@@ -1,4 +1,5 @@
 .idea
+git_version.txt
 
 ###> symfony/framework-bundle ###
 /.env.local
