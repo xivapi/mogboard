@@ -1,0 +1,14 @@
+{
+  "entrypoints": {
+    "app": {
+      "js": [
+        "/ui/app.js"
+      ]
+    },
+    "vis": {
+      "css": [
+        "/ui/vis.css"
+      ]
+    }
+  }
+}

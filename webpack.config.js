@@ -1,10 +1,11 @@
 let Encore = require('@symfony/webpack-encore');
 
 Encore
+    .disableSingleRuntimeChunk()
     .setOutputPath('public/ui/')
     .setPublicPath('/ui')
     .addEntry('app', './assets/js/App.js')
-    .addStyleEntry('vis', './assets/css/App.scss')
+    .addStyleEntry('vis', './assets/scss/App.scss')
     .enableSassLoader(function(options) {}, {
         resolveUrlLoader: false
     })
