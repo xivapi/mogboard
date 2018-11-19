@@ -1,0 +1,7 @@
+{% if user() %}
+    Logged in as: {{ user().username }}
+    -
+    <a href="{{ path('user_logout') }}">Logout</a>
+{% else %}
+    <a href="{{ path('user_login_discord') }}">Login</a>
+{% endif %}
