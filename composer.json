@@ -23,6 +23,7 @@
     },
     "require-dev": {
         "symfony/dotenv": "4.1.*",
+        "symfony/maker-bundle": "^1.9",
         "symfony/web-server-bundle": "4.1.*"
     },
     "config": {
