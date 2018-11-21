@@ -128,26 +128,10 @@ function deploy($config)
 
 // --------------------------------------------------------
 
-task('api', function () {
+task('mogboard', function () {
     deploy((Object)[
-        'name'   => 'API',
-        'home'   => "/home/dalamud/dalamud/",
+        'name'   => 'MogBoard',
+        'home'   => "/home/dalamud/mogboard.com/",
         'branch' => 'master',
     ]);
-})->onHosts('api');
-
-task('staging', function () {
-    deploy((Object)[
-        'name'   => 'Staging',
-        'home'   => "/home/dalamud/dalamud_staging/",
-        'branch' => 'staging',
-    ]);
-})->onHosts('staging');
-
-task('parser', function () {
-    deploy((Object)[
-        'name'   => 'Lodestone Parser',
-        'home'   => "/home/dalamud/dalamud/",
-        'branch' => 'master',
-    ]);
-})->onHosts('parser');
+})->onHosts('mogboard');
