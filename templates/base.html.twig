@@ -1,12 +1,47 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125096878-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-125096878-2');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}MOGBOARD{% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="/ui/ui.css?v={{ siteVersion().hash }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    {% include 'header.html.twig' %}
+
+    <main>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+    </main>
+
+    <footer>
+        Premium Virtue (Phoenix)
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        Discord: Vekien#3458
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        Twitter: <a href="https://twitter.com/viion">Viion</a>
+        <br>
+        <small>v{{ siteVersion().version }} - Deployed {{ siteVersion().time }}</small>
+        <small>ALL FINAL FANTASY XIV CONTENT IS PROPERTY OF SQUARE ENIX CO., LTD</small>
+    </footer>
+
+    {# JS #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.15.0/lazyload.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="/ui/app.js?v={{ siteVersion().hash }}"></script>
+    {% block javascripts %}{% endblock %}
+</body>
 </html>

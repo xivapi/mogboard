@@ -23,6 +23,7 @@
     },
     "require-dev": {
         "symfony/dotenv": "4.1.*",
+        "symfony/var-dumper": "4.1.*",
         "symfony/web-server-bundle": "4.1.*"
     },
     "config": {

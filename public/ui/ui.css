@@ -1,0 +1,225 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+* {
+  box-sizing: border-box; }
+
+html {
+  font-family: 'Roboto', sans-serif;
+  background-color: #181818;
+  color: #fff;
+  text-shadow: 0 1px 2px #000;
+  font-size: 16px; }
+
+body {
+  overflow-y: scroll; }
+
+main {
+  max-width: 1600px;
+  margin: 0 auto; }
+
+footer {
+  padding: 20px 0 50px 0;
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  line-height: 24px; }
+
+h1 {
+  margin-bottom: 20px; }
+
+a {
+  color: #ffb4ec;
+  text-decoration: none; }
+  a:hover {
+    color: #ff93e7; }
+
+header {
+  display: flex;
+  background-color: #28292d;
+  height: 70px;
+  box-shadow: 0 1px 3px #000;
+  position: relative;
+  z-index: 1000; }
+  header .logo {
+    display: flex;
+    flex: 0 1 400px;
+    position: relative; }
+    header .logo a {
+      flex: 0 1 90px; }
+      header .logo a img {
+        margin: -20px 0px 0px 20px; }
+    header .logo div {
+      flex: 0 1 calc(100% - 90px);
+      font-size: 28px;
+      font-weight: 300;
+      margin: 22px 0 0 0; }
+      header .logo div span {
+        color: #fff847;
+        font-weight: 600; }
+  header .search {
+    flex: 0 1 calc(100% - 800px);
+    padding: 10px;
+    text-align: center;
+    position: relative; }
+    header .search > div:first-of-type {
+      display: inline-block;
+      border: solid 1px #000;
+      box-shadow: 0 1px 3px #000;
+      overflow: hidden;
+      border-radius: 5px; }
+      header .search > div:first-of-type > div {
+        display: flex; }
+    header .search > div:last-of-type {
+      width: 780px;
+      margin: 0 auto;
+      position: relative; }
+      header .search > div:last-of-type > div {
+        position: absolute;
+        right: 0;
+        width: 380px; }
+    header .search .search-bar input {
+      width: 400px;
+      font-size: 20px;
+      font-weight: 300;
+      color: #fff;
+      outline: none;
+      line-height: 48px;
+      padding: 0 15px;
+      border: none;
+      background-color: #515151; }
+    header .search .search-bar button {
+      font-size: 16px;
+      font-weight: 300;
+      color: #fff;
+      outline: none;
+      line-height: 48px;
+      padding: 0 20px;
+      border: none;
+      background-color: #444;
+      border-left: solid 2px #000; }
+      header .search .search-bar button:hover {
+        background-color: #383838;
+        cursor: pointer;
+        position: relative;
+        z-index: 10; }
+  header nav {
+    flex: 0 1 400px;
+    text-align: right; }
+    header nav img {
+      display: inline-block;
+      height: 50px;
+      border-radius: 5px;
+      box-shadow: 0 0 3px #000;
+      vertical-align: middle;
+      margin-left: 15px; }
+    header nav a {
+      display: inline-block;
+      font-size: 18px;
+      font-weight: 400;
+      color: #fff;
+      outline: none;
+      padding: 0 20px;
+      line-height: 71px;
+      border: none;
+      transition: .1s;
+      background-color: #222;
+      margin-left: 10px; }
+      header nav a:hover {
+        background-color: #181818;
+        cursor: pointer; }
+      header nav a.user {
+        color: #fff;
+        background-color: transparent;
+        border: none; }
+        header nav a.user:hover {
+          color: #ddd749;
+          background-color: #222; }
+      header nav a.login {
+        background-color: #7289DA; }
+        header nav a.login:hover {
+          color: #fff;
+          background-color: #5763ae; }
+
+.categories-list {
+  background-color: #444444;
+  border: solid 1px #000;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px #000;
+  overflow: hidden; }
+  .categories-list > button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    color: #fff;
+    outline: none;
+    border: none;
+    border-bottom: solid 1px #000;
+    padding: 0 10px;
+    line-height: 38px;
+    background-color: transparent;
+    font-size: 15px;
+    transition: .1s;
+    text-shadow: 0 1px 2px #000;
+    cursor: pointer; }
+    .categories-list > button img {
+      vertical-align: middle;
+      margin-right: 10px; }
+    .categories-list > button:hover, .categories-list > button:focus, .categories-list > button:active {
+      background-color: #222; }
+    .categories-list > button:last-of-type {
+      border-bottom: none; }
+
+.home {
+  text-align: center;
+  padding: 100px 0; }
+  .home h1 {
+    font-size: 42px;
+    font-weight: 300;
+    color: #888;
+    display: block; }
+

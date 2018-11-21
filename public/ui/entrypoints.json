@@ -5,9 +5,9 @@
         "/ui/app.js"
       ]
     },
-    "vis": {
+    "ui": {
       "css": [
-        "/ui/vis.css"
+        "/ui/ui.css"
       ]
     }
   }

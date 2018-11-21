@@ -19,15 +19,6 @@ class UserController extends Controller
     }
     
     /**
-     * @Route("/users/logout", name="user_logout")
-     */
-    public function logout()
-    {
-        $this->users->logout();
-        return $this->redirectToRoute('index');
-    }
-    
-    /**
      * @Route("/users/login/discord", name="user_login_discord")
      */
     public function loginDiscord(Request $request)
@@ -47,6 +38,15 @@ class UserController extends Controller
         }
         
         $this->users->setSsoProvider(new DiscordSignIn($request))->authenticate();
+        return $this->redirectToRoute('index');
+    }
+    
+    /**
+     * @Route("/users/logout", name="user_logout")
+     */
+    public function logout()
+    {
+        $this->users->logout();
         return $this->redirectToRoute('index');
     }
 }

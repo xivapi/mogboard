@@ -29,7 +29,7 @@ class UserExtension extends AbstractExtension
     }
     
     /**
-     * Get API version information
+     * Get the current logged in user (this should be static)
      */
     public function getUser()
     {

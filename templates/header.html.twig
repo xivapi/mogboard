@@ -1,0 +1,33 @@
+<header>
+    <div class="logo">
+        <a href="{{ path('index') }}"><img src="/i/mog.png" height="80"></a>
+        <div><span>MOG</span>BOARD</div>
+    </div>
+    <div class="search">
+        <div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search the Market Board">
+                <button>Weapons</button>
+                <button>Armors</button>
+                <button>Misc</button>
+                <button>Housing</button>
+            </div>
+        </div>
+        <div>
+            <div class="categories-list">
+                {% for cat in categories().Weapons %}
+                <button><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <nav>
+        {% if user() %}
+            <a href="" class="user">
+                {{ user().Username|title }} <img src="{{ user().avatar }}">
+            </a>
+        {% else %}
+            <a href="{{ path('user_login_discord') }}" class="login">Login via Discord</a>
+        {% endif %}
+    </nav>
+</header>

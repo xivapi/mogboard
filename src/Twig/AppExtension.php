@@ -13,7 +13,8 @@ class AppExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('dateRelative', [$this, 'getDateRelative']),
+            new TwigFilter('date', [$this, 'getDate']),
+            new TwigFilter('icon', [$this, 'getIcon']),
         ];
     }
     
@@ -26,7 +27,7 @@ class AppExtension extends AbstractExtension
         ];
     }
     
-    public function getDateRelative($unix)
+    public function getDate($unix)
     {
         $unix = is_numeric($unix) ? $unix : strtotime($unix);
         $difference = time() - $unix;
@@ -37,6 +38,11 @@ class AppExtension extends AbstractExtension
         }
         
         return Carbon::now()->subSeconds($difference)->diffForHumans();
+    }
+    
+    public function getIcon($icon)
+    {
+        return 'https://xivapi.com'. $icon;
     }
 
     /**

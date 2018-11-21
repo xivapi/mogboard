@@ -5,7 +5,7 @@ Encore
     .setOutputPath('public/ui/')
     .setPublicPath('/ui')
     .addEntry('app', './assets/js/App.js')
-    .addStyleEntry('vis', './assets/scss/App.scss')
+    .addStyleEntry('ui', './assets/scss/App.scss')
     .enableSassLoader(function(options) {}, {
         resolveUrlLoader: false
     })
