@@ -58,12 +58,21 @@ class User
      * @ORM\Column(type="string", length=60, nullable=true)
      */
     private $avatar;
+    /**
+     * @ORM\OneToMany(targetEntity="Alert", mappedBy="user")
+     */
+    private $alerts;
+    /**
+     * @ORM\OneToMany(targetEntity="Report", mappedBy="user")
+     */
+    private $reports;
     
     public function __construct()
     {
-        $this->id = Uuid::uuid4();
-        $this->session = Uuid::uuid4()->toString() . Uuid::uuid4()->toString() . Uuid::uuid4()->toString();
-        $this->apps = new ArrayCollection();
+        $this->id       = Uuid::uuid4();
+        $this->session  = Uuid::uuid4()->toString() . Uuid::uuid4()->toString() . Uuid::uuid4()->toString();
+        $this->alerts = new ArrayCollection();
+        $this->reports  = new ArrayCollection();
     }
     
     public function getId()
@@ -158,6 +167,42 @@ class User
     {
         $this->avatar = $avatar;
         
+        return $this;
+    }
+
+    public function getAlerts()
+    {
+        return $this->alerts;
+    }
+
+    public function setAlerts($alerts)
+    {
+        $this->alerts = $alerts;
+
+        return $this;
+    }
+
+    public function addAlert(Alert $alert)
+    {
+        $this->alerts[] = $alert;
+        return $this;
+    }
+
+    public function getReports()
+    {
+        return $this->reports;
+    }
+
+    public function setReports($reports)
+    {
+        $this->reports = $reports;
+
+        return $this;
+    }
+
+    public function addReport(Report $report)
+    {
+        $this->reports[] = $report;
         return $this;
     }
 }
