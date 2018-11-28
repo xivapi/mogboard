@@ -1,7 +1,9 @@
 .idea
+git_version.txt
 vm/.vagrant/
 vm/ubuntu-bionic-18.04-cloudimg-console.log
-git_version.txt
+src/Resources/*
+!src/Resources/Resources.php
 
 ###> symfony/framework-bundle ###
 /.env.local

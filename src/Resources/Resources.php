@@ -2,24 +2,23 @@
 
 namespace App\Resources;
 
+use App\Services\Common\Language;
+
 /**
- * Very basic class to load resources within this folder, good
- * for a bunch of cached json from XIVAPI
+ * Quickly load and save json files
+ * todo - this could be stored in redis
  */
 class Resources
 {
     public static function load($file)
     {
-        return file_get_contents(__DIR__ .'/'. $file);
+        $resource = json_decode(file_get_contents(__DIR__ .'/'. $file));
+        $resource = Language::handle($resource);
+        return $resource;
     }
     
     public static function save($file, $data)
     {
-        file_put_contents(__DIR__ .'/'. $file, $data);
-    }
-    
-    public static function json($file)
-    {
-        return json_decode(self::load($file));
+        file_put_contents(__DIR__ .'/'. $file, json_encode($data));
     }
 }

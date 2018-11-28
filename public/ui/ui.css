@@ -92,7 +92,10 @@ header {
     header .logo a {
       flex: 0 1 90px; }
       header .logo a img {
-        margin: -20px 0px 0px 20px; }
+        margin: -20px 0px 0px 20px;
+        transition: .2s; }
+        header .logo a img:hover {
+          transform: scale(1.1); }
     header .logo div {
       flex: 0 1 calc(100% - 90px);
       font-size: 28px;
@@ -115,13 +118,14 @@ header {
       header .search > div:first-of-type > div {
         display: flex; }
     header .search > div:last-of-type {
-      width: 780px;
+      width: 800px;
       margin: 0 auto;
       position: relative; }
       header .search > div:last-of-type > div {
         position: absolute;
         right: 0;
-        width: 380px; }
+        width: 398px;
+        top: -2px; }
     header .search .search-bar input {
       width: 400px;
       font-size: 20px;
@@ -138,7 +142,8 @@ header {
       color: #fff;
       outline: none;
       line-height: 48px;
-      padding: 0 20px;
+      padding: 0;
+      width: 100px;
       border: none;
       background-color: #444;
       border-left: solid 2px #000; }
@@ -147,6 +152,8 @@ header {
         cursor: pointer;
         position: relative;
         z-index: 10; }
+      header .search .search-bar button.active {
+        background-color: #223d7c; }
   header nav {
     flex: 0 1 400px;
     text-align: right; }
@@ -190,7 +197,12 @@ header {
   border: solid 1px #000;
   border-radius: 5px;
   box-shadow: 0 1px 3px #000;
-  overflow: hidden; }
+  overflow: hidden;
+  position: relative;
+  z-index: 50;
+  display: none; }
+  .categories-list.open {
+    display: block; }
   .categories-list > button {
     display: block;
     width: 100%;
@@ -222,4 +234,8 @@ header {
     font-weight: 300;
     color: #888;
     display: block; }
+
+.item-category-list {
+  max-width: 800px;
+  margin: 0 auto 30px 0; }
 

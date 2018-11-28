@@ -23,6 +23,7 @@
     {% include 'header.html.twig' %}
 
     <main>
+        <div class="search-ui"></div>
         {% block body %}{% endblock %}
     </main>
 
@@ -38,6 +39,10 @@
     </footer>
 
     {# JS #}
+    <script>let app = {
+        xivapi_key: "{{ env('XIVAPI_PRIVATE_KEY') }}",
+        url_item_category_list: "{{ path('item_category_list', { categoryId: '-id-' }) }}",
+    }</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.15.0/lazyload.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>

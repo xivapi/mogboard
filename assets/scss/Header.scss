@@ -16,6 +16,11 @@ header {
 
             img {
                 margin: -20px 0px 0px 20px;
+                transition: .2s;
+
+                &:hover {
+                    transform: scale(1.1);
+                }
             }
         }
 
@@ -51,16 +56,16 @@ header {
         }
 
         > div:last-of-type {
-            width: 780px;
+            width: 800px;
             margin: 0 auto;
             position: relative;
 
             > div {
                 position: absolute;
                 right: 0;
-                width: 380px;
+                width: 398px;
+                top: -2px;
             }
-
         }
 
         .search-bar {
@@ -82,7 +87,8 @@ header {
                 color: #fff;
                 outline: none;
                 line-height: 48px;
-                padding: 0 20px;
+                padding: 0;
+                width: 100px;
                 border: none;
                 background-color: #444;
                 border-left: solid 2px #000;
@@ -92,6 +98,10 @@ header {
                     cursor: pointer;
                     position: relative;
                     z-index: 10;
+                }
+
+                &.active {
+                    background-color: #223d7c;
                 }
             }
         }
@@ -157,6 +167,13 @@ header {
     border-radius: 5px;
     box-shadow: 0 1px 3px #000;
     overflow: hidden;
+    position: relative;
+    z-index: 50;
+    display: none;
+
+    &.open {
+        display: block;
+    }
 
     > button {
         display: block;

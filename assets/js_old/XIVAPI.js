@@ -3,7 +3,7 @@ class XIVAPI
     get(endpoint, queries, callback) {
 
         queries = queries ? queries : {};
-        queries.key = 'f0ef8bd32a004f1daf0d53b1';
+        queries.key = 'xiv_mogboard14_f1daf0d53';
         queries.tags = 'mogboard';
 
         let query = Object.keys(queries)

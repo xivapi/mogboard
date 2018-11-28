@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Resources\Resources;
 use App\Services\Common\Environment;
 use App\Services\Common\SiteVersion;
 use Carbon\Carbon;
@@ -21,9 +22,11 @@ class AppExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
+            new \Twig_SimpleFunction('env', [$this, 'getEnvVar']),
             new \Twig_SimpleFunction('environment', [$this, 'getEnvironment']),
             new \Twig_SimpleFunction('siteVersion', [$this, 'getApiVersion']),
             new \Twig_SimpleFunction('favIcon', [$this, 'getFavIcon']),
+            new \Twig_SimpleFunction('resource', [$this, 'getResource']),
         ];
     }
     
@@ -40,9 +43,25 @@ class AppExtension extends AbstractExtension
         return Carbon::now()->subSeconds($difference)->diffForHumans();
     }
     
+    public function getResource($filename)
+    {
+        return Resources::load($filename);
+    }
+    
+    /**
+     * Handle xivapi icons
+     */
     public function getIcon($icon)
     {
         return 'https://xivapi.com'. $icon;
+    }
+    
+    /**
+     * Get an environment variable
+     */
+    public function getEnvVar($var)
+    {
+        return getenv($var);
     }
 
     /**

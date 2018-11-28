@@ -7,16 +7,31 @@
         <div>
             <div class="search-bar">
                 <input type="text" placeholder="Search the Market Board">
-                <button>Weapons</button>
-                <button>Armors</button>
-                <button>Misc</button>
-                <button>Housing</button>
+                <button id="cl-weapons">Weapons</button>
+                <button id="cl-armors">Armors</button>
+                <button id="cl-misc">Misc</button>
+                <button id="cl-housing">Housing</button>
             </div>
         </div>
-        <div>
-            <div class="categories-list">
-                {% for cat in categories().Weapons %}
-                <button><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
+        <div class="categories">
+            <div class="categories-list cl-weapons">
+                {% for cat in resource('ItemSearchCategories').weapons %}
+                    <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
+                {% endfor %}
+            </div>
+            <div class="categories-list cl-armors">
+                {% for cat in resource('ItemSearchCategories').armor %}
+                    <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
+                {% endfor %}
+            </div>
+            <div class="categories-list cl-misc">
+                {% for cat in resource('ItemSearchCategories').misc %}
+                    <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
+                {% endfor %}
+            </div>
+            <div class="categories-list cl-housing">
+                {% for cat in resource('ItemSearchCategories').housing %}
+                    <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
                 {% endfor %}
             </div>
         </div>
