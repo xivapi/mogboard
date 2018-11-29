@@ -25,6 +25,7 @@ class UserExtension extends AbstractExtension
     {
         return [
             new \Twig_SimpleFunction('user', [$this, 'getUser']),
+            new \Twig_SimpleFunction('server', [$this, 'getServer']),
         ];
     }
     
@@ -34,5 +35,13 @@ class UserExtension extends AbstractExtension
     public function getUser()
     {
         return $this->users->getUser();
+    }
+    
+    /**
+     * Get the users current server
+     */
+    public function getServer()
+    {
+        return 'Phoenix';
     }
 }

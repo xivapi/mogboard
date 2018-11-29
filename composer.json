@@ -10,6 +10,7 @@
         "nesbot/carbon": "^2.5",
         "ramsey/uuid": "^3.8",
         "sensio/framework-extra-bundle": "^5.2",
+        "spatie/async": "^0.0.4",
         "symfony/console": "4.1.*",
         "symfony/flex": "^1.1",
         "symfony/form": "4.1.*",
@@ -19,7 +20,8 @@
         "symfony/validator": "4.1.*",
         "symfony/webpack-encore-bundle": "^1.0",
         "symfony/yaml": "4.1.*",
-        "wohali/oauth2-discord-new": "^1.0"
+        "wohali/oauth2-discord-new": "^1.0",
+        "xivapi/xivapi-php": "^1.0"
     },
     "require-dev": {
         "symfony/dotenv": "4.1.*",

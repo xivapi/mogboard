@@ -1,7 +1,7 @@
 header {
     display: flex;
     background-color: #28292d;
-    height: 70px;
+    height: 50px;
     box-shadow: 0 1px 3px #000;
     position: relative;
     z-index: 1000;
@@ -28,7 +28,7 @@ header {
             flex: 0 1 calc(100% - 90px);
             font-size: 28px;
             font-weight: 300;
-            margin: 22px 0 0 0;
+            margin: 12px 0 0 0;
 
             span {
                 color: #fff847;
@@ -39,16 +39,14 @@ header {
 
     .search {
         flex: 0 1 calc(100% - 800px);
-        padding: 10px;
         text-align: center;
         position: relative;
 
         > div:first-of-type {
             display: inline-block;
-            border: solid 1px #000;
-            box-shadow: 0 1px 3px #000;
+            border-left: solid 1px #000;
+            border-right: solid 1px #000;
             overflow: hidden;
-            border-radius: 5px;
 
             > div {
                 display: flex;
@@ -62,8 +60,8 @@ header {
 
             > div {
                 position: absolute;
-                right: 0;
-                width: 398px;
+                right: -1px;
+                width: 400px;
                 top: -2px;
             }
         }
@@ -75,10 +73,10 @@ header {
                 font-weight: 300;
                 color: #fff;
                 outline: none;
-                line-height: 48px;
+                line-height: 50px;
                 padding: 0 15px;
                 border: none;
-                background-color: #515151;
+                background-color: #37383c;
             }
 
             button {
@@ -86,18 +84,19 @@ header {
                 font-weight: 300;
                 color: #fff;
                 outline: none;
-                line-height: 48px;
+                line-height: 50px;
                 padding: 0;
                 width: 100px;
                 border: none;
-                background-color: #444;
-                border-left: solid 2px #000;
+                background-color: #37383c;
+                border-left: solid 1px #000;
 
                 &:hover {
-                    background-color: #383838;
+                    background-color: #4c4d51;
                     cursor: pointer;
                     position: relative;
                     z-index: 10;
+                    box-shadow: 0 0 5px #000;
                 }
 
                 &.active {
@@ -127,7 +126,7 @@ header {
             color: #fff;
             outline: none;
             padding: 0 20px;
-            line-height: 71px;
+            line-height: 50px;
             border: none;
             transition: .1s;
             background-color: #222;
@@ -164,7 +163,7 @@ header {
 .categories-list {
     background-color: #444444;
     border: solid 1px #000;
-    border-radius: 5px;
+    border-radius: 0 0 5px 5px;
     box-shadow: 0 1px 3px #000;
     overflow: hidden;
     position: relative;

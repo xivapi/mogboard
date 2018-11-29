@@ -92,6 +92,9 @@
     "league/oauth2-client": {
         "version": "2.3.0"
     },
+    "myclabs/deep-copy": {
+        "version": "1.8.1"
+    },
     "nesbot/carbon": {
         "version": "2.5.4"
     },
@@ -103,6 +106,54 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.2.2"
+    },
+    "opis/closure": {
+        "version": "3.1.1"
+    },
+    "phar-io/manifest": {
+        "version": "1.0.1"
+    },
+    "phar-io/version": {
+        "version": "1.0.1"
+    },
+    "phpdocumentor/reflection-common": {
+        "version": "1.0.1"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "4.3.0"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "0.4.0"
+    },
+    "phpspec/prophecy": {
+        "version": "1.8.0"
+    },
+    "phpunit/php-code-coverage": {
+        "version": "5.3.2"
+    },
+    "phpunit/php-file-iterator": {
+        "version": "1.4.5"
+    },
+    "phpunit/php-text-template": {
+        "version": "1.2.1"
+    },
+    "phpunit/php-timer": {
+        "version": "1.0.9"
+    },
+    "phpunit/php-token-stream": {
+        "version": "2.0.2"
+    },
+    "phpunit/phpunit": {
+        "version": "4.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.7",
+            "ref": "89239f0cf2759efccc76b9944083bfcc4d180f9d"
+        }
+    },
+    "phpunit/phpunit-mock-objects": {
+        "version": "5.0.10"
     },
     "pimple/pimple": {
         "version": "v3.2.3"
@@ -125,6 +176,39 @@
     "ramsey/uuid": {
         "version": "3.8.0"
     },
+    "sebastian/code-unit-reverse-lookup": {
+        "version": "1.0.1"
+    },
+    "sebastian/comparator": {
+        "version": "2.1.3"
+    },
+    "sebastian/diff": {
+        "version": "2.0.1"
+    },
+    "sebastian/environment": {
+        "version": "3.1.0"
+    },
+    "sebastian/exporter": {
+        "version": "3.1.0"
+    },
+    "sebastian/global-state": {
+        "version": "2.0.0"
+    },
+    "sebastian/object-enumerator": {
+        "version": "3.0.3"
+    },
+    "sebastian/object-reflector": {
+        "version": "1.1.1"
+    },
+    "sebastian/recursion-context": {
+        "version": "3.0.0"
+    },
+    "sebastian/resource-operations": {
+        "version": "1.0.0"
+    },
+    "sebastian/version": {
+        "version": "2.0.1"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -133,6 +217,9 @@
             "version": "5.2",
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
         }
+    },
+    "spatie/async": {
+        "version": "0.0.4"
     },
     "symfony/asset": {
         "version": "v4.1.7"
@@ -299,11 +386,20 @@
     "symfony/yaml": {
         "version": "v4.1.7"
     },
+    "theseer/tokenizer": {
+        "version": "1.1.0"
+    },
     "twig/twig": {
         "version": "v2.5.0"
     },
+    "webmozart/assert": {
+        "version": "1.3.0"
+    },
     "wohali/oauth2-discord-new": {
         "version": "v1.0.0"
+    },
+    "xivapi/xivapi-php": {
+        "version": "1.0.0"
     },
     "zendframework/zend-code": {
         "version": "3.3.1"

@@ -81,7 +81,7 @@ a {
 header {
   display: flex;
   background-color: #28292d;
-  height: 70px;
+  height: 50px;
   box-shadow: 0 1px 3px #000;
   position: relative;
   z-index: 1000; }
@@ -100,21 +100,19 @@ header {
       flex: 0 1 calc(100% - 90px);
       font-size: 28px;
       font-weight: 300;
-      margin: 22px 0 0 0; }
+      margin: 12px 0 0 0; }
       header .logo div span {
         color: #fff847;
         font-weight: 600; }
   header .search {
     flex: 0 1 calc(100% - 800px);
-    padding: 10px;
     text-align: center;
     position: relative; }
     header .search > div:first-of-type {
       display: inline-block;
-      border: solid 1px #000;
-      box-shadow: 0 1px 3px #000;
-      overflow: hidden;
-      border-radius: 5px; }
+      border-left: solid 1px #000;
+      border-right: solid 1px #000;
+      overflow: hidden; }
       header .search > div:first-of-type > div {
         display: flex; }
     header .search > div:last-of-type {
@@ -123,8 +121,8 @@ header {
       position: relative; }
       header .search > div:last-of-type > div {
         position: absolute;
-        right: 0;
-        width: 398px;
+        right: -1px;
+        width: 400px;
         top: -2px; }
     header .search .search-bar input {
       width: 400px;
@@ -132,26 +130,27 @@ header {
       font-weight: 300;
       color: #fff;
       outline: none;
-      line-height: 48px;
+      line-height: 50px;
       padding: 0 15px;
       border: none;
-      background-color: #515151; }
+      background-color: #37383c; }
     header .search .search-bar button {
       font-size: 16px;
       font-weight: 300;
       color: #fff;
       outline: none;
-      line-height: 48px;
+      line-height: 50px;
       padding: 0;
       width: 100px;
       border: none;
-      background-color: #444;
-      border-left: solid 2px #000; }
+      background-color: #37383c;
+      border-left: solid 1px #000; }
       header .search .search-bar button:hover {
-        background-color: #383838;
+        background-color: #4c4d51;
         cursor: pointer;
         position: relative;
-        z-index: 10; }
+        z-index: 10;
+        box-shadow: 0 0 5px #000; }
       header .search .search-bar button.active {
         background-color: #223d7c; }
   header nav {
@@ -171,7 +170,7 @@ header {
       color: #fff;
       outline: none;
       padding: 0 20px;
-      line-height: 71px;
+      line-height: 50px;
       border: none;
       transition: .1s;
       background-color: #222;
@@ -195,7 +194,7 @@ header {
 .categories-list {
   background-color: #444444;
   border: solid 1px #000;
-  border-radius: 5px;
+  border-radius: 0 0 5px 5px;
   box-shadow: 0 1px 3px #000;
   overflow: hidden;
   position: relative;
@@ -237,5 +236,72 @@ header {
 
 .item-category-list {
   max-width: 800px;
-  margin: 0 auto 30px 0; }
+  margin: 0 auto 30px auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-self: flex-start; }
+  .item-category-list h2 {
+    flex: 0 1 100%;
+    padding: 10px 0;
+    color: #666;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 2px; }
+  .item-category-list a {
+    flex: 0 1 calc(50% - 4px);
+    align-items: stretch;
+    display: flex;
+    background-color: #363636;
+    border: none;
+    border-radius: 5px;
+    line-height: 40px;
+    height: 40px;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    transition: .2s;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden; }
+    .item-category-list a:hover {
+      background-color: #282828; }
+    .item-category-list a img {
+      height: 46px;
+      width: 46px;
+      margin: -3px 0 0 -3px;
+      vertical-align: middle; }
+    .item-category-list a:nth-of-type(odd) {
+      margin: 0 2px 4px 0; }
+    .item-category-list a:nth-of-type(even) {
+      margin: 0 0 4px 2px; }
+    .item-category-list a span:first-of-type {
+      display: block;
+      width: 40px;
+      height: 40px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px #000;
+      margin-right: 10px; }
+    .item-category-list a span:last-of-type {
+      color: yellow;
+      display: inline-block;
+      width: 40px; }
+    .item-category-list a.rarity-1 {
+      color: #eee; }
+    .item-category-list a.rarity-2 {
+      color: #89ffbc; }
+    .item-category-list a.rarity-3 {
+      color: #3dafff; }
+    .item-category-list a.rarity-4 {
+      color: #f44bff; }
+    .item-category-list a.rarity-7 {
+      color: #ff7e85; }
+
+.product {
+  margin: 30px 0; }
+  .product h1 {
+    font-size: 32px;
+    font-weight: 300; }
 
