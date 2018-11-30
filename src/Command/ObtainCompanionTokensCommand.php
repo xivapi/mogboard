@@ -2,13 +2,12 @@
 
 namespace App\Command;
 
-use App\Services\GameData\GameData;
+use App\Services\Companion\Companion;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
-class PopulateGameDataCommand extends Command
+class ObtainCompanionTokensCommand extends Command
 {
     protected function configure()
     {
@@ -17,7 +16,8 @@ class PopulateGameDataCommand extends Command
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $gamedata = new GameData(new SymfonyStyle($input, $output));
-        $gamedata->populate();
+        $companion = new Companion();
+        $companion->refreshTokens();
+        $output->writeln('Complete');
     }
 }

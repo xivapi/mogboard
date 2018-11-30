@@ -16,7 +16,7 @@ class Cache
         'timeout'       => 5,
         'compression'   => 5,
         'default_time'  => 3600,
-        'serializer'    => \Redis::SERIALIZER_NONE,
+        'serializer'    => 0,
         'read_timeout'  => -1,
     ];
     

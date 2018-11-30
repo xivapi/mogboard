@@ -125,6 +125,9 @@
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
     },
+    "phpseclib/phpseclib": {
+        "version": "2.0.12"
+    },
     "phpspec/prophecy": {
         "version": "1.8.0"
     },
@@ -175,6 +178,9 @@
     },
     "ramsey/uuid": {
         "version": "3.8.0"
+    },
+    "rct567/dom-query": {
+        "version": "v0.6.2"
     },
     "sebastian/code-unit-reverse-lookup": {
         "version": "1.0.1"
@@ -397,6 +403,9 @@
     },
     "wohali/oauth2-discord-new": {
         "version": "v1.0.0"
+    },
+    "xivapi/companion-php": {
+        "version": "0.1.7"
     },
     "xivapi/xivapi-php": {
         "version": "1.0.0"

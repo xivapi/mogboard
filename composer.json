@@ -21,6 +21,7 @@
         "symfony/webpack-encore-bundle": "^1.0",
         "symfony/yaml": "4.1.*",
         "wohali/oauth2-discord-new": "^1.0",
+        "xivapi/companion-php": "^0.1.7",
         "xivapi/xivapi-php": "^1.0"
     },
     "require-dev": {
