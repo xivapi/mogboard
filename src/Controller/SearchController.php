@@ -2,20 +2,28 @@
 
 namespace App\Controller;
 
-use App\Resources\Resources;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use App\Services\Cache\Cache;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SearchController extends Controller
+class SearchController extends AbstractController
 {
+    /** @var Cache */
+    private $cache;
+    
+    public function __construct(Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+    
     /**
      * @Route("/item/category/list/{categoryId}", name="item_category_list")
      */
     public function index($categoryId)
     {
         return $this->render('Search/item_category_list.html.twig', [
-            'category'  => Resources::load('ItemSearchCategoriesByID')[$categoryId],
-            'items'     => Resources::load("ItemsWithinSearchCategory_{$categoryId}"),
+            'category'  => $this->cache->get("mog_ItemSearchCategory_{$categoryId}"),
+            'items'     => $this->cache->get("mog_ItemSearchCategory_{$categoryId}_Items"),
         ]);
     }
 }

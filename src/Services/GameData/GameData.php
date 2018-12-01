@@ -9,15 +9,21 @@ namespace App\Services\GameData;
  */
 class GameData extends GameDataAbstract
 {
+    const CACHE_TIME = (60*60*24*365);
+    
     public function populate()
     {
+        // clear current db
+        #(new Cache())->connect()->flush();
+        
         $classes = [
-            new ItemSearchCategories($this->io),
-            new Items($this->io),
-            new Towns($this->io),
-            new Materia($this->io)
+            new GameDataItems($this->io),
+            new GameDataItemSearchCategories($this->io),
+            #new Towns($this->io),
+            #new Materia($this->io),
         ];
-
+    
+        // begin populating
         /** @var GameDataAbstract $class */
         foreach ($classes as $class) {
             $this->io->section(get_class($class));

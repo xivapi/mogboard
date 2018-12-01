@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Services\User\Discord\DiscordSignIn;
 use App\Services\User\Users;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class UserController extends Controller
+class UserController extends AbstractController
 {
     /** @var Users */
     private $users;

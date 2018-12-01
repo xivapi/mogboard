@@ -13,37 +13,7 @@ if ('prod' !== $_SERVER['APP_ENV']) {
         throw new RuntimeException('The "APP_ENV" environment variable is not set to "prod". Please run "composer require symfony/dotenv" to load the ".env" files configuring the application.');
     }
 
-    $path = dirname(__DIR__).'/.env';
-    $dotenv = new Dotenv();
-
-    if (method_exists($dotenv, 'loadEnv')) {
-        $dotenv->loadEnv($path);
-    } else {
-        // fallback code in case your Dotenv component is not 4.2 or higher (when loadEnv() was added)
-
-        if (file_exists($path) || !file_exists($p = "$path.dist")) {
-            $dotenv->load($path);
-        } else {
-            $dotenv->load($p);
-        }
-
-        if (null === $env = $_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? null) {
-            $dotenv->populate(array('APP_ENV' => $env = 'dev'));
-        }
-
-        if ('test' !== $env && file_exists($p = "$path.local")) {
-            $dotenv->load($p);
-            $env = $_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? $env;
-        }
-
-        if (file_exists($p = "$path.$env")) {
-            $dotenv->load($p);
-        }
-
-        if (file_exists($p = "$path.$env.local")) {
-            $dotenv->load($p);
-        }
-    }
+    (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 }
 
 $_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = $_SERVER['APP_ENV'] ?: $_ENV['APP_ENV'] ?: 'dev';

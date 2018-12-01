@@ -1,9 +1,4 @@
-.idea
-git_version.txt
-vm/.vagrant/
-vm/ubuntu-bionic-18.04-cloudimg-console.log
-src/Resources/*
-!src/Resources/Resources.php
+node_modules/
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -12,10 +7,6 @@ src/Resources/*
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-###> symfony/web-server-bundle ###
-/.web-server-pid
-###< symfony/web-server-bundle ###
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/

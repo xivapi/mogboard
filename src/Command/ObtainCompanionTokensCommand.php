@@ -16,6 +16,7 @@ class ObtainCompanionTokensCommand extends Command
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln('Fetching latest companion tokens ...');
         $companion = new Companion();
         $companion->refreshTokens();
         $output->writeln('Complete');

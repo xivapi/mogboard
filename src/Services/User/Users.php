@@ -51,6 +51,11 @@ class Users
         return $user;
     }
     
+    public function isOnline()
+    {
+        return !empty($this->getUser());
+    }
+    
     /**
      * Sign in
      */

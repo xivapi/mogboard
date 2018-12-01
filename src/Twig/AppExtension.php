@@ -2,8 +2,9 @@
 
 namespace App\Twig;
 
-use App\Resources\Resources;
 use App\Services\Common\Environment;
+use App\Services\Common\Language;
+use App\Services\Common\Redis\StaticCache;
 use App\Services\Common\SiteVersion;
 use Carbon\Carbon;
 use Twig\Extension\AbstractExtension;
@@ -26,7 +27,6 @@ class AppExtension extends AbstractExtension
             new \Twig_SimpleFunction('environment', [$this, 'getEnvironment']),
             new \Twig_SimpleFunction('siteVersion', [$this, 'getApiVersion']),
             new \Twig_SimpleFunction('favIcon', [$this, 'getFavIcon']),
-            new \Twig_SimpleFunction('resource', [$this, 'getResource']),
         ];
     }
     
@@ -42,12 +42,7 @@ class AppExtension extends AbstractExtension
         
         return Carbon::now()->subSeconds($difference)->diffForHumans();
     }
-    
-    public function getResource($filename)
-    {
-        return Resources::load($filename);
-    }
-    
+
     /**
      * Handle xivapi icons
      */

@@ -1,3 +1,5 @@
+{% set itemSearchCategories = cache.get('mog_ItemSearchCategories') %}
+
 <header>
     <div class="logo">
         <a href="{{ path('index') }}"><img src="/i/mog.png" height="80"></a>
@@ -8,38 +10,38 @@
             <div class="search-bar">
                 <input type="text" placeholder="Search the Market Board">
                 <button id="cl-weapons">Weapons</button>
-                <button id="cl-armors">Armors</button>
+                <button id="cl-armor">Armors</button>
                 <button id="cl-misc">Misc</button>
                 <button id="cl-housing">Housing</button>
             </div>
         </div>
         <div class="categories">
             <div class="categories-list cl-weapons">
-                {% for cat in resource('ItemSearchCategories').weapons %}
+                {% for cat in itemSearchCategories.weapons %}
                     <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
                 {% endfor %}
             </div>
-            <div class="categories-list cl-armors">
-                {% for cat in resource('ItemSearchCategories').armor %}
+            <div class="categories-list cl-armor">
+                {% for cat in itemSearchCategories.armor %}
                     <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
                 {% endfor %}
             </div>
             <div class="categories-list cl-misc">
-                {% for cat in resource('ItemSearchCategories').misc %}
+                {% for cat in itemSearchCategories.misc %}
                     <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
                 {% endfor %}
             </div>
             <div class="categories-list cl-housing">
-                {% for cat in resource('ItemSearchCategories').housing %}
+                {% for cat in itemSearchCategories.housing %}
                     <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
                 {% endfor %}
             </div>
         </div>
     </div>
     <nav>
-        {% if user() %}
+        {% if auth.online() %}
             <a href="" class="user">
-                {{ user().Username|title }} <img src="{{ user().avatar }}">
+                {{ auth.user.username|title }} <img src="{{ auth.user.avatar }}">
             </a>
         {% else %}
             <a href="{{ path('user_login_discord') }}" class="login">Login via Discord</a>

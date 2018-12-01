@@ -2,44 +2,35 @@
 
 namespace App\Controller;
 
-use Spatie\Async\Pool;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use App\Services\Cache\Cache;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use XIVAPI\XIVAPI;
 
-class ProductController extends Controller
+class ProductController extends AbstractController
 {
+    /** @var Cache */
+    private $cache;
+    
+    public function __construct(Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+    
     /**
      * @Route("/market/{server}/{id}", name="product_page")
      */
     public function index(string $server, int $id)
     {
-        $api = new XIVAPI();
-    
-        $columns = [
-            "ID",
-            "Name",
-            "Icon",
-            "Description",
-            "LevelEquip",
-            "LevelItem",
-            "ItemUICategory.Name",
-            "ItemUICategory.Icon",
-            "ItemSearchCategory.Name",
-            "ItemSearchCategory.Icon",
-            "ItemKind.Name",
-            "GamePatch"
-        ];
-    
-        $item = $api->columns($columns)->content->Item()->one($id);
+        $item = $this->cache->get("xiv_Item_{$id}") ?: false;
         
-        //$prices  = $api->market->price($server, $id);
-        //$history = $api->market->history($server, $id);
+        if (!$item) {
+            throw new NotFoundHttpException();
+        }
 
-        return $this->render('Product/page.html.twig', [
-            'item'      => $item,
-            // 'prices'    => $prices,
-            // 'history'   => $history
+        return $this->render('Product/item.html.twig', [
+            'item'   => $item,
+            'server' => $server
         ]);
     }
 }
