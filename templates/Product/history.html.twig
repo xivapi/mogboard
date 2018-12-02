@@ -141,7 +141,7 @@
                 <td align="right" class="product-date" data-sort-value="{{ purchase.PurchaseDate }}">
                     {{ purchase.PurchaseDate|date }}
                 </td>
-                <td align="right" width="2%" class="product-percent product-percent-{{ percent > 100 ? 1 : 2 }}" data-sort-value="{{ purchase.PurchaseDate }}">
+                <td align="right" width="2%" class="product-percent product-percent-{{ percent > 100 ? 1 : 2 }}" data-sort-value="{{ percent }}">
                     {{ percent }}%
                 </td>
             </tr>
