@@ -64,6 +64,7 @@ let refreshButton    = $('.btn-refresh'),
     currentModules   = 0;
 
 // button actions
+crossWorldButton.attr('disabled', true);
 refreshButton.on('click', fetchPricesAndHistory);
 crossWorldButton.on('click', fetchCrossWorldPrices);
 
@@ -72,6 +73,7 @@ function hideLoading() {
 
     if (currentModules >= totalModules) {
         refreshButton.attr('disabled', false);
+        crossWorldButton.attr('disabled', false);
 
         $('.product-loading').removeClass('on');
         $('.product-page').addClass('active');
@@ -89,14 +91,16 @@ function fetchPricesAndHistory() {
     refreshButton.attr('disabled', true);
 }
 function fetchCrossWorldPrices() {
+    $('.product-loading').addClass('on');
     crossWorldButton.attr('disabled', true);
 
     mogboard.ProductCrossWorld.setUi('.product-cross-world').fetch({{ item.ID }}, () => {
         crossWorldButton.attr('disabled', false);
+        $('.product-loading').removeClass('on');
     });
 }
 
 fetchPricesAndHistory();
-fetchCrossWorldPrices();
+// fetchCrossWorldPrices();
 </script>
 {% endblock %}

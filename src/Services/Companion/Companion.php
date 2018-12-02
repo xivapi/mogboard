@@ -61,6 +61,7 @@ class Companion
         $servers = $dcToServers->{$dc};
     
         # todo - comment this, debugging purposes
+        /*
         if (file_exists(__DIR__.'/dev.json')) {
             return [
                 json_decode(file_get_contents(__DIR__.'/dev.json')),
@@ -68,7 +69,7 @@ class Companion
                 $servers,
                 0.1234
             ];
-        }
+        }*/
         
         // concurrent api requests!!!!!!
         $this->xivapi->async();
