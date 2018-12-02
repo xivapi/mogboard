@@ -58,6 +58,29 @@ table.table {
 
     background-color: #181818;
 
+    tr {
+        border-bottom: solid 1px #333;
+
+        &:last-of-type {
+            border-bottom: none;
+        }
+
+        &:hover td {
+            background-color: #080808;
+        }
+    }
+
+    td {
+        padding: 10px;
+        border-right: dashed 1px #222;
+
+        font-size: 16px;
+
+        &:last-of-type {
+            border: none;
+        }
+    }
+
     thead {
         tr {
             box-shadow: 0 1px 5px #000;
@@ -72,30 +95,20 @@ table.table {
             text-transform: uppercase;
             border-right: solid 1px #000;
             border-bottom: solid 1px #000;
-        }
-    }
+            
+            &:hover {
+                position: relative;
+                z-index: 20;
+                box-shadow: 0 1px 5px #000;
+                background-color: #333;
+                cursor: pointer;
 
-    tbody {
-        tr {
-            border-bottom: solid 1px #333;
-
-            &:last-of-type {
-                border-bottom: none;
-            }
-
-            &:hover td {
-                background-color: #080808;
-            }
-        }
-
-        td {
-            padding: 10px;
-            border-right: dashed 1px #222;
-
-            font-size: 16px;
-
-            &:last-of-type {
-                border: none;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
             }
         }
     }

@@ -3,8 +3,6 @@
 namespace App\Twig;
 
 use App\Services\Common\Environment;
-use App\Services\Common\Language;
-use App\Services\Common\Redis\StaticCache;
 use App\Services\Common\SiteVersion;
 use Carbon\Carbon;
 use Twig\Extension\AbstractExtension;

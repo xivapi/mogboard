@@ -97,6 +97,18 @@ button.btn {
 table.table {
   width: 100%;
   background-color: #181818; }
+  table.table tr {
+    border-bottom: solid 1px #333; }
+    table.table tr:last-of-type {
+      border-bottom: none; }
+    table.table tr:hover td {
+      background-color: #080808; }
+  table.table td {
+    padding: 10px;
+    border-right: dashed 1px #222;
+    font-size: 16px; }
+    table.table td:last-of-type {
+      border: none; }
   table.table thead tr {
     box-shadow: 0 1px 5px #000;
     position: relative;
@@ -108,18 +120,18 @@ table.table {
     text-transform: uppercase;
     border-right: solid 1px #000;
     border-bottom: solid 1px #000; }
-  table.table tbody tr {
-    border-bottom: solid 1px #333; }
-    table.table tbody tr:last-of-type {
-      border-bottom: none; }
-    table.table tbody tr:hover td {
-      background-color: #080808; }
-  table.table tbody td {
-    padding: 10px;
-    border-right: dashed 1px #222;
-    font-size: 16px; }
-    table.table tbody td:last-of-type {
-      border: none; }
+    table.table thead th:hover {
+      position: relative;
+      z-index: 20;
+      box-shadow: 0 1px 5px #000;
+      background-color: #333;
+      cursor: pointer;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none; }
 
 .rarity-1 {
   color: #eee; }
