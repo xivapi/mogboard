@@ -128,7 +128,8 @@
     </thead>
     <tbody>
         {% for price in prices.Prices %}
-            <tr>
+            {% set state = (price.PriceTotal == stats.PriceTotal.Min ? 1 : (price.PriceTotal == stats.PriceTotal.Max ? 2 : 0)) %}
+            <tr class="product-status-{{ state }}">
                 <td align="center" class="product-num" width="1%" data-sort-value="{{ loop.index }}">{{ loop.index }}</td>
                 <td align="center" class="product-hq" width="1%" data-sort-value="{{ price.IsHQ }}">{{ price.IsHQ ? '<img src="/i/hq.png">' : '' }}</td>
                 <td align="center" class="product-materia" data-sort-value="{{ price.Materia|length }}">
@@ -155,11 +156,9 @@
                         {{ price.CraftSignature }}
                     {% endif %}
                 </td>
-                <td class="product-status" align="center" data-sort-value="{{ price.PriceTotal == stats.PriceTotal.Min ? 1 : (price.PriceTotal == stats.PriceTotal.Max ? 2 : 0) }}">
-                    {% if price.PriceTotal == stats.PriceTotal.Min %}
-                        <img src="/i/dot_green.png">
-                    {% elseif price.PriceTotal == stats.PriceTotal.Max %}
-                        <img src="/i/dot_red.png">
+                <td class="product-status" align="center" data-sort-value="">
+                    {% if state > 0 %}
+                        <img src="/i/{{ state == 1 ? 'dot_green.png' : 'dot_red.png' }}">
                     {% endif %}
                 </td>
             </tr>

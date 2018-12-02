@@ -19,3 +19,5 @@ yarn-error.log
 ###> phpunit/phpunit ###
 /phpunit.xml
 ###< phpunit/phpunit ###
+
+ssh\.exe\.stackdump

@@ -115,10 +115,12 @@
             <th data-sort="int">QTY</th>
             <th data-sort="string">Buyer</th>
             <th data-sort="int">Date</th>
+            <th data-sort="int">%</th>
         </tr>
     </thead>
     <tbody>
         {% for purchase in history.History %}
+            {% set percent = ((purchase.PricePerUnit / stats.PricePerUnit.Avg) * 100)|round(1) %}
             <tr>
                 <td align="center" class="product-num" width="1%" data-sort-value="{{ loop.index }}">{{ loop.index }}</td>
                 <td align="center" class="product-hq" width="1%" data-sort-value="{{ purchase.IsHQ }}">{{ purchase.IsHQ ? '<img src="/i/hq.png">' : '' }}</td>
@@ -139,6 +141,9 @@
                 <td align="right" class="product-date" data-sort-value="{{ purchase.PurchaseDate }}">
                     {{ purchase.PurchaseDate|date }}
                 </td>
+                <td align="right" width="2%" class="product-percent product-percent-{{ percent > 100 ? 1 : 2 }}" data-sort-value="{{ purchase.PurchaseDate }}">
+                    {{ percent }}%
+                </td>
             </tr>
         {% else %}
             <tr>
@@ -147,5 +152,9 @@
         {% endfor %}
     </tbody>
 </table>
+
+<div class="product-table-footer">
+    <span>X% = Purchase percentage +/- over the average price per unit</span>
+</div>
 
 <script>$('table.product-history-table').stupidtable();</script>

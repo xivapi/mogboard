@@ -240,6 +240,21 @@
                 border-radius: 5px;
                 vertical-align: middle;
             }
+
+            .product-status-1 {
+                background-color: #071909;
+            }
+
+            .product-status-2 {
+                background-color: #190d0d;
+            }
+
+            .product-percent {
+                font-size: 13px;
+
+                &.product-percent-1 { color: #9e232a; }
+                &.product-percent-2 { color: #4c974c; }
+            }
         }
 
         .product-price-chart {

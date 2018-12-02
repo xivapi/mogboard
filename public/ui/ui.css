@@ -595,6 +595,16 @@ header {
       height: 20px;
       border-radius: 5px;
       vertical-align: middle; }
+    .product .product-page .table .product-status-1 {
+      background-color: #071909; }
+    .product .product-page .table .product-status-2 {
+      background-color: #190d0d; }
+    .product .product-page .table .product-percent {
+      font-size: 13px; }
+      .product .product-page .table .product-percent.product-percent-1 {
+        color: #9e232a; }
+      .product .product-page .table .product-percent.product-percent-2 {
+        color: #4c974c; }
     .product .product-page .product-price-chart {
       padding: 10px; }
     .product .product-page .product-stats-info-header {
