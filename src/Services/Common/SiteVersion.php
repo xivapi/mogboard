@@ -17,7 +17,7 @@ class SiteVersion
         $version = substr_replace($version, '.', 2, 0);
         $version = sprintf('%s.%s', getenv('VERSION'), $version);
 
-        $time = Carbon::createFromTimestamp($time)->format('jS M - g:i a') . ' (UTC)';
+        $time = Carbon::createFromTimestamp($time)->fromNow();
 
         return (Object)[
             'version'   => $version,

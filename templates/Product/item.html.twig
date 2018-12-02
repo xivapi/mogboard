@@ -15,8 +15,8 @@
         {% endif %}
 
         <div class="product-actions">
-            <button class="btn">Add to List</button>
-            <button class="btn">Refresh</button>
+            <button class="btn btn-add-to-list">Add to List</button>
+            <button class="btn btn-refresh"><img src="/i/sync-alt-regular.svg" height="14">Refresh</button>
         </div>
     </div>
 
@@ -50,22 +50,34 @@
 
 {% block javascripts %}
 <script>
-let totalModules = 2,
+let refreshButton = $('.btn-refresh'),
+    totalModules = 2,
     currentModules = 0;
+
+refreshButton.on('click', fetchPricesAndHistory);
 
 function hideLoading() {
     currentModules++;
 
-    if (currentModules === totalModules) {
-        // hide loading
-        $('.product-loading').removeClass('on');
+    if (currentModules >= totalModules) {
+        refreshButton.attr('disabled', false);
 
-        // show page data
+        $('.product-loading').removeClass('on');
         $('.product-page').addClass('active');
     }
 }
-// fetch prices + history
-mogboard.ProductPricing.setUi('.product-prices').fetch({{ item.ID }}, hideLoading);
-mogboard.ProductHistory.setUi('.product-history').fetch({{ item.ID }}, hideLoading);
+function fetchPricesAndHistory() {
+    currentModules = 0;
+
+    $('.product-loading').addClass('on');
+    $('.product-page').removeClass( 'active');
+
+    // fetch prices + history
+    mogboard.ProductPricing.setUi('.product-prices').fetch({{ item.ID }}, hideLoading);
+    mogboard.ProductHistory.setUi('.product-history').fetch({{ item.ID }}, hideLoading);
+    refreshButton.attr('disabled', true);
+}
+
+fetchPricesAndHistory();
 </script>
 {% endblock %}

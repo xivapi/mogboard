@@ -93,6 +93,11 @@ button.btn {
   button.btn:hover {
     background-color: #1468b7;
     cursor: pointer; }
+  button.btn:disabled {
+    opacity: 0.4; }
+  button.btn img {
+    display: inline-block;
+    margin: 0 8px -1px 0; }
 
 table.table {
   width: 100%;
@@ -436,7 +441,7 @@ header {
     border-bottom: solid 5px #333;
     padding-bottom: 30px;
     margin-bottom: 30px; }
-    .product .product-header img {
+    .product .product-header > img {
       height: 40px;
       border: solid 1px #000;
       box-shadow: 0 1px 3px #000;

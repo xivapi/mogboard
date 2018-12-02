@@ -3,7 +3,7 @@
         <canvas id="price-chart" width="100%" height="240"></canvas>
     </div>
     <script>
-    let quantities = {{ stats.General.Quantities|json_encode|raw }};
+    var quantities = {{ stats.General.Quantities|json_encode|raw }};
     new Chart(document.getElementById("price-chart"), {
         type: 'bubble',
         data: {
@@ -172,8 +172,8 @@
 
 <div class="product-table-footer">
     <span>Total Cost:</span>
-    <span><img src="/i/dot_green.png"> Cheapest</span>
-    <span><img src="/i/dot_red.png"> Expensive</span>
+    <span><img src="/i/dot_green.png"> Lowest Price</span>
+    <span><img src="/i/dot_red.png"> Highest Price</span>
 </div>
 
 <script>$('table.product-prices-table').stupidtable();</script>

@@ -51,6 +51,15 @@ button.btn {
         background-color: #1468b7;
         cursor: pointer;
     }
+
+    &:disabled {
+        opacity: 0.4;
+    }
+
+    img {
+        display: inline-block;
+        margin: 0 8px -1px 0;
+    }
 }
 
 table.table {
