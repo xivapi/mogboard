@@ -247,6 +247,7 @@ header {
           color: #ddd749;
           background-color: #222; }
       header nav a.login {
+        padding: 0 20px;
         background-color: #7289DA; }
         header nav a.login:hover {
           color: #fff;
