@@ -11,7 +11,7 @@
                 <input type="text" placeholder="Search the Market Board">
                 <button id="cl-weapons">Weapons</button>
                 <button id="cl-armor">Armors</button>
-                <button id="cl-misc">Misc</button>
+                <button id="cl-items">Items</button>
                 <button id="cl-housing">Housing</button>
             </div>
         </div>
@@ -26,8 +26,8 @@
                     <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
                 {% endfor %}
             </div>
-            <div class="categories-list cl-misc">
-                {% for cat in itemSearchCategories.misc %}
+            <div class="categories-list cl-items">
+                {% for cat in itemSearchCategories.items %}
                     <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
                 {% endfor %}
             </div>
@@ -40,9 +40,7 @@
     </div>
     <nav>
         {% if auth.online() %}
-            <a href="" class="user">
-                {{ auth.user.username|title }} <img src="{{ auth.user.avatar }}">
-            </a>
+            <a href="" class="user">{{ auth.user.username|title }} <img src="{{ auth.user.avatar }}"></a>
         {% else %}
             <a href="{{ path('user_login_discord') }}" class="login">Login via Discord</a>
         {% endif %}

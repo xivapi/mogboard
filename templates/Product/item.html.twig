@@ -3,7 +3,69 @@
 {% block body %}
 <div class="product">
 
-    <h1>{{ item.Name }}</h1>
+    <div class="product-header">
+        <img src="{{ item.Icon|icon }}">
+
+        <h1 class="rarity-{{ item.Rarity }}"><span>{{ item.LevelItem }}</span> {{ item.Name }}</h1>
+
+        {{ item.ItemKind.Name }} <em>-</em> {{ item.ItemUICategory.Name }}
+
+        {% if item.ClassJobCategory.Name is defined %}
+        <em>-</em> {{ item.LevelEquip }} {{ item.ClassJobCategory.Name }}
+        {% endif %}
+
+        <div class="product-actions">
+            <button class="btn">Add to List</button>
+            <button class="btn">Refresh</button>
+        </div>
+    </div>
+
+    <div class="product-loading on">
+        <div>loading</div>
+        <span>
+            <em></em>
+            <em></em>
+            <em></em>
+            <em></em>
+        </span>
+    </div>
+
+    <div class="product-page">
+        <div class="product-page-left">
+            <h2>PRICES</h2>
+            <div class="product-box product-prices">
+                prizes
+            </div>
+        </div>
+        <div class="product-page-right">
+            <h2>HISTORY</h2>
+            <div class="product-box product-history">
+                history
+            </div>
+        </div>
+    </div>
 
 </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+let totalModules = 2,
+    currentModules = 0;
+
+function hideLoading() {
+    currentModules++;
+
+    if (currentModules === totalModules) {
+        // hide loading
+        $('.product-loading').removeClass('on');
+
+        // show page data
+        $('.product-page').addClass('active');
+    }
+}
+// fetch prices + history
+mogboard.ProductPricing.setUi('.product-prices').fetch({{ item.ID }}, hideLoading);
+mogboard.ProductHistory.setUi('.product-history').fetch({{ item.ID }}, hideLoading);
+</script>
 {% endblock %}

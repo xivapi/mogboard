@@ -35,8 +35,8 @@ class AppExtension extends AbstractExtension
         $unix = is_numeric($unix) ? $unix : strtotime($unix);
         $difference = time() - $unix;
         
-        // if over 72hrs, show date
-        if ($difference > (60 * 60 * 72)) {
+        // if over 24hrs, show date
+        if ($difference > (60 * 60 * 24)) {
             return date('M jS', $unix);
         }
         

@@ -1,0 +1,160 @@
+{% if stats %}
+    <div class="product-price-chart">
+        <canvas id="price-chart" width="100%" height="240"></canvas>
+    </div>
+    <script>
+    new Chart(document.getElementById("price-chart"), {
+        type: 'bubble',
+        data: {
+            datasets: [{
+                label: "Price Per Unit",
+                data: {{ stats.PricePerUnit.Chart|json_encode|raw }},
+                backgroundColor: "rgba(220, 120, 255, 1)"
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            animation: false,
+            legend: {
+                display: false
+            },
+            tooltips: {
+                displayColors: false,
+                position: 'nearest',
+                intersect: false,
+                bodyFontSize: 14,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return 'Price/Unit: ' + numeral(tooltipItem.yLabel).format('0,0')
+                    }
+                }
+            },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        display: false
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        callback: function (value) {
+                            return numeral(value).format('0,0')
+                        }
+                    }
+                }]
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 20,
+                    top: 10,
+                    bottom: 10
+                }
+            }
+        }
+    });
+    </script>
+    <small class="product-chart-note">Listings <strong>200%</strong> above the average <strong>price per unit</strong> are ignored</small>
+
+    <hr>
+
+    <div class="product-stats-info product-stats-info-header">
+        <div>&nbsp;</div>
+        <div>Min</div>
+        <div>Max</div>
+        <div>Avg</div>
+    </div>
+    <div class="product-stats-info">
+        <div>Price Per Unit</div>
+        <div>{{ stats.PricePerUnit.Min|number_format }}</div>
+        <div>{{ stats.PricePerUnit.Max|number_format }}</div>
+        <div>{{ stats.PricePerUnit.Avg|number_format }}</div>
+    </div>
+    <div class="product-stats-info">
+        <div>Price Total</div>
+        <div>{{ stats.PriceTotal.Min|number_format }}</div>
+        <div>{{ stats.PriceTotal.Max|number_format }}</div>
+        <div>{{ stats.PriceTotal.Avg|number_format }}</div>
+    </div>
+
+    <hr>
+
+    <div class="product-stats-info2">
+        <div>
+            <span>{{ stats.General.Stock|number_format }}</span> in stock
+        </div>
+        <div>
+            <span>{{ stats.General.Listings|number_format }}</span> listings
+        </div>
+        <div>
+            <span>{{ stats.General.TotalCost|number_format }}</span> gil
+        </div>
+    </div>
+{% else %}
+<div class="product-no-stats">
+    No statistical data available for this item.
+</div>
+{% endif %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>HQ</th>
+            <th>Materia</th>
+            <th>Price</th>
+            <th>QTY</th>
+            <th>Total</th>
+            <th>Retainer</th>
+            <th>Crafter</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for price in prices.Prices %}
+        <tr>
+            <td align="center" class="product-num" width="1%">{{ loop.index }}</td>
+            <td align="center" class="product-hq" width="1%">{{ price.IsHQ ? '<img src="/i/hq.png">' : '' }}</td>
+            <td align="center" class="product-materia">
+                {% if price.Materia %}
+                    {% for materia in price.Materia %}
+                        <img src="{{ materia.Icon|icon }}">
+                    {% endfor %}
+                {% endif %}
+            </td>
+            <td align="right" class="product-ppu">
+                {{ price.PricePerUnit|number_format }}
+            </td>
+            <td align="center" class="product-qty" width="1%">
+                {{ price.Quantity|number_format }}
+            </td>
+            <td align="right" class="product-pt">
+                {% if price.PriceTotal == stats.PriceTotal.Min %}
+                    <img src="/i/dot_green.png">
+                {% elseif price.PriceTotal == stats.PriceTotal.Max %}
+                    <img src="/i/dot_red.png">
+                {% endif %}
+
+                {{ price.PriceTotal|number_format }}
+            </td>
+            <td class="product-town">
+                <img src="{{ price.Town.Icon|icon }}"> {{ price.Town.Name }}
+            </td>
+            <td class="product-crafter">
+                {% if price.CraftSignature|length > 2 %}
+                    {{ price.CraftSignature }}
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7">None for sale!</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="product-table-footer">
+    <span>Total Cost:</span>
+    <span><img src="/i/dot_green.png"> Cheapest</span>
+    <span><img src="/i/dot_red.png"> Expensive</span>
+</div>

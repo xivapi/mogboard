@@ -1,9 +1,9 @@
 * {
     box-sizing: border-box;
 }
-html {
+html, body {
     font-family: 'Roboto', sans-serif;
-    background-color: #181818;
+    background-color: #282828;
     color: #fff;
     text-shadow: 0 1px 2px #000;
     font-size: 16px;
@@ -34,3 +34,78 @@ a {
         color: #ff93e7;
     }
 }
+strong {
+    font-weight: 600;
+}
+button.btn {
+    font-size: 16px;
+    background-color: #115192;
+    line-height: 36px;
+    padding: 0 12px;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px #000;
+
+    &:hover {
+        background-color: #1468b7;
+        cursor: pointer;
+    }
+}
+
+table.table {
+    width: 100%;
+
+    background-color: #181818;
+
+    thead {
+        tr {
+            box-shadow: 0 1px 5px #000;
+            position: relative;
+            z-index: 13;
+        }
+
+        th {
+            background-color: #444;
+            padding: 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            border-right: solid 1px #000;
+            border-bottom: solid 1px #000;
+        }
+    }
+
+    tbody {
+        tr {
+            border-bottom: solid 1px #333;
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+
+            &:hover td {
+                background-color: #080808;
+            }
+        }
+
+        td {
+            padding: 10px;
+            border-right: dashed 1px #222;
+
+            font-size: 16px;
+
+            &:last-of-type {
+                border: none;
+            }
+        }
+    }
+}
+
+//
+// In-game rarity colours
+//
+.rarity-1 { color: #eee; }
+.rarity-2 { color: #89ffbc; }
+.rarity-3 { color: #3dafff; }
+.rarity-4 { color: #f44bff; }
+.rarity-7 { color: #ff7e85; }

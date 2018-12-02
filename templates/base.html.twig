@@ -39,13 +39,19 @@
     </footer>
 
     {# JS #}
-    <script>let app = {
-        xivapi_key: "{{ env('XIVAPI_PRIVATE_KEY') }}",
-        url_item_category_list: "{{ path('item_category_list', { categoryId: '-id-' }) }}",
-    }</script>
+    <script>
+        let app = {
+            xivapi_key: "{{ env('XIVAPI_PRIVATE_KEY') }}",
+            url_item_category_list: "{{ path('item_category_list', { categoryId: '-id-' }) }}",
+            url_product: "{{ path('product_page', { itemId: '-id-' }) }}",
+            url_product_price: "{{ path('product_price', { server: '-server-', itemId: '-id-' }) }}",
+            url_product_history: "{{ path('product_history', { server: '-server-', itemId: '-id-' }) }}",
+        }
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.15.0/lazyload.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
     <script src="/ui/app.js?v={{ siteVersion().hash }}"></script>
     {% block javascripts %}{% endblock %}
 </body>

@@ -9,7 +9,7 @@ class GameDataItemSearchCategories extends GameDataAbstract
     const CATEGORY_NAMES = [
         1 => 'weapons',
         2 => 'armor',
-        3 => 'misc',
+        3 => 'items',
         4 => 'housing'
     ];
 
@@ -36,27 +36,27 @@ class GameDataItemSearchCategories extends GameDataAbstract
             // store category
             $catName = self::CATEGORY_NAMES[$category->Category];
             $categories[$catName][$category->Order] = [
-                'ID'        => $category->ID,
-                'Icon'      => $category->Icon,
-                'Name_en'   => $category->Name_en,
-                'Name_de'   => $category->Name_de,
-                'Name_fr'   => $category->Name_fr,
-                'Name_ja'   => $category->Name_ja,
+                'ID'      => $category->ID,
+                'Icon'    => $category->Icon,
+                'Name_en' => $category->Name_en,
+                'Name_de' => $category->Name_de,
+                'Name_fr' => $category->Name_fr,
+                'Name_ja' => $category->Name_ja,
             ];
             
             // copy category over
-            $cache->set("mog_ItemSearchCategory_{$category->ID}", $category);
+            $cache->set("mog_ItemSearchCategory_{$category->ID}", $category, GameData::CACHE_TIME);
         }
     
         ksort($categories['weapons']);
         ksort($categories['armor']);
-        ksort($categories['misc']);
+        ksort($categories['items']);
         ksort($categories['housing']);
     
-        $categories['weapons'] = array_values($categories['weapons']);
-        $categories['armor'] = array_values($categories['armor']);
-        $categories['misc'] = array_values($categories['misc']);
-        $categories['housing'] = array_values($categories['housing']);
+        $categories['weapons']  = array_values($categories['weapons']);
+        $categories['armor']    = array_values($categories['armor']);
+        $categories['items']     = array_values($categories['items']);
+        $categories['housing']  = array_values($categories['housing']);
         
         $cache->set("mog_ItemSearchCategories", $categories, GameData::CACHE_TIME);
         $cache->disconnect();

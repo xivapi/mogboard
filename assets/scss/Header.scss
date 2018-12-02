@@ -3,6 +3,7 @@ header {
     background-color: #28292d;
     height: 50px;
     box-shadow: 0 1px 3px #000;
+    border-bottom: solid 1px #000;
     position: relative;
     z-index: 1000;
 
@@ -89,10 +90,12 @@ header {
                 width: 100px;
                 border: none;
                 background-color: #37383c;
+                border-right: solid 1px #37383c;
                 border-left: solid 1px #000;
 
                 &:hover {
                     background-color: #4c4d51;
+                    border-right: solid 1px #000;
                     cursor: pointer;
                     position: relative;
                     z-index: 10;
@@ -101,6 +104,7 @@ header {
 
                 &.active {
                     background-color: #223d7c;
+                    z-index: 8;
                 }
             }
         }
@@ -113,7 +117,6 @@ header {
         img {
             display: inline-block;
             height: 50px;
-            border-radius: 5px;
             box-shadow: 0 0 3px #000;
             vertical-align: middle;
             margin-left: 15px;
@@ -125,7 +128,7 @@ header {
             font-weight: 400;
             color: #fff;
             outline: none;
-            padding: 0 0 0 20px;
+            padding: 0 0 0 25px;
             line-height: 50px;
             border: none;
             transition: .1s;

@@ -9,7 +9,8 @@ namespace App\Services\GameData;
  */
 class GameData extends GameDataAbstract
 {
-    const CACHE_TIME = (60*60*24*365);
+    // cache to 2030
+    const CACHE_TIME = 1890691200;
     
     public function populate()
     {
@@ -19,8 +20,6 @@ class GameData extends GameDataAbstract
         $classes = [
             new GameDataItems($this->io),
             new GameDataItemSearchCategories($this->io),
-            #new Towns($this->io),
-            #new Materia($this->io),
         ];
     
         // begin populating

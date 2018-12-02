@@ -3,7 +3,7 @@
 // The list of items shown when you click a search category in the header
 //
 
-.item-category-list {
+.item-search-list {
     max-width: 800px;
     margin: 0 auto 30px auto;
 
@@ -21,10 +21,15 @@
         font-weight: 400;
         letter-spacing: 1px;
         text-shadow: none;
+
+        strong {
+            font-weight: bold;
+            color: #999;
+        }
     }
 
     a {
-        flex: 0 1 calc(50% - 4px);
+        flex: 0 1 100%;
         align-items: stretch;
         display: flex;
         background-color: #363636;
@@ -40,6 +45,7 @@
         text-decoration: none;
         position: relative;
         overflow: hidden;
+        margin-bottom: 4px;
 
         &:hover {
             background-color: #181818;
@@ -52,15 +58,7 @@
             vertical-align: middle;
         }
 
-        &:nth-of-type(odd) {
-            margin: 0 2px 4px 0;
-        }
-
-        &:nth-of-type(even) {
-            margin: 0 0 4px 2px;
-        }
-
-        span:first-of-type {
+        span:nth-of-type(1) {
             display: block;
             width: 40px;
             height: 40px;
@@ -69,10 +67,18 @@
             margin-right: 10px;
         }
 
-        span:last-of-type {
+        span:nth-of-type(2){
             color: yellow;
             display: inline-block;
             width: 40px;
+        }
+
+        span:nth-of-type(3) {
+            color: #888;
+            text-transform: uppercase;
+            font-size: 12px;
+            position: absolute;
+            right: 12px;
         }
     }
 }
