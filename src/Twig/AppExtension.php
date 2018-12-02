@@ -36,8 +36,8 @@ class AppExtension extends AbstractExtension
         $difference = time() - $unix;
         
         // if over 24hrs, show date
-        if ($difference > (60 * 60 * 24)) {
-            return date('M jS', $unix);
+        if ($difference > (60 * 60)) {
+            return date('jS M, H:i:s', $unix);
         }
         
         return Carbon::now()->subSeconds($difference)->diffForHumans();

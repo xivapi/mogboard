@@ -154,7 +154,7 @@ trait CompanionStatisticsTrait
         // Average Sale Wait
         /** @var Carbon $asw */
         $stats->General->AvgSaleWait = ($stats->General->AvgSaleWait > 86400)
-            ? 'over a day' : gmdate("H \h\\r i \m\i\\n s \s\\e\c", $stats->General->AvgSaleWait);
+            ? 'over a day' : gmdate("H \h\\r\s i \m\i\\n s \s\\e\c", $stats->General->AvgSaleWait);
         
         //
         // Bubble Chart!

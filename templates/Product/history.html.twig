@@ -6,10 +6,10 @@
         new Chart(document.getElementById("price-history"), {
             type: 'line',
             data: {
-                labels: {{ stats.PricePerUnit.Chart.Labels|json_encode|raw }},
+                labels: {{ stats.PricePerUnit.Chart.Labels|reverse|json_encode|raw }},
                 datasets: [{
                     label: 'Price Per Unit Sales',
-                    data: {{ stats.PricePerUnit.Chart.Values|json_encode|raw }},
+                    data: {{ stats.PricePerUnit.Chart.Values|reverse|json_encode|raw }},
                     backgroundColor: 'rgba(80, 80, 80, 0)',
                     borderColor: 'rgba(220, 120, 255, 0.3)',
                     borderWidth: 2,
@@ -29,10 +29,19 @@
                     displayColors: false,
                     position: 'nearest',
                     intersect: false,
-                    bodyFontSize: 14,
+                    bodyFontSize: 16,
+                    bodyFontColor: "rgba(220, 120, 255, 1)",
+                    footerFontSize: 13,
+                    footerFontColor: "rgba(220, 120, 255, 0.5)",
                     callbacks: {
+                        title: (tooltipItem, data) => {
+                            return '#'+ (tooltipItem[0].index + 1) + ' - PRICE PER UNIT';
+                        },
                         label: (tooltipItem, data) => {
-                            return 'Price/Unit: ' + numeral(tooltipItem.yLabel).format('0,0')
+                            return numeral(tooltipItem.yLabel).format('0,0')
+                        },
+                        footer: (tooltipItem, data) => {
+                            return tooltipItem[0].xLabel;
                         }
                     }
                 },

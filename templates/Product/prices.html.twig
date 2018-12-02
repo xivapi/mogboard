@@ -29,7 +29,7 @@
                 footerFontColor: "rgba(220, 120, 255, 0.5)",
                 callbacks: {
                     title: (tooltipItem, data) => {
-                        return '#'+ tooltipItem[0].index + ' - PRICE PER UNIT';
+                        return '#'+ (tooltipItem[0].index + 1) + ' - PRICE PER UNIT';
                     },
                     label: (tooltipItem, data) => {
                         let quantity = quantities[tooltipItem.index],
