@@ -16,10 +16,12 @@ trait CompanionStatisticsTrait
         }
         
         $stats = (Object)[
-            'General' => (Object)[
-                'Stock'     => 0,
-                'Listings'  => 0,
-                'TotalCost' => 0,
+            'General'      => (Object)[
+                'Stock'       => 0,
+                'Listings'    => 0,
+                'TotalCost'   => 0,
+                'Quantities'  => [],
+                'QuantityMax' => 0,
             ],
             'PricePerUnit' => (Object)[
                 'Min'       => 0,
@@ -27,8 +29,9 @@ trait CompanionStatisticsTrait
                 'Avg'       => 0,
                 'Values'    => [],
                 'Chart'     => [],
+                'Quantity'  => [],
             ],
-            'PriceTotal' => (Object)[
+            'PriceTotal'   => (Object)[
                 'Min'       => 0,
                 'Max'       => 0,
                 'Avg'       => 0,
@@ -65,20 +68,28 @@ trait CompanionStatisticsTrait
             $stats->PriceTotal->Min   = ($stats->PriceTotal->Min === 0 || $price->PriceTotal < $stats->PriceTotal->Min) ? $price->PriceTotal : $stats->PriceTotal->Min;
             $stats->PricePerUnit->Max = ($stats->PricePerUnit->Max === 0 || $price->PricePerUnit > $stats->PricePerUnit->Max) ? $price->PricePerUnit : $stats->PricePerUnit->Max;
             $stats->PriceTotal->Max   = ($stats->PriceTotal->Max === 0 || $price->PriceTotal > $stats->PriceTotal->Max) ? $price->PriceTotal : $stats->PriceTotal->Max;
-    
+            
+            $stats->General->Quantities[] = $price->Quantity;
+            
             $stats->General->Stock += $price->Quantity;
             $stats->General->Listings++;
             $stats->General->TotalCost += $price->PriceTotal;
         }
+    
+        $stats->General->QuantityMax = max($stats->General->Quantities);
         
         //
         // Bubble Chart!
         //
         foreach ($prices as $i => $price) {
+            // size radius based on quantity, minimum of 3px
+            $radius = round(8 * ($price->Quantity / $stats->General->QuantityMax));
+            $radius = $radius > 2 ? $radius : 2;
+            
             $stats->PricePerUnit->Chart[] = [
                 'x' => ($i + 1),
                 'y' => $price->PricePerUnit,
-                'r' => 4,
+                'r' => $radius,
             ];
         }
         

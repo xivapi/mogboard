@@ -4,10 +4,11 @@
 
     {% for item in items %}
     <a href="{{ path('product_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">
-        <span><img src="{{ item.Icon|icon }}"></span>
+        <span><img src="http://xivapi.com/mb/loading.svg" class="lazy" data-src="{{ item.Icon|icon }}"></span>
         <span>{{ item.LevelItem }}</span>
         {{ item.Name }}
     </a>
     {% endfor %}
 
 </div>
+<script>new LazyLoad({ elements_selector: ".lazy" });</script>

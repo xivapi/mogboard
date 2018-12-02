@@ -44,7 +44,7 @@ class Search
 
             results.push(
                 `<a href="${url}" class="rarity-${item.Rarity}">
-                    <span><img src="https://xivapi.com${item.Icon}"></span>
+                    <span><img src="http://xivapi.com/mb/loading.svg" class="lazy" data-src="https://xivapi.com${item.Icon}"></span>
                     <span>${item.LevelItem}</span>
                     ${item.Name}
                     <span>${item.ItemSearchCategory.Name}</span>
@@ -59,6 +59,8 @@ class Search
                 ${results.join('')}
             </div>
         `);
+
+        new LazyLoad({ elements_selector: ".lazy" });
     }
 }
 

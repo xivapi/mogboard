@@ -3,6 +3,7 @@
         <canvas id="price-chart" width="100%" height="240"></canvas>
     </div>
     <script>
+    let quantities = {{ stats.General.Quantities|json_encode|raw }};
     new Chart(document.getElementById("price-chart"), {
         type: 'bubble',
         data: {
@@ -22,10 +23,25 @@
                 displayColors: false,
                 position: 'nearest',
                 intersect: false,
-                bodyFontSize: 14,
+                bodyFontSize: 16,
+                bodyFontColor: "rgba(220, 120, 255, 1)",
+                footerFontSize: 13,
+                footerFontColor: "rgba(220, 120, 255, 0.5)",
                 callbacks: {
-                    label: function(tooltipItem, data) {
-                        return 'Price/Unit: ' + numeral(tooltipItem.yLabel).format('0,0')
+                    title: (tooltipItem, data) => {
+                        return '#'+ tooltipItem[0].index + ' - PRICE PER UNIT';
+                    },
+                    label: (tooltipItem, data) => {
+                        let quantity = quantities[tooltipItem.index],
+                            price = numeral(tooltipItem.yLabel).format('0,0');
+
+                        return price +' x '+ quantity;
+                    },
+                    footer: (tooltipItem, data) => {
+                        let quantity = quantities[tooltipItem[0].index],
+                            total = numeral(tooltipItem[0].yLabel * quantity).format('0,0');
+
+                        return 'Total: '+ total;
                     }
                 }
             },
@@ -37,7 +53,7 @@
                 }],
                 yAxes: [{
                     ticks: {
-                        callback: function (value) {
+                        callback: (value) => {
                             return numeral(value).format('0,0')
                         }
                     }

@@ -16,6 +16,7 @@
                     pointBackgroundColor: 'rgba(220, 120, 255, 1)',
                     pointBorderColor: 'rgba(220, 120, 255, 1)',
                     pointBorderWidth: 2,
+                    lineTension: 0,
                 }],
             },
             options: {
@@ -30,7 +31,7 @@
                     intersect: false,
                     bodyFontSize: 14,
                     callbacks: {
-                        label: function(tooltipItem, data) {
+                        label: (tooltipItem, data) => {
                             return 'Price/Unit: ' + numeral(tooltipItem.yLabel).format('0,0')
                         }
                     }
@@ -44,7 +45,7 @@
                     yAxes: [{
                         ticks: {
                             beginAtZero: true,
-                            callback: function (value) {
+                            callback: (value) => {
                                 return numeral(value).format('0,0')
                             }
                         },

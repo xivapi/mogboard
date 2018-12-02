@@ -1,7 +1,14 @@
 import Polyfills from './Polyfills';
 
+//
+// Start
+//
+
 import Server from './Server';
 Server.init();
+
+import Language from './Language';
+Language.init();
 
 import HeaderCategories from './HeaderCategories';
 HeaderCategories.watch();
