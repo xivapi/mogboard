@@ -19,7 +19,6 @@ class HeaderCategoriesSelection
             const catId = $(event.currentTarget).attr('id');
 
             Http.getItemCategoryList(catId, response => {
-                console.log(response);
                 this.uiView.html(response);
             });
         });
