@@ -46,6 +46,23 @@ class Http
             .then(response => response.text())
             .then(callback);
     }
+
+    /**
+     * Get the price for an item across multiple worlds, by default this will select worlds
+     * based on the users server data-center, however they can customise this if they're logged in.
+     *
+     * @param server
+     * @param itemId
+     * @param callback
+     */
+    getItemPricesCrossWorld(server, itemId, callback)
+    {
+        const url = app.url_product_cross_world.replace('-server-', server).replace('-id-', itemId);
+
+        fetch(url, { mode: 'cors' })
+            .then(response => response.text())
+            .then(callback);
+    }
 }
 
 export default new Http;

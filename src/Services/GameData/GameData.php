@@ -20,6 +20,7 @@ class GameData extends GameDataAbstract
         $classes = [
             new GameDataItems($this->io),
             new GameDataItemSearchCategories($this->io),
+            new GameDataServers($this->io),
         ];
     
         // begin populating

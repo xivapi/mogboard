@@ -15,8 +15,12 @@
         {% endif %}
 
         <div class="product-actions">
+            <button class="btn btn-cross-server">
+                <img src="/i/atheryte.png"> Cross-Server Prices
+            </button>
+
             <button class="btn btn-add-to-list">Add to List</button>
-            <button class="btn btn-refresh"><img src="/i/sync-alt-regular.svg" height="14">Refresh</button>
+            <button class="btn btn-refresh"><img src="/i/sync-alt-regular.svg" height="13">Refresh</button>
         </div>
     </div>
 
@@ -28,6 +32,10 @@
             <em></em>
             <em></em>
         </span>
+    </div>
+
+    <div class="product-cross-world">
+
     </div>
 
     <div class="product-page">
@@ -50,11 +58,14 @@
 
 {% block javascripts %}
 <script>
-let refreshButton = $('.btn-refresh'),
-    totalModules = 2,
-    currentModules = 0;
+let refreshButton    = $('.btn-refresh'),
+    crossWorldButton = $('.btn-cross-server'),
+    totalModules     = 2,
+    currentModules   = 0;
 
+// button actions
 refreshButton.on('click', fetchPricesAndHistory);
+crossWorldButton.on('click', fetchCrossWorldPrices);
 
 function hideLoading() {
     currentModules++;
@@ -77,7 +88,15 @@ function fetchPricesAndHistory() {
     mogboard.ProductHistory.setUi('.product-history').fetch({{ item.ID }}, hideLoading);
     refreshButton.attr('disabled', true);
 }
+function fetchCrossWorldPrices() {
+    crossWorldButton.attr('disabled', true);
+
+    mogboard.ProductCrossWorld.setUi('.product-cross-world').fetch({{ item.ID }}, () => {
+        crossWorldButton.attr('disabled', false);
+    });
+}
 
 fetchPricesAndHistory();
+fetchCrossWorldPrices();
 </script>
 {% endblock %}

@@ -1,0 +1,106 @@
+<div class="product-page2">
+    <h2>Cross-World Pricing - {{ dc|title }}</h2>
+    <div class="product-box product-box-cross-world">
+
+        <div>
+            <table class="table product-server-list">
+                <thead>
+                    <tr>
+                        <th data-sort="string" width="30%">Server</th>
+                        <th data-sort="int">QTY</th>
+                        <th data-sort="int">Lowest HQ per unit</th>
+                        <th data-sort="int">Lowest NQ per unit</th>
+                        <th data-sort="int">Last Sale</th>
+                        <th width="1%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for server in servers %}
+                    {% set qty = prices[server ~'_current'].Prices|length %}
+                    {% set lastSale = statsOverall.LastSold[server] %}
+                    <tr class="product-cw-row product-cw-row-{{ server }}">
+                        <td class="product-cw-server" data-sort-value="{{ server }}">
+                            <strong>{{ server|title }}</strong>
+                        </td>
+                        <td class="product-cw-qty" data-sort-value="{{ qty|number_format }}">
+                            {{ qty|number_format }}
+                        </td>
+                        <td class="product-cw-ppu1 {{ server == statsOverall.CheapestNqServer ? 'product-cw-cheap' }}" data-sort-value="{{ stats[server].Prices.PricePerUnit.MinHQ }}">
+                            <img src="/i/hq.png" height="16">
+                            {% if stats[server].Prices.PricePerUnit.MinHQ > 0 %}
+                                {{ stats[server].Prices.PricePerUnit.MinHQ|number_format }}
+                            {% else %}
+                                <small>None for sale</small>
+                            {% endif %}
+                        </td>
+                        <td class="product-cw-ppu2 {{ server == statsOverall.CheapestHqServer ? 'product-cw-cheap' }}" data-sort-value="{{ stats[server].Prices.PricePerUnit.MinNQ }}">
+                            {% if stats[server].Prices.PricePerUnit.MinNQ > 0 %}
+                                {{ stats[server].Prices.PricePerUnit.MinNQ|number_format }}
+                            {% else %}
+                                <small>None for sale</small>
+                            {% endif %}
+                        </td>
+                        <td class="product-cw-last">
+                            {% if lastSale.IsHQ %}
+                                <img src="/i/hq.png" height="16">
+                            {% endif %}
+                            {{ lastSale.PricePerUnit|number_format }}
+                        </td>
+                        <td align="right">
+                            <button class="btn btn-cw-view" id="{{ server }}"></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="product-cw-selected">
+            {% for server in servers %}
+                {% set serverPrices = prices[server ~'_current'] %}
+                {% set serverHistory = prices[server ~'_history'] %}
+                {% set serverStats = stats[server] %}
+                <div class="product-cw-view product-cw-{{ server }}">
+                    <div class="product-cw-header" data-id="{{ server }}">
+                        <button data-className="product-cw-prices" class="active">PRICES</button>
+                        <button data-className="product-cw-history">HISTORY</button>
+                        <span>{{ server|title }}</span>
+                    </div>
+                    <div class="product-cw-prices on">
+                        {% include "Product/prices_snippet.html.twig" with { prices: serverPrices, stats: serverStats.Prices } %}
+                    </div>
+                    <div class="product-cw-history">
+                        {% include "Product/history_snippet.html.twig" with { history: serverHistory, stats: serverStats.History } %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    <div class="product-cw-spacer"></div>
+</div>
+
+<script>$('table.product-server-list').stupidtable();</script>
+<script>
+function showServerPrices(server) {
+    $('.product-cw-view.active').removeClass('active');
+    $('.product-cw-row.active').removeClass('active');
+
+    $('.product-cw-row-' + server).addClass('active');
+    $('.product-cw-' + server).addClass('active');
+}
+$('.btn-cw-view').on('click', event => {
+    let server = $(event.currentTarget).attr('id');
+    showServerPrices(server);
+});
+$('.product-cw-header button').on('click', event => {
+    let server = $(event.currentTarget).parent().attr('data-id'),
+        className = $(event.currentTarget).attr('data-className');
+
+    $('.product-cw-'+ server +' .on').removeClass('on');
+    $('.product-cw-'+ server +' .' + className).addClass('on');
+
+    $('.product-cw-'+ server +' button.active').removeClass('active');
+    $(event.currentTarget).addClass('active');
+});
+showServerPrices('{{ statsOverall.CheapestHqServer }}');
+</script>

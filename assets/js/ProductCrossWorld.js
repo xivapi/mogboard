@@ -1,7 +1,7 @@
 import Server from './Server';
 import Http from './Http';
 
-class ProductPricing
+class ProductCrossWorld
 {
     constructor()
     {
@@ -16,15 +16,15 @@ class ProductPricing
 
     fetch(itemId, callback)
     {
-        this.ui.html('<div class="product-loading-text">Loading current prices</div>');
+        this.ui.html('<div class="product-loading-text2">cross-world prices and purchase history</div>');
 
         const server = Server.getServer();
 
-        Http.getItemPrices(server, itemId, response => {
+        Http.getItemPricesCrossWorld(server, itemId, response => {
             this.ui.html(response);
             callback();
         });
     }
 }
 
-export default new ProductPricing;
+export default new ProductCrossWorld;

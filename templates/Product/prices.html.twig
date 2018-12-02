@@ -1,6 +1,6 @@
 {% if stats %}
-    <div class="product-price-chart">
-        <canvas id="price-chart" width="100%" height="240"></canvas>
+    <div class="product-price-chart" style="position: relative; height: 240px; width: 100%">
+        <canvas id="price-chart"></canvas>
     </div>
     <script>
     var quantities = {{ stats.General.Quantities|json_encode|raw }};
@@ -14,6 +14,7 @@
             }]
         },
         options: {
+            responsive: true,
             maintainAspectRatio: false,
             animation: false,
             legend: {
@@ -70,7 +71,7 @@
         }
     });
     </script>
-    <small class="product-chart-note">Listings <strong>200%</strong> above the average <strong>price per unit</strong> are ignored</small>
+    <small class="product-chart-note">Listings <strong>300%</strong> above the average <strong>price per unit</strong> are ignored</small>
 
     <hr>
 
@@ -112,63 +113,7 @@
 </div>
 {% endif %}
 
-<table class="table product-prices-table">
-    <thead>
-        <tr>
-            <th data-sort="int">#</th>
-            <th data-sort="int">HQ</th>
-            <th data-sort="int">Materia</th>
-            <th data-sort="int">Price</th>
-            <th data-sort="int">QTY</th>
-            <th data-sort="int">Total</th>
-            <th data-sort="string">Retainer</th>
-            <th data-sort="string">Crafter</th>
-            <th data-sort="int"></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for price in prices.Prices %}
-            {% set state = (price.PriceTotal == stats.PriceTotal.Min ? 1 : (price.PriceTotal == stats.PriceTotal.Max ? 2 : 0)) %}
-            <tr class="product-status-{{ state }}">
-                <td align="center" class="product-num" width="1%" data-sort-value="{{ loop.index }}">{{ loop.index }}</td>
-                <td align="center" class="product-hq" width="1%" data-sort-value="{{ price.IsHQ }}">{{ price.IsHQ ? '<img src="/i/hq.png">' : '' }}</td>
-                <td align="center" class="product-materia" data-sort-value="{{ price.Materia|length }}">
-                    {% if price.Materia %}
-                        {% for materia in price.Materia %}
-                            <img src="{{ materia.Icon|icon }}">
-                        {% endfor %}
-                    {% endif %}
-                </td>
-                <td align="right" class="product-ppu" data-sort-value="{{ price.PricePerUnit }}">
-                    {{ price.PricePerUnit|number_format }}
-                </td>
-                <td align="center" class="product-qty" width="1%" data-sort-value="{{ price.Quantity }}">
-                    {{ price.Quantity|number_format }}
-                </td>
-                <td align="right" class="product-pt" width="1%" data-sort-value="{{ price.PriceTotal }}">
-                    {{ price.PriceTotal|number_format }}
-                </td>
-                <td class="product-town" data-sort-value="{{ price.Town.Name }}">
-                    <img src="{{ price.Town.Icon|icon }}"> {{ price.Town.Name }}
-                </td>
-                <td class="product-crafter" data-sort-value="{{ price.CraftSignature }}">
-                    {% if price.CraftSignature|length > 2 %}
-                        {{ price.CraftSignature }}
-                    {% endif %}
-                </td>
-                <td class="product-status" align="center" data-sort-value="">
-                    {% if state > 0 %}
-                        <img src="/i/{{ state == 1 ? 'dot_green.png' : 'dot_red.png' }}">
-                    {% endif %}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">None for sale!</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% include "Product/prices_snippet.html.twig" with { prices: prices } %}
 
 <div class="product-table-footer">
     <span>Total Cost:</span>

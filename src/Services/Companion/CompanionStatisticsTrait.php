@@ -27,6 +27,10 @@ trait CompanionStatisticsTrait
                 'Min'       => 0,
                 'Max'       => 0,
                 'Avg'       => 0,
+                'MinHQ'     => 0,
+                'MinNQ'     => 0,
+                'MaxHQ'     => 0,
+                'MaxNQ'     => 0,
                 'Values'    => [],
                 'Chart'     => [],
                 'Quantity'  => [],
@@ -35,6 +39,10 @@ trait CompanionStatisticsTrait
                 'Min'       => 0,
                 'Max'       => 0,
                 'Avg'       => 0,
+                'MinHQ'     => 0,
+                'MinNQ'     => 0,
+                'MaxHQ'     => 0,
+                'MaxNQ'     => 0,
                 'Values'    => [],
             ],
         ];
@@ -53,8 +61,8 @@ trait CompanionStatisticsTrait
         // if filtered false, silly prices still exist
         if ($filtered === false) {
             foreach ($prices as $i => $price) {
-                // ignore prices that are 2x the average
-                $threshold = ($stats->PricePerUnit->Avg * 2);
+                // ignore prices that are 3x the average
+                $threshold = ($stats->PricePerUnit->Avg * 3);
                 if ($price->PricePerUnit > $threshold) {
                     unset($prices[$i]);
                 }
@@ -68,6 +76,18 @@ trait CompanionStatisticsTrait
             $stats->PriceTotal->Min   = ($stats->PriceTotal->Min === 0 || $price->PriceTotal < $stats->PriceTotal->Min) ? $price->PriceTotal : $stats->PriceTotal->Min;
             $stats->PricePerUnit->Max = ($stats->PricePerUnit->Max === 0 || $price->PricePerUnit > $stats->PricePerUnit->Max) ? $price->PricePerUnit : $stats->PricePerUnit->Max;
             $stats->PriceTotal->Max   = ($stats->PriceTotal->Max === 0 || $price->PriceTotal > $stats->PriceTotal->Max) ? $price->PriceTotal : $stats->PriceTotal->Max;
+            
+            if ($price->IsHQ) {
+                $stats->PricePerUnit->MinHQ = ($stats->PricePerUnit->MinHQ === 0 || $price->PricePerUnit < $stats->PricePerUnit->MinHQ) ? $price->PricePerUnit : $stats->PricePerUnit->MinHQ;
+                $stats->PriceTotal->MinHQ   = ($stats->PriceTotal->MinHQ === 0 || $price->PriceTotal < $stats->PriceTotal->MinHQ) ? $price->PriceTotal : $stats->PriceTotal->MinHQ;
+                $stats->PricePerUnit->MaxHQ = ($stats->PricePerUnit->MaxHQ === 0 || $price->PricePerUnit > $stats->PricePerUnit->MaxHQ) ? $price->PricePerUnit : $stats->PricePerUnit->MaxHQ;
+                $stats->PriceTotal->MaxHQ   = ($stats->PriceTotal->MaxHQ === 0 || $price->PriceTotal > $stats->PriceTotal->MaxHQ) ? $price->PriceTotal : $stats->PriceTotal->MaxHQ;
+            } else {
+                $stats->PricePerUnit->MinNQ = ($stats->PricePerUnit->MinNQ === 0 || $price->PricePerUnit < $stats->PricePerUnit->MinNQ) ? $price->PricePerUnit : $stats->PricePerUnit->MinNQ;
+                $stats->PriceTotal->MinNQ   = ($stats->PriceTotal->MinNQ === 0 || $price->PriceTotal < $stats->PriceTotal->MinNQ) ? $price->PriceTotal : $stats->PriceTotal->MinNQ;
+                $stats->PricePerUnit->MaxNQ = ($stats->PricePerUnit->MaxNQ === 0 || $price->PricePerUnit > $stats->PricePerUnit->MaxNQ) ? $price->PricePerUnit : $stats->PricePerUnit->MaxNQ;
+                $stats->PriceTotal->MaxNQ   = ($stats->PriceTotal->MaxNQ === 0 || $price->PriceTotal > $stats->PriceTotal->MaxNQ) ? $price->PriceTotal : $stats->PriceTotal->MaxNQ;
+            }
             
             $stats->General->Quantities[] = $price->Quantity;
             
@@ -96,6 +116,9 @@ trait CompanionStatisticsTrait
         return $stats;
     }
     
+    /**
+     * Build stats for the current purchase history
+     */
     public function getItemHistoryStats($history)
     {
         if (empty($history)) {
@@ -165,5 +188,53 @@ trait CompanionStatisticsTrait
         }
     
         return $stats;
+    }
+    
+    /**
+     * (mega) Build stats for all servers!
+     *  - this can be fed to the two other methods
+     */
+    public function getItemPricesCrossWorldStats($servers, $prices)
+    {
+        $stats = [];
+        $statsOverall = (Object)[
+            'CheapestNq' => 0,
+            'CheapestNqServer' => 0,
+            'CheapestHq' => 0,
+            'CheapestHqServer' => 0,
+            'LastSold' => []
+        ];
+        
+        foreach ($servers as $server) {
+            $serverPrices   = $prices->{$server . '_current'}->Prices;
+            $serverHistory  = $prices->{$server . '_history'}->History;
+            $lastSold       = $serverHistory[0];
+            
+            // build stats
+            $priceStats   = $this->getItemPriceStats($serverPrices);
+            $historyStats = $this->getItemHistoryStats($serverHistory);
+            
+            // save to server
+            $stats[$server] = [
+                'Prices'  => $priceStats,
+                'History' => $historyStats
+            ];
+            
+            // work out cheapests
+            if ($statsOverall->CheapestNq === 0 || $priceStats->PricePerUnit->MinNQ < $statsOverall->CheapestNq) {
+                $statsOverall->CheapestNq = $priceStats->PricePerUnit->MinNQ;
+                $statsOverall->CheapestNqServer = $server;
+            }
+    
+            if ($statsOverall->CheapestHq === 0 || $priceStats->PricePerUnit->MinHQ < $statsOverall->CheapestHq) {
+                $statsOverall->CheapestHq = $priceStats->PricePerUnit->MinHQ;
+                $statsOverall->CheapestHqServer = $server;
+            }
+            
+            // record last sold
+            $statsOverall->LastSold[$server] = $lastSold;
+        }
+        
+        return [ $stats, $statsOverall ];
     }
 }

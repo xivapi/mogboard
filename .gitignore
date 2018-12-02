@@ -21,3 +21,5 @@ yarn-error.log
 ###< phpunit/phpunit ###
 
 ssh\.exe\.stackdump
+
+src/Services/Companion/dev\.json

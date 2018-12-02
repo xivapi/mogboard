@@ -64,4 +64,23 @@ class ProductController extends AbstractController
             'stats'   => $stats,
         ]);
     }
+    
+    /**
+     * @Route("/market/{server}/{itemId}/prices/cross-world", name="product_cross_world")
+     */
+    public function pricesCrossWorld(string $server, int $itemId)
+    {
+        [$prices, $dc, $servers, $duration] = $this->companion->getItemPricesCrossWorld($server, $itemId);
+        [$stats, $statsOverall]  = $this->companion->getItemPricesCrossWorldStats($servers, $prices);
+
+        return $this->render('Product/cross-world.html.twig', [
+            'prices'        => json_decode(json_encode($prices), true),
+            'stats'         => json_decode(json_encode($stats), true),
+            'statsOverall'  => $statsOverall,
+            'dc'            => $dc,
+            'servers'       => $servers,
+            'server'        => $server,
+            'duration'      => $duration
+        ]);
+    }
 }

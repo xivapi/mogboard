@@ -1,6 +1,6 @@
 {% if stats %}
-    <div class="product-price-chart">
-        <canvas id="price-history" width="100%" height="240"></canvas>
+    <div class="product-price-chart" style="position: relative; height: 240px; width: 100%">
+        <canvas id="price-history"></canvas>
     </div>
     <script>
         new Chart(document.getElementById("price-history"), {
@@ -20,6 +20,7 @@
                 }],
             },
             options: {
+                responsive: true,
                 maintainAspectRatio: false,
                 animation: false,
                 legend: {
@@ -106,52 +107,8 @@
     </div>
 {% endif %}
 
-<table class="table product-history-table">
-    <thead>
-        <tr>
-            <th data-sort="int">#</th>
-            <th data-sort="int">HQ</th>
-            <th data-sort="int">Price (Unit)</th>
-            <th data-sort="int">QTY</th>
-            <th data-sort="string">Buyer</th>
-            <th data-sort="int">Date</th>
-            <th data-sort="int">%</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for purchase in history.History %}
-            {% set percent = ((purchase.PricePerUnit / stats.PricePerUnit.Avg) * 100)|round(1) %}
-            <tr>
-                <td align="center" class="product-num" width="1%" data-sort-value="{{ loop.index }}">{{ loop.index }}</td>
-                <td align="center" class="product-hq" width="1%" data-sort-value="{{ purchase.IsHQ }}">{{ purchase.IsHQ ? '<img src="/i/hq.png">' : '' }}</td>
-                <td align="right" class="product-ppu2" data-sort-value="{{ purchase.PricePerUnit }}">
-                    <div>
-                        {{ purchase.PriceTotal|number_format }}
-                    </div>
-                    <div>
-                        {{ purchase.PricePerUnit|number_format }}
-                    </div>
-                </td>
-                <td align="center" class="product-qty" width="1%" data-sort-value="{{ purchase.Quantity }}">
-                    {{ purchase.Quantity|number_format }}
-                </td>
-                <td class="product-buyer" data-sort-value="{{ purchase.CharacterName }}">
-                    {{ purchase.CharacterName|title }}
-                </td>
-                <td align="right" class="product-date" data-sort-value="{{ purchase.PurchaseDate }}">
-                    {{ purchase.PurchaseDate|date }}
-                </td>
-                <td align="right" width="2%" class="product-percent product-percent-{{ percent > 100 ? 1 : 2 }}" data-sort-value="{{ percent }}">
-                    {{ percent }}%
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">None have ever sold!</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% include "Product/history_snippet.html.twig" with { history: history } %}
+
 
 <div class="product-table-footer">
     <span>X% = Purchase percentage +/- over the average price per unit</span>

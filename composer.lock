@@ -1600,16 +1600,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.6.1",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "ab9bfecb5b9ea9557f027dcd01762495c351632f"
+                "reference": "90ff5556d4bd25954c272a22654e7bd43e8ab055"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/ab9bfecb5b9ea9557f027dcd01762495c351632f",
-                "reference": "ab9bfecb5b9ea9557f027dcd01762495c351632f",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/90ff5556d4bd25954c272a22654e7bd43e8ab055",
+                "reference": "90ff5556d4bd25954c272a22654e7bd43e8ab055",
                 "shasum": ""
             },
             "require": {
@@ -1655,7 +1655,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-11-22T16:45:03+00:00"
+            "time": "2018-12-02T10:14:51+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -3841,16 +3841,16 @@
         },
         {
             "name": "symfony/contracts",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "4a33574d5771f4b04334cd4f7d43de96a92efb62"
+                "reference": "3edf0ab943d1985a356721952cba36ff31bd6e5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/4a33574d5771f4b04334cd4f7d43de96a92efb62",
-                "reference": "4a33574d5771f4b04334cd4f7d43de96a92efb62",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/3edf0ab943d1985a356721952cba36ff31bd6e5f",
+                "reference": "3edf0ab943d1985a356721952cba36ff31bd6e5f",
                 "shasum": ""
             },
             "require": {
@@ -3905,7 +3905,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2018-10-31T08:00:32+00:00"
+            "time": "2018-11-24T09:35:08+00:00"
         },
         {
             "name": "symfony/debug",
@@ -5963,16 +5963,16 @@
         },
         {
             "name": "xivapi/xivapi-php",
-            "version": "1.1.5",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xivapi/xivapi-php.git",
-                "reference": "1f5f4dd3fe65084852bd185ffc5a5ef42616c422"
+                "reference": "d17e1d1f2fd7ad8019d78f77f1db457ca578a441"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xivapi/xivapi-php/zipball/1f5f4dd3fe65084852bd185ffc5a5ef42616c422",
-                "reference": "1f5f4dd3fe65084852bd185ffc5a5ef42616c422",
+                "url": "https://api.github.com/repos/xivapi/xivapi-php/zipball/d17e1d1f2fd7ad8019d78f77f1db457ca578a441",
+                "reference": "d17e1d1f2fd7ad8019d78f77f1db457ca578a441",
                 "shasum": ""
             },
             "require": {
@@ -6006,7 +6006,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2018-11-30T17:35:07+00:00"
+            "time": "2018-12-02T16:21:33+00:00"
         },
         {
             "name": "zendframework/zend-code",

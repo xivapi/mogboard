@@ -21,8 +21,10 @@ Search.watch();
 
 import ProductPricing from './ProductPricing';
 import ProductHistory from './ProductHistory';
+import ProductCrossWorld from './ProductCrossWorld';
 
 export default {
     ProductPricing: ProductPricing,
     ProductHistory: ProductHistory,
+    ProductCrossWorld: ProductCrossWorld,
 }
