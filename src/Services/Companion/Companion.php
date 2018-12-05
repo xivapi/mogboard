@@ -44,6 +44,7 @@ class Companion
      */
     public function getItemPricesCrossWorld(string $server, int $itemId): array
     {
+        $start  = microtime(true);
         $server = ucwords($server);
         
         $redis = (new Redis())->connect();
@@ -59,18 +60,7 @@ class Companion
         
         $dc = $serversToDc->{$server};
         $servers = $dcToServers->{$dc};
-    
-        # todo - comment this, debugging purposes
-        /*
-        if (file_exists(__DIR__.'/dev.json')) {
-            return [
-                json_decode(file_get_contents(__DIR__.'/dev.json')),
-                $dc,
-                $servers,
-                0.1234
-            ];
-        }*/
-        
+
         // concurrent api requests!!!!!!
         $this->xivapi->async();
 
@@ -78,17 +68,18 @@ class Companion
         $promises = [];
         foreach ($servers as $server) {
             $promises[$server . '_current'] = $this->getItemPrices($server, $itemId);
+        }
+
+        $results = Promise\settle($promises)->wait();
+        sleep(1);
+    
+        foreach ($servers as $server) {
             $promises[$server . '_history'] = $this->getItemHistory($server, $itemId);
         }
-    
-        // fire off request
-        $start = microtime(true);
-        $results = Promise\settle($promises)->wait();
-        $prices = $this->xivapi->unwrap($results);
+
+        $results  = array_merge($results, Promise\settle($promises)->wait());
+        $prices   = $this->xivapi->unwrap($results);
         $duration = microtime(true) - $start;
-        
-        # todo - comment this, debugging purposes
-        // file_put_contents(__DIR__.'/dev.json', json_encode($prices));
         
         return [ $prices, $dc, $servers, $duration ];
     }
