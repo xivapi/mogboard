@@ -4,9 +4,31 @@
     <main>
 
         <div class="home">
-            <p>in testing</p><br>
+            <p>in testing</p>
+            <br><br>
+            <select id="servers">
+                {% for dc, servers in cache.get('mog_DataCenters') %}
+                <optgroup label="{{ dc }}">
+                    {% for server in servers %}
+                    <option value="{{ server }}">{{ server }}</option>
+                    {% endfor %}
+                </optgroup>
+                {% endfor %}
+            </select>
+            <br><br><br>
             <a href="{{ path('user_logout') }}" class="logout">Logout</a>
         </div>
 
     </main>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="application/javascript">
+        $('#servers').val(localStorage.getItem('server'));
+        $('#servers').on('change', function(event) {
+            let value = $(event.currentTarget).val();
+            localStorage.setItem('server', value);
+            location.reload();
+        });
+    </script>
 {% endblock %}
