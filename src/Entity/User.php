@@ -71,7 +71,7 @@ class User
     {
         $this->id       = Uuid::uuid4();
         $this->session  = Uuid::uuid4()->toString() . Uuid::uuid4()->toString() . Uuid::uuid4()->toString();
-        $this->alerts = new ArrayCollection();
+        $this->alerts   = new ArrayCollection();
         $this->reports  = new ArrayCollection();
     }
     

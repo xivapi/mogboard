@@ -16,8 +16,8 @@ class Alert
     const CONDITION_AVG_PRICE = 3;
     const CONDITION_MIN_STOCK = 10;
     const CONDITION_MAX_STOCK = 11;
-    const CONDITION_MIN_QTY = 20;
-    const CONDITION_MAX_QTY = 21;
+    const CONDITION_MIN_QTY   = 20;
+    const CONDITION_MAX_QTY   = 21;
 
     /**
      * @var string
@@ -31,6 +31,12 @@ class Alert
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="AlertItem", inversedBy="alerts")
+     * @ORM\JoinColumn(name="alert_item_id", referencedColumnName="id")
+     */
+    private $alertItem;
     /**
      * @var int
      * @ORM\Column(type="integer")
@@ -50,19 +56,12 @@ class Alert
      * @var string
      * @ORM\Column(type="string", length=64)
      */
-    private $value;
-    /**
-     * In minutes
-     *
-     * @var int
-     * @ORM\Column(type="integer", length=10)
-     */
-    private $delay;
+    private $conditionValue;
     /**
      * @var boolean
      * @ORM\Column(type="boolean")
      */
-    private $notifyViaDesktop;
+    private $notifyViaDesktop = false;
     /**
      * @var User
      * @ORM\Column(type="string", length=64)
@@ -104,6 +103,18 @@ class Alert
         return $this;
     }
 
+    public function getAlertItem(): User
+    {
+        return $this->alertItem;
+    }
+
+    public function setAlertItem(User $alertItem)
+    {
+        $this->alertItem = $alertItem;
+
+        return $this;
+    }
+
     public function getAdded(): int
     {
         return $this->added;
@@ -140,26 +151,14 @@ class Alert
         return $this;
     }
 
-    public function getValue(): string
+    public function getConditionValue(): string
     {
-        return $this->value;
+        return $this->conditionValue;
     }
 
-    public function setValue(string $value)
+    public function setConditionValue(string $conditionValue)
     {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    public function getDelay(): int
-    {
-        return $this->delay;
-    }
-
-    public function setDelay(int $delay)
-    {
-        $this->delay = $delay;
+        $this->conditionValue = $conditionValue;
 
         return $this;
     }
