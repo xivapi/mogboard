@@ -7,8 +7,8 @@ use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="alerts")
- * @ORM\Entity(repositoryClass="App\Repository\AlertRepository")
+ * @ORM\Table(name="alerts_items")
+ * @ORM\Entity(repositoryClass="App\Repository\AlertItemRepository")
  */
 class AlertItem
 {
@@ -29,6 +29,11 @@ class AlertItem
      */
     private $itemId;
     /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    private $server;
+    /**
      * @var int
      * @ORM\Column(type="integer")
      */
@@ -37,18 +42,12 @@ class AlertItem
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $lastScanned;
+    private $lastScanned = 0;
     /**
      * @var string
      * @ORM\Column(type="text")
      */
-    private $data;
-    /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="alerts")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    private $user;
+    private $data = '';
     /**
      * @ORM\OneToMany(targetEntity="Alert", mappedBy="alertItem")
      */
@@ -56,7 +55,9 @@ class AlertItem
 
     public function __construct()
     {
+        $this->id = Uuid::uuid4();
         $this->alerts = new ArrayCollection();
+        $this->added = time();
     }
 
     public function getId(): string
@@ -94,7 +95,19 @@ class AlertItem
 
         return $this;
     }
-
+    
+    public function getServer(): string
+    {
+        return $this->server;
+    }
+    
+    public function setServer(string $server)
+    {
+        $this->server = $server;
+        
+        return $this;
+    }
+    
     public function getScans(): int
     {
         return $this->scans;
@@ -131,18 +144,6 @@ class AlertItem
         return $this;
     }
 
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getAlerts()
     {
         return $this->alerts;
@@ -154,5 +155,4 @@ class AlertItem
 
         return $this;
     }
-
 }

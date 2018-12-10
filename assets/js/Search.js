@@ -40,7 +40,7 @@ class Search
 
         // prep results
         response.Results.forEach((item, i) => {
-            const url = app.url_product.replace('-id-', item.ID);
+            const url = mog.url_product.replace('-id-', item.ID);
 
             results.push(
                 `<a href="${url}" class="rarity-${item.Rarity}">

@@ -1,12 +1,16 @@
 class Language
 {
+    constructor()
+    {
+        this.default = 'eu';
+    }
+
     init()
     {
         let language = localStorage.getItem('language');
 
         // default language if non exist
-        language = language ? language : 'eu';
-        localStorage.setItem('language', language);
+        localStorage.setItem('language', language ? language : this.default);
     }
 
     getLanguage()

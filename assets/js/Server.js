@@ -1,12 +1,16 @@
 class Server
 {
+    constructor()
+    {
+        this.default = 'Phoenix';
+    }
+
     init()
     {
         let server = localStorage.getItem('server');
 
         // default server if non exist
-        server = server ? server : 'Phoenix';
-        localStorage.setItem('server', server);
+        localStorage.setItem('server', server ? server : this.default);
     }
 
     getServer()

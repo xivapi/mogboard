@@ -11,13 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Alert
 {
-    const CONDITION_MIN_PRICE = 1;
-    const CONDITION_MAX_PRICE = 2;
-    const CONDITION_AVG_PRICE = 3;
-    const CONDITION_MIN_STOCK = 10;
-    const CONDITION_MAX_STOCK = 11;
-    const CONDITION_MIN_QTY   = 20;
-    const CONDITION_MAX_QTY   = 21;
+    const TRIGGER_MIN_PRICE = 1;
+    const TRIGGER_MAX_PRICE = 2;
+    const TRIGGER_AVG_PRICE = 3;
+    const TRIGGER_MIN_STOCK = 10;
+    const TRIGGER_MAX_STOCK = 11;
+    const TRIGGER_MIN_QTY   = 20;
+    const TRIGGER_MAX_QTY   = 21;
 
     /**
      * @var string
@@ -32,7 +32,7 @@ class Alert
      */
     private $user;
     /**
-     * @var User
+     * @var AlertItem
      * @ORM\ManyToOne(targetEntity="AlertItem", inversedBy="alerts")
      * @ORM\JoinColumn(name="alert_item_id", referencedColumnName="id")
      */
@@ -51,151 +51,202 @@ class Alert
      * @var int
      * @ORM\Column(type="integer", length=3)
      */
-    private $condition;
+    private $triggerOption;
     /**
      * @var string
      * @ORM\Column(type="string", length=64)
      */
-    private $conditionValue;
+    private $triggerValue;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $triggerLimit;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $triggerDelay = 300;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $triggerLastSent = 0;
     /**
      * @var boolean
      * @ORM\Column(type="boolean")
      */
-    private $notifyViaDesktop = false;
+    private $notifiedViaDesktop = false;
     /**
-     * @var User
-     * @ORM\Column(type="string", length=64)
+     * @var boolean
+     * @ORM\Column(type="boolean")
      */
-    private $notifyViaEmail;
+    private $notifiedViaEmail = false;
     /**
-     * @var User
-     * @ORM\Column(type="string", length=64)
+     * @var boolean
+     * @ORM\Column(type="boolean")
      */
-    private $notifyViaDiscord;
-
+    private $notifiedViaDiscord = false;
+    
     public function __construct()
     {
         $this->id = Uuid::uuid4();
         $this->added = time();
     }
-
+    
     public function getId(): string
     {
         return $this->id;
     }
-
+    
     public function setId(string $id)
     {
         $this->id = $id;
-
+        
         return $this;
     }
-
+    
     public function getUser(): User
     {
         return $this->user;
     }
-
+    
     public function setUser(User $user)
     {
         $this->user = $user;
-
+        
         return $this;
     }
-
-    public function getAlertItem(): User
+    
+    public function getAlertItem(): AlertItem
     {
         return $this->alertItem;
     }
-
-    public function setAlertItem(User $alertItem)
+    
+    public function setAlertItem(AlertItem $alertItem)
     {
         $this->alertItem = $alertItem;
-
+        
         return $this;
     }
-
+    
     public function getAdded(): int
     {
         return $this->added;
     }
-
+    
     public function setAdded(int $added)
     {
         $this->added = $added;
-
+        
         return $this;
     }
-
+    
     public function getName(): string
     {
         return $this->name;
     }
-
+    
     public function setName(string $name)
     {
         $this->name = $name;
-
+        
         return $this;
     }
-
-    public function getCondition(): int
+    
+    public function getTriggerOption(): int
     {
-        return $this->condition;
+        return $this->triggerOption;
     }
-
-    public function setCondition(int $condition)
+    
+    public function setTriggerOption(int $triggerOption)
     {
-        $this->condition = $condition;
-
+        $this->triggerOption = $triggerOption;
+        
         return $this;
     }
-
-    public function getConditionValue(): string
+    
+    public function getTriggerValue(): string
     {
-        return $this->conditionValue;
+        return $this->triggerValue;
     }
-
-    public function setConditionValue(string $conditionValue)
+    
+    public function setTriggerValue(string $triggerValue)
     {
-        $this->conditionValue = $conditionValue;
-
+        $this->triggerValue = $triggerValue;
+        
         return $this;
     }
-
-    public function isNotifyViaDesktop(): bool
+    
+    public function getTriggerLimit(): int
     {
-        return $this->notifyViaDesktop;
+        return $this->triggerLimit;
     }
-
-    public function setNotifyViaDesktop(bool $notifyViaDesktop)
+    
+    public function setTriggerLimit(int $triggerLimit)
     {
-        $this->notifyViaDesktop = $notifyViaDesktop;
-
+        $this->triggerLimit = $triggerLimit;
+        
         return $this;
     }
-
-    public function getNotifyViaEmail(): User
+    
+    public function getTriggerDelay(): int
     {
-        return $this->notifyViaEmail;
+        return $this->triggerDelay;
     }
-
-    public function setNotifyViaEmail(User $notifyViaEmail)
+    
+    public function setTriggerDelay(int $triggerDelay)
     {
-        $this->notifyViaEmail = $notifyViaEmail;
-
+        $this->triggerDelay = $triggerDelay;
+        
         return $this;
     }
-
-    public function getNotifyViaDiscord(): User
+    
+    public function getTriggerLastSent(): int
     {
-        return $this->notifyViaDiscord;
+        return $this->triggerLastSent;
     }
-
-    public function setNotifyViaDiscord(User $notifyViaDiscord)
+    
+    public function setTriggerLastSent(int $triggerLastSent)
     {
-        $this->notifyViaDiscord = $notifyViaDiscord;
-
+        $this->triggerLastSent = $triggerLastSent;
+        
+        return $this;
+    }
+    
+    public function isNotifiedViaDesktop(): bool
+    {
+        return $this->notifiedViaDesktop;
+    }
+    
+    public function setNotifiedViaDesktop(bool $notifiedViaDesktop)
+    {
+        $this->notifiedViaDesktop = $notifiedViaDesktop;
+        
+        return $this;
+    }
+    
+    public function isNotifiedViaEmail(): bool
+    {
+        return $this->notifiedViaEmail;
+    }
+    
+    public function setNotifiedViaEmail(bool $notifiedViaEmail)
+    {
+        $this->notifiedViaEmail = $notifiedViaEmail;
+        
+        return $this;
+    }
+    
+    public function isNotifiedViaDiscord(): bool
+    {
+        return $this->notifiedViaDiscord;
+    }
+    
+    public function setNotifiedViaDiscord(bool $notifiedViaDiscord)
+    {
+        $this->notifiedViaDiscord = $notifiedViaDiscord;
+        
         return $this;
     }
 }

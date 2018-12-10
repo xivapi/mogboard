@@ -39,8 +39,43 @@
         </div>
     </div>
     <nav>
+        <button class="settings settings-btn">
+            <img src="/i/cog-light.svg" height="32">
+        </button>
+        <div class="settings-menu">
+            <div class="settings-row settings-row-top">
+                <label for="servers">Server</label>
+                <p>Choose your primary server, this will also set your Data Center for cross-world pricing.</p>
+                <select id="servers" class="servers">
+                    {% for dc, servers in cache.get('mog_DataCenters') %}
+                        <optgroup label="{{ dc }}">
+                            {% for server in servers %}
+                                <option value="{{ server }}">{{ server }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="settings-row">
+                <label for="languages">Language</label>
+                <select id="languages" class="languages">
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsche</option>
+                    <option value="ja">日本人</option>
+                    {# <option value="kr">한국어</option>
+                    <option value="cn">中文</option> #}
+                </select>
+            </div>
+        </div>
+
+        {# user bitz #}
         {% if auth.online() %}
-            <a href="" class="user">{{ auth.user.username|title }} <img src="{{ auth.user.avatar }}"></a>
+            <button class="user user-btn">{{ auth.user.username|title }} <img src="{{ auth.user.avatar }}"></button>
+            <div class="user-menu">
+                <span>SSO: <strong>{{ auth.user.sso|title }}</strong></span>
+                <a href="{{ path('user_logout') }}" class="logout">Logout</a>
+            </div>
         {% else %}
             <a href="{{ path('user_login_discord') }}" class="login">Login via Discord</a>
         {% endif %}

@@ -24,6 +24,20 @@
         </div>
     </div>
 
+    <div class="product-user-bar">
+        <div>
+            {% if auth.online() %}
+                <button class="btn-add-list"><img src="/i/tasks-regular.svg" height="16"> Add to List</button>
+                <button class="btn-add-alert"><img src="/i/alarm-clock-regular.svg" height="16"> Create Alert</button>
+            {% else %}
+                <a href="{{ path('user_login_discord') }}">Login via Discord</a> to create item alerts and watch lists.
+            {% endif %}
+        </div>
+        <div>
+            <span>Popularity: <em>⮝{{ random(500) }}%</em></span>
+        </div>
+    </div>
+
     <div class="product-loading on">
         <div>loading</div>
         <span>
@@ -34,9 +48,7 @@
         </span>
     </div>
 
-    <div class="product-cross-world">
-
-    </div>
+    <div class="product-page2 product-cross-world"></div>
 
     <div class="product-page">
         <div class="product-page-left">

@@ -88,6 +88,10 @@ function showServerPrices(server) {
     $('.product-cw-row-' + server).addClass('active');
     $('.product-cw-' + server).addClass('active');
 }
+$('.product-cw-server').on('click', event => {
+    let server = $(event.currentTarget).parent().find('.btn-cw-view').attr('id');
+    showServerPrices(server);
+});
 $('.btn-cw-view').on('click', event => {
     let server = $(event.currentTarget).attr('id');
     showServerPrices(server);

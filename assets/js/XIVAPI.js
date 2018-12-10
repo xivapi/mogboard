@@ -1,11 +1,13 @@
+import Language from './Language';
+
 class XIVAPI
 {
     get(endpoint, queries, callback)
     {
         queries = queries ? queries : {};
-        queries.key = app.xivapi_key;
-        queries.tags = 'mogboardv2';
-        queries.language = localStorage.getItem('language');
+        queries.key      = mog.xivapi_key;
+        queries.tags     = 'mogboardv2';
+        queries.language = Language.getLanguage();
 
         let query = Object.keys(queries)
             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(queries[k]))
