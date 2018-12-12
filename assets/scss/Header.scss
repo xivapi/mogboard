@@ -175,15 +175,17 @@ header {
                     background-color: #222;
                 }
             }
+        }
 
-            &.login {
-                padding: 0 20px;
-                background-color: #7289DA;
+        a.login {
+            padding: 0 20px;
+            background-color: #7289DA;
+            display: inline-block;
+            line-height: 49px;
+            color: #fff;
 
-                &:hover {
-                    color: #fff;
-                    background-color: #5763ae;
-                }
+            &:hover {
+                background-color: #5763ae;
             }
         }
     }

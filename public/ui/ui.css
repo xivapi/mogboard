@@ -312,12 +312,14 @@ header {
         header nav button.user:hover {
           color: #ddd749;
           background-color: #222; }
-      header nav button.login {
-        padding: 0 20px;
-        background-color: #7289DA; }
-        header nav button.login:hover {
-          color: #fff;
-          background-color: #5763ae; }
+    header nav a.login {
+      padding: 0 20px;
+      background-color: #7289DA;
+      display: inline-block;
+      line-height: 49px;
+      color: #fff; }
+      header nav a.login:hover {
+        background-color: #5763ae; }
 
 .user-menu,
 .settings-menu {
