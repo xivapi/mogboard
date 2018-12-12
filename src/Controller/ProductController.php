@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Alert;
 use App\Services\Cache\Cache;
 use App\Services\Companion\Companion;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,7 +34,8 @@ class ProductController extends AbstractController
         }
 
         return $this->render('Product/item.html.twig', [
-            'item'   => $item,
+            'triggers' => Alert::getTriggers(),
+            'item'     => $item,
         ]);
     }
     
@@ -80,7 +82,7 @@ class ProductController extends AbstractController
             'dc'            => $dc,
             'servers'       => $servers,
             'server'        => $server,
-            'duration'      => $duration
+            'duration'      => $duration,
         ]);
     }
 }

@@ -49,6 +49,7 @@ class AlertController extends AbstractController
             $name,
             $condition,
             $conditionValue,
+            $conditionHQ,
             $viaDesktop,
             $viaDiscord,
             $viaEmail,
@@ -79,6 +80,7 @@ class AlertController extends AbstractController
             ->setTriggerValue($conditionValue)
             ->setTriggerLimit($limit)
             ->setTriggerDelay($delay)
+            ->setTriggerHq($conditionHQ)
             ->setNotifiedViaDesktop($viaDesktop)
             ->setNotifiedViaDiscord($viaDiscord)
             ->setNotifiedViaEmail($viaEmail);

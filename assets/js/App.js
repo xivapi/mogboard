@@ -22,16 +22,21 @@ HeaderCategoriesSelection.watch();
 import HeaderSettings from './HeaderSettings';
 HeaderSettings.watch();
 
+import ProductAlert from './ProductAlert';
+ProductAlert.watch();
 
 import Search from './Search';
 Search.watch();
 
+
 import ProductPricing from './ProductPricing';
 import ProductHistory from './ProductHistory';
 import ProductCrossWorld from './ProductCrossWorld';
+import ProductLoading from './ProductLoading';
 
 export default {
     ProductPricing: ProductPricing,
     ProductHistory: ProductHistory,
     ProductCrossWorld: ProductCrossWorld,
+    ProductLoading: ProductLoading,
 }

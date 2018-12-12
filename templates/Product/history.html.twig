@@ -100,6 +100,9 @@
         <div>
             Average Sale Speed: <span>{{ stats.General.AvgSaleWait }}</span>
         </div>
+        <div>
+            Total Gil: <span>{{ stats.General.TotalCost|number_format }}</span>
+        </div>
     </div>
 {% else %}
     <div class="product-no-stats">
@@ -108,7 +111,6 @@
 {% endif %}
 
 {% include "Product/history_snippet.html.twig" with { history: history } %}
-
 
 <div class="product-table-footer">
     <span>X% = Purchase percentage +/- over the average price per unit</span>

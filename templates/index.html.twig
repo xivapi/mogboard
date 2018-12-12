@@ -7,11 +7,15 @@
             This is a home page, welcome home!
             <br><br><br><br>
 
-            {{ dump(auth.user.alerts|length) }}
+            {% if auth.isOnline() %}
+                <p>Alerts</p>
+                {{ dump(auth.user.alerts|length) }}
 
-            {% for alert in auth.user.alerts %}
-                <br>{{ alert.name }}
-            {% endfor %}
+                <p>named</p>
+                {% for alert in auth.user.alerts %}
+                    <br>{{ alert.name }}
+                {% endfor %}
+            {% endif %}
         </div>
 
     </main>

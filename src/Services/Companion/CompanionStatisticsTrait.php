@@ -129,6 +129,7 @@ trait CompanionStatisticsTrait
             'General' => (Object)[
                 'LastSold'      => 0,
                 'LastSoldDates' => [],
+                'TotalCost'     => 0,
                 'AvgSaleWait'   => null,
             ],
             'PricePerUnit' => (Object)[
@@ -155,11 +156,12 @@ trait CompanionStatisticsTrait
         foreach ($history as $i => $purchase) {
             $stats->PricePerUnit->Values[] = $purchase->PricePerUnit;
             $stats->PriceTotal->Values[] = $purchase->PriceTotal;
-        
-            $stats->PricePerUnit->Min = ($stats->PricePerUnit->Min === 0 || $purchase->PricePerUnit < $stats->PricePerUnit->Min) ? $purchase->PricePerUnit : $stats->PricePerUnit->Min;
-            $stats->PriceTotal->Min   = ($stats->PriceTotal->Min === 0 || $purchase->PriceTotal < $stats->PriceTotal->Min) ? $purchase->PriceTotal : $stats->PriceTotal->Min;
-            $stats->PricePerUnit->Max = ($stats->PricePerUnit->Max === 0 || $purchase->PricePerUnit > $stats->PricePerUnit->Max) ? $purchase->PricePerUnit : $stats->PricePerUnit->Max;
-            $stats->PriceTotal->Max   = ($stats->PriceTotal->Max === 0 || $purchase->PriceTotal > $stats->PriceTotal->Max) ? $purchase->PriceTotal : $stats->PricePerUnit->Max;
+    
+            $stats->General->TotalCost += $purchase->PriceTotal;
+            $stats->PricePerUnit->Min  = ($stats->PricePerUnit->Min === 0 || $purchase->PricePerUnit < $stats->PricePerUnit->Min) ? $purchase->PricePerUnit : $stats->PricePerUnit->Min;
+            $stats->PriceTotal->Min    = ($stats->PriceTotal->Min === 0 || $purchase->PriceTotal < $stats->PriceTotal->Min) ? $purchase->PriceTotal : $stats->PriceTotal->Min;
+            $stats->PricePerUnit->Max  = ($stats->PricePerUnit->Max === 0 || $purchase->PricePerUnit > $stats->PricePerUnit->Max) ? $purchase->PricePerUnit : $stats->PricePerUnit->Max;
+            $stats->PriceTotal->Max    = ($stats->PriceTotal->Max === 0 || $purchase->PriceTotal > $stats->PriceTotal->Max) ? $purchase->PriceTotal : $stats->PricePerUnit->Max;
         
             if ($stats->General->LastSold === 0) {
                 $stats->General->LastSold = $purchase->PurchaseDate;
@@ -219,6 +221,13 @@ trait CompanionStatisticsTrait
                 'Prices'  => $priceStats,
                 'History' => $historyStats
             ];
+    
+            // record last sold
+            $statsOverall->LastSold[$server] = $lastSold;
+    
+            if (!$priceStats || !$historyStats) {
+                continue;
+            }
             
             // work out cheapests
             if ($statsOverall->CheapestNq === 0 || $priceStats->PricePerUnit->MinNQ < $statsOverall->CheapestNq) {
@@ -231,8 +240,7 @@ trait CompanionStatisticsTrait
                 $statsOverall->CheapestHqServer = $server;
             }
             
-            // record last sold
-            $statsOverall->LastSold[$server] = $lastSold;
+            
         }
         
         return [ $stats, $statsOverall ];

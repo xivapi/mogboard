@@ -110,9 +110,10 @@ table.table {
             text-transform: uppercase;
             border-right: solid 1px #000;
             border-bottom: solid 1px #000;
-            
+            position: sticky;
+            top: 0;
+
             &:hover {
-                position: relative;
                 z-index: 20;
                 box-shadow: 0 1px 5px #000;
                 background-color: #333;
@@ -125,6 +126,41 @@ table.table {
                 -ms-user-select: none;
                 user-select: none;
             }
+        }
+    }
+}
+
+form.form {
+    label {
+        font-size: 14px;
+        color: #eeeeee;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input, select, textarea {
+        color: #000;
+        border: none;
+        padding: 8px;
+        border-radius: 4px;
+        display: block;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        width: 100%;
+        outline: none;
+    }
+
+    .row {
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    .row-flex {
+        display: flex;
+        margin-bottom: 20px;
+
+        > div {
+            flex: 0 1 auto;
+            margin-right: 10px;
         }
     }
 }

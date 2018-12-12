@@ -68,16 +68,10 @@ class Companion
         $promises = [];
         foreach ($servers as $server) {
             $promises[$server . '_current'] = $this->getItemPrices($server, $itemId);
-        }
-
-        $results = Promise\settle($promises)->wait();
-        sleep(1);
-    
-        foreach ($servers as $server) {
             $promises[$server . '_history'] = $this->getItemHistory($server, $itemId);
         }
 
-        $results  = array_merge($results, Promise\settle($promises)->wait());
+        $results  = Promise\settle($promises)->wait();
         $prices   = $this->xivapi->unwrap($results);
         $duration = microtime(true) - $start;
         

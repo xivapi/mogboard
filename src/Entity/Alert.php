@@ -61,7 +61,7 @@ class Alert
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $triggerLimit;
+    private $triggerLimit = 5;
     /**
      * @var int
      * @ORM\Column(type="integer")
@@ -72,6 +72,16 @@ class Alert
      * @ORM\Column(type="integer")
      */
     private $triggerLastSent = 0;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $triggerHq = 0;
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    private $triggerActive = true;
     /**
      * @var boolean
      * @ORM\Column(type="boolean")
@@ -92,6 +102,19 @@ class Alert
     {
         $this->id = Uuid::uuid4();
         $this->added = time();
+    }
+    
+    public static function getTriggers()
+    {
+        return [
+            self::TRIGGER_MIN_PRICE => 'Min Price per Unit',
+            self::TRIGGER_MAX_PRICE => 'Max Price per Unit',
+            self::TRIGGER_AVG_PRICE => 'Avg Price per Unit',
+            self::TRIGGER_MIN_STOCK => 'Minimum in Stock',
+            self::TRIGGER_MAX_STOCK => 'Maximum in Stock',
+            self::TRIGGER_MIN_QTY => 'Minimum Quantity in sale',
+            self::TRIGGER_MAX_QTY => 'Maximum Quantity in sale',
+        ];
     }
     
     public function getId(): string
@@ -210,6 +233,30 @@ class Alert
     public function setTriggerLastSent(int $triggerLastSent)
     {
         $this->triggerLastSent = $triggerLastSent;
+        
+        return $this;
+    }
+    
+    public function getTriggerHq(): int
+    {
+        return $this->triggerHq;
+    }
+    
+    public function setTriggerHq(int $triggerHq)
+    {
+        $this->triggerHq = $triggerHq;
+        
+        return $this;
+    }
+    
+    public function isTriggerActive(): bool
+    {
+        return $this->triggerActive;
+    }
+    
+    public function setTriggerActive(bool $triggerActive)
+    {
+        $this->triggerActive = $triggerActive;
         
         return $this;
     }

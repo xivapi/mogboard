@@ -42,7 +42,7 @@
                     {{ price.CraftSignature }}
                 {% endif %}
             </td>
-            <td class="product-status" align="center" data-sort-value="">
+            <td class="product-status" align="center" data-sort-value="{{ state }}">
                 {% if state > 0 %}
                     <img src="/i/{{ state == 1 ? 'dot_green.png' : 'dot_red.png' }}">
                 {% endif %}

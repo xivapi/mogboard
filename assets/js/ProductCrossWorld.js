@@ -16,8 +16,6 @@ class ProductCrossWorld
 
     fetch(itemId, callback)
     {
-        this.ui.html('<div class="product-loading-text2">cross-world prices and purchase history</div>');
-
         const server = Server.getServer();
 
         Http.getItemPricesCrossWorld(server, itemId, response => {

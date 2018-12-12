@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    {{ item.Name }} - Mogboard
+{% endblock %}
+
 {% block body %}
 <div class="product">
 
@@ -18,8 +22,6 @@
             <button class="btn btn-cross-server">
                 <img src="/i/atheryte.png"> Cross-Server Prices
             </button>
-
-            <button class="btn btn-add-to-list">Add to List</button>
             <button class="btn btn-refresh"><img src="/i/sync-alt-regular.svg" height="13">Refresh</button>
         </div>
     </div>
@@ -38,14 +40,13 @@
         </div>
     </div>
 
-    <div class="product-loading on">
-        <div>loading</div>
-        <span>
-            <em></em>
-            <em></em>
-            <em></em>
-            <em></em>
-        </span>
+    {% include "Product/modal_alert.html.twig" %}
+
+    <div class="loading-container">
+        <div class="product-loading-bar-text">-</div>
+        <div class="product-loading-bar">
+            <span style="width: 0%;"></span>
+        </div>
     </div>
 
     <div class="product-page2 product-cross-world"></div>
@@ -54,13 +55,13 @@
         <div class="product-page-left">
             <h2>PRICES</h2>
             <div class="product-box product-prices">
-                prizes
+                <span class="product-loading-temp"><img src="/i/mog_bw.png" height="100"></span>
             </div>
         </div>
         <div class="product-page-right">
             <h2>HISTORY</h2>
             <div class="product-box product-history">
-                history
+                <span class="product-loading-temp"><img src="/i/mog_bw.png" height="100"></span>
             </div>
         </div>
     </div>
@@ -84,18 +85,13 @@ function hideLoading() {
     currentModules++;
 
     if (currentModules >= totalModules) {
-        refreshButton.attr('disabled', false);
-        crossWorldButton.attr('disabled', false);
-
-        $('.product-loading').removeClass('on');
-        $('.product-page').addClass('active');
+        mogboard.ProductLoading.hide();
+        enableButtons();
     }
 }
 function fetchPricesAndHistory() {
     currentModules = 0;
-
-    $('.product-loading').addClass('on');
-    $('.product-page').removeClass( 'active');
+    mogboard.ProductLoading.set(100, 'Loading data').show();
 
     // fetch prices + history
     mogboard.ProductPricing.setUi('.product-prices').fetch({{ item.ID }}, hideLoading);
@@ -103,15 +99,30 @@ function fetchPricesAndHistory() {
     refreshButton.attr('disabled', true);
 }
 function fetchCrossWorldPrices() {
-    $('.product-loading').addClass('on');
+    mogboard.ProductLoading.setLonger().set(100, 'Loading data').show();
     crossWorldButton.attr('disabled', true);
 
     mogboard.ProductCrossWorld.setUi('.product-cross-world').fetch({{ item.ID }}, () => {
         crossWorldButton.attr('disabled', false);
-        $('.product-loading').removeClass('on');
+        mogboard.ProductLoading.hide();
+        enableButtons();
     });
-}
 
+    setTimeout(function() { mogboard.ProductLoading.setText('Loading: 1/10 ...') }, 1000);
+    setTimeout(function() { mogboard.ProductLoading.setText('Loading: 2/10 .......... global cooldown?') }, 2000);
+    setTimeout(function() { mogboard.ProductLoading.setText('Loading: 3/??? ..... still going') }, 3000);
+    setTimeout(function() { mogboard.ProductLoading.setText('Loading: 4/? this is just made upo ...') }, 4000);
+    setTimeout(function() { mogboard.ProductLoading.setText('Loading: see no numbers') }, 5000);
+    setTimeout(function() { mogboard.ProductLoading.setText('Loading: omg still loading?') }, 6000);
+    setTimeout(function() { mogboard.ProductLoading.setText('Loading: i think its broke') }, 10000);
+    setTimeout(function() { mogboard.ProductLoading.setText('yeh its broke') }, 20000);
+}
+function enableButtons() {
+    setTimeout(function() {
+        crossWorldButton.attr('disabled', false);
+        refreshButton.attr('disabled', false);
+    }, 1000);
+}
 fetchPricesAndHistory();
 // fetchCrossWorldPrices();
 </script>

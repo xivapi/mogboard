@@ -16,8 +16,6 @@ class ProductHistory
 
     fetch(itemId, callback)
     {
-        this.ui.html('<div class="product-loading-text">Loading historic purchases</div>');
-
         const server = Server.getServer();
 
         Http.getItemHistory(server, itemId, response => {

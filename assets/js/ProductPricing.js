@@ -16,8 +16,6 @@ class ProductPricing
 
     fetch(itemId, callback)
     {
-        this.ui.html('<div class="product-loading-text">Loading current prices</div>');
-
         const server = Server.getServer();
 
         Http.getItemPrices(server, itemId, response => {
