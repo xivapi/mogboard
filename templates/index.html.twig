@@ -8,9 +8,7 @@
             <br><br><br><br>
 
             {% if auth.isOnline() %}
-                <p>Alerts</p>
-                {{ dump(auth.user.alerts|length) }}
-
+                <p>Alerts: {{ auth.user.alerts|length }}</p>
                 <p>named</p>
                 {% for alert in auth.user.alerts %}
                     <br>{{ alert.name }}
