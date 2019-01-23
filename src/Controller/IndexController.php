@@ -14,4 +14,12 @@ class IndexController extends AbstractController
     {
         return $this->render('index.html.twig');
     }
+    
+    /**
+     * @Route("/theme", name="theme")
+     */
+    public function theme()
+    {
+        return $this->render('theme/theme.html.twig');
+    }
 }

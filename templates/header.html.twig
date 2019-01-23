@@ -1,83 +1,35 @@
 {% set itemSearchCategories = cache.get('mog_ItemSearchCategories') %}
 
 <header>
-    <div class="logo">
-        <a href="{{ path('index') }}"><img src="/i/mog.png" height="80"></a>
-        <div><span>MOG</span>BOARD</div>
-    </div>
-    <div class="search">
+    <div>
         <div>
-            <div class="search-bar">
-                <input type="text" placeholder="Search the Market Board">
-                <button id="cl-weapons">Weapons</button>
-                <button id="cl-armor">Armors</button>
-                <button id="cl-items">Items</button>
-                <button id="cl-housing">Housing</button>
-            </div>
+            <a href="{{ path('index') }}" class="btn-home">
+                <img src="/i/mog/mog.png" height="74">
+            </a>
         </div>
-        <div class="categories">
-            <div class="categories-list cl-weapons">
-                {% for cat in itemSearchCategories.weapons %}
-                    <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
-                {% endfor %}
-            </div>
-            <div class="categories-list cl-armor">
-                {% for cat in itemSearchCategories.armor %}
-                    <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
-                {% endfor %}
-            </div>
-            <div class="categories-list cl-items">
-                {% for cat in itemSearchCategories.items %}
-                    <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
-                {% endfor %}
-            </div>
-            <div class="categories-list cl-housing">
-                {% for cat in itemSearchCategories.housing %}
-                    <button id="{{ cat.ID }}"><img src="{{ cat.Icon|icon }}">{{ cat.Name }}</button>
-                {% endfor %}
-            </div>
+        <div>
+            <input type="text" class="search" placeholder="Search for something awesome">
+        </div>
+        <div>
+            <nav class="form">
+                <button class="btn-market-board">
+                    <span class="icon-Market"></span>
+                    Market Board
+                </button>
+            </nav>
         </div>
     </div>
-    <nav>
-        <button class="settings settings-btn">
-            <img src="/i/cog-light.svg" height="32">
-        </button>
-        <div class="settings-menu">
-            <div class="settings-row settings-row-top">
-                <label for="servers">Server</label>
-                <p>Choose your primary server, this will also set your Data Center for cross-world pricing.</p>
-                <select id="servers" class="servers">
-                    {% for dc, servers in cache.get('mog_DataCenters') %}
-                        <optgroup label="{{ dc }}">
-                            {% for server in servers %}
-                                <option value="{{ server }}">{{ server }}</option>
-                            {% endfor %}
-                        </optgroup>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="settings-row">
-                <label for="languages">Language</label>
-                <select id="languages" class="languages">
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                    <option value="de">Deutsche</option>
-                    <option value="ja">日本人</option>
-                    {# <option value="kr">한국어</option>
-                    <option value="cn">中文</option> #}
-                </select>
-            </div>
+    <div>
+        <div>
+            <span class="username">
+                Vekien
+            </span>
         </div>
-
-        {# user bitz #}
-        {% if auth.online() %}
-            <button class="user user-btn">{{ auth.user.username|title }} <img src="{{ auth.user.avatar }}"></button>
-            <div class="user-menu">
-                <span>SSO: <strong>{{ auth.user.sso|title }}</strong></span>
-                <a href="{{ path('user_logout') }}" class="logout">Logout</a>
-            </div>
-        {% else %}
-            <a href="{{ path('user_login_discord') }}" class="login">Login via Discord</a>
-        {% endif %}
-    </nav>
+        <div>
+            <img class="img-avatar" src="https://img2.finalfantasyxiv.com/f/73cbde3df508fa147006c64859727aae_5047bc596a4bab2dc7f7c120bb22dec5fc0_96x96.jpg?1548198308" height="50">
+        </div>
+        <div>
+            <button class="btn-settings"><span class="icon-app_drawer_setting"></span></button>
+        </div>
+    </div>
 </header>

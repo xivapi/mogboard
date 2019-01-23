@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# 100 million records
+counter=1
+while [ $counter -le 500 ]
+do
+    echo $counter
+
+    php bin/console TestDataCommand
+
+    ((counter++))
+done

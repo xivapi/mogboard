@@ -1,20 +1,45 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <main>
 
-        <div class="home">
-            This is a home page, welcome home!
-            <br><br><br><br>
+    <div class="welcome-banner">
+        <h1>welcome to</h1>
+        <img src="/i/brand/mogboard/mogboard_light.svg" height="42">
+    </div>
 
-            {% if auth.isOnline() %}
-                <p>Alerts: {{ auth.user.alerts|length }}</p>
-                <p>named</p>
-                {% for alert in auth.user.alerts %}
-                    <br>{{ alert.name }}
-                {% endfor %}
-            {% endif %}
+    <div class="home">
+        <div>
+            <div class="home-outline">
+                <p>Friends</p>
+                <p>Tracked Retainers</p>
+                <p>Popular items</p>
+                <p>Other player statz</p>
+            </div>
         </div>
+        <div>
+            <div class="home-outline">
+                <p>Recent "watched item" notification</p>
+                <p>Player "sold item" notification</p>
+                <p>Tracked items with graph porn and sales figures</p>
+            </div>
+        </div>
+        <div>
+            <div class="home-box">
+                <p>
+                    Mogboard.com Is still heavily in progress, if you have any feedback please
+                    be sure to jump onto the Discord and shout at <strong class="text-blue">@vekien</strong>
+                </p>
+                <p>
+                    Discord: <a href="https://discord.gg/MFFVHWC">discord.gg/MFFVHWC</a>
+                </p>
+            </div>
+            <div class="home-outline">
+                <p>Patreon</p>
+                <p>Mogboard News</p>
+                <p>Server Status</p>
+                <p>Recent Items</p>
+            </div>
+        </div>
+    </div>
 
-    </main>
 {% endblock %}

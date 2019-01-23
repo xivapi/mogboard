@@ -1,0 +1,54 @@
+.welcome-banner {
+    width: 300px;
+    text-align: center;
+    margin: 0 auto 50px auto;
+
+    h1 {
+        font-size: 16px;
+        opacity: 0.5;
+    }
+
+    p {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #666;
+    }
+}
+
+.home {
+    display: flex;
+
+    > div:nth-of-type(1) {
+        flex: 0 1 400px;
+    }
+
+    > div:nth-of-type(2) {
+        flex: 0 1 calc(100% - 400px - 400px);
+        padding: 0 20px;
+    }
+
+    > div:nth-of-type(3) {
+        flex: 0 1 400px;
+    }
+
+    .home-outline,
+    .home-box {
+        padding: 15px;
+        border-radius: var(--general-border-radius);
+        margin-bottom: 10px;
+
+        p:last-of-type {
+            margin: 0;
+        }
+    }
+
+    .home-outline {
+        border: solid 1px var(--default-3x);
+    }
+
+    .home-box {
+        background-color: var(--default-3x);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+}
