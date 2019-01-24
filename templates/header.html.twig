@@ -20,14 +20,17 @@
         </div>
     </div>
     <div>
+        {% if auth.online() %}
         <div>
-            <span class="username">
-                Vekien
-            </span>
+            <span class="username">{{ auth.user.username|title }}</span>
         </div>
         <div>
-            <img class="img-avatar" src="https://img2.finalfantasyxiv.com/f/73cbde3df508fa147006c64859727aae_5047bc596a4bab2dc7f7c120bb22dec5fc0_96x96.jpg?1548198308" height="50">
+            <img class="img-avatar" src="{{ auth.user.avatar }}" height="50">
         </div>
+        {% else %}
+            <a href="{{ path('user_login_discord') }}" class="btn-login">Login via Discord</a>
+        {% endif %}
+
         <div>
             <button class="btn-settings"><span class="icon-app_drawer_setting"></span></button>
         </div>

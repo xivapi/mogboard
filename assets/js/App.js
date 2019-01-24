@@ -28,7 +28,6 @@ ProductAlert.watch();
 import Search from './Search';
 Search.watch();
 
-
 import ProductPricing from './ProductPricing';
 import ProductHistory from './ProductHistory';
 import ProductCrossWorld from './ProductCrossWorld';

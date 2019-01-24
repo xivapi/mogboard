@@ -1,0 +1,28 @@
+{# Site Settings #}
+<div class="modal-settings">
+    <div class="row row-top">
+        <label for="servers">Server</label>
+        <p>Choose your primary server, this will also set your Data Center for cross-world pricing.</p>
+        <select id="servers" class="servers">
+            {% for dc, servers in cache.get('mog_DataCenters') %}
+                <optgroup label="{{ dc }}">
+                    {% for server in servers %}
+                        <option value="{{ server }}">{{ server }}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="row">
+        <label for="languages">Language</label>
+        <p>Set the language for the site, many pages have multi-language displays on them for ease of use.</p>
+        <select id="languages" class="languages">
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsche</option>
+            <option value="ja">日本人</option>
+            {# <option value="kr">한국어</option>
+            <option value="cn">中文</option> #}
+        </select>
+    </div>
+</div>

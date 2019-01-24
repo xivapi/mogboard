@@ -12,6 +12,12 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mogboard.com">
+    <meta property="og:title" content="Mogboard">
+    <meta property="og:description" content="Final Fantasy XIV: Market Board Site. Find prices, track history for any server at any time!">
+    <meta property="og:image" content="http://mogboard.com/mog.png">
+    <meta name="theme-color" content="#e2ec7a">
 
     <title>{% block title %}MOGBOARD{% endblock %}</title>
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
@@ -23,6 +29,7 @@
 <body>
     <header>{% include 'header.html.twig' %}</header>
     <main>{% block body %}{% endblock %}</main>
+    {% include 'Modals/settings.html.twig' %}
     <footer>{# {% include 'footer.html.twig %} #}</footer>
 
     {# JS #}

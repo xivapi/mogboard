@@ -5,18 +5,18 @@ class HeaderUser
 {
     constructor()
     {
-        this.uiButton = $('.settings-btn');
-        this.uiMenu = $('.settings-menu');
+        this.uiButton = $('.btn-settings');
+        this.uiModal = $('.modal-settings');
 
         console.log(localStorage.getItem('server'));
 
         // set current server
-        this.uiMenu.find('select.servers').val(
+        this.uiModal.find('select.servers').val(
             localStorage.getItem('server')
         );
 
         // set current language
-        this.uiMenu.find('select.languages').val(
+        this.uiModal.find('select.languages').val(
             localStorage.getItem('language')
         );
     }
@@ -24,29 +24,28 @@ class HeaderUser
     watch()
     {
         this.uiButton.on('click', event => {
-            this.uiMenu.toggleClass('open');
+            this.uiModal.toggleClass('open');
         });
 
         $(document).mouseup(event => {
             const buttons = this.uiButton;
-            const nav = this.uiMenu;
+            const nav = this.uiModal;
 
             // if the target of the click isn't the container nor a descendant of the container
             if (!buttons.is(event.target) && buttons.has(event.target).length === 0
                 && !nav.is(event.target) && nav.has(event.target).length === 0) {
 
-                this.uiMenu.removeClass('open');
+                this.uiModal.removeClass('open');
             }
         });
 
         // server select
-        this.uiMenu.find('.servers').on('change', event => {
-            console.log('change');
+        this.uiModal.find('.servers').on('change', event => {
             Server.setServer($(event.currentTarget).val());
         });
 
         // language select
-        this.uiMenu.find('.languages').on('change', event => {
+        this.uiModal.find('.languages').on('change', event => {
             Language.setLanguage($(event.currentTarget).val());
         });
     }
