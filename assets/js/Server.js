@@ -20,6 +20,7 @@ class Server
 
     setServer(server)
     {
+        document.cookie = `server=${server}`;
         localStorage.setItem('server', server);
         this.init();
     }

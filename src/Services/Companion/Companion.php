@@ -16,27 +16,16 @@ class Companion
     
     public function __construct()
     {
-        $this->xivapi = new XIVAPI();
+        $this->xivapi = new XIVAPI(XIVAPI::DEV);
     }
     
     /**
-     * Get prices for an item on a server
+     * Get market data from XIVAPI
      * @return \stdClass|\GuzzleHttp\Promise\Promise
      */
-    public function getItemPrices(string $server, int $itemId)
+    public function get(string $server, int $itemId)
     {
-        $server = ucwords($server);
-        return $this->xivapi->market->price($server, $itemId);
-    }
-
-    /**
-     * Get item history
-     * @return \stdClass|\GuzzleHttp\Promise\Promise
-     */
-    public function getItemHistory(string $server, int $itemId)
-    {
-        $server = ucwords($server);
-        return $this->xivapi->market->history($server, $itemId);
+        return $this->xivapi->market->get($server, $itemId);
     }
     
     /**

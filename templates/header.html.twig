@@ -1,9 +1,7 @@
-{% set itemSearchCategories = cache.get('mog_ItemSearchCategories') %}
-
 <header>
     <div>
         <div>
-            <a href="{{ path('index') }}" class="btn-home">
+            <a href="{{ path('home') }}" class="btn-home">
                 <img src="/i/mog/mog.png" height="74">
             </a>
         </div>
@@ -32,7 +30,7 @@
         {% endif %}
 
         <div>
-            <button class="btn-settings"><span class="icon-app_drawer_setting"></span></button>
+            <button class="btn-settings" data-tippy-content="Site Settings"><span class="icon-app_drawer_setting"></span></button>
         </div>
     </div>
 </header>

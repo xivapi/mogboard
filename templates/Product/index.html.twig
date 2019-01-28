@@ -1,0 +1,179 @@
+{% extends 'base.html.twig' %}
+{% set title = item.Name %}
+
+{% block body %}
+<div class="product">
+
+    <div>
+        <span class="icon">
+            <img src="/temp/12865.png">
+        </span>
+        <div class="menu">
+            <button type="button" data-tab="prices" class="open"><span class="icon-Market"></span> Prices</button>
+            <button type="button" data-tab="history"><span class="icon-MarketLimit"></span> History</button>
+            <button type="button" data-tab="crossworld"><span class="icon-CrossWorld"></span> Cross-World</button>
+            <button type="button" data-tab="details"><span class="icon-ViewDetail"></span> Details</button>
+        </div>
+    </div>
+    <div>
+        {# patch #}
+        <span class="patch" data-tippy-content="{{ item.GamePatch.Name }}">
+            PATCH {{ item.GamePatch.Version }}
+        </span>
+
+        {# title #}
+        <h1 class="rarity-{{ item.Rarity }}">{{ item.Name }}</h1>
+
+        {# info #}
+        <div class="info">
+            <button class="product-search-cat" data-tippy-content="Open Market Category: {{ item.ItemSearchCategory.Name }}" data-cat="{{ item.ItemSearchCategory.ID }}">
+                <i class="icon-{{ item.ItemSearchCategory.ID|xivicon }}"></i>
+            </button>
+            <span>{{ item.ItemKind.Name }}</span>
+            <span class="product-item-kind">{{ item.ItemUICategory.Name }}</span>
+            <span><em>Stack Size:</em>{{ item.StackSize|number_format }}</span>
+            <span>
+                <em>On Sale</em>{{ market.prices|length|number_format }}
+                &nbsp;&nbsp;
+                <img src="/i/game/hq.png">
+                34
+            </span>
+            <span>
+                <em>History</em>{{ market.history|length|number_format }}
+                &nbsp;&nbsp;
+                <img src="/i/game/hq.png">
+                22
+            </span>
+        </div>
+
+        <div class="tab">
+            {# Current Prices #}
+            <div class="tab-prices open">
+                <div class="table">
+                    <table class="striped">
+                        <thead>
+                        <tr>
+                            <th width="2%">#</th>
+                            <th width="2%">HQ</th>
+                            <th>Materia</th>
+                            <th width="15%">Price</th>
+                            <th width="5%">QTY</th>
+                            <th width="20%">Total</th>
+                            <th>Retainer</th>
+                            <th>Creator</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for price in market.prices %}
+                            <tr>
+                                <td class="price-num">{{ loop.index }}</td>
+                                <td class="price-hq">{{ price.is_hq ? '<img src="/i/game/hq.png">' : '' }}</td>
+                                <td class="materia">
+                                    {{ price.materia ? '<i class="icon-ItemCategory_Materia"></icon>' : '' }}
+                                </td>
+                                <td class="price-current">{{ price.price_per_unit|number_format }}</td>
+                                <td class="price-qty">{{ price.quantity|number_format }}</td>
+                                <td class="price-total">{{ price.price_total|number_format }}</td>
+                                <td class="price-retainer">{{ price.retainer_id ? 'Retainer' : '' }}</td>
+                                <td class="price-creator">{{ price.craft_signature_id ? 'Creator Name' : '' }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {# History prices #}
+            <div class="tab-history">
+                <div class="table">
+                    <table class="striped">
+                        <thead>
+                        <tr>
+                            <th width="2%">#</th>
+                            <th width="2%">HQ</th>
+                            <th width="15%">Price</th>
+                            <th width="5%">QTY</th>
+                            <th width="20%">Total</th>
+                            <th>Buyer</th>
+                            <th width="20%">Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for price in market.history %}
+                            <tr>
+                                <td class="price-num">{{ loop.index }}</td>
+                                <td class="price-hq">{{ price.is_hq ? '<img src="/i/game/hq.png">' : '' }}</td>
+                                <td class="price-current">{{ price.price_per_unit|number_format }}</td>
+                                <td class="price-qty">{{ price.quantity|number_format }}</td>
+                                <td class="price-total">{{ price.price_total|number_format }}</td>
+                                <td class="price-buyer">{{ price.character_name }}</td>
+                                <td class="price-date">{{ price.purchase_date|date }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {# Cross World #}
+            <div class="tab-crossworld">
+                Cross World
+            </div>
+
+            {# Item Details #}
+            <div class="tab-details">
+                Details
+            </div>
+        </div>
+    </div>
+    <div>
+        <p>Charts</p>
+        <p>Stats</p>
+        <p>Friend Alerts</p>
+        <p>Tracking info</p>
+
+        {# Multi-Language display #}
+        <div class="box box-language">
+            <div class="table">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td width="1%" align="center"><em>EN</em></td>
+                        <td>{{ item.Name_en }}</td>
+                    </tr>
+                    <tr>
+                        <td><em>FR</em></td>
+                        <td>{{ item.Name_fr }}</td>
+                    </tr>
+                    <tr>
+                        <td><em>DE</em></td>
+                        <td>{{ item.Name_de }}</td>
+                    </tr>
+                    <tr>
+                        <td><em>JA</em></td>
+                        <td>{{ item.Name_ja }}</td>
+                    </tr>
+                    {#
+                    <tr>
+                        <td><em>Cn</em></td>
+                        <td>{{ item.Name_cn }}</td>
+                    </tr>
+                    <tr>
+                        <td><em>KR</em></td>
+                        <td>{{ item.Name_kr }}</td>
+                    </tr>
+                    #}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p>Links to Garland Tools</p>
+        <p>Links to Gamer Escape</p>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

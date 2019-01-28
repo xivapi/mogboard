@@ -34,11 +34,11 @@ class UserController extends AbstractController
     public function loginDiscordResponse(Request $request)
     {
         if ($request->get('error') == 'access_denied') {
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('home');
         }
         
         $this->users->setSsoProvider(new DiscordSignIn($request))->authenticate();
-        return $this->redirectToRoute('index');
+        return $this->redirectToRoute('home');
     }
     
     /**
@@ -47,6 +47,6 @@ class UserController extends AbstractController
     public function logout()
     {
         $this->users->logout();
-        return $this->redirectToRoute('index');
+        return $this->redirectToRoute('home');
     }
 }

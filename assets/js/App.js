@@ -16,26 +16,15 @@ HeaderUser.watch();
 import HeaderCategories from './HeaderCategories';
 HeaderCategories.watch();
 
-import HeaderCategoriesSelection from './HeaderCategoriesSelection';
-HeaderCategoriesSelection.watch();
-
 import HeaderSettings from './HeaderSettings';
 HeaderSettings.watch();
-
-import ProductAlert from './ProductAlert';
-ProductAlert.watch();
 
 import Search from './Search';
 Search.watch();
 
-import ProductPricing from './ProductPricing';
-import ProductHistory from './ProductHistory';
-import ProductCrossWorld from './ProductCrossWorld';
-import ProductLoading from './ProductLoading';
+import ProductTabs from './ProductTabs';
+ProductTabs.watch();
 
 export default {
-    ProductPricing: ProductPricing,
-    ProductHistory: ProductHistory,
-    ProductCrossWorld: ProductCrossWorld,
-    ProductLoading: ProductLoading,
+    HeaderCategories: HeaderCategories,
 }

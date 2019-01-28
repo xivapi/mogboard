@@ -1,53 +1,92 @@
+import Http from "./Http";
+
 class HeaderCategories
 {
     constructor()
     {
-        this.uiCurrentOpenCatList = null;
-        this.uiButtons = $('.search .search-bar');
-        this.uiCatList = $('.search .categories');
+        this.uiButton = $('.btn-market-board');
+        this.uiView = $('.market-board-container');
+        this.uiCategory = $('.market-category-container');
+        this.uiLazy = null;
+        this.viewActive = false;
     }
 
     watch()
     {
-        this.uiButtons.on('click', 'button', event => {
+        this.uiButton.on('click', event => {
+            this.uiView.addClass('open');
+        });
+
+        this.uiView.find('button').on('click', event => {
             const id = $(event.currentTarget).attr('id');
-            this.toggleDropdownMenu(id);
+            this.openCategory(id);
         });
 
         $(document).mouseup(event => {
-            const buttons = this.uiButtons.find('button');
-            const catlist = this.uiCatList.find('.open');
+            const btn = this.uiButton;
+            const view = this.uiView;
 
             // if the target of the click isn't the container nor a descendant of the container
-            if (!buttons.is(event.target) && buttons.has(event.target).length === 0
-                && !catlist.is(event.target) && catlist.has(event.target).length === 0) {
-                this.uiButtons.find('.active').removeClass('active');
-                this.uiCatList.find('.open').removeClass('open');
-                this.uiCurrentOpenCatList = null;
+            if (!btn.is(event.target) && btn.has(event.target).length === 0
+                && !view.is(event.target) && view.has(event.target).length === 0) {
+                this.uiView.removeClass('open');
             }
+        });
+
+        $(document).mouseup(event => {
+            const category = this.uiCategory;
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!category.is(event.target) && category.has(event.target).length === 0) {
+                this.uiCategory.removeClass('open');
+                this.viewActive = false;
+            }
+        });
+
+        this.uiCategory.find('.market-category').on('click', 'a', event => {
+            this.uiCategory.find('.market-category').html('<div class="loading"><img src="/i/svg/loading2.svg"></div>');
         });
     }
 
-    toggleDropdownMenu(id)
+    openCategory(id)
     {
-        this.hideDropdownMenus();
+        this.uiView.removeClass('open');
+        this.uiCategory.addClass('open');
 
-        // set states
-        if (this.uiCurrentOpenCatList !== id) {
-            this.uiButtons.find(`#${id}`).addClass('active');
-            this.uiCatList.find(`.${id}`).addClass('open');
-            this.uiCurrentOpenCatList = id;
-        } else {
-            this.uiCurrentOpenCatList = null;
+        this.uiCategory.find('.market-category').html('<div class="loading"><img src="/i/svg/loading2.svg"></div>');
+
+        Http.getItemCategoryList(id, response => {
+            this.uiCategory.find('.market-category').html(response);
+            this.viewActive = true;
+            this.setSearchHeight();
+
+            this.uiLazy = $('.lazy').Lazy({
+                // your configuration goes here
+                scrollDirection: 'vertical',
+                appendScroll: $('.item-category-list'),
+                effect: 'fadeIn',
+                visibleOnly: false,
+                bind: 'event',
+            });
+        });
+    }
+
+    setSearchHeight()
+    {
+        if (this.viewActive) {
+            // Handle height of search
+            const $searchResults = $('.item-category-list');
+            const windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 260;
+            $searchResults.css({ height: `${windowHeight}px`} );
         }
     }
 
-    hideDropdownMenus()
+    setLoadingLazyLoadWatcher()
     {
-        // remove any previous states
-        this.uiButtons.find('.active').removeClass('active');
-        this.uiCatList.find('.open').removeClass('open');
-        this.uiCurrentOpenCatList = null;
+        const el = new SimpleBar(document.getElementById('item-category-list'));
+        el.getScrollElement().addEventListener('scroll', event => {
+            this.uiLazy.data("plugin_lazy").update();
+        });
     }
 }
 

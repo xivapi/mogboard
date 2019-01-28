@@ -52,3 +52,43 @@
         box-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }
 }
+
+.home-patron {
+    background-color: #f96854;
+    border-radius: 6px;
+    overflow: hidden;
+
+    display: flex;
+
+    > div:first-of-type {
+        flex: 0 1 70px;
+        text-align: center;
+        padding: 14px 4px 10px 10px;
+
+        img {
+            margin-bottom: -5px;
+        }
+    }
+
+    > div:last-of-type {
+        flex: 0 1 calc(100% - 70px);
+        padding: 10px 0 10px 20px;
+        background-color: #f96854;
+        transition: 100ms;
+
+        &:hover {
+            background-color: #ff897b;
+        }
+    }
+
+    text-shadow: none;
+    color: #052d49;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 26px;
+    margin-bottom: 10px;
+
+    &:hover, &:focus {
+        color: #052d49;
+    }
+}

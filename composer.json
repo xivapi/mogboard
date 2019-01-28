@@ -14,7 +14,7 @@
         "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",
         "symfony/form": "4.2.*",
-        "symfony/framework-bundle": "4.2.*",
+        "symfony/framework-bundle": "4.2.2",
         "symfony/orm-pack": "^1.0",
         "symfony/twig-bundle": "4.2.*",
         "symfony/validator": "4.2.*",
@@ -23,7 +23,7 @@
         "symfony/yaml": "4.2.*",
         "wohali/oauth2-discord-new": "^1.0",
         "xivapi/companion-php": "^0.1.7",
-        "xivapi/xivapi-php": "^1.1"
+        "xivapi/xivapi-php": "1.2.2"
     },
     "config": {
         "preferred-install": {

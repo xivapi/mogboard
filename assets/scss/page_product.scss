@@ -1,0 +1,207 @@
+.product {
+    display: flex;
+    padding-bottom: 20px;
+
+    > div:nth-of-type(1) {
+        flex: 0 1 180px;
+        position: relative;
+
+        .icon {
+            display: block;
+            width: 128px;
+            height: 128px;
+            margin: 0 auto;
+
+            background-color: #7a42c9;
+            border-radius: 10px;
+            box-shadow: 0 1px 6px #000;
+            margin-bottom: 30px;
+        }
+
+        .menu {
+            width: 180px;
+            position: relative;
+
+            &.fixed {
+                position: fixed;
+                top: 20px;
+            }
+
+            > button {
+                width: 100%;
+                margin-bottom: 5px;
+                text-align: left;
+                line-height: 46px;
+                height: 46px;
+                font-size: 19px;
+                background-color: transparent;
+                border-radius: 4px;
+                border: none;
+                color: #fff;
+                display: block;
+                outline: none;
+                cursor: pointer;
+                transition: 100ms;
+                padding: 0 15px;
+
+                > span {
+                    font-size: 24px;
+                    vertical-align: bottom;
+                    margin: 0 5px -2px 0px;
+                    display: inline-block;
+                }
+
+                &:hover {
+                    color: var(--purple-3x);
+                    font-weight: 600;
+                }
+
+                &.open {
+                    border: solid 1px var(--purple-2x);
+                    color: var(--purple-3x);
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    > div:nth-of-type(2) {
+        flex: 0 1 calc(100% - 180px - 300px);
+        padding: 0 30px;
+
+        i {
+            font-size: 24px;
+            vertical-align: bottom;
+            display: inline-block;
+            margin: 0 0 -4px 0;
+        }
+
+        .patch {
+            float: right;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .info {
+            line-height: 42px;
+            height: 44px;
+            border: solid 1px var(--table-color);
+            border-radius: 6px;
+            display: flex;
+            margin-bottom: 20px;
+
+            span,
+            button {
+                display: inline-block;
+                padding: 0 15px;
+                border-right: solid 1px var(--table-color);
+            }
+
+            button {
+                background-color: transparent;
+                border: none;
+                border-right: solid 1px var(--table-color);
+                color: #fff;
+                outline: none;
+                cursor: pointer;
+                transition: 100ms;
+
+                &:hover {
+                    background-color: rgba(80,80,80,0.4);
+                    color: var(--blue-3x);
+                }
+            }
+
+            em {
+                display: inline-block;
+                margin-right: 8px;
+                color: var(--color6);
+            }
+
+            img {
+                vertical-align: middle;
+                max-height: 16px;
+                max-width: 16px;
+            }
+        }
+
+        .tab-prices,
+        .tab-history,
+        .tab-details,
+        .tab-crossworld {
+            display: none;
+
+            &.open {
+                display: block;
+            }
+        }
+
+        .tab-prices,
+        .tab-history {
+            .table {
+                tr:hover {
+                    background-color: rgba(80,80,80,0.3);
+                }
+
+                i {
+                    font-size: 20px;
+                    vertical-align: middle;
+                }
+
+                img {
+                    vertical-align: middle;
+                }
+
+                .price-num {
+                    color: #555;
+                }
+
+                .price-hq {
+                    text-align: center;
+                }
+
+                .price-qty {
+                    color: #aaa;
+                    font-weight: 600;
+                }
+
+                .price-current {
+                    color: #dddc87;
+                    text-align: right;
+                }
+
+                .price-total {
+                    color: #afffa1;
+                    text-align: right;
+                }
+
+                .price-retainer,
+                .price-creator,
+                .price-buyer,
+                .price-date {
+                    text-align: right;
+                    color: #aaa;
+                }
+            }
+        }
+    }
+
+    > div:nth-of-type(3) {
+        flex: 0 1 300px;
+
+        .box {
+            background-color: var(--table-color-dark);
+            border-radius: 3px;
+            margin-bottom: 20px;
+
+            &.box-language {
+                em {
+                    display: inline-block;
+                    font-style: normal;
+                    color: var(--purple-3x);
+                    opacity: 0.5;
+                }
+            }
+        }
+    }
+}

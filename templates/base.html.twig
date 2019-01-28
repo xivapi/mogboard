@@ -1,3 +1,4 @@
+{% set title = title is defined ? title ~ ' - MogBoard' : 'MogBoard' %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,9 +20,10 @@
     <meta property="og:image" content="http://mogboard.com/mog.png">
     <meta name="theme-color" content="#e2ec7a">
 
-    <title>{% block title %}MOGBOARD{% endblock %}</title>
+    <title>{{ title }}</title>
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simplebar/2.6.1/simplebar.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/font/xivicons.css?v={{ siteVersion().hash }}">
     <link rel="stylesheet" href="/ui/ui.css?v={{ siteVersion().hash }}">
     {% block stylesheets %}{% endblock %}
@@ -30,23 +32,28 @@
     <header>{% include 'header.html.twig' %}</header>
     <main>{% block body %}{% endblock %}</main>
     {% include 'Modals/settings.html.twig' %}
+    {% include 'Modals/search.html.twig' %}
+    {% include 'Modals/market_board.html.twig' %}
+    {% include 'Modals/market_category.html.twig' %}
     <footer>{# {% include 'footer.html.twig %} #}</footer>
 
     {# JS #}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.15.0/lazyload.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/1.1.3/stupidtable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplebar/2.6.1/simplebar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/3.4.1/tippy.all.min.js"></script>
     <script>
         let mog = {
-            xivapi_key: "{{ env('XIVAPI_PRIVATE_KEY') }}",
+            xivapi_key: "{{ env('XIVAPI_KEY') }}",
             url_item_category_list: "{{ path('item_category_list', { categoryId: '-id-' }) }}",
             url_product: "{{ path('product_page', { itemId: '-id-' }) }}",
-            url_product_price: "{{ path('product_price', { server: '-server-', itemId: '-id-' }) }}",
-            url_product_history: "{{ path('product_history', { server: '-server-', itemId: '-id-' }) }}",
-            url_product_cross_world: "{{ path('product_cross_world', { server: '-server-', itemId: '-id-' }) }}",
         };
+        tippy('[data-tippy-content]', {
+            arrow: true,
+        })
     </script>
     <script src="/ui/app.js?v={{ siteVersion().hash }}"></script>
     {% block javascripts %}{% endblock %}

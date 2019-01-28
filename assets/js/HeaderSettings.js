@@ -8,7 +8,10 @@ class HeaderUser
         this.uiButton = $('.btn-settings');
         this.uiModal = $('.modal-settings');
 
-        console.log(localStorage.getItem('server'));
+        // always ensure server is stored in cookie
+        if (localStorage.getItem('server')) {
+            Server.setServer(localStorage.getItem('server'));
+        }
 
         // set current server
         this.uiModal.find('select.servers').val(

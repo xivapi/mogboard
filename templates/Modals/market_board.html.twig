@@ -1,0 +1,38 @@
+{% set itemSearchCategories = cache.get('mog_ItemSearchCategories') %}
+
+<div class="market-board-container">
+    <div class="market-board">
+        <div class="categories">
+            <h2>WEAPONS</h2>
+            <div class="categories-list">
+                {% for cat in itemSearchCategories.weapons %}
+                    <button id="{{ cat.ID }}" data-tippy-content="{{ cat.Name }}"><span class="icon-{{ cat.ID|xivicon }}"></span></button>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="categories">
+            <h2>ARMOR</h2>
+            <div class="categories-list">
+                {% for cat in itemSearchCategories.armor %}
+                    <button id="{{ cat.ID }}" data-tippy-content="{{ cat.Name }}"><span class="icon-{{ cat.ID|xivicon }}"></span></button>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="categories">
+            <h2>ITEMS</h2>
+            <div class="categories-list">
+                {% for cat in itemSearchCategories.items %}
+                    <button id="{{ cat.ID }}" data-tippy-content="{{ cat.Name }}"><span class="icon-{{ cat.ID|xivicon }}"></span></button>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="categories">
+            <h2>HOUSING</h2>
+            <div class="categories-list">
+                {% for cat in itemSearchCategories.housing %}
+                    <button id="{{ cat.ID }}" data-tippy-content="{{ cat.Name }}"><span class="icon-{{ cat.ID|xivicon }}"></span></button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
