@@ -40,13 +40,13 @@
             <span class="product-item-kind">{{ item.ItemUICategory.Name }}</span>
             <span><em>Stack Size:</em>{{ item.StackSize|number_format }}</span>
             <span>
-                <em>On Sale</em>{{ market.prices|length|number_format }}
+                <em>On Sale</em>{{ attribute(market, server.name).prices|length|number_format }}
                 &nbsp;&nbsp;
                 <img src="/i/game/hq.png">
                 34
             </span>
             <span>
-                <em>History</em>{{ market.history|length|number_format }}
+                <em>History</em>{{ attribute(market, server.name).history|length|number_format }}
                 &nbsp;&nbsp;
                 <img src="/i/game/hq.png">
                 22
@@ -56,12 +56,12 @@
         <div class="tab">
             {# Current Prices #}
             <div class="tab-page tab-prices open">
-                {% include 'Product/prices.html.twig' with { 'prices': market.prices } %}
+                {% include 'Product/prices.html.twig' with { 'prices': attribute(market, server.name).prices } %}
             </div>
 
             {# History prices #}
             <div class="tab-page tab-history">
-                {% include 'Product/history.html.twig' with { 'history': market.history } %}
+                {% include 'Product/history.html.twig' with { 'history': attribute(market, server.name).history } %}
             </div>
 
             {# Item Details #}
@@ -76,6 +76,12 @@
             {% for serverName in server.dc_servers %}
             <div class="tab-page tab-cw{{ serverName }}">
                 <h1>{{ serverName }}</h1>
+                <div class="cw-prices open">
+                    {% include 'Product/prices.html.twig' with { 'prices': attribute(market, serverName).prices } %}
+                </div>
+                <div class="cw-history">
+                    {% include 'Product/history.html.twig' with { 'history': attribute(market, serverName).history } %}
+                </div>
             </div>
             {% endfor %}
         </div>

@@ -365,4 +365,13 @@
             line-height: 26px;
         }
     }
+
+    .cw-history,
+    .cw-prices {
+        display: none;
+
+        &.open {
+            display: block;
+        }
+    }
 }

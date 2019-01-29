@@ -31,6 +31,29 @@ class Companion
     /**
      * Get prices for an item across multiple servers
      */
+    public function getMultiServer(array $servers, int $itemId)
+    {
+        // enable async mode
+        $this->xivapi->async();
+        
+        // build promises
+        $promises = [];
+        foreach ($servers as $server) {
+            $promises[$server] = $this->get($server, $itemId);
+        }
+    
+        // grab results
+        $results  = Promise\settle($promises)->wait();
+        
+        // unwrap market prices
+        $market   = $this->xivapi->unwrap($results);
+
+        return $market;
+    }
+    
+    /**
+     * Get prices for an item across multiple servers
+     */
     public function getItemPricesCrossWorld(string $server, int $itemId): array
     {
         $start  = microtime(true);

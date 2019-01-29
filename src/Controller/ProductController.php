@@ -33,16 +33,19 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('404');
         }
         
-        $server = Cookie::get('server');
-        $market = $this->companion->get($server, $itemId);
+        $server     = Cookie::get('server');
+        $dc         = GameDataServers::getDataCenter($server);
+        $dcServers  = GameDataServers::getDataCenterServers($server);
+        
+        $market = $this->companion->getMultiServer($dcServers, $itemId);
         
         return $this->render('Product/index.html.twig', [
             'item'     => $item,
             'market'   => $market,
             'server'   => [
                 'name'       => $server,
-                'dc'         => GameDataServers::getDataCenter($server),
-                'dc_servers' => GameDataServers::getDataCenterServers($server)
+                'dc'         => $dc,
+                'dc_servers' => $dcServers
             ]
         ]);
     }
