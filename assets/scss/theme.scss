@@ -783,7 +783,7 @@ main {
     .item-search-header {
         display: flex;
         background-color: var(--default);
-        box-shadow: 0 0 4px 1px rgba(0,0,0,0.4);
+        box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5);
         font-size: 14px;
         margin-bottom: 0;
         height: 40px;
@@ -926,7 +926,7 @@ main {
     .item-category-header {
         display: flex;
         background-color: var(--default);
-        box-shadow: 0 0 4px 1px rgba(0,0,0,0.4);
+        box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5);
         font-size: 14px;
         margin-bottom: 0;
         height: 40px;
