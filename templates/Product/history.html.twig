@@ -1,119 +1,28 @@
-{% if stats %}
-    <div class="product-price-chart" style="position: relative; height: 240px; width: 100%">
-        <canvas id="price-history"></canvas>
-    </div>
-    <script>
-        new Chart(document.getElementById("price-history"), {
-            type: 'line',
-            data: {
-                labels: {{ stats.PricePerUnit.Chart.Labels|reverse|json_encode|raw }},
-                datasets: [{
-                    label: 'Price Per Unit Sales',
-                    data: {{ stats.PricePerUnit.Chart.Values|reverse|json_encode|raw }},
-                    backgroundColor: 'rgba(80, 80, 80, 0)',
-                    borderColor: 'rgba(220, 120, 255, 0.3)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(220, 120, 255, 1)',
-                    pointBorderColor: 'rgba(220, 120, 255, 1)',
-                    pointBorderWidth: 2,
-                    lineTension: 0,
-                }],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: false,
-                legend: {
-                    display: false
-                },
-                tooltips: {
-                    displayColors: false,
-                    position: 'nearest',
-                    intersect: false,
-                    bodyFontSize: 16,
-                    bodyFontColor: "rgba(220, 120, 255, 1)",
-                    footerFontSize: 13,
-                    footerFontColor: "rgba(220, 120, 255, 0.5)",
-                    callbacks: {
-                        title: (tooltipItem, data) => {
-                            return '#'+ (tooltipItem[0].index + 1) + ' - PRICE PER UNIT';
-                        },
-                        label: (tooltipItem, data) => {
-                            return numeral(tooltipItem.yLabel).format('0,0')
-                        },
-                        footer: (tooltipItem, data) => {
-                            return tooltipItem[0].xLabel;
-                        }
-                    }
-                },
-                scales: {
-                    xAxes: [{
-                        ticks: {
-                            display: false
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            callback: (value) => {
-                                return numeral(value).format('0,0')
-                            }
-                        },
-                    }]
-                },
-                layout: {
-                    padding: {
-                        left: 10,
-                        right: 20,
-                        top: 10,
-                        bottom: 10
-                    }
-                }
-            }
-        });
-    </script>
-
-    <hr>
-
-    <div class="product-stats-info product-stats-info-header">
-        <div>&nbsp;</div>
-        <div>Min</div>
-        <div>Max</div>
-        <div>Avg</div>
-    </div>
-    <div class="product-stats-info">
-        <div>Price Per Unit</div>
-        <div>{{ stats.PricePerUnit.Min|number_format }}</div>
-        <div>{{ stats.PricePerUnit.Max|number_format }}</div>
-        <div>{{ stats.PricePerUnit.Avg|number_format }}</div>
-    </div>
-    <div class="product-stats-info">
-        <div>Price Total</div>
-        <div>{{ stats.PriceTotal.Min|number_format }}</div>
-        <div>{{ stats.PriceTotal.Max|number_format }}</div>
-        <div>{{ stats.PriceTotal.Avg|number_format }}</div>
-    </div>
-
-    <hr>
-
-    <div class="product-stats-info3">
-        <div>
-            Average Sale Speed: <span>{{ stats.General.AvgSaleWait }}</span>
-        </div>
-        <div>
-            Total Gil: <span>{{ stats.General.TotalCost|number_format }}</span>
-        </div>
-    </div>
-{% else %}
-    <div class="product-no-stats">
-        No statistical data available for this item.
-    </div>
-{% endif %}
-
-{% include "Product/history_snippet.html.twig" with { history: history } %}
-
-<div class="product-table-footer">
-    <span>X% = Purchase percentage +/- over the average price per unit</span>
+<div class="table">
+    <table class="striped">
+        <thead>
+        <tr>
+            <th width="2%">#</th>
+            <th width="2%">HQ</th>
+            <th width="15%">Price</th>
+            <th width="5%">QTY</th>
+            <th width="20%">Total</th>
+            <th>Buyer</th>
+            <th width="20%">Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for price in history %}
+            <tr>
+                <td class="price-num">{{ loop.index }}</td>
+                <td class="price-hq">{{ price.is_hq ? '<img src="/i/game/hq.png">' : '' }}</td>
+                <td class="price-current">{{ price.price_per_unit|number_format }}</td>
+                <td class="price-qty">{{ price.quantity|number_format }}</td>
+                <td class="price-total">{{ price.price_total|number_format }}</td>
+                <td class="price-buyer">{{ price.character_name }}</td>
+                <td class="price-date">{{ price.purchase_date|date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
-
-<script>$('table.product-history-table').stupidtable();</script>

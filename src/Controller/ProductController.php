@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Services\Cache\Cache;
 use App\Services\Companion\Companion;
+use App\Services\GameData\GameDataServers;
 use Delight\Cookie\Cookie;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,6 +39,11 @@ class ProductController extends AbstractController
         return $this->render('Product/index.html.twig', [
             'item'     => $item,
             'market'   => $market,
+            'server'   => [
+                'name'       => $server,
+                'dc'         => GameDataServers::getDataCenter($server),
+                'dc_servers' => GameDataServers::getDataCenterServers($server)
+            ]
         ]);
     }
 }

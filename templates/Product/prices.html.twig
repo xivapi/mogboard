@@ -1,124 +1,32 @@
-{% if stats %}
-    <div class="product-price-chart" style="position: relative; height: 240px; width: 100%">
-        <canvas id="price-chart"></canvas>
-    </div>
-    <script>
-    var quantities = {{ stats.General.Quantities|json_encode|raw }};
-    new Chart(document.getElementById("price-chart"), {
-        type: 'bubble',
-        data: {
-            datasets: [{
-                label: "Price Per Unit",
-                data: {{ stats.PricePerUnit.Chart|json_encode|raw }},
-                backgroundColor: "rgba(220, 120, 255, 1)"
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: false,
-            legend: {
-                display: false
-            },
-            tooltips: {
-                displayColors: false,
-                position: 'nearest',
-                intersect: false,
-                bodyFontSize: 16,
-                bodyFontColor: "rgba(220, 120, 255, 1)",
-                footerFontSize: 13,
-                footerFontColor: "rgba(220, 120, 255, 0.5)",
-                callbacks: {
-                    title: (tooltipItem, data) => {
-                        return '#'+ (tooltipItem[0].index + 1) + ' - PRICE PER UNIT';
-                    },
-                    label: (tooltipItem, data) => {
-                        let quantity = quantities[tooltipItem.index],
-                            price = numeral(tooltipItem.yLabel).format('0,0');
-
-                        return price +' x '+ quantity;
-                    },
-                    footer: (tooltipItem, data) => {
-                        let quantity = quantities[tooltipItem[0].index],
-                            total = numeral(tooltipItem[0].yLabel * quantity).format('0,0');
-
-                        return 'Total: '+ total;
-                    }
-                }
-            },
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        display: false
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        callback: (value) => {
-                            return numeral(value).format('0,0')
-                        }
-                    }
-                }]
-            },
-            layout: {
-                padding: {
-                    left: 10,
-                    right: 20,
-                    top: 10,
-                    bottom: 10
-                }
-            }
-        }
-    });
-    </script>
-    <small class="product-chart-note">Listings <strong>300%</strong> above the average <strong>price per unit</strong> are ignored</small>
-
-    <hr>
-
-    <div class="product-stats-info product-stats-info-header">
-        <div>&nbsp;</div>
-        <div>Min</div>
-        <div>Max</div>
-        <div>Avg</div>
-    </div>
-    <div class="product-stats-info">
-        <div>Price Per Unit</div>
-        <div>{{ stats.PricePerUnit.Min|number_format }}</div>
-        <div>{{ stats.PricePerUnit.Max|number_format }}</div>
-        <div>{{ stats.PricePerUnit.Avg|number_format }}</div>
-    </div>
-    <div class="product-stats-info">
-        <div>Price Total</div>
-        <div>{{ stats.PriceTotal.Min|number_format }}</div>
-        <div>{{ stats.PriceTotal.Max|number_format }}</div>
-        <div>{{ stats.PriceTotal.Avg|number_format }}</div>
-    </div>
-
-    <hr>
-
-    <div class="product-stats-info2">
-        <div>
-            <span>{{ stats.General.Stock|number_format }}</span> in stock
-        </div>
-        <div>
-            <span>{{ stats.General.Listings|number_format }}</span> listings
-        </div>
-        <div>
-            <span>{{ stats.General.TotalCost|number_format }}</span> gil
-        </div>
-    </div>
-{% else %}
-<div class="product-no-stats">
-    No statistical data available for this item.
+<div class="table">
+    <table class="striped">
+        <thead>
+        <tr>
+            <th width="2%">#</th>
+            <th width="2%">HQ</th>
+            <th>Materia</th>
+            <th width="15%">Price</th>
+            <th width="5%">QTY</th>
+            <th width="20%">Total</th>
+            <th>Retainer</th>
+            <th>Creator</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for price in prices %}
+            <tr>
+                <td class="price-num">{{ loop.index }}</td>
+                <td class="price-hq">{{ price.is_hq ? '<img src="/i/game/hq.png">' : '' }}</td>
+                <td class="materia">
+                    {{ price.materia ? '<i class="icon-ItemCategory_Materia"></icon>' : '' }}
+                </td>
+                <td class="price-current">{{ price.price_per_unit|number_format }}</td>
+                <td class="price-qty">{{ price.quantity|number_format }}</td>
+                <td class="price-total">{{ price.price_total|number_format }}</td>
+                <td class="price-retainer">{{ price.retainer_id ? 'Retainer' : '' }}</td>
+                <td class="price-creator">{{ price.craft_signature_id ? 'Creator Name' : '' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
-{% endif %}
-
-{% include "Product/prices_snippet.html.twig" with { prices: prices } %}
-
-<div class="product-table-footer">
-    <span>Total Cost:</span>
-    <span><img src="/i/dot_green.png"> Lowest Price</span>
-    <span><img src="/i/dot_red.png"> Highest Price</span>
-</div>
-
-<script>$('table.product-prices-table').stupidtable();</script>

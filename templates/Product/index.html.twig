@@ -5,14 +5,21 @@
 <div class="product">
 
     <div>
-        <span class="icon">
+        <span class="icon icon-rarity-{{ item.Rarity }}">
             <img src="/temp/12865.png">
         </span>
         <div class="menu">
             <button type="button" data-tab="prices" class="open"><span class="icon-Market"></span> Prices</button>
             <button type="button" data-tab="history"><span class="icon-MarketLimit"></span> History</button>
-            <button type="button" data-tab="crossworld"><span class="icon-CrossWorld"></span> Cross-World</button>
             <button type="button" data-tab="details"><span class="icon-ViewDetail"></span> Details</button>
+
+            <h4>Cross-World<strong>{{ server.dc }}</strong></h4>
+            <button type="button" data-tab="summary"><span class="icon-CrossWorld"></span> Summary</button>
+            {% for serverName in server.dc_servers %}
+                {% set icon = serverName == server.name ? 'ItemShard' : 'PaintBorder' %}
+                {% set className = serverName == server.name ? 'home-world' : '' %}
+                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}"><span class="icon-{{ icon }} cw-icon"></span> {{ serverName }}</button>
+            {% endfor %}
         </div>
     </div>
     <div>
@@ -48,123 +55,60 @@
 
         <div class="tab">
             {# Current Prices #}
-            <div class="tab-prices open">
-                <div class="table">
-                    <table class="striped">
-                        <thead>
-                        <tr>
-                            <th width="2%">#</th>
-                            <th width="2%">HQ</th>
-                            <th>Materia</th>
-                            <th width="15%">Price</th>
-                            <th width="5%">QTY</th>
-                            <th width="20%">Total</th>
-                            <th>Retainer</th>
-                            <th>Creator</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for price in market.prices %}
-                            <tr>
-                                <td class="price-num">{{ loop.index }}</td>
-                                <td class="price-hq">{{ price.is_hq ? '<img src="/i/game/hq.png">' : '' }}</td>
-                                <td class="materia">
-                                    {{ price.materia ? '<i class="icon-ItemCategory_Materia"></icon>' : '' }}
-                                </td>
-                                <td class="price-current">{{ price.price_per_unit|number_format }}</td>
-                                <td class="price-qty">{{ price.quantity|number_format }}</td>
-                                <td class="price-total">{{ price.price_total|number_format }}</td>
-                                <td class="price-retainer">{{ price.retainer_id ? 'Retainer' : '' }}</td>
-                                <td class="price-creator">{{ price.craft_signature_id ? 'Creator Name' : '' }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {# History prices #}
-            <div class="tab-history">
-                <div class="table">
-                    <table class="striped">
-                        <thead>
-                        <tr>
-                            <th width="2%">#</th>
-                            <th width="2%">HQ</th>
-                            <th width="15%">Price</th>
-                            <th width="5%">QTY</th>
-                            <th width="20%">Total</th>
-                            <th>Buyer</th>
-                            <th width="20%">Date</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for price in market.history %}
-                            <tr>
-                                <td class="price-num">{{ loop.index }}</td>
-                                <td class="price-hq">{{ price.is_hq ? '<img src="/i/game/hq.png">' : '' }}</td>
-                                <td class="price-current">{{ price.price_per_unit|number_format }}</td>
-                                <td class="price-qty">{{ price.quantity|number_format }}</td>
-                                <td class="price-total">{{ price.price_total|number_format }}</td>
-                                <td class="price-buyer">{{ price.character_name }}</td>
-                                <td class="price-date">{{ price.purchase_date|date }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            <div class="tab-page tab-prices open">
+                {% include 'Product/prices.html.twig' with { 'prices': market.prices } %}
             </div>
 
-            {# Cross World #}
-            <div class="tab-crossworld">
-                Cross World
+            {# History prices #}
+            <div class="tab-page tab-history">
+                {% include 'Product/history.html.twig' with { 'history': market.history } %}
             </div>
 
             {# Item Details #}
-            <div class="tab-details">
-                Details
+            <div class="tab-page tab-details">
+                {% include 'Product/details.html.twig' %}
             </div>
+
+            {# Cross World #}
+            <div class="tab-page tab-summary">
+                Cross-World Summary
+            </div>
+            {% for serverName in server.dc_servers %}
+            <div class="tab-page tab-cw{{ serverName }}">
+                <h1>{{ serverName }}</h1>
+            </div>
+            {% endfor %}
         </div>
     </div>
     <div>
-        <p>Charts</p>
-        <p>Stats</p>
-        <p>Friend Alerts</p>
-        <p>Tracking info</p>
+        <div class="box">
+            <div class="box-updated">
+                <div>
+                    <h6>Updated</h6>
+                    <div>
+                        {{ 1548720068|date }}
+                    </div>
+                </div>
+                <div class="form">
+                    <button type="button" class="btn-green" data-tippy-content="Request updated pricing."><i class="icon-ViewRefresh"></i> Refresh</button>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            {% include 'Product/statistics.html.twig' %}
+        </div>
+
+        <div class="box-outline">
+            {% include 'Product/alerts.html.twig' %}
+        </div>
+        <div class="box">
+            If logged in and character verified, show if
+            any friends have purchased this item.
+        </div>
 
         {# Multi-Language display #}
         <div class="box box-language">
-            <div class="table">
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <td width="1%" align="center"><em>EN</em></td>
-                        <td>{{ item.Name_en }}</td>
-                    </tr>
-                    <tr>
-                        <td><em>FR</em></td>
-                        <td>{{ item.Name_fr }}</td>
-                    </tr>
-                    <tr>
-                        <td><em>DE</em></td>
-                        <td>{{ item.Name_de }}</td>
-                    </tr>
-                    <tr>
-                        <td><em>JA</em></td>
-                        <td>{{ item.Name_ja }}</td>
-                    </tr>
-                    {#
-                    <tr>
-                        <td><em>Cn</em></td>
-                        <td>{{ item.Name_cn }}</td>
-                    </tr>
-                    <tr>
-                        <td><em>KR</em></td>
-                        <td>{{ item.Name_kr }}</td>
-                    </tr>
-                    #}
-                    </tbody>
-                </table>
-            </div>
+            {% include 'Product/language.html.twig' %}
         </div>
         <p>Links to Garland Tools</p>
         <p>Links to Gamer Escape</p>

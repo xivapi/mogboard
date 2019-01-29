@@ -1,12 +1,14 @@
 import HeaderCategories from "./HeaderCategories";
 
-class ProductTabs
+class Product
 {
     constructor()
     {
         this.uiButtons = $('.product .menu');
         this.uiTabs = $('.product .tab');
         this.uiCategory = $('.product .product-search-cat');
+        this.uiAlertWindow = $('.alert-info-container');
+        this.uiAlertButton = $('.btn-alert-info');
     }
 
     watch()
@@ -20,6 +22,14 @@ class ProductTabs
         this.uiCategory.on('click', event => {
             const id = $(event.currentTarget).attr('data-cat');
             HeaderCategories.openCategory(id);
+        });
+
+        this.uiAlertWindow.on('click', event => {
+            this.uiAlertWindow.removeClass('open');
+        });
+
+        this.uiAlertButton.on('click', event => {
+            this.uiAlertWindow.addClass('open');
         });
 
         $(document).scroll(event => {
@@ -49,4 +59,4 @@ class ProductTabs
     }
 }
 
-export default new ProductTabs;
+export default new Product;

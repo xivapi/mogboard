@@ -2,8 +2,6 @@
 
 namespace App\Exceptions;
 
-use Throwable;
-
 class InvalidAlertCreationException extends \Exception
 {
     public function __construct()

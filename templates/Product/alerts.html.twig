@@ -1,0 +1,80 @@
+<div class="row">
+    No alerts for this item.
+</div>
+<div class="box-form">
+    <form method="post">
+        <h3>Create a new alert</h3>
+        <p>
+            <button type="button" class="btn-alert-info"><i class="icon-app_drawer_news"></i>Learn about alerts</button>
+        </p>
+        <div class="form-row">
+            <input name="watch_name" type="text" placeholder="Name" class="full">
+        </div>
+        <div class="form-row">
+            <select name="watch_type" class="full">
+                {% for id, type in getAlertTriggers() %}
+                    <option value="{{ id }}">{{ type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-row">
+            <input name="watch_value" type="text" placeholder="Condition Value" class="full">
+        </div>
+        <div>
+            <button type="button">Create Market Alert</button>
+        </div>
+    </form>
+
+</div>
+
+<div class="alert-info-container">
+    <div class="alert-info">
+        <h3>What are alerts?</h3>
+        <p>
+            Alerts allow you to setup notification watchers that can track an item
+            and send you information such as price changes or market trends!
+        </p>
+        <br><br>
+        <h3>The types of alerts</h3>
+        <p>
+            <strong>Triggers</strong> are fired when a specific condition
+            is met, this could be an item being listed below X price or a certain player purchases something.
+            All triggers send notifications based on your communication choice and
+            statistics will appear on the home page when you are logged in.
+        </p>
+        <p>
+            Triggers are fired immediately once the condition is met. The conditions are
+            checked at set time intervals based on your accounts status; this could be
+            every day, hour or sometimes every minute.
+        </p>
+        <p>
+            <em>
+                All triggers expire after 1 month if: They've not been set off or you have
+                not logged into the site for some time
+            </em>
+        </p>
+        <br>
+        <p>
+            <strong>Reports</strong>. You can request a weekly report on an item that will provide
+            you trends, buying/selling information and provide you with profitability results. These
+            are great if you're interested in an item to see its market potential.
+        </p>
+        <br><br>
+
+        <h3>Supported notification methods</h3>
+        <p>Right now 2 methods of being notified are supported:</p>
+        <div class="table">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td width="50%">Email</td>
+                        <td>Discord</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br><br>
+
+        <small>Click anywhere to close</small>
+    </div>
+</div>

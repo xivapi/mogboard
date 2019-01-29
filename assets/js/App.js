@@ -22,8 +22,8 @@ HeaderSettings.watch();
 import Search from './Search';
 Search.watch();
 
-import ProductTabs from './ProductTabs';
-ProductTabs.watch();
+import Product from './Product';
+Product.watch();
 
 export default {
     HeaderCategories: HeaderCategories,
