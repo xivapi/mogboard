@@ -82,6 +82,10 @@
                 transition: 100ms;
                 padding: 0 15px;
 
+                em {
+                    float: right;
+                }
+
                 > span {
                     font-size: 24px;
                     vertical-align: bottom;
@@ -178,7 +182,8 @@
         }
 
         .tab-prices,
-        .tab-history {
+        .tab-history,
+        .tab-page {
             .table {
                 tr:hover {
                     background-color: rgba(80,80,80,0.3);
@@ -222,6 +227,12 @@
                 .price-date {
                     text-align: right;
                     color: #aaa;
+                }
+
+                .materia {
+                    img {
+                        border-radius: 30px;
+                    }
                 }
             }
         }

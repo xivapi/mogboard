@@ -16,15 +16,20 @@
         {% for price in prices %}
             <tr>
                 <td class="price-num">{{ loop.index }}</td>
-                <td class="price-hq">{{ price.is_hq ? '<img src="/i/game/hq.png">' : '' }}</td>
+                <td class="price-hq">{{ price.IsHq ? '<img src="/i/game/hq.png">' : '' }}</td>
                 <td class="materia">
-                    {{ price.materia ? '<i class="icon-ItemCategory_Materia"></icon>' : '' }}
+                    {% if price.Materia %}
+                        {% for id in price.Materia %}
+                            {% set item = gamedata().item(id) %}
+                            <img src="{{ item.Icon|icon }}" data-tippy-content="{{ item.Name }}" height="16">
+                        {% endfor %}
+                    {% endif %}
                 </td>
-                <td class="price-current">{{ price.price_per_unit|number_format }}</td>
-                <td class="price-qty">{{ price.quantity|number_format }}</td>
-                <td class="price-total">{{ price.price_total|number_format }}</td>
-                <td class="price-retainer">{{ price.retainer_id ? 'Retainer' : '' }}</td>
-                <td class="price-creator">{{ price.craft_signature_id ? 'Creator Name' : '' }}</td>
+                <td class="price-current">{{ price.PricePerUnit|number_format }}</td>
+                <td class="price-qty">{{ price.Quantity|number_format }}</td>
+                <td class="price-total">{{ price.PriceTotal|number_format }}</td>
+                <td class="price-retainer">{{ price.RetainerID ? 'Retainer' : '' }}</td>
+                <td class="price-creator">{{ price.CreatorSignatureID ? 'Creator Name' : '' }}</td>
             </tr>
         {% endfor %}
         </tbody>

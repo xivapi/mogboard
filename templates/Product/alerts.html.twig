@@ -12,7 +12,7 @@
         </div>
         <div class="form-row">
             <select name="watch_type" class="full">
-                {% for id, type in getAlertTriggers() %}
+                {% for id, type in alertTriggers() %}
                     <option value="{{ id }}">{{ type }}</option>
                 {% endfor %}
             </select>

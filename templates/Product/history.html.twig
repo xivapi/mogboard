@@ -15,12 +15,12 @@
         {% for price in history %}
             <tr>
                 <td class="price-num">{{ loop.index }}</td>
-                <td class="price-hq">{{ price.is_hq ? '<img src="/i/game/hq.png">' : '' }}</td>
-                <td class="price-current">{{ price.price_per_unit|number_format }}</td>
-                <td class="price-qty">{{ price.quantity|number_format }}</td>
-                <td class="price-total">{{ price.price_total|number_format }}</td>
-                <td class="price-buyer">{{ price.character_name }}</td>
-                <td class="price-date">{{ price.purchase_date|date }}</td>
+                <td class="price-hq">{{ price.IsHq ? '<img src="/i/game/hq.png">' : '' }}</td>
+                <td class="price-current">{{ price.PricePerUnit|number_format }}</td>
+                <td class="price-qty">{{ price.Quantity|number_format }}</td>
+                <td class="price-total">{{ price.PriceTotal|number_format }}</td>
+                <td class="price-buyer">{{ price.CharacterName }}</td>
+                <td class="price-date">{{ price.PurchaseDate|date }}</td>
             </tr>
         {% endfor %}
         </tbody>

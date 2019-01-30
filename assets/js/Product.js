@@ -50,8 +50,8 @@ class Product
     switchTab(tab)
     {
         // remove current active states
-        this.uiButtons.find('.open').removeClass('open');
-        this.uiTabs.find('.open').removeClass('open');
+        this.uiButtons.find('button.open').removeClass('open');
+        this.uiTabs.find('.tab-page.open').removeClass('open');
 
         // set active
         $(event.currentTarget).addClass('open');

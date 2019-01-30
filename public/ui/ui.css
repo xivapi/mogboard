@@ -965,6 +965,8 @@ main {
         cursor: pointer;
         transition: 100ms;
         padding: 0 15px; }
+        .product > div:nth-of-type(1) .menu > button em {
+          float: right; }
         .product > div:nth-of-type(1) .menu > button > span {
           font-size: 24px;
           vertical-align: bottom;
@@ -1032,31 +1034,39 @@ main {
       .product > div:nth-of-type(2) .tab-page.open {
         display: block; }
     .product > div:nth-of-type(2) .tab-prices .table tr:hover,
-    .product > div:nth-of-type(2) .tab-history .table tr:hover {
+    .product > div:nth-of-type(2) .tab-history .table tr:hover,
+    .product > div:nth-of-type(2) .tab-page .table tr:hover {
       background-color: rgba(80, 80, 80, 0.3); }
     .product > div:nth-of-type(2) .tab-prices .table i,
-    .product > div:nth-of-type(2) .tab-history .table i {
+    .product > div:nth-of-type(2) .tab-history .table i,
+    .product > div:nth-of-type(2) .tab-page .table i {
       font-size: 20px;
       vertical-align: middle; }
     .product > div:nth-of-type(2) .tab-prices .table img,
-    .product > div:nth-of-type(2) .tab-history .table img {
+    .product > div:nth-of-type(2) .tab-history .table img,
+    .product > div:nth-of-type(2) .tab-page .table img {
       vertical-align: middle; }
     .product > div:nth-of-type(2) .tab-prices .table .price-num,
-    .product > div:nth-of-type(2) .tab-history .table .price-num {
+    .product > div:nth-of-type(2) .tab-history .table .price-num,
+    .product > div:nth-of-type(2) .tab-page .table .price-num {
       color: #555; }
     .product > div:nth-of-type(2) .tab-prices .table .price-hq,
-    .product > div:nth-of-type(2) .tab-history .table .price-hq {
+    .product > div:nth-of-type(2) .tab-history .table .price-hq,
+    .product > div:nth-of-type(2) .tab-page .table .price-hq {
       text-align: center; }
     .product > div:nth-of-type(2) .tab-prices .table .price-qty,
-    .product > div:nth-of-type(2) .tab-history .table .price-qty {
+    .product > div:nth-of-type(2) .tab-history .table .price-qty,
+    .product > div:nth-of-type(2) .tab-page .table .price-qty {
       color: #aaa;
       font-weight: 600; }
     .product > div:nth-of-type(2) .tab-prices .table .price-current,
-    .product > div:nth-of-type(2) .tab-history .table .price-current {
+    .product > div:nth-of-type(2) .tab-history .table .price-current,
+    .product > div:nth-of-type(2) .tab-page .table .price-current {
       color: #dddc87;
       text-align: right; }
     .product > div:nth-of-type(2) .tab-prices .table .price-total,
-    .product > div:nth-of-type(2) .tab-history .table .price-total {
+    .product > div:nth-of-type(2) .tab-history .table .price-total,
+    .product > div:nth-of-type(2) .tab-page .table .price-total {
       color: #afffa1;
       text-align: right; }
     .product > div:nth-of-type(2) .tab-prices .table .price-retainer,
@@ -1066,9 +1076,17 @@ main {
     .product > div:nth-of-type(2) .tab-history .table .price-retainer,
     .product > div:nth-of-type(2) .tab-history .table .price-creator,
     .product > div:nth-of-type(2) .tab-history .table .price-buyer,
-    .product > div:nth-of-type(2) .tab-history .table .price-date {
+    .product > div:nth-of-type(2) .tab-history .table .price-date,
+    .product > div:nth-of-type(2) .tab-page .table .price-retainer,
+    .product > div:nth-of-type(2) .tab-page .table .price-creator,
+    .product > div:nth-of-type(2) .tab-page .table .price-buyer,
+    .product > div:nth-of-type(2) .tab-page .table .price-date {
       text-align: right;
       color: #aaa; }
+    .product > div:nth-of-type(2) .tab-prices .table .materia img,
+    .product > div:nth-of-type(2) .tab-history .table .materia img,
+    .product > div:nth-of-type(2) .tab-page .table .materia img {
+      border-radius: 30px; }
   .product > div:nth-of-type(3) {
     flex: 0 1 var(--columnRight); }
     .product > div:nth-of-type(3) .box {
@@ -1160,4 +1178,10 @@ main {
       font-size: 14px; }
     .product .alert-info p {
       line-height: 26px; }
+  .product .cw-history,
+  .product .cw-prices {
+    display: none; }
+    .product .cw-history.open,
+    .product .cw-prices.open {
+      display: block; }
 

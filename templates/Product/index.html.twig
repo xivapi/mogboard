@@ -9,8 +9,8 @@
             <img src="/temp/12865.png">
         </span>
         <div class="menu">
-            <button type="button" data-tab="prices" class="open"><span class="icon-Market"></span> Prices</button>
-            <button type="button" data-tab="history"><span class="icon-MarketLimit"></span> History</button>
+            <button type="button" data-tab="prices" class="open"><span class="icon-Market"></span> For Sale <em>{{ attribute(market, server.name).Prices|length|number_format }}</em></button>
+            <button type="button" data-tab="history"><span class="icon-MarketLimit"></span> History <em>{{ attribute(market, server.name).History|length|number_format }}</em></button>
             <button type="button" data-tab="details"><span class="icon-ViewDetail"></span> Details</button>
 
             <h4>Cross-World<strong>{{ server.dc }}</strong></h4>
@@ -18,7 +18,7 @@
             {% for serverName in server.dc_servers %}
                 {% set icon = serverName == server.name ? 'ItemShard' : 'PaintBorder' %}
                 {% set className = serverName == server.name ? 'home-world' : '' %}
-                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}"><span class="icon-{{ icon }} cw-icon"></span> {{ serverName }}</button>
+                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}"><span class="icon-{{ icon }} cw-icon"></span> {{ serverName }} <em>{{ attribute(market, serverName).Prices|length|number_format }}</em></button>
             {% endfor %}
         </div>
     </div>
@@ -40,13 +40,13 @@
             <span class="product-item-kind">{{ item.ItemUICategory.Name }}</span>
             <span><em>Stack Size:</em>{{ item.StackSize|number_format }}</span>
             <span>
-                <em>On Sale</em>{{ attribute(market, server.name).prices|length|number_format }}
+                <em>On Sale</em>{{ attribute(market, server.name).Prices|length|number_format }}
                 &nbsp;&nbsp;
                 <img src="/i/game/hq.png">
                 34
             </span>
             <span>
-                <em>History</em>{{ attribute(market, server.name).history|length|number_format }}
+                <em>History</em>{{ attribute(market, server.name).History|length|number_format }}
                 &nbsp;&nbsp;
                 <img src="/i/game/hq.png">
                 22
@@ -56,12 +56,12 @@
         <div class="tab">
             {# Current Prices #}
             <div class="tab-page tab-prices open">
-                {% include 'Product/prices.html.twig' with { 'prices': attribute(market, server.name).prices } %}
+                {% include 'Product/prices.html.twig' with { 'prices': attribute(market, server.name).Prices } %}
             </div>
 
             {# History prices #}
             <div class="tab-page tab-history">
-                {% include 'Product/history.html.twig' with { 'history': attribute(market, server.name).history } %}
+                {% include 'Product/history.html.twig' with { 'history': attribute(market, server.name).History } %}
             </div>
 
             {# Item Details #}
@@ -77,10 +77,10 @@
             <div class="tab-page tab-cw{{ serverName }}">
                 <h1>{{ serverName }}</h1>
                 <div class="cw-prices open">
-                    {% include 'Product/prices.html.twig' with { 'prices': attribute(market, serverName).prices } %}
+                    {% include 'Product/prices.html.twig' with { 'prices': attribute(market, serverName).Prices } %}
                 </div>
                 <div class="cw-history">
-                    {% include 'Product/history.html.twig' with { 'history': attribute(market, serverName).history } %}
+                    {% include 'Product/history.html.twig' with { 'history': attribute(market, serverName).History } %}
                 </div>
             </div>
             {% endfor %}
@@ -92,7 +92,7 @@
                 <div>
                     <h6>Updated</h6>
                     <div>
-                        {{ 1548720068|date }}
+                        {{ attribute(market, server.name).Updated|date }}
                     </div>
                 </div>
                 <div class="form">

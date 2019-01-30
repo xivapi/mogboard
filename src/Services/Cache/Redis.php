@@ -7,6 +7,9 @@ namespace App\Services\Cache;
  */
 class Redis
 {
+    const LOCAL = 'REDIS_LOCAL';
+    const PROD  = 'REDIS_PROD';
+    
     /** @var \Redis */
     private $instance;
     /** @var \Redis */
@@ -20,7 +23,7 @@ class Redis
         'read_timeout'  => -1,
     ];
     
-    public function connect(string $env = 'REDIS_LOCAL'): Redis
+    public function connect(string $env = self::LOCAL): Redis
     {
         [$ip, $port, $auth] = explode(',', getenv($env));
     

@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Services\Cache\Cache;
 use App\Services\Companion\Companion;
-use App\Services\GameData\GameDataServers;
-use Delight\Cookie\Cookie;
+use App\Services\Companion\CompanionCensus;
+use App\Services\GameData\GameServers;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,11 +15,14 @@ class ProductController extends AbstractController
     private $cache;
     /** @var Companion */
     private $companion;
+    /** @var Companion */
+    private $companionCensus;
     
-    public function __construct(Cache $cache, Companion $companion)
+    public function __construct(Cache $cache, Companion $companion, CompanionCensus $companionCensus)
     {
         $this->cache = $cache;
         $this->companion = $companion;
+        $this->companionCensus = $companionCensus;
     }
     
     /**
@@ -33,15 +36,17 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('404');
         }
         
-        $server     = Cookie::get('server');
-        $dc         = GameDataServers::getDataCenter($server);
-        $dcServers  = GameDataServers::getDataCenterServers($server);
+        $server     = GameServers::getServer();
+        $dc         = GameServers::getDataCenter($server);
+        $dcServers  = GameServers::getDataCenterServers($server);
         
         $market = $this->companion->getMultiServer($dcServers, $itemId);
+        $census = $this->companionCensus->generate($market);
         
         return $this->render('Product/index.html.twig', [
             'item'     => $item,
             'market'   => $market,
+            'census'   => $census,
             'server'   => [
                 'name'       => $server,
                 'dc'         => $dc,

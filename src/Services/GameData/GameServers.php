@@ -2,6 +2,9 @@
 
 namespace App\Services\GameData;
 
+use App\Exceptions\CompanionMarketServerException;
+use Delight\Cookie\Cookie;
+
 class GameServers
 {
     /**
@@ -156,4 +159,49 @@ class GameServers
             'Zodiark',
         ],
     ];
+    
+    /**
+     * Get the users current server
+     */
+    public static function getServer(): string
+    {
+        return Cookie::get('server') ?: 'Phoenix';
+    }
+    
+    /**
+     * Get a server id from a server string
+     */
+    public static function getServerId(string $server): int
+    {
+        $index = array_search(ucwords($server), GameServers::LIST);
+        
+        if ($index === false) {
+            throw new CompanionMarketServerException();
+        }
+        
+        return $index;
+    }
+    
+    /**
+     * Get the Data Center for
+     */
+    public static function getDataCenter(string $server): ?string
+    {
+        foreach (GameServers::LIST_DC as $dc => $servers) {
+            if (in_array($server, $servers)) {
+                return $dc;
+            }
+        }
+        
+        return 'Chaos';
+    }
+    
+    /**
+     * Get the data center servers for a specific server
+     */
+    public static function getDataCenterServers(string $server): ?array
+    {
+        $dc = self::getDataCenter($server);
+        return $dc ? GameServers::LIST_DC[$dc] : null;
+    }
 }

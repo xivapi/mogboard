@@ -4,7 +4,7 @@ namespace App\Services\Common;
 
 class Arrays
 {
-    public static function sksort(&$array, $subkey, $sort_ascending = false)
+    public static function sortBySubKey(&$array, $subkey, $sort_ascending = false)
     {
         if ($array) {
             if (count($array)) {

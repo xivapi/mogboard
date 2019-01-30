@@ -6,22 +6,28 @@ use App\Services\Common\Language;
 
 class Cache
 {
-    /** @var Redis */
-    private $redis;
+    /** @var Redis[] */
+    private static $instances = [];
     
     /**
-     * Access the redis
+     * Get a static cache for an environment
      */
-    public function get($key)
+    public static function instance(string $environment = Redis::LOCAL): Redis
     {
-        if ($this->redis === null) {
-            $this->redis = new Redis();
-            $this->redis->connect();
+        if (!isset(self::$instances[$environment])) {
+            self::$instances[$environment] = (new Redis())->connect($environment);
         }
         
-        $data = $this->redis->get($key);
+        return self::$instances[$environment];
+    }
+    
+    /**
+     * Get something from cache and convert it for multi-language
+     */
+    public static function get(string $key, string $environment = Redis::LOCAL)
+    {
+        $data = self::instance($environment)->get($key);
         $data = Language::handle($data);
-        
         return $data;
     }
 }
