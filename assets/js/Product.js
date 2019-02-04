@@ -7,8 +7,6 @@ class Product
         this.uiButtons = $('.product .menu');
         this.uiTabs = $('.product .tab');
         this.uiCategory = $('.product .product-search-cat');
-        this.uiAlertWindow = $('.alert-info-container');
-        this.uiAlertButton = $('.btn-alert-info');
     }
 
     watch()
@@ -24,19 +22,11 @@ class Product
             HeaderCategories.openCategory(id);
         });
 
-        this.uiAlertWindow.on('click', event => {
-            this.uiAlertWindow.removeClass('open');
-        });
-
-        this.uiAlertButton.on('click', event => {
-            this.uiAlertWindow.addClass('open');
-        });
-
         $(document).scroll(event => {
             let y = $(document).scrollTop(),
                 menu = this.uiButtons;
 
-            if (y >= 280) {
+            if (y >= 300) {
                 menu.addClass('fixed');
             } else {
                 menu.removeClass('fixed');

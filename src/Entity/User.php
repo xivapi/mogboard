@@ -66,6 +66,11 @@ class User
      * @ORM\OneToMany(targetEntity="Report", mappedBy="user")
      */
     private $reports;
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $patron = false;
     
     public function __construct()
     {
@@ -203,6 +208,18 @@ class User
     public function addReport(Report $report)
     {
         $this->reports[] = $report;
+        return $this;
+    }
+    
+    public function isPatron(): bool
+    {
+        return $this->patron;
+    }
+    
+    public function setPatron(bool $patron)
+    {
+        $this->patron = $patron;
+        
         return $this;
     }
 }

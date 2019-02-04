@@ -9,16 +9,15 @@
             <img src="/temp/12865.png">
         </span>
         <div class="menu">
-            <button type="button" data-tab="prices" class="open"><span class="icon-Market"></span> For Sale <em>{{ attribute(market, server.name).Prices|length|number_format }}</em></button>
-            <button type="button" data-tab="history"><span class="icon-MarketLimit"></span> History <em>{{ attribute(market, server.name).History|length|number_format }}</em></button>
-            <button type="button" data-tab="details"><span class="icon-ViewDetail"></span> Details</button>
+            <h4>
+                <strong>(DC)</strong> {{ server.dc }}
+            </h4>
 
-            <h4>Cross-World<strong>{{ server.dc }}</strong></h4>
-            <button type="button" data-tab="summary"><span class="icon-CrossWorld"></span> Summary</button>
+            <button type="button" data-tab="summary"><span class="xiv-Market"></span> Summary</button>
             {% for serverName in server.dc_servers %}
                 {% set icon = serverName == server.name ? 'ItemShard' : 'PaintBorder' %}
-                {% set className = serverName == server.name ? 'home-world' : '' %}
-                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}"><span class="icon-{{ icon }} cw-icon"></span> {{ serverName }} <em>{{ attribute(market, serverName).Prices|length|number_format }}</em></button>
+                {% set className = serverName == server.name ? 'home-world open' : '' %}
+                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}"><span class="xiv-{{ icon }} cw-icon"></span> {{ serverName }} <em>{{ attribute(market, serverName).Prices|length|number_format }}</em></button>
             {% endfor %}
         </div>
     </div>
@@ -34,7 +33,7 @@
         {# info #}
         <div class="info">
             <button class="product-search-cat" data-tippy-content="Open Market Category: {{ item.ItemSearchCategory.Name }}" data-cat="{{ item.ItemSearchCategory.ID }}">
-                <i class="icon-{{ item.ItemSearchCategory.ID|xivicon }}"></i>
+                <i class="xiv-{{ item.ItemSearchCategory.ID|xivicon }}"></i>
             </button>
             <span>{{ item.ItemKind.Name }}</span>
             <span class="product-item-kind">{{ item.ItemUICategory.Name }}</span>
@@ -54,70 +53,50 @@
         </div>
 
         <div class="tab">
-            {# Current Prices #}
-            <div class="tab-page tab-prices open">
-                {% include 'Product/prices.html.twig' with { 'prices': attribute(market, server.name).Prices } %}
-            </div>
-
-            {# History prices #}
-            <div class="tab-page tab-history">
-                {% include 'Product/history.html.twig' with { 'history': attribute(market, server.name).History } %}
-            </div>
-
-            {# Item Details #}
-            <div class="tab-page tab-details">
-                {% include 'Product/details.html.twig' %}
-            </div>
-
             {# Cross World #}
             <div class="tab-page tab-summary">
                 Cross-World Summary
             </div>
             {% for serverName in server.dc_servers %}
-            <div class="tab-page tab-cw{{ serverName }}">
-                <h1>{{ serverName }}</h1>
-                <div class="cw-prices open">
-                    {% include 'Product/prices.html.twig' with { 'prices': attribute(market, serverName).Prices } %}
+                {% set open = serverName == server.name ? 'open' : '' %}
+                <div class="tab-page tab-cw{{ serverName }} {{ open }}">
+                    <h1>{{ serverName }}</h1>
+                    <div class="cw-prices open">
+                        {% include 'Product/prices.html.twig' with { 'prices': attribute(market, serverName).Prices } %}
+                    </div>
+                    <div class="cw-history open">
+                        {% include 'Product/history.html.twig' with { 'history': attribute(market, serverName).History } %}
+                    </div>
                 </div>
-                <div class="cw-history">
-                    {% include 'Product/history.html.twig' with { 'history': attribute(market, serverName).History } %}
-                </div>
-            </div>
             {% endfor %}
         </div>
     </div>
     <div>
         <div class="box">
-            <div class="box-updated">
-                <div>
-                    <h6>Updated</h6>
-                    <div>
-                        {{ attribute(market, server.name).Updated|date }}
-                    </div>
-                </div>
-                <div class="form">
-                    <button type="button" class="btn-green" data-tippy-content="Request updated pricing."><i class="icon-ViewRefresh"></i> Refresh</button>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            {% include 'Product/statistics.html.twig' %}
+            {% include 'Product/item_updated.html.twig' %}
         </div>
 
-        <div class="box-outline">
+        <div class="box">
             {% include 'Product/alerts.html.twig' %}
         </div>
+
         <div class="box">
-            If logged in and character verified, show if
-            any friends have purchased this item.
+            {% include 'Product/friends.html.twig' %}
         </div>
 
         {# Multi-Language display #}
         <div class="box box-language">
             {% include 'Product/language.html.twig' %}
         </div>
-        <p>Links to Garland Tools</p>
-        <p>Links to Gamer Escape</p>
+
+        {# Third Party Links #}
+        <div class="box">
+            {% include 'Product/third_party.html.twig' %}
+        </div>
+
+        <div class="box">
+            {% include 'Product/item_details.html.twig' %}
+        </div>
 
     </div>
 

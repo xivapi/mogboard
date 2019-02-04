@@ -1,8 +1,8 @@
 {# Site Settings #}
-<div class="modal-settings">
-    <div class="row row-top">
+<div class="modal modal_settings">
+    <div class="row row_top">
         <label for="servers">Server</label>
-        <p>Choose your primary server, this will also set your Data Center for cross-world pricing.</p>
+        <p>Choose your primary server, this will also set your Data-Center.</p>
         <div class="form">
             <select id="servers" class="servers">
                 {% for dc, servers in cache.get('mog_DataCenters') %}
@@ -15,9 +15,9 @@
             </select>
         </div>
     </div>
-    <div class="row row-top">
+    <div class="row row_top">
         <label for="languages">Language</label>
-        <p>Set the language for the site, many pages have multi-language displays on them for ease of use.</p>
+        <p>Set the language for the site and search.</p>
         <div class="form">
             <select id="languages" class="languages">
                 <option value="en">English</option>
@@ -31,24 +31,24 @@
     </div>
 
     {% if auth.online() %}
-    <div class="row row-top">
-        <label>Characters</label>
-        <p>Add your very own in-game character! This form uses your primary server.</p>
-        <div class="modal-settings-form form">
-            <input type="text" placeholder="Name">
-            <button type="button">Search</button>
+        <div class="row row_top">
+            <label>Characters</label>
+            <p>Add your very own in-game character!</p>
+            <div class="modal_settings-form form">
+                <input type="text" placeholder="Name">
+                <button type="button">Search</button>
+            </div>
         </div>
-    </div>
-    <div class="row logout">
-        <strong><a href="{{ path('user_logout') }}">Logout</a></strong> of Mogboard.com
-    </div>
+        <div class="row logout">
+            Ready to leave? <a href="{{ path('user_logout') }}">Logout</a>
+        </div>
     {% else %}
-    <div class="row">
-        <p>
-            Login using discord and you'll be able to add your characters,
-            track items, sales and retainers! You'll also get a custom
-            tailored dashboard that matches your needs!
-        </p>
-    </div>
+        <div class="row">
+            <p>
+                Login using discord and you'll be able to add your characters,
+                track items, sales and retainers! You'll also get a custom
+                tailored dashboard that matches your needs!
+            </p>
+        </div>
     {% endif %}
 </div>

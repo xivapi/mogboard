@@ -36,22 +36,34 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('404');
         }
         
-        $server     = GameServers::getServer();
-        $dc         = GameServers::getDataCenter($server);
-        $dcServers  = GameServers::getDataCenterServers($server);
+        if (file_exists(__DIR__.'/temp.json')) {
+            $data = json_decode(
+                file_get_contents(__DIR__.'/temp.json'),
+                true
+            );
+        } else {
+            $server     = GameServers::getServer();
+            $dc         = GameServers::getDataCenter($server);
+            $dcServers  = GameServers::getDataCenterServers($server);
+    
+            $market = $this->companion->getMultiServer($dcServers, $itemId);
+            $census = $this->companionCensus->generate($market);
+    
+            $data = [
+                'item'     => $item,
+                'market'   => $market,
+                'census'   => $census,
+                'server'   => [
+                    'name'       => $server,
+                    'dc'         => $dc,
+                    'dc_servers' => $dcServers
+                ]
+            ];
+
+            // temp cache to avoid slow load times to prod servers
+            file_put_contents(__DIR__.'/temp.json', json_encode($data));
+        }
         
-        $market = $this->companion->getMultiServer($dcServers, $itemId);
-        $census = $this->companionCensus->generate($market);
-        
-        return $this->render('Product/index.html.twig', [
-            'item'     => $item,
-            'market'   => $market,
-            'census'   => $census,
-            'server'   => [
-                'name'       => $server,
-                'dc'         => $dc,
-                'dc_servers' => $dcServers
-            ]
-        ]);
+        return $this->render('Product/index.html.twig', $data);
     }
 }

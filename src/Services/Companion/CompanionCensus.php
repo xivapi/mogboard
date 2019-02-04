@@ -15,7 +15,7 @@ class CompanionCensus
     {
         
         
-        die('ok');
+        //die('ok');
         return $this;
     }
 }

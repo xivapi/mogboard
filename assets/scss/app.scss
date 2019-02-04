@@ -14,6 +14,7 @@ $mq-breakpoints: (
 @import 'temp';
 
 // custom theme
-@import 'theme';
+@import 'theme_modals';
+@import 'theme_styles';
 @import 'page_home';
 @import 'page_product';

@@ -1,9 +1,3 @@
-import Polyfills from './Polyfills';
-
-//
-// Start
-//
-
 import Server from './Server';
 Server.init();
 
@@ -16,14 +10,17 @@ HeaderUser.watch();
 import HeaderCategories from './HeaderCategories';
 HeaderCategories.watch();
 
-import HeaderSettings from './HeaderSettings';
-HeaderSettings.watch();
+import Settings from './Settings';
+Settings.watch();
 
 import Search from './Search';
 Search.watch();
 
 import Product from './Product';
 Product.watch();
+
+import ProductAlerts from './ProductAlerts';
+ProductAlerts.watch();
 
 export default {
     HeaderCategories: HeaderCategories,

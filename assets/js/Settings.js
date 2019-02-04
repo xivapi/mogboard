@@ -1,12 +1,13 @@
 import Server from './Server';
 import Language from './Language';
+import Modals from './Modals';
 
-class HeaderUser
+class Settings
 {
     constructor()
     {
-        this.uiButton = $('.btn-settings');
-        this.uiModal = $('.modal-settings');
+        this.uiModal        = $('.modal_settings');
+        this.uiModalButton  = $('.btn-settings');
 
         // always ensure server is stored in cookie
         if (localStorage.getItem('server')) {
@@ -26,21 +27,7 @@ class HeaderUser
 
     watch()
     {
-        this.uiButton.on('click', event => {
-            this.uiModal.toggleClass('open');
-        });
-
-        $(document).mouseup(event => {
-            const buttons = this.uiButton;
-            const nav = this.uiModal;
-
-            // if the target of the click isn't the container nor a descendant of the container
-            if (!buttons.is(event.target) && buttons.has(event.target).length === 0
-                && !nav.is(event.target) && nav.has(event.target).length === 0) {
-
-                this.uiModal.removeClass('open');
-            }
-        });
+        Modals.add(this.uiModal, this.uiModalButton);
 
         // server select
         this.uiModal.find('.servers').on('change', event => {
@@ -54,4 +41,4 @@ class HeaderUser
     }
 }
 
-export default new HeaderUser;
+export default new Settings;

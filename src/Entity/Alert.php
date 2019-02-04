@@ -18,6 +18,11 @@ class Alert
     const TRIGGER_MAX_STOCK = 11;
     const TRIGGER_MIN_QTY   = 20;
     const TRIGGER_MAX_QTY   = 21;
+    
+    const LIMIT_DEFAULT = 5;
+    
+    const DELAY_DEFAULT = 3600;
+    const DELAY_PATRON = 120;
 
     /**
      * @var string
@@ -61,40 +66,40 @@ class Alert
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $triggerLimit = 5;
+    private $triggerLimit = self::LIMIT_DEFAULT;
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $triggerDelay = 300;
+    private $triggerDelay = self::DELAY_DEFAULT;
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
     private $triggerLastSent = 0;
     /**
-     * @var int
-     * @ORM\Column(type="integer")
+     * @var boolean
+     * @ORM\Column(type="boolean", options={"default": false})
      */
-    private $triggerHq = 0;
+    private $triggerHq = false;
     /**
      * @var boolean
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $triggerNq = false;
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", options={"default": true})
      */
     private $triggerActive = true;
     /**
      * @var boolean
-     * @ORM\Column(type="boolean")
-     */
-    private $notifiedViaDesktop = false;
-    /**
-     * @var boolean
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default": false})
      */
     private $notifiedViaEmail = false;
     /**
      * @var boolean
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default": false})
      */
     private $notifiedViaDiscord = false;
     
@@ -237,14 +242,26 @@ class Alert
         return $this;
     }
     
-    public function getTriggerHq(): int
+    public function isTriggerHq(): bool
     {
         return $this->triggerHq;
     }
     
-    public function setTriggerHq(int $triggerHq)
+    public function setTriggerHq(bool $triggerHq)
     {
         $this->triggerHq = $triggerHq;
+        
+        return $this;
+    }
+    
+    public function isTriggerNq(): bool
+    {
+        return $this->triggerNq;
+    }
+    
+    public function setTriggerNq(bool $triggerNq)
+    {
+        $this->triggerNq = $triggerNq;
         
         return $this;
     }
@@ -257,18 +274,6 @@ class Alert
     public function setTriggerActive(bool $triggerActive)
     {
         $this->triggerActive = $triggerActive;
-        
-        return $this;
-    }
-    
-    public function isNotifiedViaDesktop(): bool
-    {
-        return $this->notifiedViaDesktop;
-    }
-    
-    public function setNotifiedViaDesktop(bool $notifiedViaDesktop)
-    {
-        $this->notifiedViaDesktop = $notifiedViaDesktop;
         
         return $this;
     }

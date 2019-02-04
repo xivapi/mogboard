@@ -53,11 +53,14 @@ class AlertItem
      */
     private $alerts;
 
-    public function __construct()
+    public function __construct(?int $itemId = null, ?string $server = null)
     {
         $this->id = Uuid::uuid4();
         $this->alerts = new ArrayCollection();
         $this->added = time();
+        
+        $this->itemId = $itemId ?: $this->getItemId();
+        $this->server = $server ?: $this->getServer();
     }
 
     public function getId(): string

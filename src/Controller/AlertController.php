@@ -6,6 +6,7 @@ use App\Entity\Alert;
 use App\Entity\AlertItem;
 use App\Exceptions\InvalidAlertCreationException;
 use App\Repository\AlertRepository;
+use App\Services\GameData\GameServers;
 use App\Services\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,61 +38,49 @@ class AlertController extends AbstractController
         if (!$user) {
             throw new NotFoundHttpException();
         }
+
+        // grab users server
+        $server = GameServers::getServer();
+
+        // get alert payload
+        $payload = json_decode($request->getContent());
         
-        if (empty($request->get('data'))) {
-            throw new InvalidAlertCreationException();
-        }
-        
-        // data
-        [
-            $itemId,
-            $server,
-            $name,
-            $condition,
-            $conditionValue,
-            $conditionHQ,
-            $viaDesktop,
-            $viaDiscord,
-            $viaEmail,
-            $limit,
-            $delay
-        ] = explode(',', $request->get('data'));
-        
+        //
+        // todo - validate
+        //  - The request
+        //  - The item id
+        //
+
         // look for an alert item, if non make one
         $alertItem = $this->em->getRepository(AlertItem::class)->findOneBy([
-            'itemId' => $itemId,
+            'itemId' => $payload->itemId,
             'server' => $server
         ]);
         
         // create alert item if one does not exist
         if (!$alertItem) {
-            $alertItem = new AlertItem();
-            $alertItem
-                ->setItemId($itemId)
-                ->setServer($server);
+            $alertItem = new AlertItem($payload->itemId, $server);
         }
 
         $alert = new Alert();
         $alert
             ->setUser($user)
             ->setAlertItem($alertItem)
-            ->setName($name)
-            ->setTriggerOption($condition)
-            ->setTriggerValue($conditionValue)
-            ->setTriggerLimit($limit)
-            ->setTriggerDelay($delay)
-            ->setTriggerHq($conditionHQ)
-            ->setNotifiedViaDesktop($viaDesktop)
-            ->setNotifiedViaDiscord($viaDiscord)
-            ->setNotifiedViaEmail($viaEmail);
+            ->setName($payload->name)
+            ->setTriggerOption($payload->option)
+            ->setTriggerValue($payload->value)
+            ->setTriggerDelay($user->isPatron() ? Alert::DELAY_PATRON : Alert::DELAY_DEFAULT)
+            ->setTriggerHq($payload->hq)
+            ->setTriggerNq($payload->nq)
+            ->setNotifiedViaDiscord($payload->discord)
+            ->setNotifiedViaEmail($payload->email);
             
         $this->em->persist($alertItem);
         $this->em->persist($alert);
         $this->em->flush();
         
         return $this->json([
-            'ok'    => true,
-            'alert' => $alert
+            'ok' => true,
         ]);
     }
 }

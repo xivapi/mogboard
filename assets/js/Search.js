@@ -93,7 +93,7 @@ class Search
                     Found ${response.Pagination.Results} / ${response.Pagination.ResultsTotal} for <strong>${this.searchTerm}</strong>
                 </div>
                 <div>
-                    <button class="btn-filters"><icon class="icon-MarketFilter"></icon> Filters</button>
+                    <button class="btn-filters"><icon class="xiv-MarketFilter"></icon> Filters</button>
                 </div>
             </div>
             <div data-simplebar class="item-search-list" id="item-search-list">${results.join('')}</div>
