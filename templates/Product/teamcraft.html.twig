@@ -1,0 +1,20 @@
+<div class="tc-top">
+    <div><img src="/i/brand/3rd/team_craft.png" height="36" class="tc"></div>
+    <div>
+        <h4>TeamCraft</h4>
+        <small>{{ recipes|length > 0 ? 'This item can be crafted!' : 'Item cannot be crafted' }}</small>
+    </div>
+</div>
+
+<div class="table">
+    <table>
+        <tbody>
+            {% for recipe in recipes %}
+                <tr>
+                    <td width="2%"><img src="{{ recipe.icon|icon }}" height="26" class="tc-img"></td>
+                    <td><a href="https://ffxivteamcraft.com/import/{{ (item.ID ~','~ recipe.id ~',1')|base64encode }}" target="_blank"><em>{{ recipe.level }}</em> {{ recipe.classjob }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

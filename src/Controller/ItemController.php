@@ -35,10 +35,25 @@ class ItemController extends AbstractController
      */
     public function index(int $itemId)
     {
+        /** @var \stdClass $item */
         $item = $this->cache->get("xiv_Item_{$itemId}") ?: false;
         
         if (!$item) {
             return $this->redirectToRoute('404');
+        }
+        
+        // if it has recipes, grab those
+        $recipes = [];
+        if (isset($item['GameContentLinks']['Recipe']['ItemResult'])) {
+            foreach ($item['GameContentLinks']['Recipe']['ItemResult'] as $id) {
+                $recipe = $this->cache->get("xiv_Recipe_{$id}");
+                $recipes[] = [
+                    'id'        => $id,
+                    'level'     => $recipe['RecipeLevelTable']['ClassJobLevel'],
+                    'classjob'  => ucwords($recipe['ClassJob']['Name']),
+                    'icon'      => $recipe['ClassJob']['Icon'],
+                ];
+            }
         }
         
         if (file_exists(__DIR__.'/temp.json')) {
@@ -69,7 +84,9 @@ class ItemController extends AbstractController
             file_put_contents(__DIR__.'/temp.json', json_encode($data));
         }
     
-        $data['alerts'] = $this->em->getRepository(Alert::class)->findBy([ 'itemId' => $itemId ]);
+        $data['item']    = $item;
+        $data['alerts']  = $this->em->getRepository(Alert::class)->findBy([ 'itemId' => $itemId ]);
+        $data['recipes'] = $recipes;
         
         return $this->render('Product/index.html.twig', $data);
     }

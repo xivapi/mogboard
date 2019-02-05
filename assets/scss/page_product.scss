@@ -14,23 +14,44 @@
         position: relative;
 
         .icon {
+            width: 200px;
+            height: 200px;
+            position: relative;
             display: block;
             margin: 0 auto;
+            overflow: hidden;
 
             text-align: center;
             border-radius: 6px;
             margin-bottom: 30px;
             padding: 20px 0;
 
-            &.icon-rarity-1 { box-shadow: inset 0 0 200px rgba(129, 128, 123, 0.25); }
-            &.icon-rarity-2 { box-shadow: inset 0 0 200px rgba(137, 255, 188, 0.25); }
-            &.icon-rarity-3 { box-shadow: inset 0 0 200px rgba(61, 175, 255, 0.25); }
-            &.icon-rarity-4 { box-shadow: inset 0 0 200px rgba(244, 75, 255, 0.25); }
-            &.icon-rarity-7 { box-shadow: inset 0 0 200px rgba(255, 126, 133, 0.25); }
+            &.icon-rarity-1 { box-shadow: inset 0 0 4px rgba(129, 128, 123, 0.80); }
+            &.icon-rarity-2 { box-shadow: inset 0 0 4px rgba(137, 255, 188, 0.80); }
+            &.icon-rarity-3 { box-shadow: inset 0 0 4px rgba(61, 175, 255, 0.80); }
+            &.icon-rarity-4 { box-shadow: inset 0 0 4px rgba(244, 75, 255, 0.80); }
+            &.icon-rarity-7 { box-shadow: inset 0 0 4px rgba(255, 126, 133, 0.80); }
 
             img {
                 border-radius: 6px;
                 box-shadow: 0 0 5px #000;
+                position: absolute;
+                left: 50%; top: 50%;
+                transform: translate(-50%, -50%);
+
+                &:first-of-type {
+                    position: absolute;
+                    z-index: 15;
+                    width: 250px;
+                    height: 250px;
+                    filter: blur(30px);
+                }
+
+                &:last-of-type {
+                    z-index: 20;
+                    border-radius: 15px;
+                    box-shadow: 0 1px 5px 1px #000;
+                }
             }
         }
 
@@ -66,7 +87,7 @@
                 text-align: left;
                 line-height: 46px;
                 height: 46px;
-                font-size: 19px;
+                font-size: 16px;
                 background-color: transparent;
                 border: solid 1px transparent;
                 border-radius: 4px;
@@ -82,13 +103,18 @@
                 }
 
                 > span {
-                    font-size: 24px;
-                    vertical-align: bottom;
-                    margin: 0 5px -2px 0px;
+                    font-size: 18px;
+                    vertical-align: middle;
+                    margin: 0 10px -6px 0px;
                     display: inline-block;
 
-                    &.cw-icon {
-                        margin: 0 5px -5px 0px;
+                    &.cw-summary {
+                        margin: 0 8px -4px 0px;
+                    }
+
+                    &.cw-home {
+                        font-size: 24px;
+                        margin: 0 5px 0 0;
                     }
                 }
 
@@ -339,6 +365,50 @@
                 border-radius: 2px;
                 display: inline;
                 vertical-align: middle;
+            }
+        }
+
+        .box_teamcraft {
+            .table {
+                box-shadow: none;
+                border-radius: 0;
+
+                em {
+                    display: inline-block;
+                    font-weight: 400;
+                    color: var(--highlight2x);
+                    margin-right: 5px;
+                }
+            }
+
+            .tc-img {
+                margin: -4px;
+            }
+
+            .tc-top {
+                padding: 10px;
+                text-align: left;
+                display: flex;
+
+                > div:last-of-type {
+                    padding: 5px 0 0 12px;
+                    text-align: left;
+                }
+
+                h4 {
+                    font-size: 20px;
+                    font-weight: 400;
+                    margin-bottom: 3px;
+                }
+
+                small {
+                    font-size: 14px;
+                    opacity: 0.5;
+                }
+
+                img {
+                    margin-top: 5px;
+                }
             }
         }
     }

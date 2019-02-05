@@ -15,7 +15,21 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFilter('date', [$this, 'getDate']),
             new TwigFilter('icon', [$this, 'getIcon']),
+            new TwigFilter('icon2x', [$this, 'getIcon2x']),
+
+            new TwigFilter('base64encode', [$this, 'getBase64encode']),
+            new TwigFilter('base64decode', [$this, 'getBase64decode']),
         ];
+    }
+    
+    public function getBase64encode($string)
+    {
+        return base64_encode($string);
+    }
+    
+    public function getBase64decode($string)
+    {
+        return base64_decode($string);
     }
     
     public function getFunctions()
@@ -49,7 +63,15 @@ class AppExtension extends AbstractExtension
      */
     public function getIcon($icon)
     {
-        return 'https://xivapi.com'. $icon;
+        return "https://xivapi.com{$icon}";
+    }
+    
+    /**
+     * Handle xivapi icons
+     */
+    public function getIcon2x($icon)
+    {
+        return "https://xivapi.com/i2/ls/{$icon}.png";
     }
     
     /**

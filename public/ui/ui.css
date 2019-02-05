@@ -221,6 +221,7 @@ table {
   --color7: #1c1c1c;
   --color8: #fff97b;
   --highlight: #fffca6;
+  --highlight2x: #b6b476;
   --default: #434857;
   --default-2x: #4f5463;
   --default-3x: #333a41;
@@ -1107,25 +1108,43 @@ main {
     flex: 0 1 var(--columnLeft);
     position: relative; }
     .product > div:nth-of-type(1) .icon {
+      width: 200px;
+      height: 200px;
+      position: relative;
       display: block;
       margin: 0 auto;
+      overflow: hidden;
       text-align: center;
       border-radius: 6px;
       margin-bottom: 30px;
       padding: 20px 0; }
       .product > div:nth-of-type(1) .icon.icon-rarity-1 {
-        box-shadow: inset 0 0 200px rgba(129, 128, 123, 0.25); }
+        box-shadow: inset 0 0 4px rgba(129, 128, 123, 0.8); }
       .product > div:nth-of-type(1) .icon.icon-rarity-2 {
-        box-shadow: inset 0 0 200px rgba(137, 255, 188, 0.25); }
+        box-shadow: inset 0 0 4px rgba(137, 255, 188, 0.8); }
       .product > div:nth-of-type(1) .icon.icon-rarity-3 {
-        box-shadow: inset 0 0 200px rgba(61, 175, 255, 0.25); }
+        box-shadow: inset 0 0 4px rgba(61, 175, 255, 0.8); }
       .product > div:nth-of-type(1) .icon.icon-rarity-4 {
-        box-shadow: inset 0 0 200px rgba(244, 75, 255, 0.25); }
+        box-shadow: inset 0 0 4px rgba(244, 75, 255, 0.8); }
       .product > div:nth-of-type(1) .icon.icon-rarity-7 {
-        box-shadow: inset 0 0 200px rgba(255, 126, 133, 0.25); }
+        box-shadow: inset 0 0 4px rgba(255, 126, 133, 0.8); }
       .product > div:nth-of-type(1) .icon img {
         border-radius: 6px;
-        box-shadow: 0 0 5px #000; }
+        box-shadow: 0 0 5px #000;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%); }
+        .product > div:nth-of-type(1) .icon img:first-of-type {
+          position: absolute;
+          z-index: 15;
+          width: 250px;
+          height: 250px;
+          filter: blur(30px); }
+        .product > div:nth-of-type(1) .icon img:last-of-type {
+          z-index: 20;
+          border-radius: 15px;
+          box-shadow: 0 1px 5px 1px #000; }
     .product > div:nth-of-type(1) .menu {
       width: var(--columnLeft);
       position: relative; }
@@ -1151,7 +1170,7 @@ main {
         text-align: left;
         line-height: 46px;
         height: 46px;
-        font-size: 19px;
+        font-size: 16px;
         background-color: transparent;
         border: solid 1px transparent;
         border-radius: 4px;
@@ -1164,12 +1183,15 @@ main {
         .product > div:nth-of-type(1) .menu > button em {
           float: right; }
         .product > div:nth-of-type(1) .menu > button > span {
-          font-size: 24px;
-          vertical-align: bottom;
-          margin: 0 5px -2px 0px;
+          font-size: 18px;
+          vertical-align: middle;
+          margin: 0 10px -6px 0px;
           display: inline-block; }
-          .product > div:nth-of-type(1) .menu > button > span.cw-icon {
-            margin: 0 5px -5px 0px; }
+          .product > div:nth-of-type(1) .menu > button > span.cw-summary {
+            margin: 0 8px -4px 0px; }
+          .product > div:nth-of-type(1) .menu > button > span.cw-home {
+            font-size: 24px;
+            margin: 0 5px 0 0; }
         .product > div:nth-of-type(1) .menu > button:hover {
           color: var(--purple-3x);
           border: solid 1px var(--table-color-dark); }
@@ -1347,6 +1369,32 @@ main {
       border-radius: 2px;
       display: inline;
       vertical-align: middle; }
+    .product > div:nth-of-type(3) .box_teamcraft .table {
+      box-shadow: none;
+      border-radius: 0; }
+      .product > div:nth-of-type(3) .box_teamcraft .table em {
+        display: inline-block;
+        font-weight: 400;
+        color: var(--highlight2x);
+        margin-right: 5px; }
+    .product > div:nth-of-type(3) .box_teamcraft .tc-img {
+      margin: -4px; }
+    .product > div:nth-of-type(3) .box_teamcraft .tc-top {
+      padding: 10px;
+      text-align: left;
+      display: flex; }
+      .product > div:nth-of-type(3) .box_teamcraft .tc-top > div:last-of-type {
+        padding: 5px 0 0 12px;
+        text-align: left; }
+      .product > div:nth-of-type(3) .box_teamcraft .tc-top h4 {
+        font-size: 20px;
+        font-weight: 400;
+        margin-bottom: 3px; }
+      .product > div:nth-of-type(3) .box_teamcraft .tc-top small {
+        font-size: 14px;
+        opacity: 0.5; }
+      .product > div:nth-of-type(3) .box_teamcraft .tc-top img {
+        margin-top: 5px; }
   .product .cw-history,
   .product .cw-prices {
     display: none; }

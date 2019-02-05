@@ -7,18 +7,19 @@
 
     <div>
         <span class="icon icon-rarity-{{ item.Rarity }}">
-            <img src="/temp/12865.png">
+            <img src="{{ item.ID|icon2x }}">
+            <img src="{{ item.ID|icon2x }}">
         </span>
         <div class="menu">
             <h4>
                 <strong>(DC)</strong> {{ server.dc }}
             </h4>
 
-            <button type="button" data-tab="summary"><span class="xiv-Market"></span> Summary</button>
+            <button type="button" data-tab="summary"><span class="xiv-Market cw-summary"></span> Summary</button>
             {% for serverName in server.dc_servers %}
-                {% set icon = serverName == server.name ? 'ItemShard' : 'PaintBorder' %}
+                {% set icon = serverName == server.name ? 'ItemShard cw-home' : 'PaintBorder' %}
                 {% set className = serverName == server.name ? 'home-world open' : '' %}
-                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}"><span class="xiv-{{ icon }} cw-icon"></span> {{ serverName }} <em>{{ attribute(market, serverName).Prices|length|number_format }}</em></button>
+                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}"><span class="xiv-{{ icon }}"></span> {{ serverName }} <em>{{ attribute(market, serverName).Prices|length|number_format }}</em></button>
             {% endfor %}
         </div>
     </div>
@@ -88,6 +89,11 @@
         {# Multi-Language display #}
         <div class="box box-language">
             {% include 'Product/language.html.twig' %}
+        </div>
+
+        {# Team Craft #}
+        <div class="box box_teamcraft">
+            {% include 'Product/teamcraft.html.twig' %}
         </div>
 
         {# Third Party Links #}
