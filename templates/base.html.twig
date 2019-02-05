@@ -59,10 +59,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/3.4.1/tippy.all.min.js"></script>
     <script>
         let mog = {
-            xivapi_key: "{{ env('XIVAPI_KEY') }}",
+            xivapi_key: "{{ env('XIVAPI_PUBLIC_KEY') }}",
             url_item_category_list: "{{ path('item_category_list', { categoryId: '-id-' }) }}",
-            url_product: "{{ path('product_page', { itemId: '-id-' }) }}",
-            url_create_alert: "{{ path('create_alert') }}"
+            url_item: "{{ path('item_page', { itemId: '-id-' }) }}",
+            url_item_refresh: "{{ path('item_refresh', { itemId: '-id-' }) }}",
+            url_create_alert: "{{ path('create_alert') }}",
+            url_get_alerts: "{{ path('alert_get', { itemId: '-id-' }) }}",
         };
         tippy('[data-tippy-content]', {
             arrow: true,

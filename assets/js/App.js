@@ -24,4 +24,5 @@ ProductAlerts.watch();
 
 export default {
     HeaderCategories: HeaderCategories,
+    ProductAlerts: ProductAlerts,
 }

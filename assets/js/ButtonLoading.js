@@ -19,6 +19,13 @@ class ButtonLoading
         $ele.prop('disabled', false);
         $ele.html(text);
     }
+
+    disable($ele, text)
+    {
+        $ele.removeClass('btn-loading');
+        $ele.prop('disabled', true);
+        $ele.html(text);
+    }
 }
 
 export default new ButtonLoading;

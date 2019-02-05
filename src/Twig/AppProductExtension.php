@@ -28,7 +28,7 @@ class AppProductExtension extends AbstractExtension
      */
     public function getAlertTriggers()
     {
-        return Alert::getTriggers();
+        return Alert::TRIGGERS;
     }
     
     /**

@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ProductController extends AbstractController
+class ItemController extends AbstractController
 {
     /** @var EntityManagerInterface */
     private $em;
@@ -31,7 +31,7 @@ class ProductController extends AbstractController
     }
     
     /**
-     * @Route("/market/{itemId}", name="product_page")
+     * @Route("/market/{itemId}", name="item_page")
      */
     public function index(int $itemId)
     {
@@ -72,5 +72,13 @@ class ProductController extends AbstractController
         $data['alerts'] = $this->em->getRepository(Alert::class)->findBy([ 'itemId' => $itemId ]);
         
         return $this->render('Product/index.html.twig', $data);
+    }
+    
+    /**
+     * @Route("/market/{itemId}/refresh", name="item_refresh")
+     */
+    public function refresh(int $itemId)
+    {
+        return $this->json([ 'ok' => true ]);
     }
 }

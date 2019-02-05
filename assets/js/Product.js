@@ -1,4 +1,6 @@
 import HeaderCategories from "./HeaderCategories";
+import Popup from "./Popup";
+import ButtonLoading from "./ButtonLoading";
 
 class Product
 {
@@ -7,6 +9,7 @@ class Product
         this.uiButtons = $('.product .menu');
         this.uiTabs = $('.product .tab');
         this.uiCategory = $('.product .product-search-cat');
+        this.uiRefreshButton = $('.btn_request_update');
     }
 
     watch()
@@ -31,6 +34,24 @@ class Product
             } else {
                 menu.removeClass('fixed');
             }
+        });
+
+        this.uiRefreshButton.on('click', event => {
+            ButtonLoading.start(this.uiRefreshButton);
+
+            $.ajax({
+                url: mog.url_item_refresh.replace('-id-', itemId),
+                success: response => {
+                    Popup.success('Prioritised!', 'This item has been bumped to the front of the queue. Check back in a minute and the prices/history should have been updated.');
+                    ButtonLoading.disable(this.uiRefreshButton, 'Queued');
+                    this.uiRefreshButton.addClass('btn-green-outline').removeClass('btn-green')
+                },
+                error: (a,b,c) => {
+                    Popup.error('Error 37', 'Could not request item pricing refresh');
+                    console.log('--- ERROR ---');
+                    console.log(a,b,c)
+                }
+            })
         });
     }
 

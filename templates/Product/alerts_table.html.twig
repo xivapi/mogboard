@@ -1,0 +1,25 @@
+<div class="table">
+    <table>
+        <tbody>
+            {% for alert in alerts %}
+                <tr>
+                    <td>
+                        <strong>{{ alert.triggerHq ? '<img src="/i/game/hq.png" height="12">' : '' }} {{ alert.name }}</strong><br>
+                        <code>{{ alert.trigger }}: {{ alert.triggerValue|number_format }}</code>
+                        {% if alert.triggerLastSent %}
+                            <br><strong>Last Triggered:</strong> {{ alert.triggerLastSent|date }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">
+                        <div align="center">
+                            <em>No alerts for this item</em>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

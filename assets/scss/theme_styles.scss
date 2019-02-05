@@ -38,6 +38,8 @@
     --table-color-2x: #393e4a;
     --table-color-3x: #666d81;
     --table-color-dark: #282b34;
+    --search-active: #888a3b;
+    --search-complete: #61aa6c;
     --form-field-height: 36px;
     --form-field-height2: 48px;
     --transition-speed: 100ms;
@@ -502,13 +504,29 @@ header {
             outline: none;
 
             background-color: transparent;
-            border: solid 1px var(--default);
+            border: solid 1px var(--default-2x);
             color: #fff;
             box-shadow: inset 0 0 3px #000;
 
             &:hover {
-                border: solid 1px var(--default-2x);
-                background-color: rgba(0,0,0,0.1);
+                background-color: rgba(0,0,0,0.2);
+            }
+
+            &.typing {
+                animation-name: search_typing;
+                animation-duration: 2800ms;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+
+                @keyframes search_typing {
+                    0% { border: solid 1px var(--default-2x); }
+                    35% { border: solid 1px var(--search-active); }
+                    100% { border: solid 1px var(--default-2x); }
+                }
+            }
+
+            &.complete {
+                border: solid 1px var(--search-complete);
             }
         }
 

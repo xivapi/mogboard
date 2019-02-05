@@ -19,6 +19,16 @@ class Alert
     const TRIGGER_MIN_QTY   = 20;
     const TRIGGER_MAX_QTY   = 21;
     
+    const TRIGGERS = [
+        self::TRIGGER_MIN_PRICE => 'Min Price per Unit',
+        self::TRIGGER_MAX_PRICE => 'Max Price per Unit',
+        self::TRIGGER_AVG_PRICE => 'Avg Price per Unit',
+        self::TRIGGER_MIN_STOCK => 'Minimum in Stock',
+        self::TRIGGER_MAX_STOCK => 'Maximum in Stock',
+        self::TRIGGER_MIN_QTY => 'Minimum Quantity in sale',
+        self::TRIGGER_MAX_QTY => 'Maximum Quantity in sale',
+    ];
+    
     const LIMIT_DEFAULT = 5;
     
     const DELAY_DEFAULT = 3600;
@@ -37,11 +47,10 @@ class Alert
      */
     private $user;
     /**
-     * @var AlertItem
-     * @ORM\ManyToOne(targetEntity="AlertItem", inversedBy="alerts")
-     * @ORM\JoinColumn(name="alert_item_id", referencedColumnName="id")
+     * @var int
+     * @ORM\Column(type="integer")
      */
-    private $alertItem;
+    private $itemId;
     /**
      * @var int
      * @ORM\Column(type="integer")
@@ -108,18 +117,10 @@ class Alert
         $this->id = Uuid::uuid4();
         $this->added = time();
     }
-    
-    public static function getTriggers()
+
+    public function getTrigger()
     {
-        return [
-            self::TRIGGER_MIN_PRICE => 'Min Price per Unit',
-            self::TRIGGER_MAX_PRICE => 'Max Price per Unit',
-            self::TRIGGER_AVG_PRICE => 'Avg Price per Unit',
-            self::TRIGGER_MIN_STOCK => 'Minimum in Stock',
-            self::TRIGGER_MAX_STOCK => 'Maximum in Stock',
-            self::TRIGGER_MIN_QTY => 'Minimum Quantity in sale',
-            self::TRIGGER_MAX_QTY => 'Maximum Quantity in sale',
-        ];
+        return self::TRIGGERS[$this->getTriggerOption()];
     }
     
     public function getId(): string
@@ -146,14 +147,14 @@ class Alert
         return $this;
     }
     
-    public function getAlertItem(): AlertItem
+    public function getItemId(): int
     {
-        return $this->alertItem;
+        return $this->itemId;
     }
     
-    public function setAlertItem(AlertItem $alertItem)
+    public function setItemId(int $itemId)
     {
-        $this->alertItem = $alertItem;
+        $this->itemId = $itemId;
         
         return $this;
     }

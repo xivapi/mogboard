@@ -11,12 +11,16 @@ class ProductAlerts
         this.uiModalButton      = $('.btn_create_alert');
         this.uiInfoModal        = $('.alert_info');
         this.uiInfoModalButton  = $('.btn_alert_info');
+        this.uiExistingAlerts   = $('.existing_alerts');
     }
 
     watch()
     {
+        // add modals
         Modals.add(this.uiModal, this.uiModalButton);
         Modals.add(this.uiInfoModal, this.uiInfoModalButton);
+
+
 
         // on submitting a new
         this.uiForm.on('submit', event => {
@@ -62,7 +66,15 @@ class ProductAlerts
 
                 // if alert ok
                 if (response.ok) {
+                    // load current alerts
+                    this.loadItemAlerts();
+
+                    // close modals
                     Modals.close(this.uiModal);
+
+                    // todo - reset form
+
+                    // confirm
                     Popup.success('Alert Created','Information on this alert will appear on the homepage!');
                     return;
                 }
@@ -71,11 +83,31 @@ class ProductAlerts
                 Popup.success('Error',response.message);
             },
             error: (a,b,c) => {
-                Popup.success('Error 37','Could not create alert. ');
+                Popup.error('Error 37', 'Could not create alert.');
                 console.log('--- ERROR ---');
                 console.log(a,b,c)
             }
         });
+    }
+
+    loadItemAlerts()
+    {
+        const url = mog.url_get_alerts.replace('-id-', itemId);
+
+        console.log(url);
+
+        $.ajax({
+            url: url,
+            contentType: "application/json",
+            success: response => {
+                this.uiExistingAlerts.html(response);
+            },
+            error: (a,b,c) => {
+                this.uiExistingAlerts.html('Could not obtain alerts for this item.');
+                console.log('--- ERROR ---');
+                console.log(a,b,c)
+            }
+        })
     }
 }
 

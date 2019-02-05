@@ -39,9 +39,6 @@ class AlertController extends AbstractController
             throw new NotFoundHttpException();
         }
 
-        // grab users server
-        $server = GameServers::getServer();
-
         // get alert payload
         $payload = json_decode($request->getContent());
         
@@ -51,21 +48,10 @@ class AlertController extends AbstractController
         //  - The item id
         //
 
-        // look for an alert item, if non make one
-        $alertItem = $this->em->getRepository(AlertItem::class)->findOneBy([
-            'itemId' => $payload->itemId,
-            'server' => $server
-        ]);
-        
-        // create alert item if one does not exist
-        if (!$alertItem) {
-            $alertItem = new AlertItem($payload->itemId, $server);
-        }
-
         $alert = new Alert();
         $alert
             ->setUser($user)
-            ->setAlertItem($alertItem)
+            ->setItemId($payload->itemId)
             ->setName($payload->name)
             ->setTriggerOption($payload->option)
             ->setTriggerValue($payload->value)
@@ -75,12 +61,30 @@ class AlertController extends AbstractController
             ->setNotifiedViaDiscord($payload->discord)
             ->setNotifiedViaEmail($payload->email);
             
-        $this->em->persist($alertItem);
         $this->em->persist($alert);
         $this->em->flush();
         
         return $this->json([
             'ok' => true,
+        ]);
+    }
+    
+    /**
+     * @Route("/alerts/get/{itemId}", name="alert_get")
+     */
+    public function fetch($itemId)
+    {
+        // get user
+        $user = $this->users->getUser();
+    
+        if (!$user) {
+            throw new NotFoundHttpException();
+        }
+        
+        $alerts = $this->em->getRepository(Alert::class)->findBy([ 'itemId' => $itemId ]);
+        
+        return $this->render('Product/alerts_table.html.twig', [
+            'alerts' => $alerts
         ]);
     }
 }

@@ -1,5 +1,8 @@
 import XIVAPI from './XIVAPI';
 
+/**
+ * todo - this needs some cleaning up
+ */
 class Search
 {
     constructor()
@@ -20,6 +23,9 @@ class Search
             clearTimeout(this.timeout);
             const searchTerm = $(event.currentTarget).val().trim();
 
+            this.uiInput.removeClass('complete');
+            searchTerm.length === 0 ? this.uiInput.removeClass('typing') : this.uiInput.addClass('typing');
+
             if (searchTerm.length === 0) {
                 this.searchTerm = '';
                 this.uiView.removeClass('open');
@@ -33,9 +39,7 @@ class Search
             // perform search
             this.timeout = setTimeout(() => {
                 this.searchTerm = $(event.currentTarget).val().trim();
-
                 this.uiView.addClass('open');
-                this.uiView.find('.search-results').html('<div class="loading"><img src="/i/svg/loading2.svg"></div>');
                 this.searching = true;
 
                 XIVAPI.search(searchTerm, response => {
@@ -59,6 +63,7 @@ class Search
                 && !input.is(event.target) && input.has(event.target).length === 0) {
 
                 this.uiView.removeClass('open');
+                this.uiInput.removeClass('complete typing');
             }
         });
 
@@ -69,12 +74,15 @@ class Search
 
     render(response)
     {
+        this.uiInput.removeClass('typing');
+        this.uiInput.addClass('complete');
+
         this.searching = false;
         const results = [];
 
         // prep results
         response.Results.forEach((item, i) => {
-            const url = mog.url_product.replace('-id-', item.ID);
+            const url = mog.url_item.replace('-id-', item.ID);
 
             results.push(
                 `<a href="${url}" class="rarity-${item.Rarity}">
@@ -114,6 +122,8 @@ class Search
         el.getScrollElement().addEventListener('scroll', event => {
             this.uiLazy.data("plugin_lazy").update();
         });
+
+        this.uiView.addClass('open');
     }
 
     setSearchHeight()
