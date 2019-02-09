@@ -2,7 +2,66 @@
     <table>
         <tbody>
             <tr>
-                <td><span class="xiv-ViewDetail"></span> Item Details</td>
+                <td colspan="2"><em>{{ item.LevelEquip }}</em> {{ item.ClassJobCategory.Name }}</td>
+            </tr>
+            <tr>
+                <td width="50%">Item Level</td>
+                <td><em>{{ item.LevelItem }}</em></td>
+            </tr>
+            {% if item.BaseParamValue0 > 0 %}
+            <tr>
+                <td colspan="2" class="item_attributes">
+                    <small>ATTRIBUTES</small>
+                    {% if item.ItemSpecialBonus.Name %}
+                        <strong>{{ item.ItemSpecialBonus.Name }}</strong>
+                    {% endif %}
+                    {% for i in range(0, 5) %}
+                        {% if item['BaseParamValue' ~ i] > 0 %}
+                            {% set hq = item['BaseParamValue' ~ i] + item['BaseParamValueSpecial' ~ i] %}
+                            <div>
+                                <em>{{ item['BaseParamValue' ~ i] }}</em> <span>{{ hq }}</span>
+                                {{ item['BaseParam' ~ i].Name }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td>Materia Slots</td>
+                <td><em>{{ item.MateriaSlotCount }}</em></td>
+            </tr>
+            <tr>
+                <td>Stack Size</td>
+                <td><em>{{ item.StackSize|number_format }}</em></td>
+            </tr>
+
+            <tr>
+                <td>Rarity</td>
+                <td><em>{{ item.Rarity }}</em></td>
+            </tr>
+            <tr>
+                <td colspan="2"><em>{{ item.GamePatch.Name }}</em></td>
+            </tr>
+            <tr>
+                <td colspan="2">Repair: <em>{{ item.ItemRepair.Name }}</em></td>
+            </tr>
+            <tr>
+                <td colspan="2">Glamour: <em>{{ item.ItemGlamour.Name }}</em></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="item_connections">
+                    <small>API CONNECTIONS</small>
+                    {% for type, fields in item.GameContentLinks %}
+                    <div>{{ type }}</div>
+                    {% else %}
+                    <div>(No content connections found)</div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>XIVAPI</td>
+                <td><a href="https://xivapi.com/item/{{ item.ID }}">/item/{{ item.ID }}</a></td>
             </tr>
         </tbody>
     </table>

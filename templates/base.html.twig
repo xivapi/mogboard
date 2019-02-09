@@ -32,22 +32,14 @@
 <body>
     <header>{% include 'header.html.twig' %}</header>
     <main>{% block body %}{% endblock %}</main>
+    <footer>{% include 'footer.html.twig' %}</footer>
+
+    {# Modal Modal #}
     {% include 'Modals/settings.html.twig' %}
     {% include 'Modals/search.html.twig' %}
     {% include 'Modals/market_board.html.twig' %}
     {% include 'Modals/market_category.html.twig' %}
-    <footer>{# {% include 'footer.html.twig %} #}</footer>
-    <div class="modal_cover"></div>
-
-    <div class="popup">
-        <div class="popup_display">
-            <div class="popup_icon" data-type="success">
-                <i class="xiv-SymbolCheck"></i>
-            </div>
-            <h1>Title</h1>
-            <p>Message</p>
-        </div>
-    </div>
+    {% include 'Modals/base.html.twig' %}
 
     {# JS #}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

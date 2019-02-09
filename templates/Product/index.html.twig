@@ -7,15 +7,15 @@
 
     <div>
         <span class="icon icon-rarity-{{ item.Rarity }}">
-            <img src="{{ item.ID|icon2x }}">
-            <img src="{{ item.ID|icon2x }}">
+            <img src="{{ item.ID|icon3x }}">
         </span>
         <div class="menu">
             <h4>
                 <strong>(DC)</strong> {{ server.dc }}
             </h4>
 
-            <button type="button" data-tab="summary"><span class="xiv-Market cw-summary"></span> Summary</button>
+            <button type="button" data-tab="summary" class="btn-summary"><span class="xiv-Market cw-summary"></span> Summary</button>
+
             {% for serverName in server.dc_servers %}
                 {% set icon = serverName == server.name ? 'ItemShard cw-home' : 'PaintBorder' %}
                 {% set className = serverName == server.name ? 'home-world open' : '' %}
@@ -24,11 +24,6 @@
         </div>
     </div>
     <div>
-        {# patch #}
-        <span class="patch" data-tippy-content="{{ item.GamePatch.Name }}">
-            PATCH {{ item.GamePatch.Version }}
-        </span>
-
         {# title #}
         <h1 class="rarity-{{ item.Rarity }}">{{ item.Name }}</h1>
 
@@ -39,7 +34,6 @@
             </button>
             <span>{{ item.ItemKind.Name }}</span>
             <span class="product-item-kind">{{ item.ItemUICategory.Name }}</span>
-            <span><em>Stack Size:</em>{{ item.StackSize|number_format }}</span>
             <span>
                 <em>On Sale</em>{{ attribute(market, server.name).Prices|length|number_format }}
                 &nbsp;&nbsp;
@@ -62,11 +56,17 @@
             {% for serverName in server.dc_servers %}
                 {% set open = serverName == server.name ? 'open' : '' %}
                 <div class="tab-page tab-cw{{ serverName }} {{ open }}">
-                    <h1>{{ serverName }}</h1>
-                    <div class="cw-prices open">
+                    <div class="tab-page-header">
+                        <div>
+                            <button data-tab="cw-prices" class="active">Prices</button>
+                            <button data-tab="cw-history">History</button>
+                        </div>
+                        <h1>{{ serverName }}</h1>
+                    </div>
+                    <div class="cw-table cw-prices open">
                         {% include 'Product/prices.html.twig' with { 'prices': attribute(market, serverName).Prices } %}
                     </div>
-                    <div class="cw-history open">
+                    <div class="cw-table cw-history">
                         {% include 'Product/history.html.twig' with { 'history': attribute(market, serverName).History } %}
                     </div>
                 </div>
@@ -78,9 +78,15 @@
             {% include 'Product/item_updated.html.twig' %}
         </div>
 
+        <div class="box box_lists">
+            {% include 'Product/lists.html.twig' %}
+        </div>
+
         <div class="box box-alerts">
             {% include 'Product/alerts.html.twig' %}
         </div>
+
+
 
         <div class="box">
             {% include 'Product/friends.html.twig' %}
@@ -101,7 +107,7 @@
             {% include 'Product/third_party.html.twig' %}
         </div>
 
-        <div class="box">
+        <div class="box box_item_details">
             {% include 'Product/item_details.html.twig' %}
         </div>
 

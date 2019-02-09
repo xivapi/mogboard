@@ -47,3 +47,9 @@
 .icon-load-c:before {
   content: "\63";
 }
+.icon-heart-o:before {
+  content: "\64";
+}
+.icon-heart:before {
+  content: "\65";
+}

@@ -14,29 +14,12 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('date', [$this, 'getDate']),
-            new TwigFilter('icon', [$this, 'getIcon']),
-            new TwigFilter('icon2x', [$this, 'getIcon2x']),
-
-            new TwigFilter('base64encode', [$this, 'getBase64encode']),
-            new TwigFilter('base64decode', [$this, 'getBase64decode']),
         ];
-    }
-    
-    public function getBase64encode($string)
-    {
-        return base64_encode($string);
-    }
-    
-    public function getBase64decode($string)
-    {
-        return base64_decode($string);
     }
     
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('env', [$this, 'getEnvVar']),
-            new \Twig_SimpleFunction('environment', [$this, 'getEnvironment']),
             new \Twig_SimpleFunction('siteVersion', [$this, 'getApiVersion']),
             new \Twig_SimpleFunction('favIcon', [$this, 'getFavIcon']),
         ];
@@ -57,39 +40,7 @@ class AppExtension extends AbstractExtension
         
         return Carbon::now()->subSeconds($difference)->diffForHumans();
     }
-
-    /**
-     * Handle xivapi icons
-     */
-    public function getIcon($icon)
-    {
-        return "https://xivapi.com{$icon}";
-    }
     
-    /**
-     * Handle xivapi icons
-     */
-    public function getIcon2x($icon)
-    {
-        return "https://xivapi.com/i2/ls/{$icon}.png";
-    }
-    
-    /**
-     * Get an environment variable
-     */
-    public function getEnvVar($var)
-    {
-        return getenv($var);
-    }
-
-    /**
-     * Get the current site environment
-     */
-    public function getEnvironment()
-    {
-        return constant(Environment::CONSTANT);
-    }
-
     /**
      * Get API version information
      */

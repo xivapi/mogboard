@@ -13,6 +13,7 @@
 
     --highlight: #fffca6;
     --highlight2x: #b6b476;
+    --highlight3x: #feffc8;
 
     --default: #434857;
     --default-2x: #4f5463;
@@ -642,6 +643,23 @@ main {
     padding: 30px 110px;
 }
 
+footer {
+    opacity: 0.5;
+    text-align: center;
+    padding: 40px 0;
+    color: #ccc;
+    font-size: 15px;
+    line-height: 22px;
+
+    em {
+        color: var(--blue-3x);
+        font-style: normal;
+    }
+
+    small {
+        font-size: 13px;
+    }
+}
 
 //
 // Custom elements
