@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\GameData;
+namespace App\Service\GameData;
 
-use App\Services\Cache\Cache;
-use App\Services\Common\Arrays;
+use App\Service\Redis\Redis;
+use App\Service\Common\Arrays;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
@@ -52,7 +52,7 @@ class GameDataCache
     
         // build redis key list
         $keys = [];
-        foreach (Cache::instance()->get('ids_Item') as $i => $id) {
+        foreach (Redis::Cache()->get('ids_Item') as $i => $id) {
             $keys[$i] = "xiv_Item_{$id}";
         }
     
@@ -62,13 +62,13 @@ class GameDataCache
         $section->writeln('Starting ...');
         foreach ($keys as $i => $chunk) {
             $memory  = (memory_get_peak_usage(true) / 1024 / 1024);
-            $objects = Cache::instance()->getMulti($chunk);
+            $objects = Redis::Cache()->getMulti($chunk);
         
             // save locally
-            Cache::instance()->startPipeline();
+            Redis::Cache()->startPipeline();
             foreach ($objects as $obj) {
                 // save item
-                Cache::instance()->set("mog_Item_{$obj->ID}", $obj, GameDataCache::CACHE_TIME);
+                Redis::Cache()->set("mog_Item_{$obj->ID}", $obj, GameDataCache::CACHE_TIME);
             
                 // save item search category data
                 if (isset($obj->ItemSearchCategory->ID)) {
@@ -84,7 +84,7 @@ class GameDataCache
                     ];
                 }
             }
-            Cache::instance()->executePipeline();
+            Redis::Cache()->executePipeline();
             unset($items);
     
             $section->overwrite("Saved chunk: ". ($i+1) ."/{$total} - {$memory} MB");
@@ -101,7 +101,7 @@ class GameDataCache
         
             // save
             $key = "mog_ItemSearchCategory_{$itemSearchCategoryId}_Items";
-            Cache::instance()->set($key, $items, GameDataCache::CACHE_TIME);
+            Redis::Cache()->set($key, $items, GameDataCache::CACHE_TIME);
             $section->overwrite(count($items) . " items saved to category: {$key}");
         }
     }
@@ -113,9 +113,9 @@ class GameDataCache
     {
         $this->output->writeln('>> Caching Game Towns');
         
-        foreach (Cache::instance()->get('ids_Town') as $i => $id) {
-            $town = Cache::instance()->get('xiv_Town_'. $id);
-            Cache::instance()->set('mog_Town_'. $id, $town, self::CACHE_TIME);
+        foreach (Redis::Cache()->get('ids_Town') as $i => $id) {
+            $town = Redis::Cache()->get('xiv_Town_'. $id);
+            Redis::Cache()->set('mog_Town_'. $id, $town, self::CACHE_TIME);
         }
     }
     
@@ -128,12 +128,12 @@ class GameDataCache
         
         // build redis key list
         $keys = [];
-        foreach (Cache::instance()->get('ids_ItemSearchCategory') as $i => $id) {
+        foreach (Redis::Cache()->get('ids_ItemSearchCategory') as $i => $id) {
             $keys[$i] = "xiv_ItemSearchCategory_{$id}";
         }
     
         // as there are only 100 item search categories, we will get them all at once:
-        $objects    = Cache::instance()->getMulti($keys);
+        $objects    = Redis::Cache()->getMulti($keys);
         $categories = [];
     
         foreach ($objects as $category) {
@@ -154,7 +154,7 @@ class GameDataCache
             ];
         
             // copy category over
-            Cache::instance()->set("mog_ItemSearchCategory_{$category->ID}", $category, GameDataCache::CACHE_TIME);
+            Redis::Cache()->set("mog_ItemSearchCategory_{$category->ID}", $category, GameDataCache::CACHE_TIME);
         }
     
         ksort($categories['weapons']);
@@ -167,6 +167,6 @@ class GameDataCache
         $categories['items']    = array_values($categories['items']);
         $categories['housing']  = array_values($categories['housing']);
     
-        Cache::instance()->set("mog_ItemSearchCategories", $categories, GameDataCache::CACHE_TIME);
+        Redis::Cache()->set("mog_ItemSearchCategories", $categories, GameDataCache::CACHE_TIME);
     }
 }

@@ -1,9 +1,11 @@
 <div class="table">
     <table>
         <tbody>
+            {% if item.ClassJobCategory %}
             <tr>
-                <td colspan="2"><em>{{ item.LevelEquip }}</em> {{ item.ClassJobCategory.Name }}</td>
+                <td colspan="2"><em>{{ item.LevelEquip }}</em> {{ item.ClassJobCategory.Name ?? '' }}</td>
             </tr>
+            {% endif %}
             <tr>
                 <td width="50%">Item Level</td>
                 <td><em>{{ item.LevelItem }}</em></td>
@@ -29,7 +31,7 @@
             {% endif %}
             <tr>
                 <td>Materia Slots</td>
-                <td><em>{{ item.MateriaSlotCount }}</em></td>
+                <td><em>{{ item.MateriaSlotCount ?: 'None' }}</em></td>
             </tr>
             <tr>
                 <td>Stack Size</td>
@@ -44,10 +46,10 @@
                 <td colspan="2"><em>{{ item.GamePatch.Name }}</em></td>
             </tr>
             <tr>
-                <td colspan="2">Repair: <em>{{ item.ItemRepair.Name }}</em></td>
+                <td colspan="2">Repair: <em>{{ item.ItemRepair.Name ?? 'n/a' }}</em></td>
             </tr>
             <tr>
-                <td colspan="2">Glamour: <em>{{ item.ItemGlamour.Name }}</em></td>
+                <td colspan="2">Glamour: <em>{{ item.ItemGlamour.Name ?? 'n/a' }}</em></td>
             </tr>
             <tr>
                 <td colspan="2" class="item_connections">

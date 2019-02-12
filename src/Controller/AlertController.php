@@ -6,8 +6,8 @@ use App\Entity\Alert;
 use App\Entity\AlertItem;
 use App\Exceptions\InvalidAlertCreationException;
 use App\Repository\AlertRepository;
-use App\Services\GameData\GameServers;
-use App\Services\User\Users;
+use App\Service\GameData\GameServers;
+use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,11 +33,7 @@ class AlertController extends AbstractController
     public function create(Request $request)
     {
         // get user
-        $user = $this->users->getUser();
-
-        if (!$user) {
-            throw new NotFoundHttpException();
-        }
+        $user = $this->users->getUser(true);
 
         // get alert payload
         $payload = json_decode($request->getContent());
@@ -74,14 +70,11 @@ class AlertController extends AbstractController
      */
     public function fetch($itemId)
     {
-        // get user
-        $user = $this->users->getUser();
-    
-        if (!$user) {
-            throw new NotFoundHttpException();
-        }
-        
-        $alerts = $this->em->getRepository(Alert::class)->findBy([ 'itemId' => $itemId ]);
+        // get alerts for the current user
+        $alerts = $this->em->getRepository(Alert::class)->findBy([
+            'itemId' => $itemId,
+            'user'   => $this->users->getUser(true),
+        ]);
         
         return $this->render('Product/alerts_table.html.twig', [
             'alerts' => $alerts

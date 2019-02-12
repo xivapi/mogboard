@@ -22,6 +22,9 @@ Product.watch();
 import ProductAlerts from './ProductAlerts';
 ProductAlerts.watch();
 
+import ProductLists from './ProductLists';
+ProductLists.watch();
+
 export default {
     HeaderCategories: HeaderCategories,
     ProductAlerts: ProductAlerts,

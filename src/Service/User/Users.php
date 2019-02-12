@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Services\User;
+namespace App\Service\User;
 
 use App\Entity\User;
-use App\Services\User\Discord\CsrfInvalidException;
-use App\Services\User\Discord\DiscordSignIn;
-use App\Services\User\SSO\SSOAccess;
+use App\Service\User\Discord\CsrfInvalidException;
+use App\Service\User\Discord\DiscordSignIn;
+use App\Service\User\SSO\SSOAccess;
 use Delight\Cookie\Cookie;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Users
 {
@@ -36,10 +37,14 @@ class Users
     /**
      * Get the current logged in user
      */
-    public function getUser(): ?User
+    public function getUser($mustBeOnline = false): ?User
     {
         $session = Cookie::get(self::COOKIE_SESSION_NAME);
         if (!$session || $session === 'x') {
+            if ($mustBeOnline) {
+                throw new NotFoundHttpException();
+            }
+            
             return null;
         }
         
@@ -47,6 +52,10 @@ class Users
         $user = $this->em->getRepository(User::class)->findOneBy([
             'session' => $session
         ]);
+    
+        if ($mustBeOnline && !$user) {
+            throw new NotFoundHttpException();
+        }
         
         return $user;
     }

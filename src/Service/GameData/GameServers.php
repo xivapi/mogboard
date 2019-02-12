@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\GameData;
+namespace App\Service\GameData;
 
 use App\Exceptions\CompanionMarketServerException;
 use Delight\Cookie\Cookie;

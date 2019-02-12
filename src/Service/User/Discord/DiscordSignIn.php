@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\User\Discord;
+namespace App\Service\User\Discord;
 
-use App\Services\User\SignInInterface;
-use App\Services\User\SSO\SSOAccess;
+use App\Service\User\SignInInterface;
+use App\Service\User\SSO\SSOAccess;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\Request;
 use Wohali\OAuth2\Client\Provider\Discord;

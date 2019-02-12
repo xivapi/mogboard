@@ -2,7 +2,7 @@
 
 namespace App\Twig;
 
-use App\Services\Common\Environment;
+use App\Service\Common\Environment;
 use Twig\Extension\AbstractExtension;
 
 class EnvironmentExtension extends AbstractExtension

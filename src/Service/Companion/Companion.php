@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Companion;
+namespace App\Service\Companion;
 
 use GuzzleHttp\Promise;
 use XIVAPI\XIVAPI;

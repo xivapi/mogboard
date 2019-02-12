@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Services\User\Discord\DiscordSignIn;
-use App\Services\User\Users;
+use App\Service\User\Discord\DiscordSignIn;
+use App\Service\User\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

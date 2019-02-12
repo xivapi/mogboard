@@ -57,6 +57,9 @@
             url_item_refresh: "{{ path('item_refresh', { itemId: '-id-' }) }}",
             url_create_alert: "{{ path('create_alert') }}",
             url_get_alerts: "{{ path('alert_get', { itemId: '-id-' }) }}",
+            url_lists_create: "{{ path('lists_create') }}",
+            url_lists_add_item: "{{ path('lists_add_item', { listId: '-id-' }) }}",
+            url_lists_favourite: "{{ path('lists_favourite') }}",
         };
         tippy('[data-tippy-content]', {
             arrow: true,

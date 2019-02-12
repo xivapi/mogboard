@@ -2,7 +2,7 @@ class ButtonLoading
 {
     start($ele)
     {
-        const text = $ele.text();
+        const text = $ele.html();
 
         $ele.attr('data-text', text);
 
@@ -13,16 +13,17 @@ class ButtonLoading
 
     finish($ele)
     {
+        console.log('finished');
         const text = $ele.attr('data-text');
 
-        $ele.removeClass('btn-loading');
+        $ele.removeClass('btn_loading');
         $ele.prop('disabled', false);
         $ele.html(text);
     }
 
     disable($ele, text)
     {
-        $ele.removeClass('btn-loading');
+        $ele.removeClass('btn_loading');
         $ele.prop('disabled', true);
         $ele.html(text);
     }

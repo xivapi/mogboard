@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\User\SSO;
+namespace App\Service\User\SSO;
 
 class SSOAccess
 {

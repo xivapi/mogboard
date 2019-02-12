@@ -2,7 +2,7 @@
 
 namespace App\Twig;
 
-use App\Services\GameData\GameDataSource;
+use App\Service\GameData\GameDataSource;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

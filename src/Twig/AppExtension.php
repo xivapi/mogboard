@@ -2,8 +2,9 @@
 
 namespace App\Twig;
 
-use App\Services\Common\Environment;
-use App\Services\Common\SiteVersion;
+use App\Service\Common\Environment;
+use App\Service\Common\SiteVersion;
+use App\Service\Redis\Redis;
 use Carbon\Carbon;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -22,6 +23,7 @@ class AppExtension extends AbstractExtension
         return [
             new \Twig_SimpleFunction('siteVersion', [$this, 'getApiVersion']),
             new \Twig_SimpleFunction('favIcon', [$this, 'getFavIcon']),
+            new \Twig_SimpleFunction('cache', [$this, 'getCached']),
         ];
     }
     
@@ -57,5 +59,11 @@ class AppExtension extends AbstractExtension
         return getenv('APP_ENV') == 'dev' ? '/favicon_dev.png' : '/favicon.png';
     }
     
-    
+    /**
+     * Get static cache
+     */
+    public function getCached($key)
+    {
+        return Redis::get($key);
+    }
 }

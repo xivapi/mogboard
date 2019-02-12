@@ -63,6 +63,10 @@ class User
      */
     private $alerts;
     /**
+     * @ORM\OneToMany(targetEntity="ItemList", mappedBy="user")
+     */
+    private $lists;
+    /**
      * @ORM\OneToMany(targetEntity="Report", mappedBy="user")
      */
     private $reports;
@@ -77,6 +81,7 @@ class User
         $this->id       = Uuid::uuid4();
         $this->session  = Uuid::uuid4()->toString() . Uuid::uuid4()->toString() . Uuid::uuid4()->toString();
         $this->alerts   = new ArrayCollection();
+        $this->lists    = new ArrayCollection();
         $this->reports  = new ArrayCollection();
     }
     
@@ -221,5 +226,48 @@ class User
         $this->patron = $patron;
         
         return $this;
+    }
+    
+    public function getLists()
+    {
+        return $this->lists;
+    }
+    
+    public function setLists($lists)
+    {
+        $this->lists = $lists;
+        
+        return $this;
+    }
+    
+    /**
+     * Get personal lists
+     */
+    public function getListsPersonal()
+    {
+        $lists = [];
+        
+        /** @var ItemList $list */
+        foreach ($this->lists as $list) {
+            if ($list->isFavourite()) {
+                continue;
+            }
+            
+            $lists[] = $list;
+        }
+        
+        return $lists;
+    }
+    
+    public function hasFavouriteItem(int $itemId)
+    {
+        /** @var ItemList $list */
+        foreach ($this->lists as $list) {
+            if ($list->isFavourite() && $list->hasItem($itemId)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

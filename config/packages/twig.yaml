@@ -3,5 +3,4 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     globals:
-        auth: '@App\Services\User\Users'
-        cache: '@App\Services\Cache\Cache'
+        auth: '@App\Service\User\Users'

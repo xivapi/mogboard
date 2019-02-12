@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\User\Discord;
+namespace App\Service\User\Discord;
 
 class CsrfInvalidException extends \Exception
 {

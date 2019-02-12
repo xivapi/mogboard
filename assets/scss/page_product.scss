@@ -379,8 +379,13 @@
             .btn_addto_list {
                 i {
                     margin-right: 5px;
+                    margin-bottom: -2px;
                     display: inline-block;
                     vertical-align: middle;
+                }
+
+                &.on {
+                    background-color: var(--red-2x);
                 }
             }
         }

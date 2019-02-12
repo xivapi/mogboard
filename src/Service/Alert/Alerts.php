@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Alert;
+namespace App\Service\Alert;
 
 use App\Entity\User;
 use App\Entity\Alert;

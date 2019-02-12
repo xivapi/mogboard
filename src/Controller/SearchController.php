@@ -2,16 +2,16 @@
 
 namespace App\Controller;
 
-use App\Services\Cache\Cache;
+use App\Service\Redis\Redis;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
-    /** @var Cache */
+    /** @var Redis */
     private $cache;
     
-    public function __construct(Cache $cache)
+    public function __construct(Redis $cache)
     {
         $this->cache = $cache;
     }

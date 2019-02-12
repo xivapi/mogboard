@@ -759,14 +759,17 @@ footer {
 .text-white {
   color: var(--white); }
 
+.alert-default,
 .alert-red,
 .alert-blue,
 .alert-green,
 .alert-purple,
 .alert-white {
-  padding: 20px;
+  padding: 15px;
   border-radius: 5px;
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  width: 100%; }
+  .alert-default h1,
   .alert-red h1,
   .alert-blue h1,
   .alert-green h1,
@@ -774,13 +777,18 @@ footer {
   .alert-white h1 {
     font-size: 32px;
     font-weight: 400; }
+  .alert-default p,
   .alert-red p,
   .alert-blue p,
   .alert-green p,
   .alert-purple p,
   .alert-white p {
     font-size: 18px;
-    margin-bottom: 0; }
+    margin-bottom: 0;
+    color: #fff; }
+
+.alert-default {
+  background-color: var(--default); }
 
 .alert-red {
   background-color: var(--red); }
@@ -1408,8 +1416,12 @@ footer {
       .product > div:nth-of-type(3) .box .btn_addto_fave i,
       .product > div:nth-of-type(3) .box .btn_addto_list i {
         margin-right: 5px;
+        margin-bottom: -2px;
         display: inline-block;
         vertical-align: middle; }
+      .product > div:nth-of-type(3) .box .btn_addto_fave.on,
+      .product > div:nth-of-type(3) .box .btn_addto_list.on {
+        background-color: var(--red-2x); }
     .product > div:nth-of-type(3) .box_updated {
       display: flex; }
       .product > div:nth-of-type(3) .box_updated > div:nth-of-type(1) {

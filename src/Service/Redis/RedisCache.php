@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Services\Cache;
+namespace App\Service\Redis;
 
 /**
  * Requires: https://github.com/phpredis/phpredis
  */
-class Redis
+class RedisCache
 {
-    const LOCAL = 'REDIS_LOCAL';
-    const PROD  = 'REDIS_PROD';
+    const LOCAL = 'REDIS_SERVER_LOCAL';
+    const PROD  = 'REDIS_SERVER_PROD';
     
     /** @var \Redis */
     private $instance;
@@ -16,17 +16,17 @@ class Redis
     private $pipeline;
     /** @var array */
     private $options = [
-        'timeout'       => 2.5,
+        'timeout'       => 3,
         'compression'   => 5,
         'default_time'  => 3600,
         'serializer'    => 0,
         'read_timeout'  => -1,
     ];
     
-    public function connect(string $env = self::LOCAL): Redis
+    public function connect(string $env = self::LOCAL): RedisCache
     {
         [$ip, $port, $auth] = explode(',', getenv($env));
-    
+        
         $this->instance = new \Redis();
         $this->instance->pconnect($ip, $port, $this->options['timeout']);
         $this->instance->auth($auth);
@@ -39,6 +39,12 @@ class Redis
     {
         $this->instance->close();
         $this->instance = null;
+    }
+    
+    public function selectDatabase(int $index)
+    {
+        $this->instance->select($index);
+        return $this;
     }
     
     public function startPipeline()
@@ -71,11 +77,11 @@ class Redis
         $data = ($this->options['serializer'] || $serialize)
             ? serialize($data)
             : gzcompress(json_encode($data), $this->options['compression']);
-    
+        
         if (json_last_error()) {
             throw new \Exception("COULD NOT SAVE TO REDIS, JSON ERROR: ". json_last_error_msg());
         }
-    
+        
         $this->pipeline ? $this->pipeline->set($key, $data, $ttl) : $this->instance->set($key, $data, $ttl);
     }
     
@@ -98,7 +104,7 @@ class Redis
     public function get(string $key, bool $serialize = false)
     {
         $data = $this->pipeline ? $this->pipeline->get($key) : $this->instance->get($key);
-    
+        
         if ($data) {
             $data = ($this->options['serializer'] || $serialize)
                 ? unserialize($data)
@@ -129,14 +135,14 @@ class Redis
         return $this->instance->get($key);
     }
     
-    public function append(string $key, $value)
-    {
-        $this->pipeline ? $this->pipeline->rPush($key, $value) : $this->instance->rPush($key, $value);
-    }
-    
     public function getCount(string $key)
     {
         return $this->pipeline ? $this->pipeline->get($key) : $this->instance->get($key);
+    }
+    
+    public function append(string $key, $value)
+    {
+        $this->pipeline ? $this->pipeline->rPush($key, $value) : $this->instance->rPush($key, $value);
     }
     
     public function delete(string $key)

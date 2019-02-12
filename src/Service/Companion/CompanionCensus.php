@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Companion;
+namespace App\Service\Companion;
 
 /**
  * Generate all stats about items, including cross-world summaries, chart data,

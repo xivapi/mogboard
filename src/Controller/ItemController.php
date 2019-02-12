@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Alert;
-use App\Services\Cache\Cache;
-use App\Services\Companion\Companion;
-use App\Services\Companion\CompanionCensus;
-use App\Services\GameData\GameServers;
+use App\Service\Redis\Redis;
+use App\Service\Companion\Companion;
+use App\Service\Companion\CompanionCensus;
+use App\Service\GameData\GameServers;
+use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,19 +16,27 @@ class ItemController extends AbstractController
 {
     /** @var EntityManagerInterface */
     private $em;
-    /** @var Cache */
+    /** @var Redis */
     private $cache;
     /** @var Companion */
     private $companion;
     /** @var Companion */
     private $companionCensus;
+    /** @var Users */
+    private $users;
     
-    public function __construct(EntityManagerInterface $em, Cache $cache, Companion $companion, CompanionCensus $companionCensus)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        Redis $cache,
+        Companion $companion,
+        CompanionCensus $companionCensus,
+        Users $users
+    ) {
         $this->em = $em;
         $this->cache = $cache;
         $this->companion = $companion;
         $this->companionCensus = $companionCensus;
+        $this->users = $users;
     }
     
     /**
@@ -35,6 +44,8 @@ class ItemController extends AbstractController
      */
     public function index(int $itemId)
     {
+        $user = $this->users->getUser();
+        
         /** @var \stdClass $item */
         $item = $this->cache->get("xiv_Item_{$itemId}") ?: false;
         
@@ -87,6 +98,8 @@ class ItemController extends AbstractController
         $data['item']    = $item;
         $data['alerts']  = $this->em->getRepository(Alert::class)->findBy([ 'itemId' => $itemId ]);
         $data['recipes'] = $recipes;
+        $data['faved']   = $user ? $user->hasFavouriteItem($itemId) : false;
+        $data['lists']   = $user ? $user->getListsPersonal() : [];
         
         return $this->render('Product/index.html.twig', $data);
     }
