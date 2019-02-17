@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\User;
+namespace App\Service\User;
 
-use App\Services\User\SSO\SSOAccess;
+use App\Service\User\SSO\SSOAccess;
 
 interface SignInInterface
 {
