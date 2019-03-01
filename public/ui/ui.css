@@ -1055,9 +1055,8 @@ footer {
     margin-right: 10px; }
 
 .welcome-banner {
-  width: 300px;
   text-align: center;
-  margin: 0 auto 50px auto; }
+  margin: 20px 0; }
   .welcome-banner h1 {
     font-size: 16px;
     opacity: 0.5; }
