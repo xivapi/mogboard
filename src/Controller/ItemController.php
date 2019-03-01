@@ -66,42 +66,28 @@ class ItemController extends AbstractController
                 ];
             }
         }
-        
-        if (file_exists(__DIR__.'/temp.json')) {
-            $data = json_decode(
-                file_get_contents(__DIR__.'/temp.json'),
-                true
-            );
-        } else {
-            $server     = GameServers::getServer();
-            $dc         = GameServers::getDataCenter($server);
-            $dcServers  = GameServers::getDataCenterServers($server);
     
-            $market = $this->companion->getMultiServer($dcServers, $itemId);
-            $census = $this->companionCensus->generate($market);
+        $server     = GameServers::getServer();
+        $dc         = GameServers::getDataCenter($server);
+        $dcServers  = GameServers::getDataCenterServers($server);
     
-            $data = [
-                'item'     => $item,
-                'market'   => $market,
-                'census'   => $census,
-                'server'   => [
-                    'name'       => $server,
-                    'dc'         => $dc,
-                    'dc_servers' => $dcServers
-                ]
-            ];
-
-            // temp cache to avoid slow load times to prod servers
-            file_put_contents(__DIR__.'/temp.json', json_encode($data));
-        }
+        $market = $this->companion->getMultiServer($dcServers, $itemId);
+        $census = $this->companionCensus->generate($market);
     
-        $data['item']    = $item;
-        $data['alerts']  = $this->em->getRepository(Alert::class)->findBy([ 'itemId' => $itemId ]);
-        $data['recipes'] = $recipes;
-        $data['faved']   = $user ? $user->hasFavouriteItem($itemId) : false;
-        $data['lists']   = $user ? $user->getListsPersonal() : [];
-        
-        return $this->render('Product/index.html.twig', $data);
+        return $this->render('Product/index.html.twig', [
+            'item'     => $item,
+            'market'   => $market,
+            'census'   => $census,
+            'recipes'  => $recipes,
+            'alerts'   => $this->em->getRepository(Alert::class)->findBy([ 'itemId' => $itemId ]),
+            'faved'    => $user ? $user->hasFavouriteItem($itemId) : false,
+            'lists'    => $user ? $user->getListsPersonal() : [],
+            'server'   => [
+                'name'       => $server,
+                'dc'         => $dc,
+                'dc_servers' => $dcServers
+            ]
+        ]);
     }
     
     /**

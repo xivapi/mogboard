@@ -17,6 +17,7 @@
         </div>
 
         {# alert form #}
+        {% if auth.online() %}
         <form method="post" class="modal_form create_alert_form">
             {# hidden stuff #}
             <input type="hidden" id="alert_item_id" value="{{ item.ID }}">
@@ -104,6 +105,12 @@
                 <button type="submit" class="btn-green btn_create_alert">Create Alert</button>
             </div>
         </form>
+        {% else %}
+        <p>To create an alert, you must be logged into the site. You can do this very easy via Discord.</p>
+        <p>
+            <a href="{{ path('user_login_discord') }}" class="btn-login">Login via Discord</a>
+        </p>
+        {% endif %}
     </div>
 </div>
 

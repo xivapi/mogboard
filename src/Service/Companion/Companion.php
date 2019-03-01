@@ -12,7 +12,7 @@ class Companion
     
     public function __construct()
     {
-        $this->xivapi = new XIVAPI(XIVAPI::DEV);
+        $this->xivapi = new XIVAPI(XIVAPI::STAGING);
     }
     
     /**

@@ -42,9 +42,11 @@
                 <td>Rarity</td>
                 <td><em>{{ item.Rarity }}</em></td>
             </tr>
+            {% if item.GamePatch is defined %}
             <tr>
                 <td colspan="2"><em>{{ item.GamePatch.Name }}</em></td>
             </tr>
+            {% endif %}
             <tr>
                 <td colspan="2">Repair: <em>{{ item.ItemRepair.Name ?? 'n/a' }}</em></td>
             </tr>
