@@ -50,6 +50,19 @@
         background-color: var(--default-3x);
         box-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }
+
+    ul {
+        margin: 10px 0 30px 50px;
+        list-style: disc;
+
+        li {
+            margin-bottom: 20px;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+        }
+    }
 }
 
 .home-patron {

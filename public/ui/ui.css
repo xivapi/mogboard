@@ -1088,6 +1088,13 @@ footer {
   .home .home-box {
     background-color: var(--default-3x);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+  .home ul {
+    margin: 10px 0 30px 50px;
+    list-style: disc; }
+    .home ul li {
+      margin-bottom: 20px; }
+      .home ul li:last-of-type {
+        margin-bottom: 0; }
 
 .home-patron {
   background-color: #f96854;
