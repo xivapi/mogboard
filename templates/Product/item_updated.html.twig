@@ -2,7 +2,11 @@
     <div>
         <h6>Updated</h6>
         <div>
-            {{ attribute(market, server.name).Updated|date }}
+            {% if attribute(market, server.name) %}
+                {{ attribute(market, server.name).Updated|date }}
+            {% else %}
+                never.
+            {% endif %}
         </div>
     </div>
     <div class="form">

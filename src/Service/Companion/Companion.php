@@ -15,35 +15,18 @@ class Companion
         $this->xivapi = new XIVAPI(XIVAPI::STAGING);
     }
     
-    /**
-     * Get market data from XIVAPI
-     * @return \stdClass|\GuzzleHttp\Promise\Promise
-     */
-    public function get(string $server, int $itemId)
+    public function getByServer(string $server, int $itemId)
     {
-        return $this->xivapi->market->get($server, $itemId);
+        return $this->xivapi->market->getServer($server, $itemId);
     }
     
-    /**
-     * Get prices for an item across multiple servers
-     */
-    public function getMultiServer(array $servers, int $itemId)
+    public function getByServers(array $servers, int $itemId)
     {
-        // enable async mode
-        $this->xivapi->async();
-        
-        // build promises
-        $promises = [];
-        foreach ($servers as $server) {
-            $promises[$server] = $this->get($server, $itemId);
-        }
+        return $this->xivapi->market->getServers($servers, $itemId);
+    }
     
-        // grab results
-        $results = Promise\settle($promises)->wait();
-        
-        // unwrap market prices
-        $market = $this->xivapi->unwrap($results);
-        
-        return $market;
+    public function getByDataCenter(string $dataCenter, int $itemId)
+    {
+        return $this->xivapi->market->getDataCenter($dataCenter, $itemId);
     }
 }

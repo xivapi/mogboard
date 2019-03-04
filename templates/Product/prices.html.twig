@@ -15,7 +15,7 @@
         <tbody>
         {% for price in prices %}
             <tr>
-                <td class="price-num">{{ loop.index }}</td>
+                <td class="price-num" data-tippy-content="ID: {{ price.ID }}">{{ loop.index }}</td>
                 <td class="price-hq">{{ price.IsHq ? '<img src="/i/game/hq.png">' : '' }}</td>
                 <td class="materia">
                     {% if price.Materia %}
@@ -28,8 +28,14 @@
                 <td class="price-current">{{ price.PricePerUnit|number_format }}</td>
                 <td class="price-qty">{{ price.Quantity|number_format }}</td>
                 <td class="price-total">{{ price.PriceTotal|number_format }}</td>
-                <td class="price-retainer">{{ price.RetainerID ? 'Retainer' : '' }}</td>
-                <td class="price-creator">{{ price.CreatorSignatureID ? 'Creator Name' : '' }}</td>
+                <td class="price-retainer">
+                    <a href="#" data-tippy-content="{{ price.RetainerID }}">{{ price.RetainerName }}</a>
+                </td>
+                <td class="price-creator">
+                    {% if price.CreatorSignatureID %}
+                        <a href="#" data-tippy-content="{{ price.CreatorSignatureID }}">{{ price.CreatorSignatureName }}</a>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

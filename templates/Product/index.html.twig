@@ -19,7 +19,8 @@
             {% for serverName in server.dc_servers %}
                 {% set icon = serverName == server.name ? 'ItemShard cw-home' : 'PaintBorder' %}
                 {% set className = serverName == server.name ? 'home-world open' : '' %}
-                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}"><span class="xiv-{{ icon }}"></span> {{ serverName }} <em>{{ attribute(market, serverName).Prices|length|number_format }}</em></button>
+                {% set salesCount = attribute(market, serverName).Prices is defined ? attribute(market, serverName).Prices|length|number_format : '-' %}
+                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}"><span class="xiv-{{ icon }}"></span> {{ serverName }} <em>{{ salesCount }}</em></button>
             {% endfor %}
         </div>
     </div>
@@ -34,18 +35,6 @@
             </button>
             <span>{{ item.ItemKind.Name }}</span>
             <span class="product-item-kind">{{ item.ItemUICategory.Name }}</span>
-            <span>
-                <em>On Sale</em>{{ attribute(market, server.name).Prices|length|number_format }}
-                &nbsp;&nbsp;
-                <img src="/i/game/hq.png">
-                34
-            </span>
-            <span>
-                <em>History</em>{{ attribute(market, server.name).History|length|number_format }}
-                &nbsp;&nbsp;
-                <img src="/i/game/hq.png">
-                22
-            </span>
         </div>
 
         <div class="tab">
@@ -64,10 +53,18 @@
                         <h1>{{ serverName }}</h1>
                     </div>
                     <div class="cw-table cw-prices open">
-                        {% include 'Product/prices.html.twig' with { 'prices': attribute(market, serverName).Prices } %}
+                        {% if attribute(market, serverName).Prices is defined %}
+                            {% include 'Product/prices.html.twig' with { 'prices': attribute(market, serverName).Prices } %}
+                        {% else %}
+                            <div>umm, prices missing? huh</div>
+                        {% endif %}
                     </div>
                     <div class="cw-table cw-history">
-                        {% include 'Product/history.html.twig' with { 'history': attribute(market, serverName).History } %}
+                        {% if attribute(market, serverName).History is defined %}
+                            {% include 'Product/history.html.twig' with { 'history': attribute(market, serverName).History } %}
+                        {% else %}
+                            <div>hmm, history missing to....</div>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
@@ -85,8 +82,6 @@
         <div class="box box-alerts">
             {% include 'Product/alerts.html.twig' %}
         </div>
-
-
 
         <div class="box">
             {% include 'Product/friends.html.twig' %}

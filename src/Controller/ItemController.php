@@ -71,9 +71,9 @@ class ItemController extends AbstractController
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
     
-        $market = $this->companion->getMultiServer($dcServers, $itemId);
+        $market = $this->companion->getByDataCenter($dc, $itemId);
         $census = $this->companionCensus->generate($market);
-    
+        
         return $this->render('Product/index.html.twig', [
             'item'     => $item,
             'market'   => $market,
