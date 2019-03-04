@@ -16,7 +16,7 @@
         {% for price in prices %}
             <tr>
                 <td class="price-num" data-tippy-content="ID: {{ price.ID }}">{{ loop.index }}</td>
-                <td class="price-hq">{{ price.IsHq ? '<img src="/i/game/hq.png">' : '' }}</td>
+                <td class="price-hq">{{ price.IsHQ ? '<img src="/i/game/hq.png">' : '' }}</td>
                 <td class="materia">
                     {% if price.Materia %}
                         {% for id in price.Materia %}

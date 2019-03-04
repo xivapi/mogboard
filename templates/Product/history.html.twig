@@ -15,7 +15,7 @@
         {% for price in history %}
             <tr>
                 <td class="price-num">{{ loop.index }}</td>
-                <td class="price-hq">{{ price.IsHq ? '<img src="/i/game/hq.png">' : '' }}</td>
+                <td class="price-hq">{{ price.IsHQ ? '<img src="/i/game/hq.png">' : '' }}</td>
                 <td class="price-current">{{ price.PricePerUnit|number_format }}</td>
                 <td class="price-qty">{{ price.Quantity|number_format }}</td>
                 <td class="price-total">{{ price.PriceTotal|number_format }}</td>
