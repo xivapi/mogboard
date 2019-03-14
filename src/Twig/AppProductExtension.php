@@ -2,7 +2,7 @@
 
 namespace App\Twig;
 
-use App\Entity\Alert;
+use App\Entity\UserAlert;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -28,7 +28,7 @@ class AppProductExtension extends AbstractExtension
      */
     public function getAlertTriggers()
     {
-        return Alert::TRIGGERS;
+        return UserAlert::TRIGGERS;
     }
     
     /**

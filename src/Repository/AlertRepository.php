@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Alert;
+use App\Entity\UserAlert;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -10,6 +10,6 @@ class AlertRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Alert::class);
+        parent::__construct($registry, UserAlert::class);
     }
 }

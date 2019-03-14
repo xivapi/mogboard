@@ -59,15 +59,15 @@ class User
      */
     private $avatar;
     /**
-     * @ORM\OneToMany(targetEntity="Alert", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="UserAlert", mappedBy="user")
      */
     private $alerts;
     /**
-     * @ORM\OneToMany(targetEntity="ItemList", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="UserList", mappedBy="user")
      */
     private $lists;
     /**
-     * @ORM\OneToMany(targetEntity="Report", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="UserReport", mappedBy="user")
      */
     private $reports;
     /**
@@ -192,7 +192,7 @@ class User
         return $this;
     }
 
-    public function addAlert(Alert $alert)
+    public function addAlert(UserAlert $alert)
     {
         $this->alerts[] = $alert;
         return $this;
@@ -247,7 +247,7 @@ class User
     {
         $lists = [];
         
-        /** @var ItemList $list */
+        /** @var UserList $list */
         foreach ($this->lists as $list) {
             if ($list->isFavourite()) {
                 continue;
@@ -261,7 +261,7 @@ class User
     
     public function hasFavouriteItem(int $itemId)
     {
-        /** @var ItemList $list */
+        /** @var UserList $list */
         foreach ($this->lists as $list) {
             if ($list->isFavourite() && $list->hasItem($itemId)) {
                 return true;

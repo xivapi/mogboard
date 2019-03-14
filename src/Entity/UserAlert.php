@@ -4,12 +4,13 @@ namespace App\Entity;
 
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @ORM\Table(name="alerts")
  * @ORM\Entity(repositoryClass="App\Repository\AlertRepository")
  */
-class Alert
+class UserAlert
 {
     const TRIGGER_MIN_PRICE = 1;
     const TRIGGER_MAX_PRICE = 2;
@@ -18,21 +19,18 @@ class Alert
     const TRIGGER_MAX_STOCK = 11;
     const TRIGGER_MIN_QTY   = 20;
     const TRIGGER_MAX_QTY   = 21;
-    
-    const TRIGGERS = [
+    const TRIGGERS          = [
         self::TRIGGER_MIN_PRICE => 'Min Price per Unit',
         self::TRIGGER_MAX_PRICE => 'Max Price per Unit',
         self::TRIGGER_AVG_PRICE => 'Avg Price per Unit',
         self::TRIGGER_MIN_STOCK => 'Minimum in Stock',
         self::TRIGGER_MAX_STOCK => 'Maximum in Stock',
-        self::TRIGGER_MIN_QTY => 'Minimum Quantity in sale',
-        self::TRIGGER_MAX_QTY => 'Maximum Quantity in sale',
+        self::TRIGGER_MIN_QTY   => 'Minimum Quantity in sale',
+        self::TRIGGER_MAX_QTY   => 'Maximum Quantity in sale',
     ];
-    
-    const LIMIT_DEFAULT = 5;
-    
-    const DELAY_DEFAULT = 3600;
-    const DELAY_PATRON = 120;
+    const LIMIT_DEFAULT     = 5;
+    const DELAY_DEFAULT     = 3600;
+    const DELAY_PATRON      = 120;
 
     /**
      * @var string
@@ -61,6 +59,16 @@ class Alert
      * @ORM\Column(type="string", length=100)
      */
     private $name;
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=100)
+     */
+    private $server;
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $triggerDataCenter = false;
     /**
      * @var int
      * @ORM\Column(type="integer", length=3)
@@ -116,6 +124,28 @@ class Alert
     {
         $this->id = Uuid::uuid4();
         $this->added = time();
+    }
+
+    /**
+     * Build a new alert from a json payload request.
+     */
+    public static function buildFromRequest(Request $request, ?UserAlert $alert = null): UserAlert
+    {
+        $obj = \GuzzleHttp\json_decode($request->getContent());
+
+        $alert = $alert ?: new UserAlert();
+
+        return $alert
+            ->setItemId($obj->itemId ?: $alert->getItemId())
+            ->setName($obj->name ?: $alert->getName())
+            ->setServer($obj->server ?: $alert->getServer())
+            ->setTriggerDataCenter($obj->dc ?: $alert->isTriggerDataCenter())
+            ->setTriggerOption($obj->option ?: $alert->getTriggerOption())
+            ->setTriggerValue($obj->value ?: $alert->getTriggerValue())
+            ->setTriggerHq($obj->hq ?: $alert->isTriggerHq())
+            ->setTriggerNq($obj->nq ?: $alert->isTriggerNq())
+            ->setNotifiedViaDiscord($obj->discord ?: $alert->isNotifiedViaDiscord())
+            ->setNotifiedViaEmail($obj->email ?: $alert->isNotifiedViaEmail());
     }
 
     public function getTrigger()
@@ -182,7 +212,31 @@ class Alert
         
         return $this;
     }
-    
+
+    public function getServer(): string
+    {
+        return $this->server;
+    }
+
+    public function setServer(string $server)
+    {
+        $this->server = $server;
+
+        return $this;
+    }
+
+    public function isTriggerDataCenter(): bool
+    {
+        return $this->triggerDataCenter;
+    }
+
+    public function setTriggerDataCenter(bool $triggerDataCenter)
+    {
+        $this->triggerDataCenter = $triggerDataCenter;
+
+        return $this;
+    }
+
     public function getTriggerOption(): int
     {
         return $this->triggerOption;

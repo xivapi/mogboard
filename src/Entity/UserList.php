@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="list")
  * @ORM\Entity(repositoryClass="App\Repository\ItemListRepository")
  */
-class ItemList
+class UserList
 {
     /**
      * @var string

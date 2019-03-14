@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\ItemList;
+use App\Entity\UserList;
 use App\Repository\ItemListRepository;
 use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +23,7 @@ class ItemListsController extends AbstractController
     {
         $this->em = $em;
         $this->users = $users;
-        $this->repository = $this->em->getRepository(ItemList::class);
+        $this->repository = $this->em->getRepository(UserList::class);
     }
     
     /**
@@ -43,7 +43,7 @@ class ItemListsController extends AbstractController
         
         $user = $this->users->getUser(true);
         
-        $list = $this->repository->findOneBy([ 'favourite' => true, 'user' => $user ]) ?: new ItemList();
+        $list = $this->repository->findOneBy([ 'favourite' => true, 'user' => $user ]) ?: new UserList();
         
         // ensure list is set properly
         $list

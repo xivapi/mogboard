@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Alert;
+use App\Entity\UserAlert;
 use App\Service\Redis\Redis;
 use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
@@ -79,7 +79,7 @@ class ItemController extends AbstractController
             'market'   => $market,
             'census'   => $census,
             'recipes'  => $recipes,
-            'alerts'   => $this->em->getRepository(Alert::class)->findBy([ 'itemId' => $itemId ]),
+            'alerts'   => $this->em->getRepository(UserAlert::class)->findBy(['itemId' => $itemId ]),
             'faved'    => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'    => $user ? $user->getListsPersonal() : [],
             'server'   => [

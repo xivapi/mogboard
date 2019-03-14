@@ -2,17 +2,22 @@
 
 namespace App\Service\GameData;
 
+use App\Service\Common\Language;
 use App\Service\Redis\Redis;
 
 class GameDataSource
 {
     public function getItem(int $id)
     {
-        return Redis::get('xiv_Item_'. $id);
+        $obj = Redis::Cache()->get('xiv_Item_'. $id);
+        $obj = Language::handle($obj);
+        return $obj;
     }
     
     public function getTown(int $id)
     {
-        return Redis::get('xiv_ITown_'. $id);
+        $obj = Redis::Cache()->get('xiv_Town_'. $id);
+        $obj = Language::handle($obj);
+        return $obj;
     }
 }

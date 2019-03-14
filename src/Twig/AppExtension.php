@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Service\Common\Environment;
+use App\Service\Common\Language;
 use App\Service\Common\SiteVersion;
 use App\Service\Redis\Redis;
 use Carbon\Carbon;
@@ -64,6 +65,8 @@ class AppExtension extends AbstractExtension
      */
     public function getCached($key)
     {
-        return Redis::get($key);
+        $obj = Redis::Cache()->get($key);
+        $obj = Language::handle($obj);
+        return $obj;
     }
 }
