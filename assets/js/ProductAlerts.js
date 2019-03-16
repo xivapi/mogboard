@@ -56,7 +56,7 @@ class ProductAlerts
 
         // send request
         $.ajax({
-            url: mog.url_create_alert,
+            url: mog.urls.alerts.create,
             type: "POST",
             dataType: "json",
             data: JSON.stringify(payload),
@@ -67,7 +67,7 @@ class ProductAlerts
                 // if alert ok
                 if (response.ok) {
                     // load current alerts
-                    this.loadItemAlerts();
+                    this.renderItemAlerts();
 
                     // close modals
                     Modals.close(this.uiModal);
@@ -90,9 +90,9 @@ class ProductAlerts
         });
     }
 
-    loadItemAlerts()
+    renderItemAlerts()
     {
-        const url = mog.url_get_alerts.replace('-id-', itemId);
+        const url = mog.urls.alerts.renderForItem.replace('-id-', itemId);
 
         console.log(url);
 

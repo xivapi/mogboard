@@ -210,7 +210,7 @@ class User
         return $this;
     }
 
-    public function addReport(Report $report)
+    public function addReport(UserReport $report)
     {
         $this->reports[] = $report;
         return $this;

@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Service\GameData\GameDataSource;
+use App\Service\GameData\GameServers;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -25,11 +26,23 @@ class AppGameExtension extends AbstractExtension
     {
         return [
             new TwigFunction('gamedata', [$this, 'getGameDataSource']),
+            new TwigFunction('getGameServers', [$this, 'getGameDataCenters']),
+            new TwigFunction('getGameDataCenters', [$this, 'getGameDataCenters']),
         ];
     }
     
     public function getGameDataSource(): GameDataSource
     {
         return $this->gameDataSource;
+    }
+    
+    public function getGameServers()
+    {
+        return GameServers::LIST;
+    }
+    
+    public function getGameDataCenters()
+    {
+        return GameServers::LIST_DC;
     }
 }

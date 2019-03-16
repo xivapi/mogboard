@@ -25,11 +25,11 @@ class GameDataCache
     ];
     
     /** @var ConsoleOutput */
-    private $output;
+    private $console;
     
     public function __construct()
     {
-        $this->output = new ConsoleOutput();
+        $this->console = new ConsoleOutput();
     }
     
     public function populate()
@@ -44,12 +44,12 @@ class GameDataCache
      */
     private function cacheGameItems()
     {
-        $this->output->writeln('>> Caching Game Items');
-        $section = $this->output->section();
+        $this->console->writeln('>> Caching Game Items');
+        $section = $this->console->section();
         
         // we want to save cat id to item id
         $categoryToItemId = [];
-    
+        
         // build redis key list
         $keys = [];
         foreach (Redis::Cache()->get('ids_Item') as $i => $id) {
@@ -90,8 +90,8 @@ class GameDataCache
             $section->overwrite("Saved chunk: ". ($i+1) ."/{$total} - {$memory} MB");
         }
         
-        $this->output->writeln('>> Caching ItemSearchCategory Item IDs');
-        $section = $this->output->section();
+        $this->console->writeln('>> Caching ItemSearchCategory Item IDs');
+        $section = $this->console->section();
     
         // save categories
         $section->writeln('Starting ...');
@@ -111,7 +111,7 @@ class GameDataCache
      */
     private function cacheGameTowns()
     {
-        $this->output->writeln('>> Caching Game Towns');
+        $this->console->writeln('>> Caching Game Towns');
         
         foreach (Redis::Cache()->get('ids_Town') as $i => $id) {
             $town = Redis::Cache()->get('xiv_Town_'. $id);
@@ -124,7 +124,7 @@ class GameDataCache
      */
     private function cacheItemSearchCategories()
     {
-        $this->output->writeln('>> Caching Item Search Categories');
+        $this->console->writeln('>> Caching Item Search Categories');
         
         // build redis key list
         $keys = [];

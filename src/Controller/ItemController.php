@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UserAlert;
+use App\Service\GameData\GameDataSource;
 use App\Service\Redis\Redis;
 use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
@@ -16,8 +17,8 @@ class ItemController extends AbstractController
 {
     /** @var EntityManagerInterface */
     private $em;
-    /** @var Redis */
-    private $cache;
+    /** @var GameDataSource */
+    private $gameDataSource;
     /** @var Companion */
     private $companion;
     /** @var Companion */
@@ -27,13 +28,13 @@ class ItemController extends AbstractController
     
     public function __construct(
         EntityManagerInterface $em,
-        Redis $cache,
+        GameDataSource $gameDataSource,
         Companion $companion,
         CompanionCensus $companionCensus,
         Users $users
     ) {
         $this->em = $em;
-        $this->cache = $cache;
+        $this->gameDataSource = $gameDataSource;
         $this->companion = $companion;
         $this->companionCensus = $companionCensus;
         $this->users = $users;
@@ -47,7 +48,7 @@ class ItemController extends AbstractController
         $user = $this->users->getUser();
         
         /** @var \stdClass $item */
-        $item = $this->cache->get("xiv_Item_{$itemId}") ?: false;
+        $item = $this->gameDataSource->getItem($itemId);
         
         if (!$item) {
             return $this->redirectToRoute('404');
@@ -57,7 +58,7 @@ class ItemController extends AbstractController
         $recipes = [];
         if (isset($item['GameContentLinks']['Recipe']['ItemResult'])) {
             foreach ($item['GameContentLinks']['Recipe']['ItemResult'] as $id) {
-                $recipe = $this->cache->get("xiv_Recipe_{$id}");
+                $recipe = $this->gameDataSource->getRecipe($id);
                 $recipes[] = [
                     'id'        => $id,
                     'level'     => $recipe['RecipeLevelTable']['ClassJobLevel'],

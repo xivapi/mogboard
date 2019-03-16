@@ -7,17 +7,35 @@ use App\Service\Redis\Redis;
 
 class GameDataSource
 {
-    public function getItem(int $id)
+    public function getItem(int $itemId)
     {
-        $obj = Redis::Cache()->get('xiv_Item_'. $id);
-        $obj = Language::handle($obj);
-        return $obj;
+        return $this->handle("xiv_Item_{$itemId}");
     }
     
-    public function getTown(int $id)
+    public function getRecipe(int $recipeId)
     {
-        $obj = Redis::Cache()->get('xiv_Town_'. $id);
-        $obj = Language::handle($obj);
-        return $obj;
+        return $this->handle("xiv_Recipe_{$recipeId}");
+    }
+    
+    public function getTown(int $townId)
+    {
+        return $this->handle("xiv_Town_{$townId}");
+    }
+    
+    public function getItemSearchCategories(int $categoryId)
+    {
+        return $this->handle("xiv_ItemSearchCategory_{$categoryId}");
+    }
+    
+    public function getItemSearchCategoryItems(int $categoryId)
+    {
+        return $this->handle("mog_ItemSearchCategory_{$categoryId}_Items");
+    }
+    
+    private function handle(string $key)
+    {
+        return Language::handle(
+            Redis::Cache()->get($key)
+        );
     }
 }

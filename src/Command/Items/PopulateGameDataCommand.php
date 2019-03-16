@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Items;
 
+use App\Command\CommandConfigureTrait;
 use App\Service\GameData\GameDataCache;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,11 +10,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PopulateGameDataCommand extends Command
 {
-    protected function configure()
-    {
-        $this->setName('PopulateGameDataCommand');
-    }
+    use CommandConfigureTrait;
     
+    const COMMAND = [
+        'name' => 'PopulateGameDataCommand',
+        'desc' => 'Populate cached game data',
+    ];
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         (new GameDataCache())->populate();

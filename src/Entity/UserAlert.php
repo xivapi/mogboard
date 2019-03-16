@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @ORM\Table(name="alerts")
+ * @ORM\Table(name="users_alerts")
  * @ORM\Entity(repositoryClass="App\Repository\AlertRepository")
  */
 class UserAlert

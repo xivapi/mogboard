@@ -43,28 +43,20 @@ class AlertController extends AbstractController
     }
 
     /**
-     * @Route("/alerts/create", name="alerts_create")
+     * @Route("/alerts/{alert}/delete", name="alerts_delete")
      */
-    public function delete(Request $request)
+    public function delete(UserAlert $alert)
     {
-        return $this->alerts->delete(
-            $request->get('id')
-        );
+        return $this->alerts->delete($alert);
     }
 
     /**
-     * @Route("/alerts/get/{itemId}", name="alert_get")
+     * @Route("/alerts/render/item/{itemId}", name="alerts_render_item")
      */
-    public function fetch($itemId)
+    public function renderAlertsForItem($itemId)
     {
-        // get alerts for the current user
-        $alerts = $this->em->getRepository(UserAlert::class)->findBy([
-            'itemId' => $itemId,
-            'user'   => $this->users->getUser(true),
-        ]);
-        
         return $this->render('Product/alerts_table.html.twig', [
-            'alerts' => $alerts
+            'alerts' => $this->alerts->getAllForItemForCurrentUser($itemId)
         ]);
     }
 }

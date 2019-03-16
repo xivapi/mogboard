@@ -5,7 +5,7 @@
         <p>Choose your primary server, this will also set your Data-Center.</p>
         <div class="form">
             <select id="servers" class="servers">
-                {% for dc, servers in cache('mog_DataCenters') %}
+                {% for dc, servers in getGameDataCenters() %}
                     <optgroup label="{{ dc }}">
                         {% for server in servers %}
                             <option value="{{ server }}">{{ server }}</option>

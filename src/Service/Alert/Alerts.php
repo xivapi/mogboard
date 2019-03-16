@@ -50,6 +50,17 @@ class Alerts
             'user' => $this->users->getUser(true),
         ]);
     }
+    
+    /**
+     * Get all alerts for a given user
+     */
+    public function getAllForItemForCurrentUser(int $itemId)
+    {
+        return $this->repository->findBy([
+            'user' => $this->users->getUser(true),
+            'item' => $itemId,
+        ]);
+    }
 
     /**
      * Get all alerts
@@ -80,11 +91,8 @@ class Alerts
      * Delete an existing alert if the owner owns it, if force
      * is set true then user check is not required.
      */
-    public function delete(string $id, bool $force = false)
+    public function delete(UserAlert $alert, bool $force = false)
     {
-        /** @var UserAlert $alert */
-        $alert = $this->repository->find($id);
-
         if ($force || $alert->getUser() !== $this->users->getUser(true)) {
             throw new UnauthorisedAlertOwnershipException();
         }

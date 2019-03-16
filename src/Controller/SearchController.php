@@ -2,18 +2,18 @@
 
 namespace App\Controller;
 
-use App\Service\Redis\Redis;
+use App\Service\GameData\GameDataSource;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
-    /** @var Redis */
-    private $cache;
+    /** @var GameDataSource */
+    private $gameDataSource;
     
-    public function __construct(Redis $cache)
+    public function __construct(GameDataSource $gameDataSource)
     {
-        $this->cache = $cache;
+        $this->gameDataSource = $gameDataSource;
     }
     
     /**
@@ -22,8 +22,8 @@ class SearchController extends AbstractController
     public function index($categoryId)
     {
         return $this->render('Search/item_category_list.html.twig', [
-            'category'  => $this->cache->get("xiv_ItemSearchCategory_{$categoryId}"),
-            'items'     => $this->cache->get("mog_ItemSearchCategory_{$categoryId}_Items"),
+            'category'  => $this->gameDataSource->getItemSearchCategories($categoryId),
+            'items'     => $this->gameDataSource->getItemSearchCategoryItems($categoryId),
         ]);
     }
 }

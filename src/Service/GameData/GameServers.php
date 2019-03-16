@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Service\Content;
+namespace App\Service\GameData;
 
-use App\Exception\CompanionMarketServerException;
+use App\Exceptions\CompanionMarketServerException;
+use Delight\Cookie\Cookie;
 
 class GameServers
 {
+    const DEFAULT_SERVER = 'Phoenix';
+    
     /**
      * It is important new servers are added to the end of this list.
      */
@@ -171,6 +174,14 @@ class GameServers
         }
 
         return $index;
+    }
+    
+    /**
+     * Get the users current server
+     */
+    public static function getServer(): string
+    {
+        return Cookie::get('server') ?: self::DEFAULT_SERVER;
     }
 
     /**

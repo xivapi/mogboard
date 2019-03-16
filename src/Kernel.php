@@ -14,25 +14,30 @@ class Kernel extends BaseKernel
     use MicroKernelTrait;
 
     const CONFIG_EXTS = '.{php,xml,yaml,yml}';
-
+    
     public function getCacheDir()
     {
-        // local env
-        if (is_dir('/vagrant_cache_mb')) {
-            return '/vagrant_cache_mb/'.$this->environment;
-        }
-        
-        return $this->getProjectDir().'/var/cache/'.$this->environment;
+        return $this->getLocalDirectory() . '/cache';
     }
-
+    
     public function getLogDir()
     {
+        return $this->getLocalDirectory() . '/log';
+    }
+    
+    /**
+     * Returns the correct local directory based on of this is a VM or not.
+     */
+    private function getLocalDirectory()
+    {
+        $vagrant = '/vagrant_mogboard/';
+        
         // local env
-        if (is_dir('/vagrant_log_mb')) {
-            return '/vagrant_log_mb/'.$this->environment;
+        if (is_dir($vagrant)) {
+            return $vagrant . $this->environment;
         }
         
-        return $this->getProjectDir().'/var/log';
+        return $this->getProjectDir() .'/var/'. $this->environment;
     }
 
     public function registerBundles()
