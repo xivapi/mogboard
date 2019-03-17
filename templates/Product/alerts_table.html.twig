@@ -5,7 +5,7 @@
                 <tr>
                     <td>
                         <strong>{{ alert.triggerHq ? '<img src="/i/game/hq.png" height="12">' : '' }} {{ alert.name }}</strong><br>
-                        <code>{{ alert.trigger }}: {{ alert.triggerValue|number_format }}</code>
+                        <code>{{ alert.trigger|replace({ '[condition]': alert.triggerValue|number_format }) }}</code>
                         {% if alert.triggerLastSent %}
                             <br><strong>Last Triggered:</strong> {{ alert.triggerLastSent|date }}
                         {% endif %}
