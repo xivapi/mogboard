@@ -34,9 +34,9 @@ class UserAlert
         410 => 'Total Stock Quantity < [Condition]',
         420 => 'Total Stock Quantity = [Condition]',
 
-        500 => 'Total Stock Quantity > [Condition]',
-        510 => 'Total Stock Quantity < [Condition]',
-        520 => 'Total Stock Quantity = [Condition]',
+        #500 => 'Total Stock Quantity > [Condition]',
+        #510 => 'Total Stock Quantity < [Condition]',
+        #520 => 'Total Stock Quantity = [Condition]',
         
         600 => 'Retainer Name = [Condition]',
         700 => 'Buyer Name = [Condition]',
