@@ -14,33 +14,33 @@ class UserAlert
 {
     const TRIGGERS = [
         // price per unit
-        100 => 'Price Per Unit > [Condition]',
-        110 => 'Price Per Unit < [Condition]',
-        120 => 'Price Per Unit = [Condition]',
-        130 => 'Price Per Unit Avg > [Condition]',
-        140 => 'Price Per Unit Avg < [Condition]',
+        100 => 'Price Per Unit > [X]',
+        110 => 'Price Per Unit < [X]',
+        120 => 'Price Per Unit = [X]',
+        130 => 'Price Per Unit Avg > [X]',
+        140 => 'Price Per Unit Avg < [X]',
 
-        200 => 'Price Total > [Condition]',
-        210 => 'Price Total < [Condition]',
-        220 => 'Price Total = [Condition]',
-        230 => 'Price Total Avg > [Condition]',
-        240 => 'Price Total Avg < [Condition]',
+        200 => 'Price Total > [X]',
+        210 => 'Price Total < [X]',
+        220 => 'Price Total = [X]',
+        230 => 'Price Total Avg > [X]',
+        240 => 'Price Total Avg < [X]',
 
-        300 => 'Single Stock Quantity > [Condition]',
-        310 => 'Single Stock Quantity < [Condition]',
-        320 => 'Single Stock Quantity = [Condition]',
+        300 => 'Single Stock Quantity > [X]',
+        310 => 'Single Stock Quantity < [X]',
+        320 => 'Single Stock Quantity = [X]',
 
-        400 => 'Total Stock Quantity > [Condition]',
-        410 => 'Total Stock Quantity < [Condition]',
-        420 => 'Total Stock Quantity = [Condition]',
+        400 => 'Total Stock Quantity > [X]',
+        410 => 'Total Stock Quantity < [X]',
+        420 => 'Total Stock Quantity = [X]',
 
-        #500 => 'Total Stock Quantity > [Condition]',
-        #510 => 'Total Stock Quantity < [Condition]',
-        #520 => 'Total Stock Quantity = [Condition]',
+        #500 => 'Total Stock Quantity > [X]',
+        #510 => 'Total Stock Quantity < [X]',
+        #520 => 'Total Stock Quantity = [X]',
         
-        600 => 'Retainer Name = [Condition]',
-        700 => 'Buyer Name = [Condition]',
-        800 => 'Craft Name = [Condition]'
+        600 => 'Retainer Name = [X]',
+        700 => 'Buyer Name = [X]',
+        800 => 'Craft Name = [X]'
     ];
     const LIMIT_DEFAULT = 5;
     const DELAY_DEFAULT = 300;
@@ -257,7 +257,7 @@ class UserAlert
     public function getTriggerOptionFormula(): string
     {
         return str_ireplace(
-            '[condition]', $this->triggerOption, self::TRIGGERS[$this->triggerOption]
+            '[X]', $this->triggerOption, self::TRIGGERS[$this->triggerOption]
         );
     }
     
