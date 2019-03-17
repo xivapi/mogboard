@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% if auth.online() %}
+        <h1>User Account Page</h1>
+    {% else %}
+        <p>plz login</p>
+    {% endif %}
+
+{% endblock %}

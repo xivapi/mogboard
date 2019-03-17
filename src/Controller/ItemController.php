@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\UserAlert;
 use App\Service\GameData\GameDataSource;
-use App\Service\Redis\Redis;
 use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
 use App\Service\GameData\GameServers;

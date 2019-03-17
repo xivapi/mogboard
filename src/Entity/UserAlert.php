@@ -12,25 +12,38 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UserAlert
 {
-    const TRIGGER_MIN_PRICE = 1;
-    const TRIGGER_MAX_PRICE = 2;
-    const TRIGGER_AVG_PRICE = 3;
-    const TRIGGER_MIN_STOCK = 10;
-    const TRIGGER_MAX_STOCK = 11;
-    const TRIGGER_MIN_QTY   = 20;
-    const TRIGGER_MAX_QTY   = 21;
-    const TRIGGERS          = [
-        self::TRIGGER_MIN_PRICE => 'Min Price per Unit',
-        self::TRIGGER_MAX_PRICE => 'Max Price per Unit',
-        self::TRIGGER_AVG_PRICE => 'Avg Price per Unit',
-        self::TRIGGER_MIN_STOCK => 'Minimum in Stock',
-        self::TRIGGER_MAX_STOCK => 'Maximum in Stock',
-        self::TRIGGER_MIN_QTY   => 'Minimum Quantity in sale',
-        self::TRIGGER_MAX_QTY   => 'Maximum Quantity in sale',
+    const TRIGGERS = [
+        // price per unit
+        100 => 'Price Per Unit > [Condition]',
+        110 => 'Price Per Unit < [Condition]',
+        120 => 'Price Per Unit = [Condition]',
+        130 => 'Price Per Unit Avg > [Condition]',
+        140 => 'Price Per Unit Avg < [Condition]',
+
+        200 => 'Price Total > [Condition]',
+        210 => 'Price Total < [Condition]',
+        220 => 'Price Total = [Condition]',
+        230 => 'Price Total Avg > [Condition]',
+        240 => 'Price Total Avg < [Condition]',
+
+        300 => 'Single Stock Quantity > [Condition]',
+        310 => 'Single Stock Quantity < [Condition]',
+        320 => 'Single Stock Quantity = [Condition]',
+
+        400 => 'Total Stock Quantity > [Condition]',
+        410 => 'Total Stock Quantity < [Condition]',
+        420 => 'Total Stock Quantity = [Condition]',
+
+        500 => 'Total Stock Quantity > [Condition]',
+        510 => 'Total Stock Quantity < [Condition]',
+        520 => 'Total Stock Quantity = [Condition]',
+        
+        600 => 'Retainer Name = [Condition]',
+        700 => 'Buyer Name = [Condition]',
+        800 => 'Craft Name = [Condition]'
     ];
-    const LIMIT_DEFAULT     = 5;
-    const DELAY_DEFAULT     = 3600;
-    const DELAY_PATRON      = 120;
+    const LIMIT_DEFAULT = 5;
+    const DELAY_DEFAULT = 300;
 
     /**
      * @var string
@@ -138,7 +151,6 @@ class UserAlert
         return $alert
             ->setItemId($obj->itemId ?: $alert->getItemId())
             ->setName($obj->name ?: $alert->getName())
-            ->setServer($obj->server ?: $alert->getServer())
             ->setTriggerDataCenter($obj->dc ?: $alert->isTriggerDataCenter())
             ->setTriggerOption($obj->option ?: $alert->getTriggerOption())
             ->setTriggerValue($obj->value ?: $alert->getTriggerValue())
@@ -240,6 +252,13 @@ class UserAlert
     public function getTriggerOption(): int
     {
         return $this->triggerOption;
+    }
+    
+    public function getTriggerOptionFormula(): string
+    {
+        return str_ireplace(
+            '[condition]', $this->triggerOption, self::TRIGGERS[$this->triggerOption]
+        );
     }
     
     public function setTriggerOption(int $triggerOption)

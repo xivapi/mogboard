@@ -6,7 +6,7 @@ use App\Entity\UserAlert;
 use App\Exceptions\UnauthorisedAlertOwnershipException;
 use App\Repository\AlertRepository;
 use App\Service\Companion\Companion;
-use App\Service\Content\GameServers;
+use App\Service\GameData\GameServers;
 use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -54,11 +54,11 @@ class Alerts
     /**
      * Get all alerts for a given user
      */
-    public function getAllForItemForCurrentUser(int $itemId)
+    public function getAllForItemForCurrentUser($itemId)
     {
         return $this->repository->findBy([
             'user' => $this->users->getUser(true),
-            'item' => $itemId,
+            'itemId' => $itemId,
         ]);
     }
 
@@ -69,18 +69,25 @@ class Alerts
     {
         return $this->repository->findBy($filters, $order, $limit, $offset);
     }
+    
+    /**
+     * Get all alerts by their patron status
+     */
+    public function getAllByPatronStatus(bool $patron = false)
+    {
+        return $this->repository->findPatrons($patron);
+    }
 
     /**
      * Save a new or existing alert
      */
     public function save(UserAlert $alert)
     {
-        $user = $this->users->getUser(true);
+        $user   = $this->users->getUser(true);
+        $server = GameServers::getServer();
 
         // set user and trigger delay
-        $alert
-            ->setUser($user)
-            ->setTriggerDelay($user->isPatron() ? UserAlert::DELAY_PATRON : UserAlert::DELAY_DEFAULT);
+        $alert->setServer($server)->setUser($user);
 
         $this->em->persist($alert);
         $this->em->flush();
@@ -109,21 +116,27 @@ class Alerts
         $this->console->writeln("Triggering Alerts");
 
         // grab all alerts
-        $alerts = $this->getAll([
-            'user.patron' => $patrons,
-        ]);
+        $alerts = $this->getAllByPatronStatus($patrons);
 
         /** @var UserAlert $alert */
         foreach ($alerts as $alert) {
-            // get servers to check
-            $servers = $alert->isTriggerDataCenter()
-                ? GameServers::getDataCenter($alert->getServer())
-                : [ $alert->getServer() ];
-
+            
+            $this->console->writeln("- Alert: <comment>{$alert->getName()}</comment> by <info>{$alert->getUser()->getUsername()}</info>");
+            $this->console->writeln("--> Trigger Condition: <comment>{$alert->getTriggerOptionFormula()}</comment>");
+            $this->console->writeln("--> Communication: <comment>". ($alert->isNotifiedViaDiscord() ? 'Discord' : 'None') ."</comment>");
+            
+            //
+            // handle server
+            //
+            $dc         = GameServers::getDataCenter($alert->getServer());
+            $dcServers  = GameServers::getDataCenterServers($alert->getServer());
+            $servers    = $alert->isTriggerDataCenter() ? $dcServers : [ $alert->getServer() ];
+            $this->console->writeln("--> Data Center: <info>{$dc}</info>: ". implode(', ', $servers));
+            
             // grab market data
-            $market = $this->companion->getByServers($servers, $alert->getItemId());
+            # $market = $this->companion->getByServers($servers, $alert->getItemId());
 
-            // todo check
+            // todo check when prices last changed
             // - if this user is a patron user and the prices are older than a few minutes
             //   it will query companion directly.
         }

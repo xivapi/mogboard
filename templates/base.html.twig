@@ -56,9 +56,9 @@
             urls: {
                 alerts: {
                     create: "{{ path('alerts_create') }}",
-                    update: "{{ path('alerts_update', { alert: '#' }) }}",
-                    delete: "{{ path('alerts_delete', { alert: '#'}) }}",
-                    renderForItem: "{{ path('alerts_render_item', { itemId: '#'}) }}",
+                    update: "{{ path('alerts_update', { alert: '-id-' }) }}",
+                    delete: "{{ path('alerts_delete', { alert: '-id-'}) }}",
+                    renderForItem: "{{ path('alerts_render_item', { itemId: '-id-'}) }}",
                 }
             },
 

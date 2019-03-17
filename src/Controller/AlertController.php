@@ -27,8 +27,10 @@ class AlertController extends AbstractController
      */
     public function create(Request $request)
     {
-        return $this->alerts->save(
-            UserAlert::buildFromRequest($request)
+        return $this->json(
+            $this->alerts->save(
+                UserAlert::buildFromRequest($request)
+            )
         );
     }
 
@@ -37,8 +39,10 @@ class AlertController extends AbstractController
      */
     public function update(Request $request, UserAlert $alert)
     {
-        return $this->alerts->save(
-            UserAlert::buildFromRequest($request, $alert)
+        return $this->json(
+            $this->alerts->save(
+                UserAlert::buildFromRequest($request, $alert)
+            )
         );
     }
 
@@ -47,7 +51,9 @@ class AlertController extends AbstractController
      */
     public function delete(UserAlert $alert)
     {
-        return $this->alerts->delete($alert);
+        return $this->json(
+            $this->alerts->delete($alert)
+        );
     }
 
     /**

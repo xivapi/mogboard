@@ -20,6 +20,7 @@
     <div>
         {% if auth.online() %}
         <div>
+            <a href="{{ path('user_account') }}">My Account</a>
             <span class="username">{{ auth.user.username|title }}</span>
         </div>
         <div>
@@ -28,7 +29,6 @@
         {% else %}
             <a href="{{ path('user_login_discord') }}" class="btn-login">Login via Discord</a>
         {% endif %}
-
         <div>
             <button class="btn-settings" data-tippy-content="Site Settings"><span class="xiv-app_drawer_setting"></span></button>
         </div>

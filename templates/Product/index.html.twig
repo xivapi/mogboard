@@ -25,17 +25,17 @@
         </div>
     </div>
     <div>
-        {# title #}
-        <h1 class="rarity-{{ item.Rarity }}">{{ item.Name }}</h1>
-
-        {# info #}
-        <div class="info">
-            <button class="product-search-cat" data-tippy-content="Open Market Category: {{ item.ItemSearchCategory.Name }}" data-cat="{{ item.ItemSearchCategory.ID }}">
+        <div class="product-header">
+            {# title #}
+            <h1 class="rarity-{{ item.Rarity }}">
                 <i class="xiv-{{ item.ItemSearchCategory.ID|xivicon }}"></i>
-            </button>
-            <span>{{ item.ItemKind.Name }}</span>
-            <span class="product-item-kind">{{ item.ItemUICategory.Name }}</span>
+                {{ item.Name }}
+                <span>{{ item.ItemKind.Name }}</span>
+                <span>{{ item.ItemUICategory.Name }}</span>
+            </h1>
         </div>
+
+
 
         <div class="tab">
             {# Cross World #}
@@ -45,13 +45,18 @@
             {% for serverName in server.dc_servers %}
                 {% set open = serverName == server.name ? 'open' : '' %}
                 <div class="tab-page tab-cw{{ serverName }} {{ open }}">
-                    <div class="tab-page-header">
+
+                    <div class="tab-nav">
                         <div>
                             <button data-tab="cw-prices" class="active">Prices</button>
                             <button data-tab="cw-history">History</button>
                         </div>
-                        <h1>{{ serverName }}</h1>
+
+                        <div>
+                            <span><strong>Updated</strong> &nbsp; {{ attribute(market, serverName).Updated|date }}</span>
+                        </div>
                     </div>
+
                     <div class="cw-table cw-prices open">
                         {% if attribute(market, serverName).Prices is defined %}
                             {% include 'Product/prices.html.twig' with { 'prices': attribute(market, serverName).Prices } %}
@@ -71,10 +76,6 @@
         </div>
     </div>
     <div>
-        <div class="box">
-            {% include 'Product/item_updated.html.twig' %}
-        </div>
-
         <div class="box box_lists">
             {% include 'Product/lists.html.twig' %}
         </div>

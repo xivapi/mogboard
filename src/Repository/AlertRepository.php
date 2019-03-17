@@ -12,4 +12,14 @@ class AlertRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, UserAlert::class);
     }
+    
+    public function findPatrons(bool $patron)
+    {
+        $sql = $this->createQueryBuilder('a');
+        $sql->join('a.user', 'u')
+            ->where('u.patron = :patron')
+            ->setParameter('patron', $patron);
+        
+        return $sql->getQuery()->getResult();
+    }
 }

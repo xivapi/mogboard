@@ -19,6 +19,14 @@ class UserController extends AbstractController
     }
     
     /**
+     * @Route("/account", name="user_account")
+     */
+    public function account(Request $request)
+    {
+        return $this->render('UserAccount/index.html.twig');
+    }
+    
+    /**
      * @Route("/users/login/discord", name="user_login_discord")
      */
     public function loginDiscord(Request $request)

@@ -65,7 +65,7 @@ class ProductAlerts
                 ButtonLoading.finish($btn);
 
                 // if alert ok
-                if (response.ok) {
+                if (response) {
                     // load current alerts
                     this.renderItemAlerts();
 
@@ -92,12 +92,8 @@ class ProductAlerts
 
     renderItemAlerts()
     {
-        const url = mog.urls.alerts.renderForItem.replace('-id-', itemId);
-
-        console.log(url);
-
         $.ajax({
-            url: url,
+            url: mog.urls.alerts.renderForItem.replace('-id-', itemId),
             contentType: "application/json",
             success: response => {
                 this.uiExistingAlerts.html(response);

@@ -29,26 +29,4 @@
             </select>
         </div>
     </div>
-
-    {% if auth.online() %}
-        <div class="row row_top">
-            <label>Characters</label>
-            <p>Add your very own in-game character!</p>
-            <div class="modal_settings-form form">
-                <input type="text" placeholder="Name">
-                <button type="button">Search</button>
-            </div>
-        </div>
-        <div class="row logout">
-            Ready to leave? <a href="{{ path('user_logout') }}">Logout</a>
-        </div>
-    {% else %}
-        <div class="row">
-            <p>
-                Login using discord and you'll be able to add your characters,
-                track items, sales and retainers! You'll also get a custom
-                tailored dashboard that matches your needs!
-            </p>
-        </div>
-    {% endif %}
 </div>
