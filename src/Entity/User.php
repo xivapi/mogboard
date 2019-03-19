@@ -59,6 +59,11 @@ class User
      */
     private $avatar;
     /**
+     * @var boolean
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $patron = false;
+    /**
      * @ORM\OneToMany(targetEntity="UserAlert", mappedBy="user")
      */
     private $alerts;
@@ -71,18 +76,23 @@ class User
      */
     private $reports;
     /**
-     * @var boolean
-     * @ORM\Column(type="boolean", options={"default": false})
+     * @ORM\OneToMany(targetEntity="UserCharacter", mappedBy="user")
      */
-    private $patron = false;
-    
+    private $characters;
+    /**
+     * @ORM\OneToMany(targetEntity="UserRetainer", mappedBy="user")
+     */
+    private $retainers;
+
     public function __construct()
     {
-        $this->id       = Uuid::uuid4();
-        $this->session  = Uuid::uuid4()->toString() . Uuid::uuid4()->toString() . Uuid::uuid4()->toString();
-        $this->alerts   = new ArrayCollection();
-        $this->lists    = new ArrayCollection();
-        $this->reports  = new ArrayCollection();
+        $this->id         = Uuid::uuid4();
+        $this->session    = Uuid::uuid4()->toString() . Uuid::uuid4()->toString() . Uuid::uuid4()->toString();
+        $this->alerts     = new ArrayCollection();
+        $this->lists      = new ArrayCollection();
+        $this->reports    = new ArrayCollection();
+        $this->characters = new ArrayCollection();
+        $this->retainers  = new ArrayCollection();
     }
     
     public function getId()
@@ -269,5 +279,29 @@ class User
         }
         
         return false;
+    }
+
+    public function getCharacters()
+    {
+        return $this->characters;
+    }
+
+    public function setCharacters($characters)
+    {
+        $this->characters = $characters;
+
+        return $this;
+    }
+
+    public function getRetainers()
+    {
+        return $this->retainers;
+    }
+
+    public function setRetainers($retainers)
+    {
+        $this->retainers = $retainers;
+
+        return $this;
     }
 }

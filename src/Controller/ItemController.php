@@ -89,12 +89,4 @@ class ItemController extends AbstractController
             ]
         ]);
     }
-    
-    /**
-     * @Route("/market/{itemId}/refresh", name="item_refresh")
-     */
-    public function refresh(int $itemId)
-    {
-        return $this->json([ 'ok' => true ]);
-    }
 }

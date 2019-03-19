@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="users_lists")
- * @ORM\Entity(repositoryClass="App\Repository\ItemListRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UserListRepository")
  */
 class UserList
 {
@@ -27,7 +27,7 @@ class UserList
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    private $listId;
+    private $slug;
     /**
      * @var int
      * @ORM\Column(type="integer")
@@ -52,8 +52,25 @@ class UserList
     public function __construct()
     {
         $this->id     = Uuid::uuid4();
-        $this->listId = Uuid::uuid4();
         $this->added  = time();
+    }
+
+    /**
+     * Set a unique slug, this allows access via a "name"
+     */
+    public function setSlug()
+    {
+        if (empty($this->name)) {
+            throw new \Exception("List name cannot be empty");
+        }
+
+        if (empty($this->user)) {
+            throw new \Exception("A user is required when creating a list");
+        }
+
+        $this->slug = sha1($this->user->getId() . strtolower(trim($this->name)));
+
+        return $this;
     }
     
     public function getId(): string
@@ -76,18 +93,6 @@ class UserList
     public function setUser(User $user)
     {
         $this->user = $user;
-        
-        return $this;
-    }
-    
-    public function getListId(): string
-    {
-        return $this->listId;
-    }
-    
-    public function setListId(string $listId)
-    {
-        $this->listId = $listId;
         
         return $this;
     }

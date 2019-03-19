@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Service\Alert;
+namespace App\Service\UserAlerts;
 
 use App\Entity\UserAlert;
 use App\Exceptions\UnauthorisedAlertOwnershipException;
-use App\Repository\AlertRepository;
+use App\Repository\UserAlertRepository;
 use App\Service\Companion\Companion;
 use App\Service\GameData\GameServers;
 use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class Alerts
+class UserAlerts
 {
     /** @var EntityManagerInterface */
     private $em;
@@ -19,7 +19,7 @@ class Alerts
     private $users;
     /** @var Companion */
     private $companion;
-    /** @var AlertRepository */
+    /** @var UserAlertRepository */
     private $repository;
     /** @var ConsoleOutput */
     private $console;

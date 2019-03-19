@@ -2,14 +2,14 @@
 
 namespace App\Repository;
 
-use App\Entity\UserList;
+use App\Entity\UserRetainer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class ItemListRepository extends ServiceEntityRepository
+class UserRetainerRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, UserList::class);
+        parent::__construct($registry, UserRetainer::class);
     }
 }

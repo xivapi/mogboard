@@ -3,22 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\UserAlert;
-use App\Service\Alert\Alerts;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\UserAlerts\UserAlerts;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AlertController extends AbstractController
+class UserAlertsController extends AbstractController
 {
-    /** @var EntityManagerInterface */
-    private $em;
-    /** @var Alerts */
+    /** @var UserAlerts */
     private $alerts;
 
-    public function __construct(EntityManagerInterface $em, Alerts $alerts)
+    public function __construct(UserAlerts $alerts)
     {
-        $this->em = $em;
         $this->alerts = $alerts;
     }
 

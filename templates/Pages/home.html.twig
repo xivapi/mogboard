@@ -23,6 +23,23 @@
                 <p>Recent "watched item" notification</p>
                 <p>Player "sold item" notification</p>
                 <p>Tracked items with graph porn and sales figures</p>
+
+                <br><br>
+
+                {% if auth.online() %}
+
+                    <p>Lists</p>
+                    {% for list in auth.user.lists %}
+                        <h4>{{ list.name }}</h4>
+                    {% endfor %}
+
+                    <p>Alerts</p>
+                    {% for alert in auth.user.alerts %}
+                        <h4>{{ alert.name }}</h4>
+                    {% endfor %}
+
+                {% endfir %}
+
             </div>
         </div>
         <div>

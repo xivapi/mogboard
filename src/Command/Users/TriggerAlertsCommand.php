@@ -3,7 +3,7 @@
 namespace App\Command\Users;
 
 use App\Command\CommandConfigureTrait;
-use App\Service\Alert\Alerts;
+use App\Service\User\UserAlerts;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,10 +21,10 @@ class TriggerAlertsCommand extends Command
         ]
     ];
 
-    /** @var Alerts */
+    /** @var UserAlerts */
     private $alerts;
 
-    public function __construct(Alerts $alerts, $name = null)
+    public function __construct(UserAlerts $alerts, $name = null)
     {
         $this->alerts = $alerts;
         parent::__construct($name);

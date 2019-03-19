@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @ORM\Table(name="users_alerts")
- * @ORM\Entity(repositoryClass="App\Repository\AlertRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UserAlertRepository")
  */
 class UserAlert
 {

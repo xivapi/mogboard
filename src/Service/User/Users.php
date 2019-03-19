@@ -14,17 +14,17 @@ class Users
 {
     const COOKIE_SESSION_NAME = 'session';
     const COOKIE_SESSION_DURATION = (60 * 60 * 24 * 30);
-    
+
     /** @var EntityManagerInterface */
     private $em;
     /** @var DiscordSignIn */
     private $sso;
-    
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
-    
+
     /**
      * Set the single sign in provider
      */
@@ -33,7 +33,7 @@ class Users
         $this->sso = $sso;
         return $this;
     }
-    
+
     /**
      * Get the current logged in user
      */
@@ -44,27 +44,30 @@ class Users
             if ($mustBeOnline) {
                 throw new NotFoundHttpException();
             }
-            
+
             return null;
         }
-        
+
         /** @var User $user */
         $user = $this->em->getRepository(User::class)->findOneBy([
             'session' => $session
         ]);
-    
+
         if ($mustBeOnline && !$user) {
             throw new NotFoundHttpException();
         }
-        
+
         return $user;
     }
-    
+
+    /**
+     * Is the current user online?
+     */
     public function isOnline()
     {
         return !empty($this->getUser());
     }
-    
+
     /**
      * Sign in
      */
@@ -72,7 +75,17 @@ class Users
     {
         return $this->sso->getLoginAuthorizationUrl();
     }
-    
+
+    /**
+     * Logout a user
+     */
+    public function logout(): void
+    {
+        $cookie = new Cookie(self::COOKIE_SESSION_NAME);
+        $cookie->setValue('x')->setMaxAge(-1)->setPath('/')->save();
+        $cookie->delete();
+    }
+
     /**
      * Authenticate
      * @throws CsrfInvalidException
@@ -84,29 +97,19 @@ class Users
         $user = $this->em->getRepository(User::class)->findOneBy([
             'email' => $ssoAccess->email
         ]);
-        
+
         // if they don't have an account, create one!
         if (!$user) {
             $user = $this->create($this->sso::NAME, $ssoAccess);
             // todo - send email?
         }
-    
+
         $cookie = new Cookie(self::COOKIE_SESSION_NAME);
         $cookie->setValue($user->getSession())->setMaxAge(self::COOKIE_SESSION_DURATION)->setPath('/')->save();
-        
+
         return $user;
     }
-    
-    /**
-     * Logout a user
-     */
-    public function logout(): void
-    {
-        $cookie = new Cookie(self::COOKIE_SESSION_NAME);
-        $cookie->setValue('x')->setMaxAge(-1)->setPath('/')->save();
-        $cookie->delete();
-    }
-    
+
     /**
      * Create a new user
      */
@@ -119,11 +122,11 @@ class Users
             ->setUsername($ssoAccess->username)
             ->setEmail($ssoAccess->email)
             ->setAvatar($ssoAccess->avatar ?: 'http://xivapi.com/img-misc/chat_messengericon_goldsaucer.png');
-        
+
         $this->save($user);
         return $user;
     }
-    
+
     /**
      * Update a user
      */

@@ -6,7 +6,7 @@ use App\Entity\UserAlert;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class AlertRepository extends ServiceEntityRepository
+class UserAlertRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
