@@ -17,14 +17,14 @@ class UserAlert
         100 => 'Price Per Unit > [X]',
         110 => 'Price Per Unit < [X]',
         120 => 'Price Per Unit = [X]',
-        130 => 'Price Per Unit Avg > [X]',
-        140 => 'Price Per Unit Avg < [X]',
+        # 130 => '(SOON) Price Per Unit Avg > [X]',
+        # 140 => '(SOON) Price Per Unit Avg < [X]',
 
         200 => 'Price Total > [X]',
         210 => 'Price Total < [X]',
         220 => 'Price Total = [X]',
-        230 => 'Price Total Avg > [X]',
-        240 => 'Price Total Avg < [X]',
+        # 230 => '(SOON) Price Total Avg > [X]',
+        # 240 => '(SOON) Price Total Avg < [X]',
 
         300 => 'Single Stock Quantity > [X]',
         310 => 'Single Stock Quantity < [X]',
@@ -34,9 +34,9 @@ class UserAlert
         410 => 'Total Stock Quantity < [X]',
         420 => 'Total Stock Quantity = [X]',
 
-        #500 => 'Total Stock Quantity > [X]',
-        #510 => 'Total Stock Quantity < [X]',
-        #520 => 'Total Stock Quantity = [X]',
+        # 500 => 'Total Stock Quantity > [X]',
+        # 510 => 'Total Stock Quantity < [X]',
+        # 520 => 'Total Stock Quantity = [X]',
         
         600 => 'Retainer Name = [X]',
         700 => 'Buyer Name = [X]',

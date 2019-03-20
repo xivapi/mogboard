@@ -3,7 +3,7 @@
 namespace App\Command\Users;
 
 use App\Command\CommandConfigureTrait;
-use App\Service\User\UserAlerts;
+use App\Service\UserAlerts\UserAlertsTriggers;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,18 +21,18 @@ class TriggerAlertsCommand extends Command
         ]
     ];
 
-    /** @var UserAlerts */
-    private $alerts;
+    /** @var UserAlertsTriggers */
+    private $alertTriggers;
 
-    public function __construct(UserAlerts $alerts, $name = null)
+    public function __construct(UserAlertsTriggers $alertTriggers, $name = null)
     {
-        $this->alerts = $alerts;
+        $this->alertTriggers = $alertTriggers;
         parent::__construct($name);
     }
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->alerts->trigger(
+        $this->alertTriggers->trigger(
             !empty($input->getArgument('patrons'))
         );
     }

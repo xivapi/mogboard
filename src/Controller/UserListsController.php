@@ -13,7 +13,7 @@ class UserListsController extends AbstractController
     /** @var UserLists */
     private $lists;
     
-    public function __construct(UserList $lists)
+    public function __construct(UserLists $lists)
     {
         $this->lists = $lists;
     }

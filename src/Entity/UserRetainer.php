@@ -6,7 +6,7 @@ use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="users_lists")
+ * @ORM\Table(name="users_retainers")
  * @ORM\Entity(repositoryClass="App\Repository\UserRetainerRepository")
  */
 class UserRetainer

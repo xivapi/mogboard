@@ -44,13 +44,6 @@ class ProductAlerts
 
     createItemAlert(payload)
     {
-        // quick dummy check
-        const valueIsNumber = !isNaN(parseFloat(payload.value)) && isFinite(payload.value);
-        if (valueIsNumber === false) {
-            Popup.warning('Invalid Alert','The alert Condition Value is not a valid number.');
-            return;
-        }
-
         const $btn = this.uiForm.find('button.btn_create_alert');
         ButtonLoading.start($btn);
 
