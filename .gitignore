@@ -15,11 +15,6 @@ node_modules/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
-
-###> phpunit/phpunit ###
-/phpunit.xml
-###< phpunit/phpunit ###
-
 ssh\.exe\.stackdump
 
 src/Services/Companion/dev\.json

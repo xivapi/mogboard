@@ -51,7 +51,7 @@ class UserAlerts
     public function getAllForCurrentUser()
     {
         return $this->repository->findBy([
-            'user' => $this->users->getUser(true),
+            'user' => $this->users->getUser(),
         ]);
     }
     
@@ -61,7 +61,7 @@ class UserAlerts
     public function getAllForItemForCurrentUser($itemId)
     {
         return $this->repository->findBy([
-            'user' => $this->users->getUser(true),
+            'user' => $this->users->getUser(),
             'itemId' => $itemId,
         ]);
     }
@@ -87,7 +87,7 @@ class UserAlerts
      */
     public function save(UserAlert $alert)
     {
-        $user   = $this->users->getUser(true);
+        $user   = $this->users->getUser();
         $server = GameServers::getServer();
 
         // set user and trigger delay
@@ -104,7 +104,7 @@ class UserAlerts
      */
     public function delete(UserAlert $alert, bool $force = false)
     {
-        if ($force || $alert->getUser() !== $this->users->getUser(true)) {
+        if ($force || $alert->getUser() !== $this->users->getUser()) {
             throw new UnauthorisedAlertOwnershipException();
         }
 

@@ -12,4 +12,13 @@ class UserCharacterRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, UserCharacter::class);
     }
+
+    public function findLastUpdated(int $limit)
+    {
+        $sql = $this->createQueryBuilder('uc');
+        $sql->orderBy('uc.updated', 'ASC')
+            ->setMaxResults($limit);
+
+        return $sql->getQuery()->getResult();
+    }
 }

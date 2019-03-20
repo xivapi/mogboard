@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Service\GameData\GameServers;
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,6 +24,11 @@ class UserRetainer
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=100)
+     */
+    private $unique;
     /**
      * @var string
      * @ORM\Column(type="string", length=100)
@@ -79,6 +85,16 @@ class UserRetainer
         $this->confirmPrice = mt_rand(9999,999999);
     }
 
+    /**
+     * Generate a consistent unique id for the retainer
+     */
+    public static function unique(string $name, int $server)
+    {
+        $name   = strtolower($name);
+
+        return sha1(sprintf('%s_%s', $name, $server));
+    }
+
     public function getId(): string
     {
         return $this->id;
@@ -103,6 +119,18 @@ class UserRetainer
         return $this;
     }
 
+    public function getUnique(): string
+    {
+        return $this->unique;
+    }
+
+    public function setUnique(string $unique)
+    {
+        $this->unique = $unique;
+
+        return $this;
+    }
+
     public function getSlug(): string
     {
         return $this->slug;
@@ -110,7 +138,12 @@ class UserRetainer
 
     public function setSlug(string $slug)
     {
-        $this->slug = $slug;
+        if (empty($this->server)) {
+            throw new \Exception('Please set the server before setting the retainer slug.');
+        }
+
+        // slug = name-server
+        $this->slug = preg_replace("/[^A-Za-z]/", '', strtolower($slug)) .'-'. GameServers::LIST[$this->server];
 
         return $this;
     }

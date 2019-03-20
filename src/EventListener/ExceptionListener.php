@@ -4,6 +4,7 @@ namespace App\EventListener;
 
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -19,11 +20,6 @@ class ExceptionListener implements EventSubscriberInterface
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        // show Symfony error if in dev mode
-        if (getenv('APP_ENV') == 'dev') {
-            return;
-        }
-        
         $ex         = $event->getException();
         $path       = $event->getRequest()->getPathInfo();
         $pathinfo   = pathinfo($path);
@@ -38,19 +34,22 @@ class ExceptionListener implements EventSubscriberInterface
         $message = $ex->getMessage() ?: '(no-exception-message)';
 
         $json = [
-            'Subject' => 'MOGBOARD ERROR',
+            'Error'   => true,
+            'Subject' => 'MOGBOARD Service Error',
             'Message' => $message,
+            'Hash'    => sha1($message),
             'Debug'   => [
+                'Env'     => getenv('APP_ENV'),
                 'File'    => "#{$ex->getLine()} {$file}",
                 'Method'  => $event->getRequest()->getMethod(),
                 'Path'    => $event->getRequest()->getPathInfo(),
                 'Action'  => $event->getRequest()->attributes->get('_controller'),
                 'Date'    => date('Y-m-d H:i:s'),
-                'Note'    => "Get on discord: https://discord.gg/MFFVHWC and complain to @Vekien :)",
             ]
         ];
 
-        print_r($json);
-        die;
+        $response = new JsonResponse($json, $json->Debug->Code);
+        $response->headers->set('Content-Type','application/json');
+        $event->setResponse($response);
     }
 }

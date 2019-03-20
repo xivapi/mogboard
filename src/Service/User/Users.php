@@ -37,7 +37,7 @@ class Users
     /**
      * Get the current logged in user
      */
-    public function getUser($mustBeOnline = false): ?User
+    public function getUser($mustBeOnline = true): ?User
     {
         $session = Cookie::get(self::COOKIE_SESSION_NAME);
         if (!$session || $session === 'x') {

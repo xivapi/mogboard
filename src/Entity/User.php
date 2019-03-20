@@ -293,6 +293,12 @@ class User
         return $this;
     }
 
+    public function addCharacter(UserCharacter $character)
+    {
+        $this->characters[] = $character;
+        return $this;
+    }
+
     public function getRetainers()
     {
         return $this->retainers;
@@ -303,5 +309,16 @@ class User
         $this->retainers = $retainers;
 
         return $this;
+    }
+
+    public function addRetainer(UserRetainer $retainer)
+    {
+        $this->retainers[] = $retainer;
+        return $this;
+    }
+
+    public function getCharacterPassPhrase()
+    {
+        return 'mb'. substr(sha1($this->id), 0, 16);
     }
 }

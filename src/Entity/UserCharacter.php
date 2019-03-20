@@ -24,6 +24,11 @@ class UserCharacter
      */
     private $user;
     /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $lodestoneId;
+    /**
      * @var string
      * @ORM\Column(type="string", length=100)
      */
@@ -52,7 +57,7 @@ class UserCharacter
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $updated;
+    private $updated = 0;
     
     public function __construct()
     {
@@ -79,6 +84,18 @@ class UserCharacter
     public function setUser(User $user)
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getLodestoneId(): int
+    {
+        return $this->lodestoneId;
+    }
+
+    public function setLodestoneId(int $lodestoneId)
+    {
+        $this->lodestoneId = $lodestoneId;
 
         return $this;
     }
@@ -153,5 +170,13 @@ class UserCharacter
         $this->updated = $updated;
 
         return $this;
+    }
+
+    /**
+     * If updated is above 0, we have sync'd once from XIVAPI
+     */
+    public function hasSynced()
+    {
+        return $this->updated > 0;
     }
 }

@@ -50,6 +50,9 @@ class UserAlertsTriggers extends UserAlerts
             // todo check when prices last changed
             // - if this user is a patron user and the prices are older than a few minutes
             //   it will query companion directly.
+            if ($patrons) {
+
+            }
             
             
             // check triggers

@@ -37,7 +37,7 @@ class UserLists
      */
     public function handleFavourite(int $itemId): UserList
     {
-        $user = $this->users->getUser(true);
+        $user = $this->users->getUser();
         $list = $this->getFavourites($user);
 
         // either add or remove the item

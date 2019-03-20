@@ -3,17 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\UserList;
-use App\Service\UserLists\UserLists;
+use App\Service\UserLists\UserCharacters;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserListsController extends AbstractController
 {
-    /** @var UserLists */
+    /** @var UserCharacters */
     private $lists;
     
-    public function __construct(UserLists $lists)
+    public function __construct(UserCharacters $lists)
     {
         $this->lists = $lists;
     }
