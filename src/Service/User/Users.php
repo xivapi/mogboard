@@ -3,9 +3,6 @@
 namespace App\Service\User;
 
 use App\Entity\User;
-use App\Service\User\Discord\CsrfInvalidException;
-use App\Service\User\Discord\DiscordSignIn;
-use App\Service\User\SSO\SSOAccess;
 use Delight\Cookie\Cookie;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,7 +14,7 @@ class Users
 
     /** @var EntityManagerInterface */
     private $em;
-    /** @var DiscordSignIn */
+    /** @var SignInInterface */
     private $sso;
 
     public function __construct(EntityManagerInterface $em)
@@ -65,7 +62,7 @@ class Users
      */
     public function isOnline()
     {
-        return !empty($this->getUser());
+        return !empty($this->getUser(false));
     }
 
     /**
@@ -88,22 +85,19 @@ class Users
 
     /**
      * Authenticate
-     * @throws CsrfInvalidException
      */
     public function authenticate(): User
     {
         // look for their user if they already have an account
-        $ssoAccess = $this->sso->setLoginAuthorizationState();
+        $sso  = $this->sso->setLoginAuthorizationState();
         $user = $this->em->getRepository(User::class)->findOneBy([
-            'email' => $ssoAccess->email
+            'email' => $sso->email
         ]);
 
-        // if they don't have an account, create one!
-        if (!$user) {
-            $user = $this->create($this->sso::NAME, $ssoAccess);
-            // todo - send email?
-        }
+        // handle user info during login process
+        $user = $this->handleUser($sso, $user);
 
+        // set cookie
         $cookie = new Cookie(self::COOKIE_SESSION_NAME);
         $cookie->setValue($user->getSession())->setMaxAge(self::COOKIE_SESSION_DURATION)->setPath('/')->save();
 
@@ -111,17 +105,26 @@ class Users
     }
 
     /**
-     * Create a new user
+     * Set user information
      */
-    public function create(string $sso, SSOAccess $ssoAccess): User
+    public function handleUser(\stdClass $sso, User $user = null): User
     {
-        $user = new User();
+        $user = $user ?: new User();
         $user
-            ->setSso($sso)
-            ->setToken(json_encode($ssoAccess))
-            ->setUsername($ssoAccess->username)
-            ->setEmail($ssoAccess->email)
-            ->setAvatar($ssoAccess->avatar ?: 'http://xivapi.com/img-misc/chat_messengericon_goldsaucer.png');
+            ->setSso($sso->name)
+            ->setUsername($sso->username)
+            ->setEmail($sso->email)
+            ->generateSession();
+        
+        // set discord info
+        if ($sso->name === SignInDiscord::NAME) {
+            $user
+                ->setSsoDiscordId($sso->id)
+                ->setSsoDiscordAvatar($sso->avatar)
+                ->setSsoDiscordTokenAccess($sso->tokenAccess)
+                ->setSsoDiscordTokenExpires($sso->tokenExpires)
+                ->setSsoDiscordTokenRefresh($sso->tokenRefresh);
+        }
 
         $this->save($user);
         return $user;

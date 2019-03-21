@@ -2,10 +2,10 @@
 
 namespace App\Exceptions;
 
-class InvalidAlertCreationException extends \Exception
+class CSRFInvalidationException extends \Exception
 {
     const CODE    = 400;
-    const MESSAGE = 'Invalid alert creation data.';
+    const MESSAGE = 'Could not confirm the CSRF token from SSO Provider. Please try again.';
     
     public function __construct()
     {

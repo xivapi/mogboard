@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +43,7 @@ class UserAlert
         700 => 'Buyer Name = [X]',
         800 => 'Craft Name = [X]'
     ];
-    const LIMIT_DEFAULT = 5;
+    const LIMIT_DEFAULT = 20;
     const DELAY_DEFAULT = 300;
 
     /**
@@ -108,6 +109,11 @@ class UserAlert
      */
     private $triggerLastSent = 0;
     /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $triggersSent = 0;
+    /**
      * @var boolean
      * @ORM\Column(type="boolean", options={"default": false})
      */
@@ -132,11 +138,16 @@ class UserAlert
      * @ORM\Column(type="boolean", options={"default": false})
      */
     private $notifiedViaDiscord = false;
+    /**
+     * @ORM\OneToMany(targetEntity="UserAlert", mappedBy="user")
+     */
+    private $events;
     
     public function __construct()
     {
-        $this->id = Uuid::uuid4();
-        $this->added = time();
+        $this->id     = Uuid::uuid4();
+        $this->added  = time();
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -316,6 +327,25 @@ class UserAlert
         return $this;
     }
     
+    public function getTriggersSent(): int
+    {
+        return $this->triggersSent;
+    }
+    
+    public function setTriggersSent(int $triggersSent)
+    {
+        $this->triggersSent = $triggersSent;
+        
+        return $this;
+    }
+    
+    public function incrementTriggersSent()
+    {
+        $this->triggersSent++;
+        
+        return $this;
+    }
+    
     public function isTriggerHq(): bool
     {
         return $this->triggerHq;
@@ -373,6 +403,24 @@ class UserAlert
     {
         $this->notifiedViaDiscord = $notifiedViaDiscord;
         
+        return $this;
+    }
+    
+    public function getEvents()
+    {
+        return $this->events;
+    }
+    
+    public function setEvents($events)
+    {
+        $this->events = $events;
+        
+        return $this;
+    }
+    
+    public function addEvent(UserAlertEvents $userAlertEvents)
+    {
+        $this->events[] = $userAlertEvents;
         return $this;
     }
 }

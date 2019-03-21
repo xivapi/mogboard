@@ -29,4 +29,10 @@
             </select>
         </div>
     </div>
+
+    {% if auth.online() %}
+        <div class="row logout">
+            Ready to leave? <a href="{{ path('user_logout') }}">Logout</a>
+        </div>
+    {% endif %}
 </div>

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Service\User\SignInDiscord;
+use App\Utils\Random;
 use Doctrine\Common\Collections\ArrayCollection;
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,15 +29,9 @@ class User
     /**
      * @var string
      * A random hash saved to cookie to retrieve the token
-     * @ORM\Column(type="string", length=128, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $session;
-    /**
-     * @var string
-     * The token provided by the SSO provider
-     * @ORM\Column(type="text", length=512, nullable=true)
-     */
-    private $token;
     /**
      * @var string
      * Username provided by the SSO provider (updates on token refresh)
@@ -57,7 +53,7 @@ class User
      * @var string
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $avatar;
+    private $avatar = 'http://xivapi.com/img-misc/chat_messengericon_goldsaucer.png';
     /**
      * @var boolean
      * @ORM\Column(type="boolean", options={"default": false})
@@ -83,16 +79,50 @@ class User
      * @ORM\OneToMany(targetEntity="UserRetainer", mappedBy="user")
      */
     private $retainers;
+    
+    // -- discord sso
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $ssoDiscordId;
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $ssoDiscordAvatar;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $ssoDiscordTokenExpires = 0;
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $ssoDiscordTokenAccess;
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $ssoDiscordTokenRefresh;
 
     public function __construct()
     {
         $this->id         = Uuid::uuid4();
-        $this->session    = Uuid::uuid4()->toString() . Uuid::uuid4()->toString() . Uuid::uuid4()->toString();
         $this->alerts     = new ArrayCollection();
         $this->lists      = new ArrayCollection();
         $this->reports    = new ArrayCollection();
         $this->characters = new ArrayCollection();
         $this->retainers  = new ArrayCollection();
+    
+        $this->generateSession();
+    }
+    
+    public function generateSession()
+    {
+        $this->session = Random::randomSecureString(250);
+        return;
     }
     
     public function getId()
@@ -131,18 +161,6 @@ class User
         return $this;
     }
     
-    public function getToken()
-    {
-        return json_decode($this->token);
-    }
-    
-    public function setToken($token)
-    {
-        $this->token = $token;
-        
-        return $this;
-    }
-    
     public function getUsername(): string
     {
         return $this->username;
@@ -169,16 +187,12 @@ class User
     
     public function getAvatar(): string
     {
-        $token = $this->getToken();
-        
-        if (empty($token->avatar) || stripos($this->avatar, 'xivapi.com') !== false) {
-            return 'http://xivapi.com/img-misc/chat_messengericon_goldsaucer.png';
+        if ($this->sso == SignInDiscord::NAME) {
+            $this->avatar = sprintf("https://cdn.discordapp.com/avatars/%s/%s.png?size=256",
+                $this->ssoDiscordId,
+                $this->ssoDiscordAvatar
+            );
         }
-        
-        $this->avatar = sprintf("https://cdn.discordapp.com/avatars/%s/%s.png?size=256",
-            $token->id,
-            $token->avatar
-        );
         
         return $this->avatar;
     }
@@ -320,5 +334,65 @@ class User
     public function getCharacterPassPhrase()
     {
         return 'mb'. substr(sha1($this->id), 0, 16);
+    }
+    
+    public function getSsoDiscordId(): string
+    {
+        return $this->ssoDiscordId;
+    }
+    
+    public function setSsoDiscordId(string $ssoDiscordId)
+    {
+        $this->ssoDiscordId = $ssoDiscordId;
+        
+        return $this;
+    }
+    
+    public function getSsoDiscordAvatar(): string
+    {
+        return $this->ssoDiscordAvatar;
+    }
+    
+    public function setSsoDiscordAvatar(string $ssoDiscordAvatar)
+    {
+        $this->ssoDiscordAvatar = $ssoDiscordAvatar;
+        
+        return $this;
+    }
+    
+    public function getSsoDiscordTokenExpires(): int
+    {
+        return $this->ssoDiscordTokenExpires;
+    }
+    
+    public function setSsoDiscordTokenExpires(int $ssoDiscordTokenExpires)
+    {
+        $this->ssoDiscordTokenExpires = $ssoDiscordTokenExpires;
+        
+        return $this;
+    }
+    
+    public function getSsoDiscordTokenAccess(): string
+    {
+        return $this->ssoDiscordTokenAccess;
+    }
+    
+    public function setSsoDiscordTokenAccess(string $ssoDiscordTokenAccess)
+    {
+        $this->ssoDiscordTokenAccess = $ssoDiscordTokenAccess;
+        
+        return $this;
+    }
+    
+    public function getSsoDiscordTokenRefresh(): string
+    {
+        return $this->ssoDiscordTokenRefresh;
+    }
+    
+    public function setSsoDiscordTokenRefresh(string $ssoDiscordTokenRefresh)
+    {
+        $this->ssoDiscordTokenRefresh = $ssoDiscordTokenRefresh;
+        
+        return $this;
     }
 }
