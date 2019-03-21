@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Service\UserLists;
+namespace App\Service\UserCharacters;
 
 use App\Entity\UserCharacter;
 use App\Exceptions\GeneralJsonException;
 use App\Repository\UserCharacterRepository;
+use App\Service\GameData\GameServers;
 use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -30,7 +31,7 @@ class UserCharacters
         $this->users      = $users;
         $this->repository = $em->getRepository(UserCharacter::class);
         $this->console    = new ConsoleOutput();
-        $this->xivapi     = new XIVAPI();
+        $this->xivapi     = new XIVAPI(XIVAPI::STAGING);
     }
 
     /**
@@ -54,9 +55,17 @@ class UserCharacters
         if ($this->get($lodestoneId, true)) {
             throw new GeneralJsonException('Character already exists and is confirmed.');
         }
+        
+        $user = $this->users->getUser();
+        
+        /** @var UserCharacter $existing */
+        $existing = $this->get($lodestoneId);
+        if ($existing && $existing->getUser() === $user) {
+            throw new GeneralJsonException('You have already added this character...');
+        }
 
         $character = (new UserCharacter())
-            ->setUser($this->users->getUser())
+            ->setUser($user)
             ->setLodestoneId($lodestoneId);
 
         $this->save($character);
@@ -65,12 +74,14 @@ class UserCharacters
     /**
      * Confirm a characters ownership
      */
-    public function confirm(UserCharacter $character)
+    public function confirm(int $lodestoneId)
     {
+        /** @var UserCharacter $character */
+        $character = $this->get($lodestoneId);
         $user = $this->users->getUser();
 
         // run character verification
-        $verification = $this->xivapi->character->verify($character->getId());
+        $verification = $this->xivapi->character->verify($character->getLodestoneId());
 
         // test if our Users pass phrase was found
         if (stripos($verification->Bio, $user->getCharacterPassPhrase()) === false) {
@@ -105,7 +116,7 @@ class UserCharacters
 
         /** @var UserCharacter $character */
         foreach ($characters as $character) {
-            $data = $this->xivapi->character->get($character->getId());
+            $data = $this->xivapi->character->get($character->getLodestoneId());
 
             // ensure we don't get stuck on a character
             $character->setUpdated(time());
@@ -117,7 +128,7 @@ class UserCharacters
 
             $character
                 ->setName($data->Character->Name)
-                ->setServer($data->Character->Server)
+                ->setServer(GameServers::getServerId($data->Character->Server))
                 ->setAvatar($data->Character->Avatar);
 
             $this->save($character);

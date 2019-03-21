@@ -3,8 +3,163 @@
 {% block body %}
 
     {% if auth.online() %}
-        <h1>User Account Page</h1>
+        <div class="account">
+            <div>
+                <div class="account-box">
+                    <h3>Account</h3>
+                    <div class="table">
+                        <table>
+                            <tr>
+                                <td width="20%">SSO</td>
+                                <td>{{ auth.user.sso }}</td>
+                            </tr>
+                            <tr>
+                                <td>Username</td>
+                                <td>{{ auth.user.username }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{ auth.user.email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Avatar</td>
+                                <td><img src="{{ auth.user.avatar }}" height="120"></td>
+                            </tr>
+                            <tr>
+                                <td>Patron?</td>
+                                <td>{{ auth.user.patron ? 'Yes' : 'No' }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="account-box">
+                    <h3>Alerts</h3>
+                    <div class="table">
+                        <table>
+                            {% for alert in auth.user.alerts %}
+                                <tr>
+                                    <td>
+                                        <h4>{{ alert.name }}</h4>
+                                        <code class="text-red">{{ alert.getTriggerOptionFormula }}</code>
+                                        <div class="account-alert-info">
+                                            <span>Triggered: {{ alert.triggerLastSent|date }}</span>
+                                            <span>Limit: {{ alert.triggerLimit }}</span>
+                                            <span>Active: {{ alert.triggerActive ? 'Yes' : 'No' }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td class="2">You have no alerts setup</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+
+                <div class="account-box">
+                    <h3>Lists</h3>
+                    <div class="table">
+                        <table>
+                            {% for list in auth.user.lists %}
+                            <tr>
+                                <td>
+                                    <h4>{{ list.name }}</h4>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td class="2">You have no alerts setup</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <div class="account-box">
+                    <h3>
+                        Characters
+                        <span class="account-verify-code">
+                            Code: <code class="inline">{{ auth.user.getCharacterPassPhrase() }}</code>
+                        </span>
+                    </h3>
+                    <div class="table">
+                        <table>
+                            {% for character in auth.user.characters %}
+                                <tr>
+                                    <td>
+                                        <strong>[{{ character.lodestoneId }}]</strong>
+                                        {% if character.confirmed %}
+                                            {% if character.hasSynced %}
+                                                <img src="{{ character.avatar }}" height="42"> {{ character.name }} - {{ character.server|server }}
+                                            {% else %}
+                                                Character confirmed and will be sync'd shortly.
+                                            {% endif %}
+                                        {% else %}
+                                            Unconfirmed Character, please follow the verification process.
+                                            <button class="account-check-verification" data-id="{{ character.lodestoneId }}">Confirm</button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td align="center">
+                                        You have no characters.
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+
+                    <br><br><br>
+
+                    <h6>Add a new character</h6>
+                    <div class="form account-add-character">
+                        <div>
+                            <input type="text" name="string" placeholder="Name, ID or URL">
+                        </div>
+                        <div>
+                            <select name="server">
+                                {% for dc, servers in getGameDataCenters() %}
+                                    <optgroup label="{{ dc }}">
+                                        {% for server in servers %}
+                                            <option value="{{ server }}" {{ server == getServer() ? 'selected' : '' }}>{{ server }}</option>
+                                        {% endfor %}
+                                    </optgroup>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <button type="button">Search</button>
+                        </div>
+                    </div>
+
+                    <br><br><br>
+
+                    <h6>Verification Process</h6>
+                    <p>
+                        Once you have added your character using the form above, it will require verification.
+                        To do this you need to add a verification code onto your characters profile page.
+                    </p>
+                    <ol>
+                        <li>Go to Lodestone</li>
+                        <li>Login with your character and then <a href="https://eu.finalfantasyxiv.com/lodestone/my/setting/profile/">Click here to edit your profile</a>.</li>
+                        <li>Paste in the code: <code>{{ auth.user.getCharacterPassPhrase() }}</code></li>
+                        <li>Click Confirm, twice.</li>
+                        <li>Back on MogBoard, click "Confirm" button next to your character.</li>
+                    </ol>
+                </div>
+                <div class="account-box">
+                    <h3>Retainers</h3>
+                    <div>[wip]</div>
+                </div>
+            </div>
+        </div>
     {% else %}
+        {# todo - do #}
         <p>plz login</p>
     {% endif %}
 

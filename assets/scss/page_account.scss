@@ -1,0 +1,114 @@
+.account {
+    display: flex;
+
+    > div {
+        flex: 0 1 50%;
+
+        &:first-of-type {
+            padding-right: 10px;
+        }
+
+        &:last-of-type {
+            padding-left: 10px;
+        }
+    }
+
+    .account-box {
+        border: solid 1px var(--default-3x);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        padding: 20px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+
+        h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ddd;
+
+            span {
+                float: right;
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--color8);
+            }
+        }
+
+        h4 {
+            font-size: 16px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            color: var(--highlight);
+        }
+
+        .table {
+            background: rgb(60,60,60);
+            background: -moz-linear-gradient(top, rgba(60,60,60,1) 0%, rgba(34,34,34,1) 100%);
+            background: -webkit-linear-gradient(top, rgba(60,60,60,1) 0%,rgba(34,34,34,1) 100%);
+            background: linear-gradient(to bottom, rgba(60,60,60,1) 0%,rgba(34,34,34,1) 100%);
+        }
+    }
+
+    .account-add-character {
+        display: flex;
+
+        > div {
+            input, select, button {
+                width: 100%;
+            }
+        }
+
+        > div:nth-of-type(1) {
+            flex: 0 1 60%;
+            padding-right: 10px;
+        }
+
+        > div:nth-of-type(2) {
+            flex: 0 1 20%;
+            padding-right: 10px;
+        }
+
+        > div:nth-of-type(3) {
+            flex: 0 1 20%;
+        }
+    }
+
+    .account-check-verification {
+        float: right;
+        background-color: var(--green);
+        box-shadow: 0 1px 3px #000;
+        border: none;
+        padding: 0 12px;
+        color: #fff;
+        border-radius: 2px;
+        margin: -10px;
+        height: 38px;
+        line-height: 38px;
+        cursor: pointer;
+        outline: none;
+        font-size: 17px;
+        font-weight: 300;
+
+        &:hover {
+            background-color: var(--green-3x);
+        }
+    }
+
+    .account-alert-info {
+        margin-top: 5px;
+        display: flex;
+
+        > span {
+            display: inline-block;
+            margin: 0 5px 5px 0;
+            background-color: #222;
+            border-radius: 3px;
+            font-size: 12px;
+            padding: 6px 8px;
+        }
+    }
+
+    .account-check-verification {
+
+    }
+}

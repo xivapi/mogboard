@@ -36,17 +36,17 @@ class UserRetainer
     private $slug;
     /**
      * @var string
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $name;
     /**
      * @var int
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $server;
     /**
      * @var string
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $avatar;
     /**
@@ -148,7 +148,7 @@ class UserRetainer
         return $this;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -160,7 +160,7 @@ class UserRetainer
         return $this;
     }
 
-    public function getServer(): int
+    public function getServer(): ?int
     {
         return $this->server;
     }
@@ -172,7 +172,7 @@ class UserRetainer
         return $this;
     }
 
-    public function getAvatar(): string
+    public function getAvatar(): ?string
     {
         return $this->avatar;
     }

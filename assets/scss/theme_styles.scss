@@ -42,7 +42,7 @@
     --table-color-dark: #282b34;
     --search-active: #888a3b;
     --search-complete: #61aa6c;
-    --form-field-height: 36px;
+    --form-field-height: 38px;
     --form-field-height2: 48px;
     --transition-speed: 100ms;
 }
@@ -124,6 +124,30 @@ strong {
 
 em {
     font-style: italic;
+}
+
+pre, code {
+    font-family: 'Roboto Mono', monospace;
+
+    &.inline {
+        padding: 5px 10px;
+        background-color: #181818;
+        border-radius: 100px;
+    }
+
+    &.box {
+        color: #c2c2c2;
+        display: block;
+        background-color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        line-height: 24px;
+
+        em {
+            color: #fff99d;
+        }
+    }
 }
 
 form,
@@ -304,7 +328,7 @@ form,
         background-color: var(--color3);
         border: none;
         font-size: 16px;
-        border-radius: 4px;
+        border-radius: 3px;
         color: #333;
         padding: 0 10px;
         transition: var(--transition-speed);
@@ -658,6 +682,16 @@ footer {
 
     small {
         font-size: 13px;
+    }
+}
+
+ul,ol {
+    padding: 0 0 0 30px;
+    margin-bottom: 30px;
+    list-style: circle;
+
+    li {
+        padding: 5px 8px;
     }
 }
 

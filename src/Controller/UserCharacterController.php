@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UserCharacter;
-use App\Service\UserLists\UserCharacters;
+use App\Service\UserCharacters\UserCharacters;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,11 +34,11 @@ class UserCharacterController extends AbstractController
     }
 
     /**
-     * @Route("/characters/{character}/confirm", name="characters_confirm")
+     * @Route("/characters/{lodestoneId}/confirm", name="characters_confirm")
      */
-    public function confirm(UserCharacter $character)
+    public function confirm(int $lodestoneId)
     {
-        $this->characters->confirm($character);
+        $this->characters->confirm($lodestoneId);
         return $this->json(true);
     }
 }

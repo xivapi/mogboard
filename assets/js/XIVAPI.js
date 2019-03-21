@@ -36,6 +36,23 @@ class XIVAPI
     }
 
     /**
+     * Get a specific character
+     */
+    getCharacter(lodestoneId, callback) {
+        this.get(`/character/${lodestoneId}`, {}, callback);
+    }
+
+    /**
+     * Search for a character
+     */
+    searchCharacter(name, server, callback) {
+        this.get(`/character/search`, {
+            name: name,
+            server: server
+        }, callback);
+    }
+
+    /**
      * Return information about an item
      */
     getItem(itemId, callback) {

@@ -249,7 +249,7 @@ table {
   --table-color-dark: #282b34;
   --search-active: #888a3b;
   --search-complete: #61aa6c;
-  --form-field-height: 36px;
+  --form-field-height: 38px;
   --form-field-height2: 48px;
   --transition-speed: 100ms; }
 
@@ -319,6 +319,23 @@ strong {
 
 em {
   font-style: italic; }
+
+pre, code {
+  font-family: 'Roboto Mono', monospace; }
+  pre.inline, code.inline {
+    padding: 5px 10px;
+    background-color: #181818;
+    border-radius: 100px; }
+  pre.box, code.box {
+    color: #c2c2c2;
+    display: block;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    line-height: 24px; }
+    pre.box em, code.box em {
+      color: #fff99d; }
 
 form button,
 .form button {
@@ -466,7 +483,7 @@ form select,
   background-color: var(--color3);
   border: none;
   font-size: 16px;
-  border-radius: 4px;
+  border-radius: 3px;
   color: #333;
   padding: 0 10px;
   transition: var(--transition-speed);
@@ -743,6 +760,13 @@ footer {
     font-style: normal; }
   footer small {
     font-size: 13px; }
+
+ul, ol {
+  padding: 0 0 0 30px;
+  margin-bottom: 30px;
+  list-style: circle; }
+  ul li, ol li {
+    padding: 5px 8px; }
 
 .text-red {
   color: var(--red-3x); }
@@ -1531,4 +1555,78 @@ footer {
       background: -moz-linear-gradient(top, #262626 0%, #1c1c1c 100%);
       background: -webkit-linear-gradient(top, #262626 0%, #1c1c1c 100%);
       background: linear-gradient(to bottom, #262626 0%, #1c1c1c 100%); }
+
+.account {
+  display: flex; }
+  .account > div {
+    flex: 0 1 50%; }
+    .account > div:first-of-type {
+      padding-right: 10px; }
+    .account > div:last-of-type {
+      padding-left: 10px; }
+  .account .account-box {
+    border: solid 1px var(--default-3x);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 4px;
+    margin-bottom: 20px; }
+    .account .account-box h3 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #ddd; }
+      .account .account-box h3 span {
+        float: right;
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--color8); }
+    .account .account-box h4 {
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 10px;
+      color: var(--highlight); }
+    .account .account-box .table {
+      background: #3c3c3c;
+      background: -moz-linear-gradient(top, #3c3c3c 0%, #222222 100%);
+      background: -webkit-linear-gradient(top, #3c3c3c 0%, #222222 100%);
+      background: linear-gradient(to bottom, #3c3c3c 0%, #222222 100%); }
+  .account .account-add-character {
+    display: flex; }
+    .account .account-add-character > div input, .account .account-add-character > div select, .account .account-add-character > div button {
+      width: 100%; }
+    .account .account-add-character > div:nth-of-type(1) {
+      flex: 0 1 60%;
+      padding-right: 10px; }
+    .account .account-add-character > div:nth-of-type(2) {
+      flex: 0 1 20%;
+      padding-right: 10px; }
+    .account .account-add-character > div:nth-of-type(3) {
+      flex: 0 1 20%; }
+  .account .account-check-verification {
+    float: right;
+    background-color: var(--green);
+    box-shadow: 0 1px 3px #000;
+    border: none;
+    padding: 0 12px;
+    color: #fff;
+    border-radius: 2px;
+    margin: -10px;
+    height: 38px;
+    line-height: 38px;
+    cursor: pointer;
+    outline: none;
+    font-size: 17px;
+    font-weight: 300; }
+    .account .account-check-verification:hover {
+      background-color: var(--green-3x); }
+  .account .account-alert-info {
+    margin-top: 5px;
+    display: flex; }
+    .account .account-alert-info > span {
+      display: inline-block;
+      margin: 0 5px 5px 0;
+      background-color: #222;
+      border-radius: 3px;
+      font-size: 12px;
+      padding: 6px 8px; }
 

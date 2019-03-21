@@ -30,17 +30,17 @@ class UserCharacter
     private $lodestoneId;
     /**
      * @var string
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $name;
     /**
      * @var int
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $server;
     /**
      * @var string
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $avatar;
     /**
@@ -100,7 +100,7 @@ class UserCharacter
         return $this;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -112,7 +112,7 @@ class UserCharacter
         return $this;
     }
 
-    public function getServer(): int
+    public function getServer(): ?int
     {
         return $this->server;
     }
@@ -124,7 +124,7 @@ class UserCharacter
         return $this;
     }
 
-    public function getAvatar(): string
+    public function getAvatar(): ?string
     {
         return $this->avatar;
     }

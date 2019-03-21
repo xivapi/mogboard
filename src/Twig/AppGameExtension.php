@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Service\GameData\GameDataSource;
 use App\Service\GameData\GameServers;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AppGameExtension extends AbstractExtension
@@ -19,14 +20,17 @@ class AppGameExtension extends AbstractExtension
     
     public function getFilters()
     {
-        return [];
+        return [
+            new TwigFilter('server', [$this, 'getServerName']),
+        ];
     }
     
     public function getFunctions()
     {
         return [
             new TwigFunction('gamedata', [$this, 'getGameDataSource']),
-            new TwigFunction('getGameServers', [$this, 'getGameDataCenters']),
+            new TwigFunction('getServer', [$this, 'getServer']),
+            new TwigFunction('getGameServers', [$this, 'getGameServers']),
             new TwigFunction('getGameDataCenters', [$this, 'getGameDataCenters']),
         ];
     }
@@ -44,5 +48,15 @@ class AppGameExtension extends AbstractExtension
     public function getGameDataCenters()
     {
         return GameServers::LIST_DC;
+    }
+    
+    public function getServer()
+    {
+        return GameServers::getServer();
+    }
+    
+    public function getServerName(int $id)
+    {
+        return GameServers::LIST[$id];
     }
 }

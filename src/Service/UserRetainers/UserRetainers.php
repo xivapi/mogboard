@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\UserLists;
+namespace App\Service\UserRetainers;
 
 use App\Entity\UserRetainer;
 use App\Exceptions\GeneralJsonException;

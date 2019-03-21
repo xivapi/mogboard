@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Exceptions\GeneralJsonException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,22 +29,28 @@ class ExceptionListener implements EventSubscriberInterface
             $event->setResponse(new Response("File not found: ". $path, 404));
             return null;
         }
+        
+        // ignore non JSON errors
+        if (get_class($ex) !== GeneralJsonException::class) {
+            return;
+        }
 
         $file = str_ireplace('/home/dalamud/dalamud', '', $ex->getFile());
         $file = str_ireplace('/home/dalamud/dalamud_staging', '', $file);
         $message = $ex->getMessage() ?: '(no-exception-message)';
 
-        $json = [
+        $json = (Object)[
             'Error'   => true,
             'Subject' => 'MOGBOARD Service Error',
             'Message' => $message,
             'Hash'    => sha1($message),
-            'Debug'   => [
+            'Debug'   => (Object)[
                 'Env'     => getenv('APP_ENV'),
                 'File'    => "#{$ex->getLine()} {$file}",
                 'Method'  => $event->getRequest()->getMethod(),
                 'Path'    => $event->getRequest()->getPathInfo(),
                 'Action'  => $event->getRequest()->attributes->get('_controller'),
+                'Code'    => method_exists($ex, 'getStatusCode') ? $ex->getStatusCode() : 500,
                 'Date'    => date('Y-m-d H:i:s'),
             ]
         ];

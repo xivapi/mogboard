@@ -6,6 +6,6 @@ class GeneralJsonException extends \Exception
 {
     public function __construct(string $message)
     {
-        parent::__construct(200,  $message);
+        parent::__construct($message, 200);
     }
 }
