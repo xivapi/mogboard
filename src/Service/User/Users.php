@@ -3,6 +3,7 @@
 namespace App\Service\User;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Delight\Cookie\Cookie;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -14,12 +15,15 @@ class Users
 
     /** @var EntityManagerInterface */
     private $em;
+    /** @var UserRepository */
+    private $repository;
     /** @var SignInInterface */
     private $sso;
 
     public function __construct(EntityManagerInterface $em)
     {
-        $this->em = $em;
+        $this->em         = $em;
+        $this->repository = $em->getRepository(User::class);
     }
 
     /**
@@ -29,6 +33,14 @@ class Users
     {
         $this->sso = $sso;
         return $this;
+    }
+
+    /**
+     * Get user repository
+     */
+    public function getRepository(): UserRepository
+    {
+        return $this->repository;
     }
 
     /**
@@ -46,7 +58,7 @@ class Users
         }
 
         /** @var User $user */
-        $user = $this->em->getRepository(User::class)->findOneBy([
+        $user = $this->repository->findOneBy([
             'session' => $session
         ]);
 
@@ -90,7 +102,7 @@ class Users
     {
         // look for their user if they already have an account
         $sso  = $this->sso->setLoginAuthorizationState();
-        $user = $this->em->getRepository(User::class)->findOneBy([
+        $user = $this->repository->findOneBy([
             'email' => $sso->email
         ]);
 
@@ -115,7 +127,7 @@ class Users
             ->setUsername($sso->username)
             ->setEmail($sso->email)
             ->generateSession();
-        
+
         // set discord info
         if ($sso->name === SignInDiscord::NAME) {
             $user
