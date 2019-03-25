@@ -118,7 +118,7 @@ class User
     
         $this->generateSession();
     }
-    
+
     public function generateSession()
     {
         $this->session = Random::randomSecureString(250);

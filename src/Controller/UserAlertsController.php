@@ -19,6 +19,27 @@ class UserAlertsController extends AbstractController
     }
 
     /**
+     * @Route("/alerts/form", name="alerts_form_new")
+     * @Route("/alerts/form/{userAlert}", name="alerts_form_edit")
+     */
+    public function form(Request $request, ?UserAlert $userAlert = null)
+    {
+        $form = $this->createForm(UserAlert::class, $userAlert);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $task = $form->getData();
+
+            return $this->redirectToRoute('task_success');
+        }
+
+        return $this->render('task/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/alerts/create", name="alerts_create")
      */
     public function create(Request $request)
