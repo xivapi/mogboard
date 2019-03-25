@@ -337,130 +337,6 @@ pre, code {
     pre.box em, code.box em {
       color: #fff99d; }
 
-form button,
-.form button {
-  height: var(--form-field-height);
-  line-height: var(--form-field-height);
-  background-color: var(--default);
-  border: none;
-  font-size: 16px;
-  color: #eee;
-  border-radius: 4px;
-  padding: 0 12px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  cursor: pointer;
-  transition: var(--transition-speed);
-  outline: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
-  form button i,
-  .form button i {
-    margin-right: 5px;
-    display: inline-block;
-    vertical-align: middle; }
-  form button:disabled,
-  .form button:disabled {
-    opacity: 0.75; }
-  form button:hover,
-  .form button:hover {
-    background-color: var(--default-2x); }
-  form button.btn-red,
-  .form button.btn-red {
-    background-color: var(--red); }
-    form button.btn-red:hover,
-    .form button.btn-red:hover {
-      background-color: var(--red-2x); }
-  form button.btn-blue,
-  .form button.btn-blue {
-    background-color: var(--blue); }
-    form button.btn-blue:hover,
-    .form button.btn-blue:hover {
-      background-color: var(--blue-2x); }
-  form button.btn-green,
-  .form button.btn-green {
-    background-color: var(--green); }
-    form button.btn-green:hover,
-    .form button.btn-green:hover {
-      background-color: var(--green-2x); }
-  form button.btn-purple,
-  .form button.btn-purple {
-    background-color: var(--purple); }
-    form button.btn-purple:hover,
-    .form button.btn-purple:hover {
-      background-color: var(--purple-2x); }
-  form button.btn-white,
-  .form button.btn-white {
-    color: #333;
-    text-shadow: none;
-    background-color: var(--white); }
-    form button.btn-white:hover,
-    .form button.btn-white:hover {
-      background-color: var(--white-2x); }
-  form button.btn-outline, form button.btn-red-outline, form button.btn-blue-outline, form button.btn-green-outline, form button.btn-purple-outline, form button.btn-white-outline,
-  .form button.btn-outline,
-  .form button.btn-red-outline,
-  .form button.btn-blue-outline,
-  .form button.btn-green-outline,
-  .form button.btn-purple-outline,
-  .form button.btn-white-outline {
-    background-color: transparent;
-    box-shadow: none; }
-  form button.btn-outline,
-  .form button.btn-outline {
-    border: solid var(--default-outline-size) var(--default); }
-    form button.btn-outline:hover,
-    .form button.btn-outline:hover {
-      border: solid var(--default-outline-size) var(--default-2x); }
-  form button.btn-red-outline,
-  .form button.btn-red-outline {
-    border: solid var(--default-outline-size) var(--red); }
-    form button.btn-red-outline:hover,
-    .form button.btn-red-outline:hover {
-      border: solid var(--default-outline-size) var(--red-2x); }
-  form button.btn-blue-outline,
-  .form button.btn-blue-outline {
-    border: solid var(--default-outline-size) var(--blue); }
-    form button.btn-blue-outline:hover,
-    .form button.btn-blue-outline:hover {
-      border: solid var(--default-outline-size) var(--blue-2x); }
-  form button.btn-green-outline,
-  .form button.btn-green-outline {
-    border: solid var(--default-outline-size) var(--green); }
-    form button.btn-green-outline:hover,
-    .form button.btn-green-outline:hover {
-      border: solid var(--default-outline-size) var(--green-2x); }
-  form button.btn-purple-outline,
-  .form button.btn-purple-outline {
-    border: solid var(--default-outline-size) var(--purple); }
-    form button.btn-purple-outline:hover,
-    .form button.btn-purple-outline:hover {
-      border: solid var(--default-outline-size) var(--purple-2x); }
-  form button.btn-white-outline,
-  .form button.btn-white-outline {
-    border: solid var(--default-outline-size) var(--white); }
-    form button.btn-white-outline:hover,
-    .form button.btn-white-outline:hover {
-      border: solid var(--default-outline-size) var(--white-2x); }
-  form button.full,
-  .form button.full {
-    width: 100%; }
-  form button.btn_loading i,
-  .form button.btn_loading i {
-    margin: 0;
-    font-size: 28px;
-    height: 28px;
-    width: 28px;
-    margin-top: -2px;
-    animation-name: btn_loading_loop;
-    animation-duration: 1200ms;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear; }
-
-@keyframes btn_loading_loop {
-  0% {
-    transform: rotate(0deg); }
-  100% {
-    transform: rotate(360deg); } }
-
 form label,
 .form label {
   font-size: 14px;
@@ -810,6 +686,134 @@ ul, ol {
     font-size: 18px;
     margin-bottom: 0;
     color: #fff; }
+
+.btn, form button,
+.form button {
+  height: var(--form-field-height);
+  line-height: var(--form-field-height);
+  background-color: var(--default);
+  border: none;
+  font-size: 16px;
+  color: #eee;
+  border-radius: 4px;
+  padding: 0 12px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+  transition: var(--transition-speed);
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
+  .btn i, form button i, .form button i {
+    margin-right: 5px;
+    display: inline-block;
+    vertical-align: middle; }
+  .btn:disabled, form button:disabled,
+  .form button:disabled {
+    opacity: 0.75; }
+  .btn:hover, form button:hover,
+  .form button:hover {
+    background-color: var(--default-2x); }
+  .btn.btn-red, form button.btn-red,
+  .form button.btn-red {
+    background-color: var(--red); }
+    .btn.btn-red:hover, form button.btn-red:hover,
+    .form button.btn-red:hover {
+      background-color: var(--red-2x); }
+  .btn.btn-blue, form button.btn-blue,
+  .form button.btn-blue {
+    background-color: var(--blue); }
+    .btn.btn-blue:hover, form button.btn-blue:hover,
+    .form button.btn-blue:hover {
+      background-color: var(--blue-2x); }
+  .btn.btn-green, form button.btn-green,
+  .form button.btn-green {
+    background-color: var(--green); }
+    .btn.btn-green:hover, form button.btn-green:hover,
+    .form button.btn-green:hover {
+      background-color: var(--green-2x); }
+  .btn.btn-purple, form button.btn-purple,
+  .form button.btn-purple {
+    background-color: var(--purple); }
+    .btn.btn-purple:hover, form button.btn-purple:hover,
+    .form button.btn-purple:hover {
+      background-color: var(--purple-2x); }
+  .btn.btn-white, form button.btn-white,
+  .form button.btn-white {
+    color: #333;
+    text-shadow: none;
+    background-color: var(--white); }
+    .btn.btn-white:hover, form button.btn-white:hover,
+    .form button.btn-white:hover {
+      background-color: var(--white-2x); }
+  .btn.btn-outline, form button.btn-outline,
+  .form button.btn-outline, .btn.btn-red-outline, form button.btn-red-outline,
+  .form button.btn-red-outline, .btn.btn-blue-outline, form button.btn-blue-outline,
+  .form button.btn-blue-outline, .btn.btn-green-outline, form button.btn-green-outline,
+  .form button.btn-green-outline, .btn.btn-purple-outline, form button.btn-purple-outline,
+  .form button.btn-purple-outline, .btn.btn-white-outline, form button.btn-white-outline,
+  .form button.btn-white-outline {
+    background-color: transparent;
+    box-shadow: none; }
+  .btn.btn-outline, form button.btn-outline,
+  .form button.btn-outline {
+    border: solid var(--default-outline-size) var(--default); }
+    .btn.btn-outline:hover, form button.btn-outline:hover,
+    .form button.btn-outline:hover {
+      border: solid var(--default-outline-size) var(--default-2x); }
+  .btn.btn-red-outline, form button.btn-red-outline,
+  .form button.btn-red-outline {
+    border: solid var(--default-outline-size) var(--red); }
+    .btn.btn-red-outline:hover, form button.btn-red-outline:hover,
+    .form button.btn-red-outline:hover {
+      border: solid var(--default-outline-size) var(--red-2x); }
+  .btn.btn-blue-outline, form button.btn-blue-outline,
+  .form button.btn-blue-outline {
+    border: solid var(--default-outline-size) var(--blue); }
+    .btn.btn-blue-outline:hover, form button.btn-blue-outline:hover,
+    .form button.btn-blue-outline:hover {
+      border: solid var(--default-outline-size) var(--blue-2x); }
+  .btn.btn-green-outline, form button.btn-green-outline,
+  .form button.btn-green-outline {
+    border: solid var(--default-outline-size) var(--green); }
+    .btn.btn-green-outline:hover, form button.btn-green-outline:hover,
+    .form button.btn-green-outline:hover {
+      border: solid var(--default-outline-size) var(--green-2x); }
+  .btn.btn-purple-outline, form button.btn-purple-outline,
+  .form button.btn-purple-outline {
+    border: solid var(--default-outline-size) var(--purple); }
+    .btn.btn-purple-outline:hover, form button.btn-purple-outline:hover,
+    .form button.btn-purple-outline:hover {
+      border: solid var(--default-outline-size) var(--purple-2x); }
+  .btn.btn-white-outline, form button.btn-white-outline,
+  .form button.btn-white-outline {
+    border: solid var(--default-outline-size) var(--white); }
+    .btn.btn-white-outline:hover, form button.btn-white-outline:hover,
+    .form button.btn-white-outline:hover {
+      border: solid var(--default-outline-size) var(--white-2x); }
+  .btn.full, form button.full,
+  .form button.full {
+    width: 100%; }
+  .btn.small, form button.small,
+  .form button.small {
+    padding: 0 8px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 15px; }
+  .btn.btn_loading i, form button.btn_loading i, .form button.btn_loading i {
+    margin: 0;
+    font-size: 28px;
+    height: 28px;
+    width: 28px;
+    margin-top: -2px;
+    animation-name: btn_loading_loop;
+    animation-duration: 1200ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; }
+
+@keyframes btn_loading_loop {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
 
 .alert-default {
   background-color: var(--default); }

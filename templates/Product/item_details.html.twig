@@ -7,7 +7,7 @@
             </tr>
             {% endif %}
             <tr>
-                <td width="50%">Item Level</td>
+                <td width="45%">Item Level</td>
                 <td><em>{{ item.LevelItem }}</em></td>
             </tr>
             {% if item.BaseParamValue0 > 0 %}
@@ -64,8 +64,15 @@
                 </td>
             </tr>
             <tr>
-                <td>XIVAPI</td>
-                <td><a href="https://xivapi.com/item/{{ item.ID }}">/item/{{ item.ID }}</a></td>
+                <td colspan="2" class="item_connections">
+                    <small>API ENDPOINTS</small>
+                    <div>
+                        <a href="https://xivapi.com/item/{{ item.ID }}">/item/{{ item.ID }}</a>
+                    </div>
+                    <div>
+                        <a href="https://xivapi.com/market/item/{{ item.ID }}?servers={{ server.name }}">/market/item/{{ item.ID }}</a>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>

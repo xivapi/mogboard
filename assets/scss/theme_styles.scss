@@ -153,158 +153,7 @@ pre, code {
 form,
 .form {
     button {
-        height: var(--form-field-height);
-        line-height: var(--form-field-height);
-        background-color: var(--default);
-        border: none;
-        font-size: 16px;
-        color: #eee;
-        border-radius: 4px;
-        padding: 0 12px;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-        cursor: pointer;
-        transition: var(--transition-speed);
-        outline: none;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-
-        i {
-            margin-right: 5px;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        &:disabled {
-            opacity: 0.75;
-        }
-
-        &:hover {
-            background-color: var(--default-2x);
-        }
-
-        &.btn-red {
-            background-color: var(--red);
-
-            &:hover {
-                background-color: var(--red-2x);
-            }
-        }
-
-        &.btn-blue {
-            background-color: var(--blue);
-
-            &:hover {
-                background-color: var(--blue-2x);
-            }
-        }
-
-        &.btn-green {
-            background-color: var(--green);
-
-            &:hover {
-                background-color: var(--green-2x);
-            }
-        }
-
-        &.btn-purple {
-            background-color: var(--purple);
-
-            &:hover {
-                background-color: var(--purple-2x);
-            }
-        }
-
-        &.btn-white {
-            color: #333;
-            text-shadow: none;
-            background-color: var(--white);
-
-            &:hover {
-                background-color: var(--white-2x);
-            }
-        }
-
-        &.btn-outline,
-        &.btn-red-outline,
-        &.btn-blue-outline,
-        &.btn-green-outline,
-        &.btn-purple-outline,
-        &.btn-white-outline
-        {
-            background-color: transparent;
-            box-shadow: none;
-        }
-
-        &.btn-outline {
-            border: solid var(--default-outline-size) var(--default);
-
-            &:hover {
-                border: solid var(--default-outline-size) var(--default-2x);
-            }
-        }
-
-        &.btn-red-outline {
-            border: solid var(--default-outline-size) var(--red);
-
-            &:hover {
-                border: solid var(--default-outline-size) var(--red-2x);
-            }
-        }
-
-        &.btn-blue-outline {
-            border: solid var(--default-outline-size) var(--blue);
-
-            &:hover {
-                border: solid var(--default-outline-size) var(--blue-2x);
-            }
-        }
-
-        &.btn-green-outline {
-            border: solid var(--default-outline-size) var(--green);
-
-            &:hover {
-                border: solid var(--default-outline-size) var(--green-2x);
-            }
-        }
-
-        &.btn-purple-outline {
-            border: solid var(--default-outline-size) var(--purple);
-
-            &:hover {
-                border: solid var(--default-outline-size) var(--purple-2x);
-            }
-        }
-
-        &.btn-white-outline {
-            border: solid var(--default-outline-size) var(--white);
-
-            &:hover {
-                border: solid var(--default-outline-size) var(--white-2x);
-            }
-        }
-
-        &.full {
-            width: 100%;
-        }
-
-        &.btn_loading {
-            i {
-                margin: 0;
-                font-size: 28px;
-                height: 28px;
-                width: 28px;
-                margin-top: -2px;
-
-                animation-name: btn_loading_loop;
-                animation-duration: 1200ms;
-                animation-iteration-count: infinite;
-                animation-timing-function: linear;
-            }
-
-            @keyframes btn_loading_loop {
-                0% { transform: rotate(0deg) }
-                100% { transform: rotate(360deg) }
-            }
-        }
+        @extend .btn;
     }
 
     label {
@@ -726,6 +575,169 @@ ul,ol {
         color: #fff;
     }
 }
+.btn {
+    height: var(--form-field-height);
+    line-height: var(--form-field-height);
+    background-color: var(--default);
+    border: none;
+    font-size: 16px;
+    color: #eee;
+    border-radius: 4px;
+    padding: 0 12px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    cursor: pointer;
+    transition: var(--transition-speed);
+    outline: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+
+    i {
+        margin-right: 5px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    &:disabled {
+        opacity: 0.75;
+    }
+
+    &:hover {
+        background-color: var(--default-2x);
+    }
+
+    &.btn-red {
+        background-color: var(--red);
+
+        &:hover {
+            background-color: var(--red-2x);
+        }
+    }
+
+    &.btn-blue {
+        background-color: var(--blue);
+
+        &:hover {
+            background-color: var(--blue-2x);
+        }
+    }
+
+    &.btn-green {
+        background-color: var(--green);
+
+        &:hover {
+            background-color: var(--green-2x);
+        }
+    }
+
+    &.btn-purple {
+        background-color: var(--purple);
+
+        &:hover {
+            background-color: var(--purple-2x);
+        }
+    }
+
+    &.btn-white {
+        color: #333;
+        text-shadow: none;
+        background-color: var(--white);
+
+        &:hover {
+            background-color: var(--white-2x);
+        }
+    }
+
+    &.btn-outline,
+    &.btn-red-outline,
+    &.btn-blue-outline,
+    &.btn-green-outline,
+    &.btn-purple-outline,
+    &.btn-white-outline
+    {
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    &.btn-outline {
+        border: solid var(--default-outline-size) var(--default);
+
+        &:hover {
+            border: solid var(--default-outline-size) var(--default-2x);
+        }
+    }
+
+    &.btn-red-outline {
+        border: solid var(--default-outline-size) var(--red);
+
+        &:hover {
+            border: solid var(--default-outline-size) var(--red-2x);
+        }
+    }
+
+    &.btn-blue-outline {
+        border: solid var(--default-outline-size) var(--blue);
+
+        &:hover {
+            border: solid var(--default-outline-size) var(--blue-2x);
+        }
+    }
+
+    &.btn-green-outline {
+        border: solid var(--default-outline-size) var(--green);
+
+        &:hover {
+            border: solid var(--default-outline-size) var(--green-2x);
+        }
+    }
+
+    &.btn-purple-outline {
+        border: solid var(--default-outline-size) var(--purple);
+
+        &:hover {
+            border: solid var(--default-outline-size) var(--purple-2x);
+        }
+    }
+
+    &.btn-white-outline {
+        border: solid var(--default-outline-size) var(--white);
+
+        &:hover {
+            border: solid var(--default-outline-size) var(--white-2x);
+        }
+    }
+
+    &.full {
+        width: 100%;
+    }
+
+    &.small {
+        padding: 0 8px;
+        height: 28px;
+        line-height: 28px;
+        font-size: 15px;
+    }
+
+    &.btn_loading {
+        i {
+            margin: 0;
+            font-size: 28px;
+            height: 28px;
+            width: 28px;
+            margin-top: -2px;
+
+            animation-name: btn_loading_loop;
+            animation-duration: 1200ms;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+
+        @keyframes btn_loading_loop {
+            0% { transform: rotate(0deg) }
+            100% { transform: rotate(360deg) }
+        }
+    }
+}
+
+
 
 .alert-default {
     background-color: var(--default);

@@ -16,16 +16,16 @@ class Companion
     
     public function getByServer(string $server, int $itemId)
     {
-        return $this->xivapi->market->getServer($server, $itemId);
+        return $this->xivapi->market->item($itemId, [$server]);
     }
     
     public function getByServers(array $servers, int $itemId)
     {
-        return $this->xivapi->market->getServers($servers, $itemId);
+        return $this->xivapi->market->item($itemId, $servers);
     }
     
     public function getByDataCenter(string $dataCenter, int $itemId)
     {
-        return $this->xivapi->market->getDataCenter($dataCenter, $itemId);
+        return $this->xivapi->market->item($itemId, [], $dataCenter);
     }
 }

@@ -6,14 +6,18 @@ use App\Entity\UserAlert;
 use App\Entity\UserAlertEvents;
 use App\Service\Common\Mog;
 use App\Service\GameData\GameServers;
+use App\Service\Redis\Redis;
 use Carbon\Carbon;
 
 /**
  * todo - optimise and refactor this, a lot of code duplication
+ * todo - email alerts
+ * todo - NQ/HQ checking
  */
 class UserAlertsTriggers extends UserAlerts
 {
     const TIME_FORMAT = 'F j, Y, g:i a';
+    const MAX_TRIGGERS_PER_ALERT = 5;
     
     /**
      * @var array[]
@@ -43,6 +47,11 @@ class UserAlertsTriggers extends UserAlerts
                 continue;
             }
             
+            if ($alert->getTriggersSent() > $alert->getTriggerLimit()) {
+                $this->console->writeln('--> This trigger has exceeded its limit');
+                continue;
+            }
+            
             //
             // handle server
             //
@@ -55,14 +64,20 @@ class UserAlertsTriggers extends UserAlerts
             $this->console->writeln("--> Getting market info");
             $market = $this->companion->getByServers($servers, $alert->getItemId());
             
-            
-            // todo check when prices last changed
+            file_put_contents(__DIR__.'/debug.json', json_encode($market, JSON_PRETTY_PRINT));
+
             // - if this user is a patron user and the prices are older than a few minutes
             //   it will query companion directly.
             if ($patrons) {
-            
+                $patronTimeout = time() - UserAlert::PATRON_UPDATE_TIME;
+                foreach ($market as $server => $marketData) {
+                    // if out of date, request update
+                    if ($marketData->Updated < $patronTimeout) {
+                        $this->console->writeln('--> Requesting manual update');
+                        $this->xivapi->market->manualUpdateItem(getenv('XIVAPI_COMPANION_KEY'), $alert->getItemId(), $alert->getServer());
+                    }
+                }
             }
-            
             
             // check triggers
             $this->console->writeln("--> Checking Triggers");
@@ -117,18 +132,34 @@ class UserAlertsTriggers extends UserAlerts
                 $this->em->persist($event);
                 $this->em->flush();
                 
+                // grab item
+                $item = Redis::Cache()->get("xiv_Item_{$alert->getItemId()}");
+                
                 // send discord msg
                 // todo - this should be optional
-                $triggers = implode("\n", $this->triggered);
-                $message  = "**MOGBOARD TRIGGER: {$alert->getName()}** `{$alert->getTriggerOptionFormula()}` \n{$triggers}";
+                
+                $triggers = implode("\n- ", $this->triggered);
+                $message = "```markdown\n";
+                $message .= "# MOGBOARD TRIGGER: {$alert->getName()} - {$alert->getTriggerOptionFormula()} \n";
+                $message .= "# Item: [{$item->ID}] {$item->Name_en} - {$item->ItemSearchCategory->Name_en} \n\n";
+                $message .= "- {$triggers}\n";
+                $message .= "```";
+
                 Mog::aymeric($message, $alert->getUser()->getSsoDiscordId());
                 
                 // todo - implement email
     
                 // reset
                 $this->triggered = [];
+            } else {
+                $this->console->writeln("--> No triggers to send");
             }
         }
+    }
+    
+    private function atMaxTriggers()
+    {
+        return count($this->triggered) >= self::MAX_TRIGGERS_PER_ALERT;
     }
     
     /**
@@ -137,7 +168,7 @@ class UserAlertsTriggers extends UserAlerts
     private function triggerPricePerUnit(UserAlert $userAlert, array $prices)
     {
         $option = $userAlert->getTriggerOption();
-        $value  = $userAlert->getTriggerValue();
+        $value  = (int)$userAlert->getTriggerValue();
         
         foreach ($prices as $price) {
             if (
@@ -146,7 +177,10 @@ class UserAlertsTriggers extends UserAlerts
                 $option === 120 && $price->PricePerUnit == $value
             ) {
                 $this->formatPricePerUnit($price);
-                break;
+                
+                if ($this->atMaxTriggers()) {
+                    break;
+                }
             }
         }
     }
@@ -158,10 +192,10 @@ class UserAlertsTriggers extends UserAlerts
     {
         // build visual string
         $string = sprintf(
-            "(PRICE PER UNIT) Price: %s x %s (%s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
-            $price->Quantity,
+            "(PRICE PER UNIT) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
             $price->PricePerUnit,
             $price->PriceTotal,
+            $price->Quantity,
             $price->IsHQ ? 'Yes' : 'No',
             $price->RetainerName,
             $this->gamedata->getTown($price->TownID)['Name'],
@@ -177,7 +211,7 @@ class UserAlertsTriggers extends UserAlerts
     private function triggerPriceTotal(UserAlert $userAlert, array $prices)
     {
         $option = $userAlert->getTriggerOption();
-        $value  = $userAlert->getTriggerValue();
+        $value  = (int)$userAlert->getTriggerValue();
         
         foreach ($prices as $price) {
             if (
@@ -186,7 +220,9 @@ class UserAlertsTriggers extends UserAlerts
                 $option === 220 && $price->PriceTotal == $value
             ) {
                 $this->formatPriceTotal($price);
-                break;
+                if ($this->atMaxTriggers()) {
+                    break;
+                }
             }
         }
     }
@@ -198,10 +234,10 @@ class UserAlertsTriggers extends UserAlerts
     {
         // build visual string
         $string = sprintf(
-            "(PRICE TOTAL) Price: %s x %s (%s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
-            $price->Quantity,
+            "(PRICE TOTAL) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
             $price->PricePerUnit,
             $price->PriceTotal,
+            $price->Quantity,
             $price->IsHQ ? 'Yes' : 'No',
             $price->RetainerName,
             $this->gamedata->getTown($price->TownID)['Name'],
@@ -217,7 +253,7 @@ class UserAlertsTriggers extends UserAlerts
     private function triggerSingleStockQuantity(UserAlert $userAlert, array $prices)
     {
         $option = $userAlert->getTriggerOption();
-        $value  = $userAlert->getTriggerValue();
+        $value  = (int)$userAlert->getTriggerValue();
         
         foreach ($prices as $price) {
             if (
@@ -226,7 +262,10 @@ class UserAlertsTriggers extends UserAlerts
                 $option === 320 && $price->PriceTotal == $value
             ) {
                 $this->formatSingleStockQuantity($price);
-                break;
+                
+                if ($this->atMaxTriggers()) {
+                    break;
+                }
             }
         }
     }
@@ -238,10 +277,10 @@ class UserAlertsTriggers extends UserAlerts
     {
         // build visual string
         $string = sprintf(
-            "(SINGLE STOCK QUANTITY) Price: %s x %s (%s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
-            $price->Quantity,
+            "(SINGLE STOCK QUANTITY) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
             $price->PricePerUnit,
             $price->PriceTotal,
+            $price->Quantity,
             $price->IsHQ ? 'Yes' : 'No',
             $price->RetainerName,
             $this->gamedata->getTown($price->TownID)['Name'],
@@ -257,7 +296,7 @@ class UserAlertsTriggers extends UserAlerts
     private function triggerTotalStockQuantity(UserAlert $userAlert, array $prices)
     {
         $option = $userAlert->getTriggerOption();
-        $value  = $userAlert->getTriggerValue();
+        $value  = (int)$userAlert->getTriggerValue();
         
         $totalStock = 0;
         foreach ($prices as $price) {
@@ -281,10 +320,10 @@ class UserAlertsTriggers extends UserAlerts
     {
         // build visual string
         $string = sprintf(
-            "(TOTAL STOCK QUANTITY) Price: %s x %s (%s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
-            $price->Quantity,
+            "(TOTAL STOCK QUANTITY) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
             $price->PricePerUnit,
             $price->PriceTotal,
+            $price->Quantity,
             $price->IsHQ ? 'Yes' : 'No',
             $price->RetainerName,
             $this->gamedata->getTown($price->TownID)['Name'],
@@ -305,12 +344,18 @@ class UserAlertsTriggers extends UserAlerts
         foreach ($prices as $price) {
             if ($option === 600 && strtolower($price->RetainerName) == $value) {
                 $this->formatRetainerNameMatch($price);
-                break;
+                
+                if ($this->atMaxTriggers()) {
+                    break;
+                }
             }
             
             if ($option === 800 && strtolower($price->CreatorSignatureName) == $value) {
                 $this->formatCreatorSignatureNameMatch($price);
-                break;
+                
+                if ($this->atMaxTriggers()) {
+                    break;
+                }
             }
         }
         
@@ -320,7 +365,10 @@ class UserAlertsTriggers extends UserAlerts
             
             if ($option === 700 && $withinTime && strtolower($event->CharacterName) == $value) {
                 $this->formatCharacterBuyerNameMatch($event);
-                break;
+                
+                if ($this->atMaxTriggers()) {
+                    break;
+                }
             }
         }
     }
@@ -332,11 +380,11 @@ class UserAlertsTriggers extends UserAlerts
     {
         // build visual string
         $string = sprintf(
-            "(RETAINER NAME MATCH) Name: %s - Price: %s x %s (%s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            "(RETAINER NAME MATCH) Name: %s - Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
             $price->RetainerName,
-            $price->Quantity,
             $price->PricePerUnit,
             $price->PriceTotal,
+            $price->Quantity,
             $price->IsHQ ? 'Yes' : 'No',
             $price->RetainerName,
             $this->gamedata->getTown($price->TownID)['Name'],
@@ -353,11 +401,11 @@ class UserAlertsTriggers extends UserAlerts
     {
         // build visual string
         $string = sprintf(
-            "(CREATOR SIGNATURE NAME) Name: %s - Price: %s x %s (%s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            "(CREATOR SIGNATURE NAME) Name: %s - Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
             $price->CreatorSignatureName,
-            $price->Quantity,
             $price->PricePerUnit,
             $price->PriceTotal,
+            $price->Quantity,
             $price->IsHQ ? 'Yes' : 'No',
             $price->RetainerName,
             $this->gamedata->getTown($price->TownID)['Name'],
@@ -374,11 +422,11 @@ class UserAlertsTriggers extends UserAlerts
     {
         // build visual string
         $string = sprintf(
-            "(CHARACTER BUYER) Name: %s - Price: %s x %s (%s) - HQ: %s - Date Purchased: %s UTC - Date Added: %s UTC",
+            "(CHARACTER BUYER) Name: %s - Price: %s (%s) (Qty: %s) - HQ: %s - Date Purchased: %s UTC - Date Added: %s UTC",
             $price->CharacterName,
-            $price->Quantity,
             $price->PricePerUnit,
             $price->PriceTotal,
+            $price->Quantity,
             $price->IsHQ ? 'Yes' : 'No',
             Carbon::createFromTimestamp($price->PurchaseDate)->format(self::TIME_FORMAT),
             Carbon::createFromTimestamp($price->Added)->format(self::TIME_FORMAT)

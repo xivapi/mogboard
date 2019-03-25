@@ -44,12 +44,15 @@
             </div>
             {% for serverName in server.dc_servers %}
                 {% set open = serverName == server.name ? 'open' : '' %}
+                {% set pricesCount = attribute(market, serverName).Prices|length %}
+                {% set historyCount = attribute(market, serverName).History|length %}
+
                 <div class="tab-page tab-cw{{ serverName }} {{ open }}">
 
                     <div class="tab-nav">
                         <div>
-                            <button data-tab="cw-prices" class="active">Prices</button>
-                            <button data-tab="cw-history">History</button>
+                            <button data-tab="cw-prices" class="active">Prices ({{ pricesCount }})</button>
+                            <button data-tab="cw-history">History ({{ historyCount }})</button>
                         </div>
 
                         <div>

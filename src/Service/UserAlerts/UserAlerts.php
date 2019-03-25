@@ -5,12 +5,15 @@ namespace App\Service\UserAlerts;
 use App\Entity\UserAlert;
 use App\Exceptions\UnauthorisedAlertOwnershipException;
 use App\Repository\UserAlertRepository;
+use App\Service\Common\Mog;
 use App\Service\Companion\Companion;
 use App\Service\GameData\GameDataSource;
 use App\Service\GameData\GameServers;
+use App\Service\Redis\Redis;
 use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use XIVAPI\XIVAPI;
 
 class UserAlerts
 {
@@ -26,6 +29,8 @@ class UserAlerts
     protected $repository;
     /** @var ConsoleOutput */
     protected $console;
+    /** @var XIVAPI */
+    protected $xivapi;
 
     public function __construct(EntityManagerInterface $em, Users $users, Companion $companion, GameDataSource $gamedata)
     {
@@ -35,6 +40,7 @@ class UserAlerts
         $this->gamedata     = $gamedata;
         $this->repository   = $em->getRepository(UserAlert::class);
         $this->console      = new ConsoleOutput();
+        $this->xivapi       = new XIVAPI(XIVAPI::STAGING);
     }
 
     /**
@@ -95,6 +101,12 @@ class UserAlerts
 
         $this->em->persist($alert);
         $this->em->flush();
+        
+        $item = Redis::Cache()->get("xiv_Item_{$alert->getItemId()}");
+        
+        // confirm
+        Mog::aymeric("Alert Confirmation: **{$alert->getName()}** `{$alert->getTriggerOptionFormula()}` - [{$item->ID}] {$item->Name_en}", $user->getSsoDiscordId());
+        
         return true;
     }
 
@@ -104,11 +116,17 @@ class UserAlerts
      */
     public function delete(UserAlert $alert, bool $force = false)
     {
-        if ($force || $alert->getUser() !== $this->users->getUser()) {
+        $user = $this->users->getUser();
+        
+        if ($force || $alert->getUser() !== $user) {
             throw new UnauthorisedAlertOwnershipException();
         }
 
         $this->em->remove($alert);
+        $this->em->flush();
+    
+        Mog::aymeric("Alert Deleted: **{$alert->getName()}** `{$alert->getTriggerOptionFormula()}`", $user->getSsoDiscordId());
+    
         return true;
     }
 }

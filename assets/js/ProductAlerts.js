@@ -20,8 +20,6 @@ class ProductAlerts
         Modals.add(this.uiModal, this.uiModalButton);
         Modals.add(this.uiInfoModal, this.uiInfoModalButton);
 
-
-
         // on submitting a new
         this.uiForm.on('submit', event => {
             event.preventDefault();
@@ -40,6 +38,31 @@ class ProductAlerts
 
             this.createItemAlert(payload);
         });
+
+        // deleting an alert
+        $('html').on('click', '.btn_delete_alert', event => {
+            const $btn = $(event.currentTarget);
+            const url = $btn.attr('data-url');
+
+            ButtonLoading.start($btn);
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: response => {
+                    this.renderItemAlerts();
+                    Popup.success('Alert Deleted', 'This alert has been deleted');
+                },
+                error: (a,b,c) => {
+                    Popup.error('Error 42', 'Could not delete alert.');
+                    console.log('--- ERROR ---');
+                    console.log(a,b,c)
+                },
+                complete: () => {
+                    ButtonLoading.finish($btn);
+                }
+            })
+        })
     }
 
     createItemAlert(payload)

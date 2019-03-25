@@ -43,8 +43,13 @@ class UserAlert
         700 => 'Buyer Name = [X]',
         800 => 'Craft Name = [X]'
     ];
-    const LIMIT_DEFAULT = 20;
-    const DELAY_DEFAULT = 300;
+    
+    // the maximum number of times a trigger will send in 1 day
+    const LIMIT_DEFAULT      = 20;
+    // the delay between sending triggers
+    const DELAY_DEFAULT      = 300;
+    // how old data can be before it's requested to be manually updated
+    const PATRON_UPDATE_TIME = 300;
 
     /**
      * @var string
@@ -268,7 +273,7 @@ class UserAlert
     public function getTriggerOptionFormula(): string
     {
         return str_ireplace(
-            '[X]', $this->triggerOption, self::TRIGGERS[$this->triggerOption]
+            '[X]', $this->triggerValue, self::TRIGGERS[$this->triggerOption]
         );
     }
     
