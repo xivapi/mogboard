@@ -48,7 +48,7 @@ class ItemController extends AbstractController
      */
     public function index(int $itemId)
     {
-        $user = $this->users->getUser();
+        $user = $this->users->getUser(false);
         
         /** @var \stdClass $item */
         $item = $this->gameDataSource->getItem($itemId);
