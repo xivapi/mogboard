@@ -2,6 +2,7 @@
 
 namespace App\Service\UserAlerts;
 
+use App\Entity\User;
 use App\Entity\UserAlert;
 use App\Entity\UserAlertEvents;
 use App\Service\Common\Mog;
@@ -64,8 +65,6 @@ class UserAlertsTriggers extends UserAlerts
             $this->console->writeln("--> Getting market info");
             $market = $this->companion->getByServers($servers, $alert->getItemId());
             
-            file_put_contents(__DIR__.'/debug.json', json_encode($market, JSON_PRETTY_PRINT));
-
             // - if this user is a patron user and the prices are older than a few minutes
             //   it will query companion directly.
             if ($patrons) {
@@ -162,6 +161,20 @@ class UserAlertsTriggers extends UserAlerts
         return count($this->triggered) >= self::MAX_TRIGGERS_PER_ALERT;
     }
     
+    private function isCorrectQuality(UserAlert $userAlert, $price)
+    {
+        if ($userAlert->isTriggerHq() !== $userAlert->isTriggerNq()) {
+            if (
+                $userAlert->isTriggerHq() && $price->IsHQ == false ||
+                $userAlert->isTriggerNq() && $price->IsHQ == true
+            ) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     /**
      * Price Per Unit triggers
      */
@@ -171,6 +184,11 @@ class UserAlertsTriggers extends UserAlerts
         $value  = (int)$userAlert->getTriggerValue();
         
         foreach ($prices as $price) {
+            // skip incorrect quality checks
+            if ($this->isCorrectQuality($userAlert, $price) === false) {
+                continue;
+            }
+            
             if (
                 $option === 100 && $price->PricePerUnit > $value ||
                 $option === 110 && $price->PricePerUnit < $value ||
@@ -214,6 +232,11 @@ class UserAlertsTriggers extends UserAlerts
         $value  = (int)$userAlert->getTriggerValue();
         
         foreach ($prices as $price) {
+            // skip incorrect quality checks
+            if ($this->isCorrectQuality($userAlert, $price) === false) {
+                continue;
+            }
+            
             if (
                 $option === 200 && $price->PriceTotal > $value ||
                 $option === 210 && $price->PriceTotal < $value ||
@@ -256,6 +279,11 @@ class UserAlertsTriggers extends UserAlerts
         $value  = (int)$userAlert->getTriggerValue();
         
         foreach ($prices as $price) {
+            // skip incorrect quality checks
+            if ($this->isCorrectQuality($userAlert, $price) === false) {
+                continue;
+            }
+            
             if (
                 $option === 300 && $price->PriceTotal > $value ||
                 $option === 310 && $price->PriceTotal < $value ||
@@ -300,6 +328,11 @@ class UserAlertsTriggers extends UserAlerts
         
         $totalStock = 0;
         foreach ($prices as $price) {
+            // skip incorrect quality checks
+            if ($this->isCorrectQuality($userAlert, $price) === false) {
+                continue;
+            }
+            
             $totalStock += $price->Quantity;
         }
     
@@ -342,6 +375,11 @@ class UserAlertsTriggers extends UserAlerts
         $value  = strtolower($userAlert->getTriggerValue());
     
         foreach ($prices as $price) {
+            // skip incorrect quality checks
+            if ($this->isCorrectQuality($userAlert, $price) === false) {
+                continue;
+            }
+            
             if ($option === 600 && strtolower($price->RetainerName) == $value) {
                 $this->formatRetainerNameMatch($price);
                 
@@ -360,6 +398,11 @@ class UserAlertsTriggers extends UserAlerts
         }
         
         foreach ($history as $event) {
+            // skip incorrect quality checks
+            if ($this->isCorrectQuality($userAlert, $event) === false) {
+                continue;
+            }
+            
             // we only care about purchases AFTER the alert was created.
             $withinTime = $event->PurchaseDate > $userAlert->getAdded();
             
