@@ -24,8 +24,8 @@ class UserAlertEvents
     private $userId;
     /**
      * @var UserAlert
-     * @ORM\ManyToOne(targetEntity="UserAlert", inversedBy="events")
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="UserAlert", inversedBy="events", cascade={"remove"})
+     * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $userAlert;
     /**

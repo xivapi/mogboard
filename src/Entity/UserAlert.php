@@ -144,7 +144,7 @@ class UserAlert
      */
     private $notifiedViaDiscord = false;
     /**
-     * @ORM\OneToMany(targetEntity="UserAlert", mappedBy="user", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="UserAlert", mappedBy="user", cascade={"remove"}, orphanRemoval=true)
      */
     private $events;
     
