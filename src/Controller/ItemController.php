@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\UserAlert;
 use App\Service\GameData\GameDataSource;
 use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
 use App\Service\GameData\GameServers;
 use App\Service\User\Users;
+use App\Service\UserAlerts\UserAlerts;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,19 +24,23 @@ class ItemController extends AbstractController
     private $companionCensus;
     /** @var Users */
     private $users;
+    /** @var UserAlerts */
+    private $userAlerts;
     
     public function __construct(
         EntityManagerInterface $em,
         GameDataSource $gameDataSource,
         Companion $companion,
         CompanionCensus $companionCensus,
-        Users $users
+        Users $users,
+        UserAlerts $userAlerts
     ) {
         $this->em = $em;
         $this->gameDataSource = $gameDataSource;
         $this->companion = $companion;
         $this->companionCensus = $companionCensus;
         $this->users = $users;
+        $this->userAlerts = $userAlerts;
     }
     
     /**
@@ -79,7 +83,7 @@ class ItemController extends AbstractController
             'market'   => $market,
             'census'   => $census,
             'recipes'  => $recipes,
-            'alerts'   => $this->em->getRepository(UserAlert::class)->findBy(['itemId' => $itemId ]),
+            'alerts'   => $this->userAlerts->getAllForItemForCurrentUser($itemId),
             'faved'    => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'    => $user ? $user->getListsPersonal() : [],
             'server'   => [
