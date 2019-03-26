@@ -47,9 +47,9 @@ class UserAlert
     // the maximum number of times a trigger will send in 1 day
     const LIMIT_DEFAULT      = 20;
     // the delay between sending triggers
-    const DELAY_DEFAULT      = 300;
+    const DELAY_DEFAULT      = 600;
     // how old data can be before it's requested to be manually updated
-    const PATRON_UPDATE_TIME = 300;
+    const PATRON_UPDATE_TIME = 120;
 
     /**
      * @var string
