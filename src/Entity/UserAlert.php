@@ -50,6 +50,8 @@ class UserAlert
     const DELAY_DEFAULT      = 600;
     // how old data can be before it's requested to be manually updated
     const PATRON_UPDATE_TIME = 120;
+    
+    // todo - some triggers need less trigger limits, eg: Buyer Purchase should only trigger once?
 
     /**
      * @var string

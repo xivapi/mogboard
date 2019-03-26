@@ -142,7 +142,8 @@ class UserAlertsTriggers extends UserAlerts
                 $message .= "# MOGBOARD TRIGGER: {$alert->getName()} - {$alert->getTriggerOptionFormula()} \n";
                 $message .= "# Item: [{$item->ID}] {$item->Name_en} - {$item->ItemSearchCategory->Name_en} \n\n";
                 $message .= "- {$triggers}\n";
-                $message .= "```";
+                $message .= "```\n";
+                $message .= "https://beta.mogboard.com/market/{$item->ID}";
 
                 Mog::aymeric($message, $alert->getUser()->getSsoDiscordId());
                 
