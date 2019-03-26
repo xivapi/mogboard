@@ -83,7 +83,7 @@ class ItemController extends AbstractController
             'market'   => $market,
             'census'   => $census,
             'recipes'  => $recipes,
-            'alerts'   => $this->userAlerts->getAllForItemForCurrentUser($itemId),
+            'alerts'   => $user ? $this->userAlerts->getAllForItemForCurrentUser($itemId) : [],
             'faved'    => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'    => $user ? $user->getListsPersonal() : [],
             'server'   => [
