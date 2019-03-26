@@ -41,18 +41,6 @@ class UserAlertsTriggers extends UserAlerts
             $this->console->writeln("--> Trigger Condition: <comment>{$alert->getTriggerOptionFormula()}</comment>");
             $this->console->writeln("--> Communication: <comment>". ($alert->isNotifiedViaDiscord() ? 'Discord' : 'None') ."</comment>");
             
-            // check if the alert has been sent recently, wait the delay
-            $timeout = $alert->getTriggerLastSent() + $alert->getTriggerDelay();
-            if ($timeout > time()) {
-                $this->console->writeln('--> Skipping as alert was triggered recently.');
-                continue;
-            }
-            
-            if ($alert->getTriggersSent() > $alert->getTriggerLimit()) {
-                $this->console->writeln('--> This trigger has exceeded its limit');
-                continue;
-            }
-            
             //
             // handle server
             //
@@ -76,6 +64,20 @@ class UserAlertsTriggers extends UserAlerts
                         $this->xivapi->market->manualUpdateItem(getenv('XIVAPI_COMPANION_KEY'), $alert->getItemId(), $alert->getServer());
                     }
                 }
+            }
+
+            // check if the alert has been sent recently, wait the delay
+            $timeout = $alert->getTriggerLastSent() + $alert->getTriggerDelay();
+            if ($timeout > time()) {
+                $this->console->writeln('--> Skipping as alert was triggered recently.');
+                unset($market);
+                continue;
+            }
+
+            if ($alert->getTriggersSent() > $alert->getTriggerLimit()) {
+                $this->console->writeln('--> This trigger has exceeded its limit');
+                unset($market);
+                continue;
             }
             
             // check triggers
@@ -286,9 +288,9 @@ class UserAlertsTriggers extends UserAlerts
             }
             
             if (
-                $option === 300 && $price->PriceTotal > $value ||
-                $option === 310 && $price->PriceTotal < $value ||
-                $option === 320 && $price->PriceTotal == $value
+                $option === 300 && $price->Quantity > $value ||
+                $option === 310 && $price->Quantity < $value ||
+                $option === 320 && $price->Quantity == $value
             ) {
                 $this->formatSingleStockQuantity($price);
                 

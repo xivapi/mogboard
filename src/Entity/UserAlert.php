@@ -43,9 +43,25 @@ class UserAlert
         700 => 'Buyer Name = [X]',
         800 => 'Craft Name = [X]'
     ];
-    
+
+    const TRIGGER_LIMITS = [
+        100 => 10,  110 => 10,  120 => 10,
+        200 => 10,  210 => 10,  220 => 10,
+        300 => 5,   310 => 5,   320 => 5,
+        400 => 5,   410 => 5,   420 => 5,
+        600 => 1,   700 => 1,   800 => 1,
+    ];
+
+    const TRIGGER_ACTIONS = [
+        1 => 'continue',
+        2 => 'delete',
+        3 => 'pause',
+    ];
+
+    // the maximum number of times a trigger will fire in total
+    const TRIGGER_LIMIT_MAX = 30;
     // the maximum number of times a trigger will send in 1 day
-    const LIMIT_DEFAULT      = 20;
+    const LIMIT_DEFAULT      = 5;
     // the delay between sending triggers
     const DELAY_DEFAULT      = 600;
     // how old data can be before it's requested to be manually updated
@@ -109,6 +125,11 @@ class UserAlert
      * @var int
      * @ORM\Column(type="integer")
      */
+    private $triggerLimitMax = self::TRIGGER_LIMIT_MAX;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
     private $triggerDelay = self::DELAY_DEFAULT;
     /**
      * @var int
@@ -120,6 +141,11 @@ class UserAlert
      * @ORM\Column(type="integer")
      */
     private $triggersSent = 0;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $triggerAction = 0;
     /**
      * @var boolean
      * @ORM\Column(type="boolean", options={"default": false})
@@ -149,7 +175,7 @@ class UserAlert
      * @ORM\OneToMany(targetEntity="UserAlert", mappedBy="user", cascade={"remove"}, orphanRemoval=true)
      */
     private $events;
-    
+
     public function __construct()
     {
         $this->id     = Uuid::uuid4();
@@ -166,12 +192,15 @@ class UserAlert
 
         $alert = $alert ?: new UserAlert();
 
+        $triggerLimit = self::TRIGGER_LIMITS[$obj->option];
+
         return $alert
             ->setItemId($obj->itemId ?: $alert->getItemId())
             ->setName($obj->name ?: $alert->getName())
             ->setTriggerDataCenter($obj->dc ?: $alert->isTriggerDataCenter())
             ->setTriggerOption($obj->option ?: $alert->getTriggerOption())
             ->setTriggerValue($obj->value ?: $alert->getTriggerValue())
+            ->setTriggerLimit($triggerLimit)
             ->setTriggerHq($obj->hq ?: $alert->isTriggerHq())
             ->setTriggerNq($obj->nq ?: $alert->isTriggerNq())
             ->setNotifiedViaDiscord($obj->discord ?: $alert->isNotifiedViaDiscord())
@@ -428,6 +457,30 @@ class UserAlert
     public function addEvent(UserAlertEvents $userAlertEvents)
     {
         $this->events[] = $userAlertEvents;
+        return $this;
+    }
+
+    public function getTriggerLimitMax(): int
+    {
+        return $this->triggerLimitMax;
+    }
+
+    public function setTriggerLimitMax(int $triggerLimitMax)
+    {
+        $this->triggerLimitMax = $triggerLimitMax;
+
+        return $this;
+    }
+
+    public function getTriggerAction(): int
+    {
+        return $this->triggerAction;
+    }
+
+    public function setTriggerAction(int $triggerAction)
+    {
+        $this->triggerAction = $triggerAction;
+
         return $this;
     }
 }
