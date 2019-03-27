@@ -2,28 +2,61 @@
 
 namespace App\Service\UserAlerts;
 
-use App\Entity\User;
 use App\Entity\UserAlert;
 use App\Entity\UserAlertEvents;
 use App\Service\Common\Mog;
+use App\Service\Companion\Companion;
+use App\Service\GameData\GameDataSource;
 use App\Service\GameData\GameServers;
 use App\Service\Redis\Redis;
 use Carbon\Carbon;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use XIVAPI\XIVAPI;
 
 /**
  * todo - optimise and refactor this, a lot of code duplication
  * todo - email alerts
  * todo - NQ/HQ checking
  */
-class UserAlertsTriggers extends UserAlerts
+class UserAlertsTriggers
 {
     const TIME_FORMAT = 'F j, Y, g:i a';
     const MAX_TRIGGERS_PER_ALERT = 5;
-    
-    /**
-     * @var array[]
-     */
+
+    /** @var EntityManagerInterface */
+    private $em;
+    /** @var UserAlertsTriggersLogic */
+    private $logic;
+    /** @var UserAlerts */
+    private $userAlerts;
+    /** @var Companion */
+    private $companion;
+    /** @var GameDataSource */
+    private $gamedata;
+    /** @var ConsoleOutput */
+    private $console;
+    /** @var XIVAPI */
+    private $xivapi;
+    /** @var array[] */
     private $triggered = [];
+
+
+    public function __construct(
+        EntityManagerInterface $em,
+        UserAlertsTriggersLogic $userAlertsTriggersLogic,
+        UserAlerts $userAlerts,
+        Companion $companion,
+        GameDataSource $gamedata
+    ) {
+        $this->em           = $em;
+        $this->logic        = $userAlertsTriggersLogic;
+        $this->userAlerts   = $userAlerts;
+        $this->companion    = $companion;
+        $this->gamedata     = $gamedata;
+        $this->console      = new ConsoleOutput();
+        $this->xivapi       = new XIVAPI(XIVAPI::STAGING);
+    }
     
     /**
      * Trigger alerts, intended to be called from commands
@@ -33,7 +66,7 @@ class UserAlertsTriggers extends UserAlerts
         $this->console->writeln("Triggering Alerts");
     
         // grab all alerts
-        $alerts = $this->getAllByPatronStatus($patrons);
+        $alerts = $this->userAlerts->getAllByPatronStatus($patrons);
         
         /** @var UserAlert $alert */
         foreach ($alerts as $alert) {
@@ -164,19 +197,7 @@ class UserAlertsTriggers extends UserAlerts
         return count($this->triggered) >= self::MAX_TRIGGERS_PER_ALERT;
     }
     
-    private function isCorrectQuality(UserAlert $userAlert, $price)
-    {
-        if ($userAlert->isTriggerHq() !== $userAlert->isTriggerNq()) {
-            if (
-                $userAlert->isTriggerHq() && $price->IsHQ == false ||
-                $userAlert->isTriggerNq() && $price->IsHQ == true
-            ) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
+
     
     /**
      * Price Per Unit triggers
@@ -188,15 +209,11 @@ class UserAlertsTriggers extends UserAlerts
         
         foreach ($prices as $price) {
             // skip incorrect quality checks
-            if ($this->isCorrectQuality($userAlert, $price) === false) {
+            if ($this->logic->isCorrectQuality($userAlert, $price) === false) {
                 continue;
             }
-            
-            if (
-                $option === 100 && $price->PricePerUnit > $value ||
-                $option === 110 && $price->PricePerUnit < $value ||
-                $option === 120 && $price->PricePerUnit == $value
-            ) {
+
+            if ($this->logic->handleTriCondition([100, 110, 120], $option, $price->PricePerUnit, $value)) {
                 $this->formatPricePerUnit($server, $price);
                 
                 if ($this->atMaxTriggers()) {
@@ -237,15 +254,11 @@ class UserAlertsTriggers extends UserAlerts
         
         foreach ($prices as $price) {
             // skip incorrect quality checks
-            if ($this->isCorrectQuality($userAlert, $price) === false) {
+            if ($this->logic->isCorrectQuality($userAlert, $price) === false) {
                 continue;
             }
-            
-            if (
-                $option === 200 && $price->PriceTotal > $value ||
-                $option === 210 && $price->PriceTotal < $value ||
-                $option === 220 && $price->PriceTotal == $value
-            ) {
+
+            if ($this->logic->handleTriCondition([200, 210, 220], $option, $price->PriceTotal, $value)) {
                 $this->formatPriceTotal($server, $price);
 
                 if ($this->atMaxTriggers()) {
@@ -286,15 +299,11 @@ class UserAlertsTriggers extends UserAlerts
         
         foreach ($prices as $price) {
             // skip incorrect quality checks
-            if ($this->isCorrectQuality($userAlert, $price) === false) {
+            if ($this->logic->isCorrectQuality($userAlert, $price) === false) {
                 continue;
             }
-            
-            if (
-                $option === 300 && $price->Quantity > $value ||
-                $option === 310 && $price->Quantity < $value ||
-                $option === 320 && $price->Quantity == $value
-            ) {
+
+            if ($this->logic->handleTriCondition([300, 310, 320], $option, $price->Quantity, $value)) {
                 $this->formatSingleStockQuantity($server, $price);
                 
                 if ($this->atMaxTriggers()) {
@@ -336,18 +345,14 @@ class UserAlertsTriggers extends UserAlerts
         $totalStock = 0;
         foreach ($prices as $price) {
             // skip incorrect quality checks
-            if ($this->isCorrectQuality($userAlert, $price) === false) {
+            if ($this->logic->isCorrectQuality($userAlert, $price) === false) {
                 continue;
             }
             
             $totalStock += $price->Quantity;
         }
-    
-        if (
-            $option === 400 && $totalStock > $value ||
-            $option === 410 && $totalStock < $value ||
-            $option === 420 && $totalStock == $value
-        ) {
+
+        if ($this->logic->handleTriCondition([400, 410, 420], $option, $totalStock, $value)) {
             $this->formatTotalStockQuantity($server, $totalStock);
             return;
         }
@@ -378,7 +383,7 @@ class UserAlertsTriggers extends UserAlerts
     
         foreach ($prices as $price) {
             // skip incorrect quality checks
-            if ($this->isCorrectQuality($userAlert, $price) === false) {
+            if ($this->logic->isCorrectQuality($userAlert, $price) === false) {
                 continue;
             }
             
@@ -401,7 +406,7 @@ class UserAlertsTriggers extends UserAlerts
         
         foreach ($history as $event) {
             // skip incorrect quality checks
-            if ($this->isCorrectQuality($userAlert, $event) === false) {
+            if ($this->logic->isCorrectQuality($userAlert, $event) === false) {
                 continue;
             }
             

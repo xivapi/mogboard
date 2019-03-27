@@ -18,19 +18,19 @@ use XIVAPI\XIVAPI;
 class UserAlerts
 {
     /** @var EntityManagerInterface */
-    protected $em;
+    private $em;
     /** @var Users */
-    protected $users;
+    private $users;
     /** @var Companion */
-    protected $companion;
+    private $companion;
     /** @var GameDataSource */
-    protected $gamedata;
+    private $gamedata;
     /** @var UserAlertRepository */
-    protected $repository;
+    private $repository;
     /** @var ConsoleOutput */
-    protected $console;
+    private $console;
     /** @var XIVAPI */
-    protected $xivapi;
+    private $xivapi;
 
     public function __construct(EntityManagerInterface $em, Users $users, Companion $companion, GameDataSource $gamedata)
     {
