@@ -88,31 +88,31 @@ class UserAlertsTriggers extends UserAlerts
                     case 100:
                     case 110:
                     case 120:
-                        $this->triggerPricePerUnit($alert, $data->Prices);
+                        $this->triggerPricePerUnit($server, $alert, $data->Prices);
                         break;
     
                     case 200:
                     case 210:
                     case 220:
-                        $this->triggerPriceTotal($alert, $data->Prices);
+                        $this->triggerPriceTotal($server, $alert, $data->Prices);
                         break;
     
                     case 300:
                     case 310:
                     case 320:
-                        $this->triggerSingleStockQuantity($alert, $data->Prices);
+                        $this->triggerSingleStockQuantity($server, $alert, $data->Prices);
                         break;
     
                     case 400:
                     case 410:
                     case 420:
-                        $this->triggerTotalStockQuantity($alert, $data->Prices);
+                        $this->triggerTotalStockQuantity($server, $alert, $data->Prices);
                         break;
                         
                     case 600:
                     case 700:
                     case 800:
-                        $this->triggerNameMatches($alert, $data->Prices, $data->History);
+                        $this->triggerNameMatches($server, $alert, $data->Prices, $data->History);
                         break;
                 }
             }
@@ -181,7 +181,7 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Price Per Unit triggers
      */
-    private function triggerPricePerUnit(UserAlert $userAlert, array $prices)
+    private function triggerPricePerUnit(string $server, UserAlert $userAlert, array $prices)
     {
         $option = $userAlert->getTriggerOption();
         $value  = (int)$userAlert->getTriggerValue();
@@ -197,7 +197,7 @@ class UserAlertsTriggers extends UserAlerts
                 $option === 110 && $price->PricePerUnit < $value ||
                 $option === 120 && $price->PricePerUnit == $value
             ) {
-                $this->formatPricePerUnit($price);
+                $this->formatPricePerUnit($server, $price);
                 
                 if ($this->atMaxTriggers()) {
                     break;
@@ -209,11 +209,12 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Format the text for triggerPricePerUnit
      */
-    private function formatPricePerUnit(\stdClass $price)
+    private function formatPricePerUnit(string $server, \stdClass $price)
     {
         // build visual string
         $string = sprintf(
-            "(PRICE PER UNIT) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            "(PRICE PER UNIT)(%s) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            $server,
             $price->PricePerUnit,
             $price->PriceTotal,
             $price->Quantity,
@@ -229,7 +230,7 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Price Total triggers
      */
-    private function triggerPriceTotal(UserAlert $userAlert, array $prices)
+    private function triggerPriceTotal(string $server, UserAlert $userAlert, array $prices)
     {
         $option = $userAlert->getTriggerOption();
         $value  = (int)$userAlert->getTriggerValue();
@@ -245,7 +246,8 @@ class UserAlertsTriggers extends UserAlerts
                 $option === 210 && $price->PriceTotal < $value ||
                 $option === 220 && $price->PriceTotal == $value
             ) {
-                $this->formatPriceTotal($price);
+                $this->formatPriceTotal($server, $price);
+
                 if ($this->atMaxTriggers()) {
                     break;
                 }
@@ -256,11 +258,12 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Format the text for triggerPricePerUnit
      */
-    private function formatPriceTotal(\stdClass $price)
+    private function formatPriceTotal(string $server, \stdClass $price)
     {
         // build visual string
         $string = sprintf(
-            "(PRICE TOTAL) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            "(PRICE TOTAL)(%s) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            $server,
             $price->PricePerUnit,
             $price->PriceTotal,
             $price->Quantity,
@@ -276,7 +279,7 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Single stock Quantity
      */
-    private function triggerSingleStockQuantity(UserAlert $userAlert, array $prices)
+    private function triggerSingleStockQuantity(string $server, UserAlert $userAlert, array $prices)
     {
         $option = $userAlert->getTriggerOption();
         $value  = (int)$userAlert->getTriggerValue();
@@ -292,7 +295,7 @@ class UserAlertsTriggers extends UserAlerts
                 $option === 310 && $price->Quantity < $value ||
                 $option === 320 && $price->Quantity == $value
             ) {
-                $this->formatSingleStockQuantity($price);
+                $this->formatSingleStockQuantity($server, $price);
                 
                 if ($this->atMaxTriggers()) {
                     break;
@@ -304,11 +307,12 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Format the text for triggerSingleStockQuantity
      */
-    private function formatSingleStockQuantity(\stdClass $price)
+    private function formatSingleStockQuantity(string $server, \stdClass $price)
     {
         // build visual string
         $string = sprintf(
-            "(SINGLE STOCK QUANTITY) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            "(SINGLE STOCK QUANTITY)(%s) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            $server,
             $price->PricePerUnit,
             $price->PriceTotal,
             $price->Quantity,
@@ -324,7 +328,7 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Total stock Quantity
      */
-    private function triggerTotalStockQuantity(UserAlert $userAlert, array $prices)
+    private function triggerTotalStockQuantity(string $server, UserAlert $userAlert, array $prices)
     {
         $option = $userAlert->getTriggerOption();
         $value  = (int)$userAlert->getTriggerValue();
@@ -344,7 +348,7 @@ class UserAlertsTriggers extends UserAlerts
             $option === 410 && $totalStock < $value ||
             $option === 420 && $totalStock == $value
         ) {
-            $this->formatTotalStockQuantity($price);
+            $this->formatTotalStockQuantity($server, $totalStock);
             return;
         }
     }
@@ -352,18 +356,13 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Format the text for triggerTotalStockQuantity
      */
-    private function formatTotalStockQuantity(\stdClass $price)
+    private function formatTotalStockQuantity(string $server, int $totalStock)
     {
         // build visual string
         $string = sprintf(
-            "(TOTAL STOCK QUANTITY) Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
-            $price->PricePerUnit,
-            $price->PriceTotal,
-            $price->Quantity,
-            $price->IsHQ ? 'Yes' : 'No',
-            $price->RetainerName,
-            $this->gamedata->getTown($price->TownID)['Name'],
-            Carbon::createFromTimestamp($price->Added)->format(self::TIME_FORMAT)
+            "(TOTAL STOCK QUANTITY)(%s) Qty: %s",
+            $server,
+            $totalStock
         );
         
         $this->triggered[] = $string;
@@ -372,7 +371,7 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Price Name match triggers
      */
-    private function triggerNameMatches(UserAlert $userAlert, array $prices, array $history)
+    private function triggerNameMatches(string $server, UserAlert $userAlert, array $prices, array $history)
     {
         $option = $userAlert->getTriggerOption();
         $value  = strtolower($userAlert->getTriggerValue());
@@ -384,7 +383,7 @@ class UserAlertsTriggers extends UserAlerts
             }
             
             if ($option === 600 && strtolower($price->RetainerName) == $value) {
-                $this->formatRetainerNameMatch($price);
+                $this->formatRetainerNameMatch($server, $price);
                 
                 if ($this->atMaxTriggers()) {
                     break;
@@ -392,7 +391,7 @@ class UserAlertsTriggers extends UserAlerts
             }
             
             if ($option === 800 && strtolower($price->CreatorSignatureName) == $value) {
-                $this->formatCreatorSignatureNameMatch($price);
+                $this->formatCreatorSignatureNameMatch($server, $price);
                 
                 if ($this->atMaxTriggers()) {
                     break;
@@ -410,7 +409,7 @@ class UserAlertsTriggers extends UserAlerts
             $withinTime = $event->PurchaseDate > $userAlert->getAdded();
             
             if ($option === 700 && $withinTime && strtolower($event->CharacterName) == $value) {
-                $this->formatCharacterBuyerNameMatch($event);
+                $this->formatCharacterBuyerNameMatch($server, $event);
                 
                 if ($this->atMaxTriggers()) {
                     break;
@@ -422,11 +421,12 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Format the text for triggerNameMatches
      */
-    private function formatRetainerNameMatch(\stdClass $price)
+    private function formatRetainerNameMatch(string $server, \stdClass $price)
     {
         // build visual string
         $string = sprintf(
-            "(RETAINER NAME MATCH) Name: %s - Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            "(RETAINER NAME MATCH)(%s) Name: %s - Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            $server,
             $price->RetainerName,
             $price->PricePerUnit,
             $price->PriceTotal,
@@ -443,11 +443,12 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Format the text for triggerNameMatches
      */
-    private function formatCreatorSignatureNameMatch(\stdClass $price)
+    private function formatCreatorSignatureNameMatch(string $server, \stdClass $price)
     {
         // build visual string
         $string = sprintf(
-            "(CREATOR SIGNATURE NAME) Name: %s - Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            "(CREATOR SIGNATURE NAME)(%s) Name: %s - Price: %s (%s) (Qty: %s) - HQ: %s - Retainer: %s (%s) - Date Added: %s UTC",
+            $server,
             $price->CreatorSignatureName,
             $price->PricePerUnit,
             $price->PriceTotal,
@@ -464,11 +465,12 @@ class UserAlertsTriggers extends UserAlerts
     /**
      * Format the text for triggerNameMatches
      */
-    private function formatCharacterBuyerNameMatch(\stdClass $price)
+    private function formatCharacterBuyerNameMatch(string $server, \stdClass $price)
     {
         // build visual string
         $string = sprintf(
-            "(CHARACTER BUYER) Name: %s - Price: %s (%s) (Qty: %s) - HQ: %s - Date Purchased: %s UTC - Date Added: %s UTC",
+            "(CHARACTER BUYER)(%s) Name: %s - Price: %s (%s) (Qty: %s) - HQ: %s - Date Purchased: %s UTC - Date Added: %s UTC",
+            $server,
             $price->CharacterName,
             $price->PricePerUnit,
             $price->PriceTotal,
