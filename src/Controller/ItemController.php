@@ -74,7 +74,7 @@ class ItemController extends AbstractController
         $server     = GameServers::getServer();
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
-    
+
         $market = $this->companion->getByDataCenter($dc, $itemId);
         $census = $this->companionCensus->generate($market);
         

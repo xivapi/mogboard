@@ -1,17 +1,12 @@
-import Server from './Server';
-Server.init();
-
-import Language from './Language';
-Language.init();
+import Settings from './Settings';
+Settings.init();
+Settings.watch();
 
 import HeaderUser from './HeaderUser';
 HeaderUser.watch();
 
 import HeaderCategories from './HeaderCategories';
 HeaderCategories.watch();
-
-import Settings from './Settings';
-Settings.watch();
 
 import Search from './Search';
 Search.watch();

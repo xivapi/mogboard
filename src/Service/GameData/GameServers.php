@@ -181,7 +181,7 @@ class GameServers
      */
     public static function getServer(): string
     {
-        return Cookie::get('server') ?: self::DEFAULT_SERVER;
+        return Cookie::get('mogboard_server') ?: self::DEFAULT_SERVER;
     }
 
     /**

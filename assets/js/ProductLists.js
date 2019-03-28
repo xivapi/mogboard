@@ -40,8 +40,6 @@ class ProductLists
     {
         ButtonLoading.start(this.uiFaveButton);
 
-        return;
-
         // itemId
         // todo - do it
 

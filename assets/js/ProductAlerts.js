@@ -1,3 +1,4 @@
+import Settings from "./Settings";
 import Modals from "./Modals";
 import Popup from "./Popup";
 import ButtonLoading from "./ButtonLoading";
@@ -24,7 +25,14 @@ class ProductAlerts
         this.uiForm.on('submit', event => {
             event.preventDefault();
 
+            const server = Settings.server;
+            if (server === null) {
+                Popup.error('No Server', 'You have no set a server, please click the cog icon and set one.');
+                return;
+            }
+
             const payload = {
+                server: server,
                 itemId: this.uiForm.find('#alert_item_id').val().trim(),
                 name:   this.uiForm.find('#alert_name').val().trim(),
                 option: this.uiForm.find('#alert_option').val().trim(),

@@ -5,6 +5,7 @@
         <p>Choose your primary server, this will also set your Data-Center.</p>
         <div class="form">
             <select id="servers" class="servers">
+                <option disabled selected value>- Please Choose a Server -</option>
                 {% for dc, servers in getGameDataCenters() %}
                     <optgroup label="{{ dc }}">
                         {% for server in servers %}
