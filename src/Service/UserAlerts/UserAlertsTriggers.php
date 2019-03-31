@@ -74,6 +74,11 @@ class UserAlertsTriggers
             $this->console->writeln("--> Trigger Condition: <comment>{$alert->getTriggerOptionFormula()}</comment>");
             $this->console->writeln("--> Communication: <comment>". ($alert->isNotifiedViaDiscord() ? 'Discord' : 'None') ."</comment>");
             
+            // if its null, ignore
+            if ($alert->getTriggerValue() === null) {
+                continue;
+            }
+            
             //
             // handle server
             //
