@@ -40,7 +40,7 @@ class UserAlerts
         $this->gamedata     = $gamedata;
         $this->repository   = $em->getRepository(UserAlert::class);
         $this->console      = new ConsoleOutput();
-        $this->xivapi       = new XIVAPI(XIVAPI::STAGING);
+        $this->xivapi       = new XIVAPI();
     }
 
     /**
@@ -128,5 +128,30 @@ class UserAlerts
         Mog::aymeric("Alert Deleted: **{$alert->getName()}** `{$alert->getTriggerOptionFormula()}`", $user->getSsoDiscordId());
     
         return true;
+    }
+    
+    /**
+     * Clean up alerts by resetting triggers and deleting old triggers
+     */
+    public function clear()
+    {
+        $alerts = $this->repository->findAll();
+        $total  = count($alerts);
+        
+        $this->console->writeln("Cleaning up: {$total} alerts");
+        
+        /** @var UserAlert $alert */
+        foreach ($alerts as $alert) {
+            $this->console->writeln("- {$alert->getName()}");
+            // reset trigger limit
+            $alert->setTriggersSent(0);
+            
+            // todo - delete old ones
+            // todo - handle trigger action
+            
+            $this->em->persist($alert);
+        }
+        
+        $this->em->flush();
     }
 }

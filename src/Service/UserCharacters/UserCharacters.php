@@ -31,7 +31,7 @@ class UserCharacters
         $this->users      = $users;
         $this->repository = $em->getRepository(UserCharacter::class);
         $this->console    = new ConsoleOutput();
-        $this->xivapi     = new XIVAPI(XIVAPI::STAGING);
+        $this->xivapi     = new XIVAPI();
     }
 
     /**

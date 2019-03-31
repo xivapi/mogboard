@@ -49,6 +49,13 @@
     .home-box {
         background-color: var(--default-3x);
         box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+
+        h4 {
+            font-size: 22px;
+            font-style: italic;
+            font-weight: 600;
+            color: #ff6566;
+        }
     }
 
     ul {
@@ -61,6 +68,26 @@
             &:last-of-type {
                 margin-bottom: 0;
             }
+        }
+    }
+
+    .alert-row {
+        line-height: 22px;
+        font-size: 18px;
+
+        code {
+            display: block;
+            padding: 4px 6px;
+            background-color: #333;
+            margin-top: 8px;
+            color: #ffcc00;
+        }
+
+        small {
+            font-size: 13px;
+            color: #888;
+            display: inline-block;
+            margin-left: 20px;
         }
     }
 }

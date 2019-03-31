@@ -11,7 +11,7 @@ class Companion
     
     public function __construct()
     {
-        $this->xivapi = new XIVAPI(XIVAPI::STAGING);
+        $this->xivapi = new XIVAPI();
     }
     
     public function getByServer(string $server, int $itemId)

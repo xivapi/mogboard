@@ -8,34 +8,58 @@
                 <p><strong>(PLAYER STUFF)</strong></p>
                 <p>Friends</p>
                 <p>Tracked Retainers</p>
-                <p>Popular items</p>
                 <p>Other player statz</p>
                 <p>Recent Items</p>
+                <hr>
+                <p>Popular items</p>
+                <ul>
+                {#
+                {% for popular in popular_items %}
+                    <li>{{ gamedata().getItem(popular.item).Name }}</li>
+                {% endfor %}
+                #}
+                </ul>
             </div>
         </div>
         <div>
-            <div class="home-outline" style="border: solid 1px #b13b4c;">
-                {% include 'Pages/bugs.html.twig' %}
-            </div>
-
             <div class="home-outline">
                 <p><strong>(TRACKED STUFF)</strong></p>
                 <p>Recent "watched item" notification</p>
                 <p>Player "sold item" notification</p>
                 <p>Tracked items with graph porn and sales figures</p>
 
-                <br><br>
 
                 {% if auth.online() %}
+                    <br><hr><br>
 
-                    <p>Lists</p>
+                    <h4>Alerts</h4>
+                    <ul>
+                        {% for alert in auth.user.alerts %}
+                            <li class="alert-row">
+                                <div>
+                                    <strong>({{ alert.server }}) {{ alert.name }}</strong>
+                                    <a href="{{ path('item_page', { itemId: alert.itemId }) }}">{{ gamedata().getItem(alert.itemId).Name }}</a>
+                                    <small>Last Sent: {{ alert.triggerLastSent ? alert.triggerLastSent|date : 'Never' }}
+                                    - Total: {{ alert.triggersSent|number_format }}</small>
+                                </div>
+                                <code>{{ alert.triggerOptionFormula }}</code>
+
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <br><hr><br>
+
+                    <h4>Lists</h4>
                     {% for list in auth.user.lists %}
-                        <h4>{{ list.name }}</h4>
-                    {% endfor %}
-
-                    <p>Alerts</p>
-                    {% for alert in auth.user.alerts %}
-                        <h4>{{ alert.name }}</h4>
+                        <p>Name: {{ list.name }}</p>
+                        <ul>
+                            {% for id in list.items %}
+                            <li>
+                                <a href="{{ path('item_page', { itemId: id }) }}">{{ gamedata().getItem(id).Name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
                     {% endfor %}
 
                 {% endif %}
@@ -47,7 +71,7 @@
                 <div class="welcome-banner">
                     <img src="/i/brand/mogboard/mogboard_light.svg" height="32">
                 </div>
-
+                <h4>beta</h4>
                 <p>
                     Mogboard.com Is still heavily in progress, if you have any feedback please
                     be sure to jump onto the Discord and shout at <strong class="text-blue">@vekien</strong>

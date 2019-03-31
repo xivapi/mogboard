@@ -6,10 +6,12 @@ use App\Service\GameData\GameDataSource;
 use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
 use App\Service\GameData\GameServers;
+use App\Service\Items\ItemPopularity;
 use App\Service\User\Users;
 use App\Service\UserAlerts\UserAlerts;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ItemController extends AbstractController
@@ -26,6 +28,8 @@ class ItemController extends AbstractController
     private $users;
     /** @var UserAlerts */
     private $userAlerts;
+    /** @var ItemPopularity */
+    private $itemPopularity;
     
     public function __construct(
         EntityManagerInterface $em,
@@ -33,7 +37,8 @@ class ItemController extends AbstractController
         Companion $companion,
         CompanionCensus $companionCensus,
         Users $users,
-        UserAlerts $userAlerts
+        UserAlerts $userAlerts,
+        ItemPopularity $itemPopularity
     ) {
         $this->em = $em;
         $this->gameDataSource = $gameDataSource;
@@ -41,12 +46,13 @@ class ItemController extends AbstractController
         $this->companionCensus = $companionCensus;
         $this->users = $users;
         $this->userAlerts = $userAlerts;
+        $this->itemPopularity = $itemPopularity;
     }
     
     /**
      * @Route("/market/{itemId}", name="item_page")
      */
-    public function index(int $itemId)
+    public function index(Request $request, int $itemId)
     {
         $user = $this->users->getUser(false);
         
@@ -56,6 +62,8 @@ class ItemController extends AbstractController
         if (!$item) {
             return $this->redirectToRoute('404');
         }
+        
+        $this->itemPopularity->hit($request, $itemId);
         
         // if it has recipes, grab those
         $recipes = [];

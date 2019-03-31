@@ -55,7 +55,7 @@ class UserAlertsTriggers
         $this->companion    = $companion;
         $this->gamedata     = $gamedata;
         $this->console      = new ConsoleOutput();
-        $this->xivapi       = new XIVAPI(XIVAPI::STAGING);
+        $this->xivapi       = new XIVAPI();
     }
     
     /**
