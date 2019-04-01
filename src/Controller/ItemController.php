@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\UserAlert;
 use App\Service\GameData\GameDataSource;
 use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
@@ -82,23 +83,35 @@ class ItemController extends AbstractController
         $server     = GameServers::getServer();
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
-
-        $market = $this->companion->getByDataCenter($dc, $itemId);
-        $census = $this->companionCensus->generate($market);
+        $market     = $this->companion->getByDataCenter($dc, $itemId);
+        $census     = $this->companionCensus->generate($market);
         
         return $this->render('Product/index.html.twig', [
             'item'     => $item,
             'market'   => $market,
             'census'   => $census,
             'recipes'  => $recipes,
-            'alerts'   => $user ? $this->userAlerts->getAllForItemForCurrentUser($itemId) : [],
             'faved'    => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'    => $user ? $user->getListsPersonal() : [],
             'server'   => [
                 'name'       => $server,
                 'dc'         => $dc,
                 'dc_servers' => $dcServers
-            ]
+            ],
+            'alerts'   => [
+                'users' => $user ? $this->userAlerts->getAllForItemForCurrentUser($itemId) : [],
+                'trigger_fields' => UserAlert::TRIGGER_FIELDS,
+                'trigger_operators' => UserAlert::TRIGGER_OPERATORS,
+                'trigger_actions' => [
+                    UserAlert::TRIGGER_ACTION_CONTINUE => 'Continue',
+                    UserAlert::TRIGGER_ACTION_DELETE   => 'Delete',
+                    UserAlert::TRIGGER_ACTION_PAUSE    => 'Pause',
+                ],
+                'trigger_limits' => [
+                    'max_sent_per_day' => $user->isPatron() ? UserAlert::LIMIT_PATREON : UserAlert::LIMIT_DEFAULT,
+                    'max_delay_per_alert' => $user->isPatron() ? UserAlert::DELAY_PATREON : UserAlert::DELAY_DEFAULT,
+                ],
+            ],
         ]);
     }
 }

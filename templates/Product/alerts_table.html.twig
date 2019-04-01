@@ -5,9 +5,6 @@
                 <tr>
                     <td>
                         <strong>{{ alert.triggerHq ? '<img src="/i/game/hq.png" height="12">' : '' }} {{ alert.name }}</strong><br>
-                        <code>{{ alert.triggerOptionFormula }}</code>
-                        <br><strong>Last Triggered:</strong> {{ alert.triggerLastSent ? alert.triggerLastSent|date : 'Never' }}
-                        <br><strong>Server:</strong> {{ alert.server }} ({{ alert.isTriggerDataCenter ? 'DC-Wide' : 'Home-Only' }})
                         <div align="right">
                             <button class="btn btn-red btn_delete_alert small" data-url="{{ path('alerts_delete', { alert: alert.id }) }}">Delete</button>
                         </div>

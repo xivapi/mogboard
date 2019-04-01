@@ -7,127 +7,103 @@ class ProductAlerts
 {
     constructor()
     {
-        this.uiForm             = $('.create_alert_form');
-        this.uiModal            = $('.alert_modal');
-        this.uiModalButton      = $('.btn_create_alert');
-        this.uiInfoModal        = $('.alert_info');
-        this.uiInfoModalButton  = $('.btn_alert_info');
-        this.uiExistingAlerts   = $('.existing_alerts');
+        this.maxTriggers = 15;
+
+        this.newAlert = {
+            alert_item_id: null,
+            alert_name: null,
+            alert_nq: null,
+            alert_hq: null,
+            alert_dc: null,
+            alert_notify_discord: null,
+            alert_notify_email: null,
+            alert_triggers: [],
+        };
+
+        this.uiForm = $('.alert_form');
+        this.uiTriggers = $('.alert_entries');
     }
 
     watch()
     {
-        // add modals
-        Modals.add(this.uiModal, this.uiModalButton);
-        Modals.add(this.uiInfoModal, this.uiInfoModalButton);
+        this.uiForm.on('click', '.alert_trigger_remove', event => { this.removeCustomTrigger(event) });
+        this.uiForm.on('click', '.alert_trigger_add', event => { this.addCustomTrigger(event) });
+        this.uiForm.on('click', '.btn_create_alert', event => { this.createNewAlert(event) });
+    }
 
-        // on submitting a new
-        this.uiForm.on('submit', event => {
-            event.preventDefault();
+    /**
+     * Add a new custom trigger to the alert form ui
+     */
+    addCustomTrigger(event)
+    {
+        event.preventDefault();
 
-            const server = Settings.server;
-            if (server === null) {
-                Popup.error('No Server', 'You have no set a server, please click the cog icon and set one.');
+        if (this.newAlert.alert_triggers.length >= this.maxTriggers) {
+            Popup.error('Max Triggers Reached', `You can add a maximum of ${this.maxTriggers} to a single alert. Sorry!`);
+            return;
+        }
+
+        const trigger = {
+            id: Math.floor((Math.random() * 99999) + 1),
+            alert_trigger_field: this.uiForm.find('#alert_trigger_field').val().trim(),
+            alert_trigger_op:    this.uiForm.find('#alert_trigger_op').val().trim(),
+            alert_trigger_value: this.uiForm.find('#alert_trigger_value').val().trim(),
+        };
+
+        // check a trigger exists
+        if (trigger.alert_trigger_value.length === 0) {
+            Popup.error('Invalid Condition Value', 'The triggers condition value is empty.');
+            return;
+        }
+
+        // check bool type
+        if (['Prices_IsCrafted','Prices_IsHQ','Prices_HasMateria','History_IsHQ'].indexOf(trigger.alert_trigger_field) > -1) {
+            if (['0','1'].indexOf(trigger.alert_trigger_value) === -1) {
+                Popup.error('Invalid Condition Value', 'For the selected trigger field, <br> your trigger value must either be: <br> a 0 (False/No) OR a 1 (True/Yes).');
                 return;
             }
 
-            const payload = {
-                server: server,
-                itemId: this.uiForm.find('#alert_item_id').val().trim(),
-                name:   this.uiForm.find('#alert_name').val().trim(),
-                option: this.uiForm.find('#alert_option').val().trim(),
-                value:  this.uiForm.find('#alert_value').val().trim(),
-                nq:     this.uiForm.find('#alert_nq').prop('checked'),
-                hq:     this.uiForm.find('#alert_hq').prop('checked'),
-                dc:     this.uiForm.find('#alert_dc').prop('checked'),
-                email:  this.uiForm.find('#alert_notify_email').prop('checked'),
-                discord:this.uiForm.find('#alert_notify_discord').prop('checked'),
-            };
+            if (['5','6'].indexOf(trigger.alert_trigger_op) === -1) {
+                Popup.error('Invalid Operator', 'For the selected trigger field, <br> your trigger operator must be either: <br> = Equal-to OR != Not equal-to')
+                return;
+            }
+        }
 
-            this.createItemAlert(payload);
-        });
+        // store
+        this.newAlert.alert_triggers.push(trigger);
 
-        // deleting an alert
-        $('html').on('click', '.btn_delete_alert', event => {
-            const $btn = $(event.currentTarget);
-            const url = $btn.attr('data-url');
-
-            ButtonLoading.start($btn);
-
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: response => {
-                    this.renderItemAlerts();
-                    Popup.success('Alert Deleted', 'This alert has been deleted');
-                },
-                error: (a,b,c) => {
-                    Popup.error('Error 42', 'Could not delete alert.');
-                    console.log('--- ERROR ---');
-                    console.log(a,b,c)
-                },
-                complete: () => {
-                    ButtonLoading.finish($btn);
-                }
-            })
-        })
+        // print trigger visual
+        this.uiTriggers.append(`
+            <div data-id="${trigger.id}">
+                <div><button type="button" class="alert_trigger_remove small"><i class="xiv-NavigationClose"></i></button></div>
+                <div>
+                    <code>
+                        <span>${trigger.alert_trigger_field}</span>
+                        <em>${alert_trigger_operators[trigger.alert_trigger_op]}:</em>
+                        <strong>${trigger.alert_trigger_value}</strong>
+                    </code>
+                </div>
+                <span class="fr">${this.newAlert.alert_triggers.length}</span>
+            </div>
+        `);
     }
 
-    createItemAlert(payload)
+    /**
+     * Create a new alert!
+     * @param event
+     */
+    createNewAlert(event)
     {
-        const $btn = this.uiForm.find('button.btn_create_alert');
-        ButtonLoading.start($btn);
-
-        // send request
-        $.ajax({
-            url: mog.urls.alerts.create,
-            type: "POST",
-            dataType: "json",
-            data: JSON.stringify(payload),
-            contentType: "application/json",
-            success: response => {
-                ButtonLoading.finish($btn);
-
-                // if alert ok
-                if (response) {
-                    // load current alerts
-                    this.renderItemAlerts();
-
-                    // close modals
-                    Modals.close(this.uiModal);
-
-                    // todo - reset form
-
-                    // confirm
-                    Popup.success('Alert Created','Information on this alert will appear on the homepage!');
-                    return;
-                }
-
-                // error
-                Popup.success('Error',response.message);
-            },
-            error: (a,b,c) => {
-                Popup.error('Error 37', 'Could not create alert.');
-                console.log('--- ERROR ---');
-                console.log(a,b,c)
-            }
-        });
+        event.preventDefault();
     }
 
-    renderItemAlerts()
+    /**
+     * Remove custom triggers
+     * @param event
+     */
+    removeCustomTrigger(event)
     {
-        $.ajax({
-            url: mog.urls.alerts.renderForItem.replace('-id-', itemId),
-            contentType: "application/json",
-            success: response => {
-                this.uiExistingAlerts.html(response);
-            },
-            error: (a,b,c) => {
-                this.uiExistingAlerts.html('Could not obtain alerts for this item.');
-                console.log('--- ERROR ---');
-                console.log(a,b,c)
-            }
-        })
+        // todo - remove logic
     }
 }
 

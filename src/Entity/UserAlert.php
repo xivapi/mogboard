@@ -16,29 +16,45 @@ class UserAlert
 {
     const TRIGGER_FIELDS = [
         // Prices
-        'Prices_Added',
-        'Prices_CreatorSignatureName',
-        'Prices_IsCrafted',
-        'Prices_IsHQ',
-        'Prices_HasMateria',
-        'Prices_PricePerUnit',
-        'Prices_PriceTotal',
-        'Prices_Quantity',
-        'Prices_RetainerName',
-        //'Prices_StainID',
-        'Prices_TownID',
+        'Prices' => [
+            'Prices_Added',
+            'Prices_CreatorSignatureName',
+            'Prices_IsCrafted',
+            'Prices_IsHQ',
+            'Prices_HasMateria',
+            'Prices_PricePerUnit',
+            'Prices_PriceTotal',
+            'Prices_Quantity',
+            'Prices_RetainerName',
+            //'Prices_StainID',
+            'Prices_TownID',
+        ],
 
         // History
-        'History_Added',
-        'History_CharacterName',
-        'History_IsHQ',
-        'History_PricePerUnit',
-        'History_PriceTotal',
-        'History_PurchaseDate',
-        'History_Quantity',
+        'History' => [
+            'History_Added',
+            'History_CharacterName',
+            'History_IsHQ',
+            'History_PricePerUnit',
+            'History_PriceTotal',
+            'History_PurchaseDate',
+            'History_Quantity',
+        ],
 
         // Custom
-        'Custom_TotalStockCount',
+        'Custom' => [
+            'Custom_TotalStockCount',
+        ]
+    ];
+    
+    const TRIGGER_OPERATORS = [
+        1 => '[ > ] Greater than',
+        2 => '[ >= ] Greater than or equal to',
+        3 => '[ < ] Less than',
+        4 => '[ <= ] Less than or equal to',
+        5 => '[ = ] Equal-to',
+        6 => '[ != ] Not equal-to',
+        7 => '[ % ] Remainder',
     ];
 
     // what to do once the trigger is fired
@@ -47,10 +63,12 @@ class UserAlert
     const TRIGGER_ACTION_PAUSE    = 'pause';
 
     // the maximum number of times a trigger will send in 1 day
-    const LIMIT_DEFAULT      = 10;
+    const LIMIT_DEFAULT = 10;
+    const LIMIT_PATREON = 50;
 
-    // the delay between sending triggers - 10 mins
-    const DELAY_DEFAULT      = (60 * 10);
+    // the delay between sending alerts
+    const DELAY_DEFAULT = (60 * 60);
+    const DELAY_PATREON = (60 * 10);
 
     // how old data can be before it's requested to be manually updated
     const PATRON_UPDATE_TIME = 120;
@@ -179,11 +197,14 @@ class UserAlert
             ->setItemId($json->itemId ?: $alert->getItemId())
             ->setName($json->name ?: $alert->getName())
             ->setTriggerDataCenter($json->dc ?: $alert->isTriggerDataCenter())
-            ->setTriggerLimit($json->limit ?: $alert->getTriggerLimit())
             ->setTriggerHq($json->hq ?: $alert->isTriggerHq())
             ->setTriggerNq($json->nq ?: $alert->isTriggerNq())
             ->setNotifiedViaDiscord($json->discord ?: $alert->isNotifiedViaDiscord())
             ->setNotifiedViaEmail($json->email ?: $alert->isNotifiedViaEmail());
+        
+        $alert
+            ->setTriggerLimit($alert->getUser()->isPatron() ? self::LIMIT_PATREON : self::LIMIT_DEFAULT)
+            ->setTriggerDelay($alert->getUser()->isPatron() ? self::DELAY_PATREON : self::DELAY_DEFAULT);
 
         return $alert;
     }
