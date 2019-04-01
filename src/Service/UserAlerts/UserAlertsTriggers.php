@@ -15,6 +15,8 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use XIVAPI\XIVAPI;
 
 /**
+ * todo - THIS NEEDS REDOING TO MATCH THE NEW CONDITION LOGIC
+ *
  * todo - optimise and refactor this, a lot of code duplication
  * todo - email alerts
  * todo - NQ/HQ checking

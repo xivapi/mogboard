@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "6da366733ac91c863c72e21042bf2ce1",
@@ -1574,16 +1574,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.16.1",
+            "version": "2.16.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "b509524136d579f6b15ad9af4e5bd4533d1ab6c2"
+                "reference": "720a9c36927396efeeb48a972e9d129d44b6dc28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/b509524136d579f6b15ad9af4e5bd4533d1ab6c2",
-                "reference": "b509524136d579f6b15ad9af4e5bd4533d1ab6c2",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/720a9c36927396efeeb48a972e9d129d44b6dc28",
+                "reference": "720a9c36927396efeeb48a972e9d129d44b6dc28",
                 "shasum": ""
             },
             "require": {
@@ -1630,7 +1630,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2019-03-20T12:20:01+00:00"
+            "time": "2019-03-29T12:23:12+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -4601,16 +4601,16 @@
         },
         {
             "name": "symfony/webpack-encore-bundle",
-            "version": "v1.2.2",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/webpack-encore-bundle.git",
-                "reference": "e23e9d32abd7fb62b84ad0ff62b235b517c61bc4"
+                "reference": "fc18456ed44737995f912c2084505fb67d040e11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/webpack-encore-bundle/zipball/e23e9d32abd7fb62b84ad0ff62b235b517c61bc4",
-                "reference": "e23e9d32abd7fb62b84ad0ff62b235b517c61bc4",
+                "url": "https://api.github.com/repos/symfony/webpack-encore-bundle/zipball/fc18456ed44737995f912c2084505fb67d040e11",
+                "reference": "fc18456ed44737995f912c2084505fb67d040e11",
                 "shasum": ""
             },
             "require": {
@@ -4651,7 +4651,7 @@
                 }
             ],
             "description": "Integration with your Symfony app & Webpack Encore!",
-            "time": "2019-03-04T15:09:28+00:00"
+            "time": "2019-03-29T14:09:53+00:00"
         },
         {
             "name": "symfony/yaml",

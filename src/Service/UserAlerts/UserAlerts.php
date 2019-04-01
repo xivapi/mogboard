@@ -9,7 +9,6 @@ use App\Service\Common\Mog;
 use App\Service\Companion\Companion;
 use App\Service\GameData\GameDataSource;
 use App\Service\GameData\GameServers;
-use App\Service\Redis\Redis;
 use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -31,9 +30,16 @@ class UserAlerts
     private $console;
     /** @var XIVAPI */
     private $xivapi;
+    /** @var UserAlertsDiscordNotification */
+    private $discord;
 
-    public function __construct(EntityManagerInterface $em, Users $users, Companion $companion, GameDataSource $gamedata)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        Users $users,
+        Companion $companion,
+        GameDataSource $gamedata,
+        UserAlertsDiscordNotification $discord
+    ) {
         $this->em           = $em;
         $this->users        = $users;
         $this->companion    = $companion;
@@ -41,6 +47,7 @@ class UserAlerts
         $this->repository   = $em->getRepository(UserAlert::class);
         $this->console      = new ConsoleOutput();
         $this->xivapi       = new XIVAPI();
+        $this->discord      = $discord;
     }
 
     /**
@@ -93,20 +100,12 @@ class UserAlerts
      */
     public function save(UserAlert $alert)
     {
-        $user   = $this->users->getUser();
-        $server = GameServers::getServer();
-
-        // set user and trigger delay
-        $alert->setServer($server)->setUser($user);
+        $alert->setServer(GameServers::getServer())->setUser($this->users->getUser());
 
         $this->em->persist($alert);
         $this->em->flush();
         
-        $item = Redis::Cache()->get("xiv_Item_{$alert->getItemId()}");
-        
-        // confirm
-        Mog::aymeric("Alert Confirmation: **{$alert->getName()}** `{$alert->getTriggerOptionFormula()}` - [{$item->ID}] {$item->Name_en}", $user->getSsoDiscordId());
-        
+        $this->discord->sendSavedAlertNotification($alert);
         return true;
     }
 
@@ -124,9 +123,8 @@ class UserAlerts
 
         $this->em->remove($alert);
         $this->em->flush();
-    
-        Mog::aymeric("Alert Deleted: **{$alert->getName()}** `{$alert->getTriggerOptionFormula()}`", $user->getSsoDiscordId());
-    
+
+        $this->discord->sendDeletedAlertNotification($alert);
         return true;
     }
     

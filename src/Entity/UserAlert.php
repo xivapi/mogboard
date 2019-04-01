@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Utils\Random;
 use Doctrine\Common\Collections\ArrayCollection;
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,68 +14,60 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UserAlert
 {
-    const TRIGGERS = [
-        // price per unit
-        100 => 'Price Per Unit > [X]',
-        110 => 'Price Per Unit < [X]',
-        120 => 'Price Per Unit = [X]',
-        # 130 => '(SOON) Price Per Unit Avg > [X]',
-        # 140 => '(SOON) Price Per Unit Avg < [X]',
+    const TRIGGER_FIELDS = [
+        // Prices
+        'Prices_Added',
+        'Prices_CreatorSignatureName',
+        'Prices_IsCrafted',
+        'Prices_IsHQ',
+        'Prices_HasMateria',
+        'Prices_PricePerUnit',
+        'Prices_PriceTotal',
+        'Prices_Quantity',
+        'Prices_RetainerName',
+        //'Prices_StainID',
+        'Prices_TownID',
 
-        200 => 'Price Total > [X]',
-        210 => 'Price Total < [X]',
-        220 => 'Price Total = [X]',
-        # 230 => '(SOON) Price Total Avg > [X]',
-        # 240 => '(SOON) Price Total Avg < [X]',
+        // History
+        'History_Added',
+        'History_CharacterName',
+        'History_IsHQ',
+        'History_PricePerUnit',
+        'History_PriceTotal',
+        'History_PurchaseDate',
+        'History_Quantity',
 
-        300 => 'Single Stock Quantity > [X]',
-        310 => 'Single Stock Quantity < [X]',
-        320 => 'Single Stock Quantity = [X]',
-
-        400 => 'Total Stock Quantity > [X]',
-        410 => 'Total Stock Quantity < [X]',
-        420 => 'Total Stock Quantity = [X]',
-
-        # 500 => 'Total Stock Quantity > [X]',
-        # 510 => 'Total Stock Quantity < [X]',
-        # 520 => 'Total Stock Quantity = [X]',
-        
-        600 => 'Retainer Name = [X]',
-        700 => 'Buyer Name = [X]',
-        800 => 'Craft Name = [X]'
+        // Custom
+        'Custom_TotalStockCount',
     ];
 
-    const TRIGGER_LIMITS = [
-        100 => 10,  110 => 10,  120 => 10,
-        200 => 10,  210 => 10,  220 => 10,
-        300 => 5,   310 => 5,   320 => 5,
-        400 => 5,   410 => 5,   420 => 5,
-        600 => 1,   700 => 1,   800 => 1,
-    ];
+    // what to do once the trigger is fired
+    const TRIGGER_ACTION_CONTINUE = 'continue';
+    const TRIGGER_ACTION_DELETE   = 'delete';
+    const TRIGGER_ACTION_PAUSE    = 'pause';
 
-    const TRIGGER_ACTIONS = [
-        1 => 'continue',
-        2 => 'delete',
-        3 => 'pause',
-    ];
-
-    // the maximum number of times a trigger will fire in total
-    const TRIGGER_LIMIT_MAX = 30;
     // the maximum number of times a trigger will send in 1 day
-    const LIMIT_DEFAULT      = 5;
-    // the delay between sending triggers
-    const DELAY_DEFAULT      = 600;
+    const LIMIT_DEFAULT      = 10;
+
+    // the delay between sending triggers - 10 mins
+    const DELAY_DEFAULT      = (60 * 10);
+
     // how old data can be before it's requested to be manually updated
     const PATRON_UPDATE_TIME = 120;
-    
-    // todo - some triggers need less trigger limits, eg: Buyer Purchase should only trigger once?
 
+    #-------------------------------------------------------------------------------------------------------------------
+    
     /**
      * @var string
      * @ORM\Id
      * @ORM\Column(type="guid")
      */
     private $id;
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=8, unique=true)
+     */
+    private $uniq;
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="User", inversedBy="alerts")
@@ -102,30 +95,15 @@ class UserAlert
      */
     private $server;
     /**
-     * @var boolean
-     * @ORM\Column(type="boolean", options={"default": false})
+     * @var array
+     * @ORM\Column(type="array")
      */
-    private $triggerDataCenter = false;
-    /**
-     * @var int
-     * @ORM\Column(type="integer", length=3)
-     */
-    private $triggerOption;
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=64)
-     */
-    private $triggerValue;
+    private $triggerConditions = [];
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
     private $triggerLimit = self::LIMIT_DEFAULT;
-    /**
-     * @var int
-     * @ORM\Column(type="integer")
-     */
-    private $triggerLimitMax = self::TRIGGER_LIMIT_MAX;
     /**
      * @var int
      * @ORM\Column(type="integer")
@@ -146,6 +124,11 @@ class UserAlert
      * @ORM\Column(type="integer")
      */
     private $triggerAction = 0;
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $triggerDataCenter = false;
     /**
      * @var boolean
      * @ORM\Column(type="boolean", options={"default": false})
@@ -181,6 +164,7 @@ class UserAlert
         $this->id     = Uuid::uuid4();
         $this->added  = time();
         $this->events = new ArrayCollection();
+        $this->uniq   = Random::randomSecureString(8);
     }
 
     /**
@@ -188,87 +172,79 @@ class UserAlert
      */
     public static function buildFromRequest(Request $request, ?UserAlert $alert = null): UserAlert
     {
-        $obj = \GuzzleHttp\json_decode($request->getContent());
-
+        $json  = \GuzzleHttp\json_decode($request->getContent());
         $alert = $alert ?: new UserAlert();
 
-        $triggerLimit = self::TRIGGER_LIMITS[$obj->option];
+        $alert
+            ->setItemId($json->itemId ?: $alert->getItemId())
+            ->setName($json->name ?: $alert->getName())
+            ->setTriggerDataCenter($json->dc ?: $alert->isTriggerDataCenter())
+            ->setTriggerLimit($json->limit ?: $alert->getTriggerLimit())
+            ->setTriggerHq($json->hq ?: $alert->isTriggerHq())
+            ->setTriggerNq($json->nq ?: $alert->isTriggerNq())
+            ->setNotifiedViaDiscord($json->discord ?: $alert->isNotifiedViaDiscord())
+            ->setNotifiedViaEmail($json->email ?: $alert->isNotifiedViaEmail());
 
-        return $alert
-            ->setItemId($obj->itemId ?: $alert->getItemId())
-            ->setName($obj->name ?: $alert->getName())
-            ->setTriggerDataCenter($obj->dc ?: $alert->isTriggerDataCenter())
-            ->setTriggerOption($obj->option ?: $alert->getTriggerOption())
-            ->setTriggerValue($obj->value ?: $alert->getTriggerValue())
-            ->setTriggerLimit($triggerLimit)
-            ->setTriggerHq($obj->hq ?: $alert->isTriggerHq())
-            ->setTriggerNq($obj->nq ?: $alert->isTriggerNq())
-            ->setNotifiedViaDiscord($obj->discord ?: $alert->isNotifiedViaDiscord())
-            ->setNotifiedViaEmail($obj->email ?: $alert->isNotifiedViaEmail());
+        return $alert;
     }
 
-    public function getTrigger()
-    {
-        return self::TRIGGERS[$this->getTriggerOption()];
-    }
-    
     public function getId(): string
     {
         return $this->id;
     }
-    
+
     public function setId(string $id)
     {
         $this->id = $id;
-        
+
         return $this;
     }
-    
+
     public function getUser(): User
     {
         return $this->user;
     }
-    
+
     public function setUser(User $user)
     {
         $this->user = $user;
-        
+
         return $this;
     }
-    
+
     public function getItemId(): int
     {
         return $this->itemId;
     }
-    
+
     public function setItemId(int $itemId)
     {
         $this->itemId = $itemId;
-        
+
         return $this;
     }
-    
+
     public function getAdded(): int
     {
         return $this->added;
     }
-    
+
     public function setAdded(int $added)
     {
         $this->added = $added;
-        
+
         return $this;
     }
-    
+
     public function getName(): string
     {
         return $this->name;
     }
-    
+
     public function setName(string $name)
     {
         $this->name = $name;
-        
+
         return $this;
     }
 
@@ -280,6 +256,93 @@ class UserAlert
     public function setServer(string $server)
     {
         $this->server = $server;
+
+        return $this;
+    }
+
+    public function getTriggerConditions(): array
+    {
+        return $this->triggerConditions;
+    }
+
+    /**
+     * Formats conditions.
+     */
+    public function getTriggerConditionsFormatted(): array
+    {
+        $conditions = [];
+        foreach ($this->triggerConditions as $triggerCondition) {
+            [$field, $operator, $value] = explode(',', $triggerCondition);
+
+            $conditions[] = [$field, $operator, $value];
+        }
+
+        return $conditions;
+    }
+
+    public function setTriggerConditions(array $triggerConditions)
+    {
+        $this->triggerConditions = $triggerConditions;
+
+        return $this;
+    }
+
+    public function getTriggerLimit(): int
+    {
+        return $this->triggerLimit;
+    }
+
+    public function setTriggerLimit(int $triggerLimit)
+    {
+        $this->triggerLimit = $triggerLimit;
+
+        return $this;
+    }
+
+    public function getTriggerDelay(): int
+    {
+        return $this->triggerDelay;
+    }
+
+    public function setTriggerDelay(int $triggerDelay)
+    {
+        $this->triggerDelay = $triggerDelay;
+
+        return $this;
+    }
+
+    public function getTriggerLastSent(): int
+    {
+        return $this->triggerLastSent;
+    }
+
+    public function setTriggerLastSent(int $triggerLastSent)
+    {
+        $this->triggerLastSent = $triggerLastSent;
+
+        return $this;
+    }
+
+    public function getTriggersSent(): int
+    {
+        return $this->triggersSent;
+    }
+
+    public function setTriggersSent(int $triggersSent)
+    {
+        $this->triggersSent = $triggersSent;
+
+        return $this;
+    }
+
+    public function getTriggerAction(): int
+    {
+        return $this->triggerAction;
+    }
+
+    public function setTriggerAction(int $triggerAction)
+    {
+        $this->triggerAction = $triggerAction;
 
         return $this;
     }
@@ -296,190 +359,74 @@ class UserAlert
         return $this;
     }
 
-    public function getTriggerOption(): int
-    {
-        return $this->triggerOption;
-    }
-    
-    public function getTriggerOptionFormula(): string
-    {
-        return str_ireplace(
-            '[X]', $this->triggerValue, self::TRIGGERS[$this->triggerOption]
-        );
-    }
-    
-    public function setTriggerOption(int $triggerOption)
-    {
-        $this->triggerOption = $triggerOption;
-        
-        return $this;
-    }
-    
-    public function getTriggerValue(): string
-    {
-        return $this->triggerValue;
-    }
-    
-    public function setTriggerValue(string $triggerValue)
-    {
-        $this->triggerValue = $triggerValue;
-        
-        return $this;
-    }
-    
-    public function getTriggerLimit(): int
-    {
-        return $this->triggerLimit;
-    }
-    
-    public function setTriggerLimit(int $triggerLimit)
-    {
-        $this->triggerLimit = $triggerLimit;
-        
-        return $this;
-    }
-    
-    public function getTriggerDelay(): int
-    {
-        return $this->triggerDelay;
-    }
-    
-    public function setTriggerDelay(int $triggerDelay)
-    {
-        $this->triggerDelay = $triggerDelay;
-        
-        return $this;
-    }
-    
-    public function getTriggerLastSent(): int
-    {
-        return $this->triggerLastSent;
-    }
-    
-    public function setTriggerLastSent(int $triggerLastSent)
-    {
-        $this->triggerLastSent = $triggerLastSent;
-        
-        return $this;
-    }
-    
-    public function getTriggersSent(): int
-    {
-        return $this->triggersSent;
-    }
-    
-    public function setTriggersSent(int $triggersSent)
-    {
-        $this->triggersSent = $triggersSent;
-        
-        return $this;
-    }
-    
-    public function incrementTriggersSent()
-    {
-        $this->triggersSent++;
-        
-        return $this;
-    }
-    
     public function isTriggerHq(): bool
     {
         return $this->triggerHq;
     }
-    
+
     public function setTriggerHq(bool $triggerHq)
     {
         $this->triggerHq = $triggerHq;
-        
+
         return $this;
     }
-    
+
     public function isTriggerNq(): bool
     {
         return $this->triggerNq;
     }
-    
+
     public function setTriggerNq(bool $triggerNq)
     {
         $this->triggerNq = $triggerNq;
-        
+
         return $this;
     }
-    
+
     public function isTriggerActive(): bool
     {
         return $this->triggerActive;
     }
-    
+
     public function setTriggerActive(bool $triggerActive)
     {
         $this->triggerActive = $triggerActive;
-        
+
         return $this;
     }
-    
+
     public function isNotifiedViaEmail(): bool
     {
         return $this->notifiedViaEmail;
     }
-    
+
     public function setNotifiedViaEmail(bool $notifiedViaEmail)
     {
         $this->notifiedViaEmail = $notifiedViaEmail;
-        
+
         return $this;
     }
-    
+
     public function isNotifiedViaDiscord(): bool
     {
         return $this->notifiedViaDiscord;
     }
-    
+
     public function setNotifiedViaDiscord(bool $notifiedViaDiscord)
     {
         $this->notifiedViaDiscord = $notifiedViaDiscord;
-        
+
         return $this;
     }
-    
+
     public function getEvents()
     {
         return $this->events;
     }
-    
+
     public function setEvents($events)
     {
         $this->events = $events;
-        
-        return $this;
-    }
-    
-    public function addEvent(UserAlertEvents $userAlertEvents)
-    {
-        $this->events[] = $userAlertEvents;
-        return $this;
-    }
-
-    public function getTriggerLimitMax(): int
-    {
-        return $this->triggerLimitMax;
-    }
-
-    public function setTriggerLimitMax(int $triggerLimitMax)
-    {
-        $this->triggerLimitMax = $triggerLimitMax;
-
-        return $this;
-    }
-
-    public function getTriggerAction(): int
-    {
-        return $this->triggerAction;
-    }
-
-    public function setTriggerAction(int $triggerAction)
-    {
-        $this->triggerAction = $triggerAction;
 
         return $this;
     }

@@ -23,21 +23,4 @@ class Mog
             ]
         ]);
     }
-    
-    /**
-     * Post a message via mog
-     */
-    public static function aymeric($message, $userId)
-    {
-        $client = new Client();
-        $client->post('https://mog.xivapi.com/aymeric/say', [
-            RequestOptions::QUERY => [
-                'key' => getenv('DISCORD_BOT_USAGE_KEY')
-            ],
-            RequestOptions::JSON => [
-                'message' => $message,
-                'user_id' => $userId
-            ]
-        ]);
-    }
 }

@@ -29,7 +29,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/404", name="404")
      */
-    public function fourofour()
+    public function fourOfour()
     {
         return $this->render('Pages/404.html.twig');
     }
