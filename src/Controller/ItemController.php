@@ -108,8 +108,8 @@ class ItemController extends AbstractController
                     UserAlert::TRIGGER_ACTION_PAUSE    => 'Pause',
                 ],
                 'trigger_limits' => [
-                    'max_sent_per_day' => $user->isPatron() ? UserAlert::LIMIT_PATREON : UserAlert::LIMIT_DEFAULT,
-                    'max_delay_per_alert' => $user->isPatron() ? UserAlert::DELAY_PATREON : UserAlert::DELAY_DEFAULT,
+                    'max_sent_per_day' => ($user && $user->isPatron()) ? UserAlert::LIMIT_PATREON : UserAlert::LIMIT_DEFAULT,
+                    'max_delay_per_alert' => ($user && $user->isPatron()) ? UserAlert::DELAY_PATREON : UserAlert::DELAY_DEFAULT,
                 ],
             ],
         ]);
