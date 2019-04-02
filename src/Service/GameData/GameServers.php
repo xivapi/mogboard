@@ -80,8 +80,9 @@ class GameServers
         'Zeromus',      # 64
         'Zodiark',      # 65
     ];
-
+    
     const LIST_DC = [
+        // jp
         'Elemental' => [
             'Aegis',
             'Atomos',
@@ -120,46 +121,56 @@ class GameServers
             'Shinryu',
             'Titan',
         ],
+        
+        // na
         'Aether' => [
             'Adamantoise',
-            'Balmung',
             'Cactuar',
-            'Coeurl',
             'Faerie',
             'Gilgamesh',
-            'Goblin',
             'Jenova',
-            'Mateus',
             'Midgardsormr',
             'Sargatanas',
-            'Siren',
-            'Zalera',
+            'Siren'
         ],
         'Primal' => [
             'Behemoth',
-            'Brynhildr',
-            'Diabolos',
             'Excalibur',
             'Exodus',
             'Famfrit',
             'Hyperion',
             'Lamia',
             'Leviathan',
-            'Malboro',
-            'Ultros',
+            'Ultros'
         ],
+        'Crystal' => [
+            'Balmung',
+            'Brynhildr',
+            'Coeurl',
+            'Diabolos',
+            'Goblin',
+            'Malboro',
+            'Mateus',
+            'Zalera'
+        ],
+        
+        // eu
         'Chaos' => [
             'Cerberus',
-            'Lich',
             'Louisoix',
             'Moogle',
-            'Odin',
             'Omega',
-            'Phoenix',
             'Ragnarok',
-            'Shiva',
-            'Zodiark',
         ],
+        
+        // eu
+        'Light' => [
+            'Lich',
+            'Odin',
+            'Phoenix',
+            'Shiva',
+            'Zodiark'
+        ]
     ];
 
     /**
