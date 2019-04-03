@@ -51,7 +51,6 @@ class UserAlertsTriggers
         GameDataSource $gamedata
     ) {
         $this->em           = $em;
-        $this->logic        = $userAlertsTriggersLogic;
         $this->userAlerts   = $userAlerts;
         $this->discord      = $userAlertsDiscordNotification;
         $this->companion    = $companion;
