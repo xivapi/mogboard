@@ -6,6 +6,7 @@ use App\Entity\UserAlert;
 use App\Service\Common\Mog;
 use App\Service\Common\SerAymeric;
 use App\Service\Redis\Redis;
+use App\Service\ThirdParty\Discord\Discord;
 
 class UserAlertsDiscordNotification
 {
@@ -42,7 +43,7 @@ class UserAlertsDiscordNotification
             'fields'        => $conditions,
         ];
 
-        SerAymeric::sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
+        Discord::seraymeric()->sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
     }
 
     /**
@@ -59,6 +60,6 @@ class UserAlertsDiscordNotification
             'footer'        => self::FOOTER,
         ];
 
-        SerAymeric::sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
+        Discord::seraymeric()->sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
     }
 }
