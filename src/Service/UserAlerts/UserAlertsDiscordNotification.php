@@ -136,6 +136,6 @@ class UserAlertsDiscordNotification
             'fields'        => $fields,
         ];
         
-        SerAymeric::sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
+        Discord::seraymeric()->sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
     }
 }
