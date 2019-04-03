@@ -8,7 +8,7 @@ class ProductAlerts
         this.maxTriggers = 15;
 
         this.alert = {
-            alert_item_id: itemId,
+            alert_item_id: mog.path == 'market' ? itemId : null,
             alert_name: null,
             alert_nq: null,
             alert_hq: null,
@@ -26,6 +26,10 @@ class ProductAlerts
 
     watch()
     {
+        if (mog.path != 'market') {
+            return;
+        }
+
         this.uiForm.on('click', '.alert_trigger_add', event => { this.addCustomTrigger(event) });
         this.uiForm.on('click', '.alert_trigger_remove', event => { this.removeCustomTrigger(event) });
         this.uiForm.on('click', '.btn_create_alert', event => { this.createNewAlert(event) });

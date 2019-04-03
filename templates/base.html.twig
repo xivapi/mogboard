@@ -51,7 +51,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/3.4.1/tippy.all.min.js"></script>
     <script>
         let mog = {
-            isOnline: {{ auth.isOnline }},
+            path: "{{ app.request.getPathInfo()|split('/')[1] }}",
+            isOnline: {{ auth.isOnline ? 'true' : 'false' }},
             urls: {
                 alerts: {
                     create: "{{ path('alerts_create') }}",
@@ -65,6 +66,8 @@
                 }
             },
 
+
+            // old
             url_item_category_list: "{{ path('item_category_list', { categoryId: '-id-' }) }}",
             url_item: "{{ path('item_page', { itemId: '-id-' }) }}",
             url_lists_create: "{{ path('lists_create') }}",

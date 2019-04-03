@@ -38,10 +38,6 @@ class Settings
         this.setServer(server);
         this.setLanguage(language);
 
-        const test = Cookie.get(this.storageKeyServer);
-
-        console.log(test);
-
         // set selected items
         this.uiModal.find('select.servers').val(server);
         this.uiModal.find('select.languages').val(language);
