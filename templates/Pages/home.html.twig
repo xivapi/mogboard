@@ -42,8 +42,6 @@
                                     <small>Last Sent: {{ alert.triggerLastSent ? alert.triggerLastSent|date : 'Never' }}
                                     - Total: {{ alert.triggersSent|number_format }}</small>
                                 </div>
-                                <code>{{ alert.triggerOptionFormula }}</code>
-
                             </li>
                         {% endfor %}
                     </ul>
