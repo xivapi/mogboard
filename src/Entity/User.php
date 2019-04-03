@@ -333,7 +333,7 @@ class User
 
     public function getCharacterPassPhrase()
     {
-        return 'mb'. substr(sha1($this->id), 0, 16);
+        return strtoupper('mb'. substr(sha1($this->id), 0, 5));
     }
     
     public function getSsoDiscordId(): string
