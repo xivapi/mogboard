@@ -79,7 +79,7 @@ class UserAlertsTriggers
             
             // if trigger conditions are empty (shouldn't happen), delete it.
             if (empty($alert->getTriggerConditions())) {
-                //$this->userAlerts->delete($alert, true);
+                $this->userAlerts->delete($alert, true);
                 continue;
             }
             
@@ -104,7 +104,7 @@ class UserAlertsTriggers
                     if ($marketData->Updated < $patronTimeout) {
                         // this only needs to request once as it does the whole DC regardless of the alert choice.
                         $this->console->writeln('--> Requesting manual update');
-                        #$this->xivapi->market->manualUpdateItem(getenv('XIVAPI_COMPANION_KEY'), $alert->getItemId(), $alert->getServer());
+                        $this->xivapi->market->manualUpdateItem(getenv('XIVAPI_COMPANION_KEY'), $alert->getItemId(), $alert->getServer());
                         break;
                     }
                 }
@@ -113,16 +113,16 @@ class UserAlertsTriggers
             // check if the alert has been sent recently, wait the delay
             $timeout = $alert->getTriggerLastSent() + $alert->getTriggerDelay();
             if ($timeout > time()) {
-                #$this->console->writeln('--> Skipping as alert was triggered recently.');
-                #unset($market);
-                #continue;
+                $this->console->writeln('--> Skipping as alert was triggered recently.');
+                unset($market);
+                continue;
             }
 
             // check if the trigger has exceeded its limit
             if ($alert->getTriggersSent() > $alert->getTriggerLimit()) {
-                #$this->console->writeln('--> This trigger has exceeded its limit');
-                #unset($market);
-                #continue;
+                $this->console->writeln('--> This trigger has exceeded its limit');
+                unset($market);
+                continue;
             }
             
             // loop through data and find a match for this trigger
@@ -150,7 +150,7 @@ class UserAlertsTriggers
                         $marketValue = $marketRow->{$field};
         
                         // output trigger to console
-                        $opName = UserAlert::TRIGGER_OPERATORS_SHORT[$op];
+                        # $opName = UserAlert::TRIGGER_OPERATORS_SHORT[$op];
                         # $this->console->writeln("--> <comment>({$category}) {$field}={$marketValue}</comment> {$opName} <info>{$value}</info>");
         
                         // run all trigger tests
