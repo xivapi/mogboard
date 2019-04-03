@@ -8,6 +8,6 @@ class ResponseListener
 {
     public function onKernelResponse(FilterResponseEvent $event)
     {
-    
+
     }
 }

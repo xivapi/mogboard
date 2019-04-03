@@ -55,6 +55,8 @@ class ItemController extends AbstractController
      */
     public function index(Request $request, int $itemId)
     {
+        $this->users->setLastUrl($request);
+        
         $user = $this->users->getUser(false);
         
         /** @var \stdClass $item */

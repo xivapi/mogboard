@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Delight\Cookie\Cookie;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Users
@@ -149,5 +150,21 @@ class Users
     {
         $this->em->persist($user);
         $this->em->flush();
+    }
+    
+    /**
+     * Set the last url the user was on
+     */
+    public function setLastUrl(Request $request)
+    {
+        $request->getSession()->set('last_url', $request->getUri());
+    }
+    
+    /**
+     * Get the last url
+     */
+    public function getLastUrl(Request $request)
+    {
+        return $request->getSession()->get('last_url');
     }
 }

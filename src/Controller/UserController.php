@@ -23,6 +23,8 @@ class UserController extends AbstractController
      */
     public function account(Request $request)
     {
+        $this->users->setLastUrl($request);
+        
         return $this->render('UserAccount/index.html.twig');
     }
     
@@ -46,7 +48,10 @@ class UserController extends AbstractController
         }
         
         $this->users->setSsoProvider(new SignInDiscord($request))->authenticate();
-        return $this->redirectToRoute('home');
+
+        // redirect to their previous url if one exists
+        $lastUrl = $this->users->getLastUrl($request);
+        return $lastUrl ? $this->redirect($lastUrl) : $this->redirectToRoute('home');
     }
     
     /**
