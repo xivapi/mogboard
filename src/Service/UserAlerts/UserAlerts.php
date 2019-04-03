@@ -74,7 +74,7 @@ class UserAlerts
     public function getAllForItemForCurrentUser($itemId)
     {
         return $this->repository->findBy([
-            'user' => $this->users->getUser(),
+            'user'   => $this->users->getUser(),
             'itemId' => $itemId,
         ]);
     }
@@ -100,12 +100,21 @@ class UserAlerts
      */
     public function save(UserAlert $alert)
     {
-        $alert->setServer(GameServers::getServer())->setUser($this->users->getUser());
+        $user = $this->users->getUser();
+        
+        $alert
+            ->setServer(GameServers::getServer())
+            ->setUser($user)
+            ->setTriggerLimit($user->isPatron() ? UserAlert::LIMIT_PATREON : UserAlert::LIMIT_DEFAULT)
+            ->setTriggerDelay($user->isPatron() ? UserAlert::DELAY_PATREON : UserAlert::DELAY_DEFAULT);
 
         $this->em->persist($alert);
         $this->em->flush();
         
-        $this->discord->sendSavedAlertNotification($alert);
+        if ($alert->isNotifiedViaDiscord()) {
+            $this->discord->sendSavedAlertNotification($alert);
+        }
+        
         return true;
     }
 
@@ -124,7 +133,10 @@ class UserAlerts
         $this->em->remove($alert);
         $this->em->flush();
 
-        $this->discord->sendDeletedAlertNotification($alert);
+        if ($alert->isNotifiedViaDiscord()) {
+            $this->discord->sendDeletedAlertNotification($alert);
+        }
+        
         return true;
     }
     

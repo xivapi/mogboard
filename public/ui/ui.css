@@ -157,7 +157,7 @@ table {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-  max-width: 500px;
+  max-width: 720px;
   background-color: var(--table-color-dark);
   border-radius: 6px;
   box-shadow: 0 2px 5px 1px #000;
@@ -329,11 +329,11 @@ pre, code {
   pre.box, code.box {
     color: #c2c2c2;
     display: block;
-    background-color: #333;
-    padding: 10px;
+    background-color: #222;
+    padding: 6px 10px;
     border-radius: 5px;
     margin-bottom: 15px;
-    line-height: 24px; }
+    line-height: 20px; }
     pre.box em, code.box em {
       color: #fff99d; }
 
@@ -1648,6 +1648,46 @@ ul, ol {
           color: var(--default-2x); }
     .product .tab-alerts form .alert_triggers_form {
       margin-bottom: 8px; }
+  .product .tab-alerts .alerts_table {
+    background-color: var(--table-color-dark); }
+    .product .tab-alerts .alerts_table h5 {
+      font-size: 18px;
+      margin-bottom: 12px; }
+    .product .tab-alerts .alerts_table small {
+      font-size: 13px;
+      color: var(--color6); }
+    .product .tab-alerts .alerts_table .box {
+      margin-bottom: 0; }
+    .product .tab-alerts .alerts_table .alert_triggers_sent {
+      font-size: 14px;
+      margin-top: 5px; }
+    .product .tab-alerts .alerts_table .alert_info {
+      font-size: 14px;
+      margin-bottom: 5px; }
+      .product .tab-alerts .alerts_table .alert_info i {
+        vertical-align: bottom;
+        margin-bottom: -1px;
+        display: inline-block;
+        font-size: 18px; }
+      .product .tab-alerts .alerts_table .alert_info em {
+        font-style: normal;
+        color: var(--purple);
+        display: inline-block;
+        margin-right: 10px; }
+      .product .tab-alerts .alerts_table .alert_info span {
+        display: inline-block;
+        margin-right: 10px; }
+    .product .tab-alerts .alerts_table .btn_alert_delete {
+      display: inline-block;
+      background-color: var(--red);
+      border: none;
+      color: #fff;
+      padding: 5px 8px;
+      border-radius: 2px;
+      cursor: pointer;
+      outline: none; }
+      .product .tab-alerts .alerts_table .btn_alert_delete:hover {
+        background-color: var(--red-3x); }
 
 .account {
   display: flex; }

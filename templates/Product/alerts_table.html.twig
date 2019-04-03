@@ -1,24 +1,47 @@
 <div class="table">
     <table>
+        <thead>
+        <tr>
+            <th width="48%">Name</th>
+            <th width="48%">Conditions</th>
+            <th width="4%">Actions</th>
+        </tr>
+        </thead>
         <tbody>
-            {% for alert in alerts %}
-                <tr>
-                    <td>
-                        <strong>{{ alert.triggerHq ? '<img src="/i/game/hq.png" height="12">' : '' }} {{ alert.name }}</strong><br>
-                        <div align="right">
-                            <button class="btn btn-red btn_delete_alert small" data-url="{{ path('alerts_delete', { alert: alert.id }) }}">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="2">
-                        <div align="center">
-                            <em>No alerts for this item</em>
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
+        {% for alert in alerts %}
+            <tr>
+                <td>
+                    <h5>{{ alert.name }} <small>({{ alert.uniq }})</small></h5>
+                    <div class="alert_info">
+                        <em>({{ alert.server }})</em>
+                        <span>
+                            {{ alert.isTriggerHq ? '<img src="/i/game/hq.png">' : '' }}
+                            {{ alert.isTriggerDataCenter ? '<i class="xiv-CrossWorld"></i>' : '' }}
+                        </span>
+                        <span>
+                            <strong>Notify:</strong> {{ alert.isNotifiedViaEmail ? '[Email]' : '' }} {{ alert.isNotifiedViaDiscord ? '[Discord]' : '' }}
+                        </span>
+                    </div>
+                    <div class="alert_info">
+                        Sent: ({{ alert.triggersSent|number_format }}) {{ alert.triggerLastSent ? alert.triggerLastSent|date : 'Never' }}
+                    </div>
+                </td>
+                <td>
+                    <code class="box">
+                    {% for trigger in alert.getTriggerConditionsFormatted %}
+                        {{ trigger[0] }} {{ trigger[1] }} {{ trigger[2] }}<br>
+                    {% endfor %}
+                    </code>
+                </td>
+                <td>
+                    <button type="button" class="btn_alert_delete" data-id="{{ alert.id }}">Delete</button>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">You have no alerts for this item.</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>

@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UserAlert
 {
+    const STRING_PREG = "/[^a-zA-Z0-9\+_\- ]/";
+    
     const TRIGGER_FIELDS = [
         // Prices
         'Prices' => [
@@ -40,11 +42,6 @@ class UserAlert
             'History_PurchaseDate',
             'History_Quantity',
         ],
-
-        // Custom
-        'Custom' => [
-            'Custom_TotalStockCount',
-        ]
     ];
     
     const TRIGGER_OPERATORS = [
@@ -54,9 +51,19 @@ class UserAlert
         4 => '[ <= ] Less than or equal to',
         5 => '[ = ] Equal-to',
         6 => '[ != ] Not equal-to',
-        7 => '[ % ] Remainder',
+        7 => '[ % ] Is Divisible by',
     ];
-
+    
+    const TRIGGER_OPERATORS_SHORT = [
+        1 => '>',
+        2 => '>=',
+        3 => '<',
+        4 => '<=',
+        5 => '=',
+        6 => '!=',
+        7 => '%',
+    ];
+    
     // what to do once the trigger is fired
     const TRIGGER_ACTION_CONTINUE = 'continue';
     const TRIGGER_ACTION_DELETE   = 'delete';
@@ -118,6 +125,11 @@ class UserAlert
      */
     private $triggerConditions = [];
     /**
+     * @var string
+     * @ORM\Column(type="string", length=100)
+     */
+    private $triggerType;
+    /**
      * @var int
      * @ORM\Column(type="integer")
      */
@@ -138,10 +150,10 @@ class UserAlert
      */
     private $triggersSent = 0;
     /**
-     * @var int
-     * @ORM\Column(type="integer")
+     * @var string
+     * @ORM\Column(type="string")
      */
-    private $triggerAction = 0;
+    private $triggerAction = self::TRIGGER_ACTION_CONTINUE;
     /**
      * @var boolean
      * @ORM\Column(type="boolean", options={"default": false})
@@ -182,7 +194,7 @@ class UserAlert
         $this->id     = Uuid::uuid4();
         $this->added  = time();
         $this->events = new ArrayCollection();
-        $this->uniq   = Random::randomSecureString(8);
+        $this->uniq   = strtoupper(Random::randomHumanUniqueCode(8));
     }
 
     /**
@@ -192,19 +204,26 @@ class UserAlert
     {
         $json  = \GuzzleHttp\json_decode($request->getContent());
         $alert = $alert ?: new UserAlert();
-
+ 
+        // preg_replace(self::STRING_PREG, null, $name);
         $alert
-            ->setItemId($json->itemId ?: $alert->getItemId())
-            ->setName($json->name ?: $alert->getName())
-            ->setTriggerDataCenter($json->dc ?: $alert->isTriggerDataCenter())
-            ->setTriggerHq($json->hq ?: $alert->isTriggerHq())
-            ->setTriggerNq($json->nq ?: $alert->isTriggerNq())
-            ->setNotifiedViaDiscord($json->discord ?: $alert->isNotifiedViaDiscord())
-            ->setNotifiedViaEmail($json->email ?: $alert->isNotifiedViaEmail());
+            ->setItemId($json->alert_item_id ?: $alert->getItemId())
+            ->setName($json->alert_name ?: $alert->getName())
+            ->setTriggerDataCenter($json->alert_dc ?: $alert->isTriggerDataCenter())
+            ->setTriggerType($json->alert_type ?: $alert->getTriggerType())
+            ->setTriggerHq($json->alert_hq ?: $alert->isTriggerHq())
+            ->setTriggerNq($json->alert_nq ?: $alert->isTriggerNq())
+            ->setNotifiedViaDiscord($json->alert_notify_discord ?: $alert->isNotifiedViaDiscord())
+            ->setNotifiedViaEmail($json->alert_notify_email ?: $alert->isNotifiedViaEmail());
         
-        $alert
-            ->setTriggerLimit($alert->getUser()->isPatron() ? self::LIMIT_PATREON : self::LIMIT_DEFAULT)
-            ->setTriggerDelay($alert->getUser()->isPatron() ? self::DELAY_PATREON : self::DELAY_DEFAULT);
+        // add triggers
+        foreach($json->alert_triggers as $trigger) {
+            $alert->addTriggerCondition(
+                $trigger->alert_trigger_field,
+                $trigger->alert_trigger_op,
+                preg_replace(self::STRING_PREG, null, $trigger->alert_trigger_value)
+            );
+        }
 
         return $alert;
     }
@@ -220,8 +239,20 @@ class UserAlert
 
         return $this;
     }
+    
+    public function getUniq(): ?string
+    {
+        return $this->uniq;
+    }
+    
+    public function setUniq(string $uniq)
+    {
+        $this->uniq = $uniq;
+        
+        return $this;
+    }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -264,7 +295,7 @@ class UserAlert
 
     public function setName(string $name)
     {
-        $this->name = $name;
+        $this->name = preg_replace(self::STRING_PREG, null, $name);
 
         return $this;
     }
@@ -276,7 +307,7 @@ class UserAlert
 
     public function setServer(string $server)
     {
-        $this->server = $server;
+        $this->server = preg_replace(self::STRING_PREG, null, $server);
 
         return $this;
     }
@@ -294,7 +325,8 @@ class UserAlert
         $conditions = [];
         foreach ($this->triggerConditions as $triggerCondition) {
             [$field, $operator, $value] = explode(',', $triggerCondition);
-
+            
+            $operator = self::TRIGGER_OPERATORS_SHORT[$operator];
             $conditions[] = [$field, $operator, $value];
         }
 
@@ -305,6 +337,24 @@ class UserAlert
     {
         $this->triggerConditions = $triggerConditions;
 
+        return $this;
+    }
+    
+    public function getTriggerType(): string
+    {
+        return $this->triggerType;
+    }
+    
+    public function setTriggerType(string $triggerType)
+    {
+        $this->triggerType = $triggerType;
+        
+        return $this;
+    }
+    
+    public function addTriggerCondition($field, $op, $value)
+    {
+        $this->triggerConditions[] = sprintf("%s,%s,%s", $field, $op, $value);
         return $this;
     }
 
@@ -353,6 +403,12 @@ class UserAlert
     {
         $this->triggersSent = $triggersSent;
 
+        return $this;
+    }
+    
+    public function incrementTriggersSent(): self
+    {
+        $this->triggersSent++;
         return $this;
     }
 

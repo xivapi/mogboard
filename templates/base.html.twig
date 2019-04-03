@@ -51,6 +51,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/3.4.1/tippy.all.min.js"></script>
     <script>
         let mog = {
+            isOnline: {{ auth.isOnline }},
             urls: {
                 alerts: {
                     create: "{{ path('alerts_create') }}",

@@ -4,12 +4,9 @@
 
     {% if auth.online() %}
         <form id="alert_form" class="alert_form" method="post" action="{{ url('alerts_create') }}">
-            {# hidden stuff #}
-            <input type="hidden" id="alert_item_id" value="{{ item.ID }}">
-
             {# Name #}
             <div class="form_row">
-                <label for="alert_name">Give your alert a name</label>
+                <label for="alert_name">Give your alert a name (length: 4-100)</label>
                 <input name="alert_name" id="alert_name" type="text" placeholder="Name" class="full">
             </div>
 
@@ -109,33 +106,13 @@
             <div class="form_footer">
                 <button type="submit" class="btn-green btn_create_alert">Create Alert</button>
             </div>
-
         </form>
 
         <br><hr><br>
 
         <h3>Current alerts for: {{ item.Name }}</h3>
-        <div class="table">
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Conditions</th>
-                    <th>Sent</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for alert in alerts.users %}
-
-                {% else %}
-                    <tr>
-                        <td colspan="5">You have no alerts for this item.</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <div class="alerts_table">
+            <div class="alert-default">Loading alerts...</div>
         </div>
 
     {% else %}

@@ -24,6 +24,5 @@ import SettingsCharacters from './SettingsCharacters';
 SettingsCharacters.watch();
 
 export default {
-    HeaderCategories: HeaderCategories,
-    ProductAlerts: ProductAlerts,
+    HeaderCategories: HeaderCategories
 }

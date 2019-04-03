@@ -9,12 +9,22 @@ use App\Service\Redis\Redis;
 
 class UserAlertsDiscordNotification
 {
-    const FOOTER       = 'mogboard.com';
+    const FOOTER = [
+        'text'     => 'mogboard.com',
+        'icon_url' => 'https://beta.mogboard.com/favicon.png',
+    ];
+    
+    const ALERT_AUTHOR = [
+        'name' => 'Mogboard Alert!',
+        'icon_url' => 'https://cdn.discordapp.com/emojis/474543539771015168.png?v=1',
+    ];
+    
     const COLOR_GREEN  = '#6de258';
     const COLOR_RED    = '#ed493d';
     const COLOR_BLUE   = '#4fc7ff';
     const COLOR_YELLOW = '#edd23c';
     const COLOR_PURPLE = '#c588f7';
+    const TIME_FORMAT  = 'F j, Y, g:i a';
 
     /**
      * Send the saved alert notification
@@ -29,15 +39,15 @@ class UserAlertsDiscordNotification
 
             $conditions[] = [
                 'name'   => $field,
-                'value'  => "{$operator} {$value}",
+                'value'  => "`{$operator} {$value}`",
                 'inline' => true,
             ];
         }
 
         $embed = [
-            'title'         => "Alert Saved: **{$alert->getName()}",
-            'description'   => "Your alert for the item: {$item->Name_en} has been saved.",
-            'color'         => self::COLOR_GREEN,
+            'title'         => "Alert Saved: {$alert->getName()}",
+            'description'   => "Your alert for the item: {$item->Name_en} has been saved. You will be alerted via discord when the alert is triggered.\n\n",
+            'color'         => hexdec(self::COLOR_GREEN),
             'footer'        => self::FOOTER,
             'fields'        => $conditions,
         ];
@@ -53,12 +63,78 @@ class UserAlertsDiscordNotification
         $item = Redis::Cache()->get("xiv_Item_{$alert->getItemId()}");
 
         $embed = [
-            'title'         => "Alert Deleted: **{$alert->getName()}",
+            'title'         => "Alert Deleted: {$alert->getName()}",
             'description'   => "Your alert for the item: {$item->Name_en} has been deleted.",
-            'color'         => self::COLOR_RED,
+            'color'         => hexdec(self::COLOR_RED),
             'footer'        => self::FOOTER,
         ];
 
+        SerAymeric::sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
+    }
+    
+    /**
+     * Send a notification regarding triggers
+     */
+    public function sendAlertTriggerNotification(UserAlert $alert, array $triggeredMarketRows)
+    {
+        $item = Redis::Cache()->get("xiv_Item_{$alert->getItemId()}");
+
+        $fields = [];
+        foreach($triggeredMarketRows as $i => $marketRow) {
+            [$server, $row] = $marketRow;
+            
+            $name = sprintf(
+                "%s @ %s Gil - Total: %s",
+                number_format($row->Quantity),
+                number_format($row->PricePerUnit),
+                number_format($row->PriceTotal),
+                $row->IsHQ ? 'HQ' : 'NQ',
+                $alert->getTriggerType() == 'Prices' ? $row->RetainerName : $row->CharacterName
+            );
+    
+            $value = sprintf(
+                "Server: %s - %s",
+                $server,
+                $alert->getTriggerType() == 'Prices' ? "Retainer: {$row->RetainerName}" : "Buyer: {$row->CharacterName}"
+            );
+
+            $fields[] = [
+                'name'  => $name,
+                'value' => $value,
+                'inline' => false,
+            ];
+        }
+        
+        // print trigger conditions
+        $triggers = [];
+        foreach($alert->getTriggerConditionsFormatted() as $trigger) {
+            [$field, $op, $value] = $trigger;
+            [$type, $field] = explode('_', $field);
+            
+            if (empty($triggers)) {
+                $triggers[] = "Trigger Conditions ($type):";
+            }
+            
+            $triggers[] = "- {$field} {$op} {$value}";
+        }
+        $triggers = "```". implode("\n", $triggers) ."```";
+        
+        // modify footer
+        $footer = self::FOOTER;
+        $footer['text'] = "{$footer['text']} - Alert ID: {$alert->getUniq()}";
+        
+        // build embed
+        $embed = [
+            'author'        => self::ALERT_AUTHOR,
+            'title'         => $alert->getName(),
+            'description'   => "The item: **{$item->Name_en}** has triggered ". count($triggeredMarketRows) ." market alerts under the type: {$alert->getTriggerType()}.\n{$triggers}\n \n ",
+            'url'           => getenv('SITE_CONFIG_DOMAIN') . "/market/{$item->ID}",
+            'color'         => hexdec(self::COLOR_YELLOW),
+            'footer'        => $footer,
+            'thumbnail'     => [ 'url' => "https://xivapi.com{$item->Icon}" ],
+            'fields'        => $fields,
+        ];
+        
         SerAymeric::sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
     }
 }

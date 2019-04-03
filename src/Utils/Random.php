@@ -6,6 +6,9 @@ use Ramsey\Uuid\Uuid;
 
 class Random
 {
+    const KEYSPACE = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    CONST KEYSPACE_EXTENDED = '!@^&()[]{}_+*=';
+    
     /**
      * Return a UUID4
      */
@@ -26,9 +29,9 @@ class Random
      * Returns a random string for a given length
      * Source: https://stackoverflow.com/questions/4356289/php-random-string-generator/31107425#31107425
      */
-    public static function randomSecureString(int $length = 100): string
+    public static function randomSecureString(int $length = 100, string $keyspace = null): string
     {
-        $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@^&()[]{}_+*=';
+        $keyspace = $keyspace ?: self::KEYSPACE . self::KEYSPACE_EXTENDED;
         $pieces   = [];
         $max      = strlen($keyspace) - 1;
 
@@ -37,5 +40,13 @@ class Random
         }
 
         return implode('', $pieces);
+    }
+    
+    /**
+     * Returns a human friendly code using just the normal keyspace.
+     */
+    public static function randomHumanUniqueCode(int $length): string
+    {
+        return self::randomSecureString(8, self::KEYSPACE);
     }
 }

@@ -1,5 +1,3 @@
-import Settings from "./Settings";
-import Modals from "./Modals";
 import Popup from "./Popup";
 import ButtonLoading from "./ButtonLoading";
 
@@ -9,8 +7,8 @@ class ProductAlerts
     {
         this.maxTriggers = 15;
 
-        this.newAlert = {
-            alert_item_id: null,
+        this.alert = {
+            alert_item_id: itemId,
             alert_name: null,
             alert_nq: null,
             alert_hq: null,
@@ -18,17 +16,22 @@ class ProductAlerts
             alert_notify_discord: null,
             alert_notify_email: null,
             alert_triggers: [],
+            alert_type: null,
         };
 
         this.uiForm = $('.alert_form');
         this.uiTriggers = $('.alert_entries');
+        this.uiAlerts = $('.alerts_table');
     }
 
     watch()
     {
-        this.uiForm.on('click', '.alert_trigger_remove', event => { this.removeCustomTrigger(event) });
         this.uiForm.on('click', '.alert_trigger_add', event => { this.addCustomTrigger(event) });
+        this.uiForm.on('click', '.alert_trigger_remove', event => { this.removeCustomTrigger(event) });
         this.uiForm.on('click', '.btn_create_alert', event => { this.createNewAlert(event) });
+        this.uiAlerts.on('click', '.btn_alert_delete', event => { this.deleteAlert(event) });
+
+        this.loadAlerts();
     }
 
     /**
@@ -38,7 +41,7 @@ class ProductAlerts
     {
         event.preventDefault();
 
-        if (this.newAlert.alert_triggers.length >= this.maxTriggers) {
+        if (this.alert.alert_triggers.length >= this.maxTriggers) {
             Popup.error('Max Triggers Reached', `You can add a maximum of ${this.maxTriggers} to a single alert. Sorry!`);
             return;
         }
@@ -56,6 +59,16 @@ class ProductAlerts
             return;
         }
 
+        // the type of triggers must match
+        const alertType = trigger.alert_trigger_field.split('_')[0];
+
+        if (this.alert.alert_type == null) {
+            this.alert.alert_type = alertType;
+        } else if (alertType != this.alert.alert_type) {
+            Popup.error('Mismatch Data Types', 'You cannot mix Prices or History triggers in the same alert.');
+            return;
+        }
+
         // check bool type
         if (['Prices_IsCrafted','Prices_IsHQ','Prices_HasMateria','History_IsHQ'].indexOf(trigger.alert_trigger_field) > -1) {
             if (['0','1'].indexOf(trigger.alert_trigger_value) === -1) {
@@ -70,12 +83,12 @@ class ProductAlerts
         }
 
         // store
-        this.newAlert.alert_triggers.push(trigger);
+        this.alert.alert_triggers.push(trigger);
 
         // print trigger visual
         this.uiTriggers.append(`
-            <div data-id="${trigger.id}">
-                <div><button type="button" class="alert_trigger_remove small"><i class="xiv-NavigationClose"></i></button></div>
+            <div id="custom_trigger_${trigger.id}">
+                <div><button type="button" class="alert_trigger_remove small" data-id="${trigger.id}"><i class="xiv-NavigationClose"></i></button></div>
                 <div>
                     <code>
                         <span>${trigger.alert_trigger_field}</span>
@@ -83,9 +96,32 @@ class ProductAlerts
                         <strong>${trigger.alert_trigger_value}</strong>
                     </code>
                 </div>
-                <span class="fr">${this.newAlert.alert_triggers.length}</span>
             </div>
         `);
+    }
+
+    /**
+     * Remove custom triggers
+     * @param event
+     */
+    removeCustomTrigger(event)
+    {
+        const id = $(event.currentTarget).attr('data-id');
+
+        // remove row
+        this.uiForm.find(`#custom_trigger_${id}`).remove();
+
+        // find the id triggers and remove them
+        this.alert.alert_triggers.forEach((trigger, index) => {
+            if (trigger.id == id) {
+                this.alert.alert_triggers.splice(index, 1);
+            }
+        });
+
+        // reset alert type if no triggers
+        if (this.alert.alert_triggers.length === 0) {
+            this.alert.alert_type = null;
+        }
     }
 
     /**
@@ -95,15 +131,111 @@ class ProductAlerts
     createNewAlert(event)
     {
         event.preventDefault();
+
+        this.alert.alert_name = this.uiForm.find('#alert_name').val().trim();
+        this.alert.alert_nq = this.uiForm.find('#alert_nq').prop('checked');
+        this.alert.alert_hq = this.uiForm.find('#alert_hq').prop('checked');
+        this.alert.alert_dc = this.uiForm.find('#alert_dc').prop('checked');
+        this.alert.alert_notify_discord = this.uiForm.find('#alert_notify_discord').prop('checked');
+        this.alert.alert_notify_email = this.uiForm.find('#alert_notify_email').prop('checked');
+
+        if (this.alert.alert_name.length < 3 || this.alert.alert_name.length > 100) {
+            Popup.error('Name Length', 'Please keep your alert name <br> between 4 and 100 characters');
+            return;
+        }
+
+        if (this.alert.alert_hq === false && this.alert.alert_nq === false) {
+            Popup.error('Error: HQ/NQ', 'You must choose either: <br> Normal Quality, High-Quality or Both.');
+            return;
+        }
+
+        if (this.alert.alert_notify_discord === false && this.alert.alert_notify_email === false) {
+            Popup.error('Error: Notification', 'You must choose to be notified <br> either by discord or by email.');
+            return;
+        }
+
+        if (this.alert.alert_triggers.length === 0) {
+            Popup.error('No Triggers', 'You have not set any triggers <br> on your alert, fix that!');
+            return;
+        }
+
+        const submitButton = this.uiForm.find('.btn_create_alert');
+        ButtonLoading.start(submitButton);
+
+        $.ajax({
+            url: mog.urls.alerts.create,
+            type: 'POST',
+            dataType: "json",
+            data: JSON.stringify(this.alert),
+            contentType: "application/json",
+            success: response => {
+                if (response === true) {
+                    Popup.success('Alert Created', 'Your alert has been created!');
+                    this.loadAlerts();
+                }
+            },
+            error: (a,b,c) => {
+                Popup.error('Error 42', 'Could not create the alert. Ask Vek why!');
+                console.log('--- ERROR ---');
+                console.log(a,b,c)
+            },
+            complete: () => {
+                ButtonLoading.finish(submitButton);
+            }
+        })
     }
 
     /**
-     * Remove custom triggers
-     * @param event
+     * Load alerts
      */
-    removeCustomTrigger(event)
+    loadAlerts()
     {
-        // todo - remove logic
+        if (mog.isOnline === false) {
+            return;
+        }
+
+        $.ajax({
+            url: mog.urls.alerts.renderForItem.replace('-id-', itemId),
+            success: response => {
+                this.uiAlerts.html(response);
+            },
+            error: (a,b,c) => {
+                this.uiAlerts.html('<div class="alert-red">Could not load any alerts for this item.</div>');
+                console.log('--- ERROR ---');
+                console.log(a,b,c)
+            }
+        })
+    }
+
+    /**
+     * Delete alert
+     */
+    deleteAlert(event)
+    {
+        const button = $(event.currentTarget);
+        const id     = button.attr('data-id');
+        const url    = mog.urls.alerts.delete.replace('-id-', id);
+
+        ButtonLoading.start(button);
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: response => {
+                this.loadAlerts();
+                Popup.success('Alert Deleted', 'This alert has been deleted');
+            },
+            error: (a,b,c) => {
+                Popup.error('Error 42', 'Could not delete alert.');
+                console.log('--- ERROR ---');
+                console.log(a,b,c)
+            },
+            complete: () => {
+                ButtonLoading.finish(button);
+            }
+        });
+
+        console.log(id, url);
     }
 }
 

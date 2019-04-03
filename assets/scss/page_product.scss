@@ -605,5 +605,67 @@
                 margin-bottom: 8px;
             }
         }
+
+        .alerts_table {
+            background-color: var(--table-color-dark);
+
+            h5 {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+
+            small {
+                font-size: 13px;
+                color: var(--color6);
+            }
+
+            .box {
+                margin-bottom: 0;
+            }
+
+            .alert_triggers_sent {
+                font-size: 14px;
+                margin-top: 5px;
+            }
+
+            .alert_info {
+                font-size: 14px;
+                margin-bottom: 5px;
+
+                i {
+                    vertical-align: bottom;
+                    margin-bottom: -1px;
+                    display: inline-block;
+                    font-size: 18px;
+                }
+
+                em {
+                    font-style: normal;
+                    color: var(--purple);
+                    display: inline-block;
+                    margin-right: 10px;
+                }
+
+                span {
+                    display: inline-block;
+                    margin-right: 10px;
+                }
+            }
+
+            .btn_alert_delete {
+                display: inline-block;
+                background-color: var(--red);
+                border: none;
+                color: #fff;
+                padding: 5px 8px;
+                border-radius: 2px;
+                cursor: pointer;
+                outline: none;
+
+                &:hover {
+                    background-color: var(--red-3x);
+                }
+            }
+        }
     }
 }
