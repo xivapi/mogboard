@@ -27,8 +27,6 @@ class UserAlertsTriggers
 
     /** @var EntityManagerInterface */
     private $em;
-    /** @var UserAlertsTriggersLogic */
-    private $logic;
     /** @var UserAlerts */
     private $userAlerts;
     /** @var UserAlertsDiscordNotification */
@@ -47,7 +45,6 @@ class UserAlertsTriggers
 
     public function __construct(
         EntityManagerInterface $em,
-        UserAlertsTriggersLogic $userAlertsTriggersLogic,
         UserAlertsDiscordNotification $userAlertsDiscordNotification,
         UserAlerts $userAlerts,
         Companion $companion,
@@ -139,6 +136,16 @@ class UserAlertsTriggers
                 foreach ($marketDataSet as $marketRow) {
                     if ($this->atMaxTriggers()) {
                         break;
+                    }
+                    
+                    // if quality is wrong, skip
+                    if ($this->isCorrectQuality($alert, $marketRow) == false) {
+                        continue;
+                    }
+                    
+                    // if alert type is "history", ignore anything from before the alert was created
+                    if ($alert->getTriggerType() === 'History' && $marketRow->PurchaseDate < $alert->getAdded()) {
+                        continue;
                     }
                     
                     // loop through triggers
@@ -233,5 +240,22 @@ class UserAlertsTriggers
     private function atMaxTriggers()
     {
         return count($this->triggered) >= self::MAX_TRIGGERS_PER_ALERT;
+    }
+    
+    /**
+     * States if a UserAlert and a Price match up with HQ/NQ settings.
+     */
+    public function isCorrectQuality(UserAlert $userAlert, $price)
+    {
+        if ($userAlert->isTriggerHq() !== $userAlert->isTriggerNq()) {
+            if (
+                $userAlert->isTriggerHq() && $price->IsHQ == false ||
+                $userAlert->isTriggerNq() && $price->IsHQ == true
+            ) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }
