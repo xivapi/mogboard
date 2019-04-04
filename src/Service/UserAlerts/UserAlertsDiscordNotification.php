@@ -53,7 +53,7 @@ class UserAlertsDiscordNotification
             'fields'        => $conditions,
         ];
 
-        Discord::seraymeric()->sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
+        Discord::seraymeric()->sendMessage($alert->getUser()->getSsoDiscordId(), null, $embed);
     }
 
     /**
@@ -70,7 +70,7 @@ class UserAlertsDiscordNotification
             'footer'        => self::FOOTER,
         ];
 
-        Discord::seraymeric()->sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
+        Discord::seraymeric()->sendMessage($alert->getUser()->getSsoDiscordId(), null, $embed);
     }
     
     /**
@@ -136,6 +136,6 @@ class UserAlertsDiscordNotification
             'fields'        => $fields,
         ];
         
-        Discord::seraymeric()->sendEmbed($embed, $alert->getUser()->getSsoDiscordId());
+        Discord::seraymeric()->sendMessage($alert->getUser()->getSsoDiscordId(), null, $embed);
     }
 }
