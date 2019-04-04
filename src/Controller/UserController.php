@@ -62,4 +62,20 @@ class UserController extends AbstractController
         $this->users->logout();
         return $this->redirectToRoute('home');
     }
+
+    /**
+     * @Route("/patreon", name="account_patreon")
+     */
+    public function patreon()
+    {
+
+    }
+
+    /**
+     * @Route("/patreon/success", name="account_patreon_success")
+     */
+    public function patreonSuccess()
+    {
+
+    }
 }
