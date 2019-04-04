@@ -221,7 +221,7 @@ class UserAlert
             $alert->addTriggerCondition(
                 $trigger->alert_trigger_field,
                 $trigger->alert_trigger_op,
-                preg_replace(self::STRING_PREG, null, $trigger->alert_trigger_value)
+                trim($trigger->alert_trigger_value)
             );
         }
 
