@@ -4,8 +4,10 @@ namespace App\Service\User;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\ThirdParty\Discord\Discord;
 use Delight\Cookie\Cookie;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -60,7 +62,7 @@ class Users
 
         /** @var User $user */
         $user = $this->repository->findOneBy([
-            'session' => $session
+            'session' => $session,
         ]);
 
         if ($mustBeOnline && !$user) {
@@ -104,7 +106,7 @@ class Users
         // look for their user if they already have an account
         $sso  = $this->sso->setLoginAuthorizationState();
         $user = $this->repository->findOneBy([
-            'email' => $sso->email
+            'email' => $sso->email,
         ]);
 
         // handle user info during login process
@@ -166,5 +168,27 @@ class Users
     public function getLastUrl(Request $request)
     {
         return $request->getSession()->get('last_url');
+    }
+    
+    public function checkPatreonTiers()
+    {
+        $console = new ConsoleOutput();
+        $console->writeln('Checking Patreon Tiers...');
+        $section = $console->section();
+        
+        /** @var User $user */
+        foreach ($this->repository->findAll() as $user) {
+            $discordId = $user->getSsoDiscordId();
+            
+            $roleTier = Discord::mog()->getUserRole($discordId);
+            $section->writeln("User: {$user->getUsername()} = {$roleTier}");
+            
+            $user->setPatron($roleTier ?: 0);
+            $this->em->persist($user);
+            $this->em->flush();
+            $this->em->clear();
+        }
+        
+        $console->writeln('Complete!');
     }
 }
