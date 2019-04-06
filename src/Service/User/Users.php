@@ -184,8 +184,13 @@ class Users
         foreach ($this->repository->findAll() as $user) {
             $discordId = $user->getSsoDiscordId();
             
-            $roleTier = Discord::mog()->getUserRole($discordId);
-            $section->writeln("User: {$user->getUsername()} = {$roleTier}");
+            try {
+                $roleTier = Discord::mog()->getUserRole($discordId);
+                $section->writeln("User: {$user->getUsername()} = {$roleTier}");
+            } catch (\Exception $ex) {
+                $section->writeln("User: {$user->getUsername()} failed to fetch, likely not on the discord server");
+                continue;
+            }
             
             // set patreon tier
             $user->setPatron($roleTier ?: 0);
