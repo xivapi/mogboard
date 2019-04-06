@@ -218,6 +218,8 @@ class Users
             
             $this->em->persist($user);
             $this->em->flush();
+    
+            usleep(200000);
         }
         $this->em->clear();
         
