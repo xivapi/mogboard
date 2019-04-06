@@ -94,7 +94,13 @@ class UserAlertsTriggers
             // - if this user is a patron user and the prices are older than a few minutes
             //   it will query companion directly.
             if ($patrons) {
-                $patronTimeout = time() - UserAlert::PATRON_UPDATE_TIME;
+                // different patreon tiers get different timeouts
+                $patreonTimeoutInSeconds = UserAlert::PATRON_UPDATE_TIME;
+                if ($alert->getUser()->isPatron(UserAlert::PATRON_UPDATE_TIME_TIER4)) {
+                    $patreonTimeoutInSeconds = UserAlert::PATRON_UPDATE_TIME_TIER4;
+                }
+                
+                $patronTimeout = time() - $patreonTimeoutInSeconds;
                 foreach ($market as $server => $marketData) {
                     // if out of date, request update
                     if ($marketData->Updated < $patronTimeout) {

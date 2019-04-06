@@ -3,6 +3,7 @@
 namespace App\Service\User;
 
 use App\Entity\User;
+use App\Entity\UserAlert;
 use App\Repository\UserRepository;
 use App\Service\ThirdParty\Discord\Discord;
 use Delight\Cookie\Cookie;
@@ -170,6 +171,9 @@ class Users
         return $request->getSession()->get('last_url');
     }
     
+    /**
+     * Checks the patreon status of all users against the discord channel.
+     */
     public function checkPatreonTiers()
     {
         $console = new ConsoleOutput();
@@ -183,7 +187,35 @@ class Users
             $roleTier = Discord::mog()->getUserRole($discordId);
             $section->writeln("User: {$user->getUsername()} = {$roleTier}");
             
+            // set patreon tier
             $user->setPatron($roleTier ?: 0);
+            
+            // extra benefits
+            if ($roleTier >= 1) {
+                $user
+                    ->setAlertsMax(User::ALERTS_MAX_PATREON)
+                    ->setAlertsExpiry(User::ALERT_EXPIRY_TIMEOUT_PATREON);
+                
+                // update alerts
+                /** @var UserAlert $alert */
+                foreach ($user->getAlerts() as $alert) {
+                    $alert
+                        ->setTriggerLimit(UserAlert::LIMIT_PATREON)
+                        ->setTriggerDelay(UserAlert::DELAY_PATREON);
+                    
+                    if ($user->isPatron(User::PATREON_DPS)) {
+                        $alert
+                            ->setTriggerLimit(UserAlert::LIMIT_PATREON_TIER4)
+                            ->setTriggerDelay(UserAlert::DELAY_PATREON_TIER4);
+                    }
+                    
+                    $this->em->persist($alert);
+                }
+                
+                $totalAlerts = count($user->getAlerts());
+                $section->writeln("User: {$user->getUsername()} = {$roleTier} - {$totalAlerts} alerts");
+            }
+            
             $this->em->persist($user);
             $this->em->flush();
             $this->em->clear();
