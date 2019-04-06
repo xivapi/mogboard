@@ -13,22 +13,26 @@ class Mog
     
     const METHOD_POST        = 'POST';
     const METHOD_GET         = 'GET';
-
+    
     private function send(
         string $method,
         string $endpoint,
         array $json = null,
         array $query = null
     ) {
-        $endpoint = self::ENDPOINT . $endpoint;
         $query['key'] = getenv('DISCORD_BOT_USAGE_KEY');
         
-        return (new Client())->request($method, $endpoint, [
+        $config = [
+            'base_uri' => self::ENDPOINT,
+            'timeout'  => 2.5
+        ];
+        
+        return (new Client($config))->request($method, $endpoint, [
             RequestOptions::JSON => $json,
             RequestOptions::QUERY => $query
         ]);
     }
-
+    
     /**
      * Post a message via mog
      */
