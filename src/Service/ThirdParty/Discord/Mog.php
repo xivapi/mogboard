@@ -21,10 +21,10 @@ class Mog
         array $query = null
     ) {
         $query['key'] = getenv('DISCORD_BOT_USAGE_KEY');
-        
+    
         $config = [
             'base_uri' => self::ENDPOINT,
-            'timeout'  => 2.5
+            'timeout'  => 5
         ];
         
         return (new Client($config))->request($method, $endpoint, [
