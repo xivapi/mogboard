@@ -338,7 +338,7 @@ class ProductAlerts
             complete: () => {
                 ButtonLoading.finish(this.uiDeleteConfirm);
                 Modals.close(
-                    $('.btn_alert_delete')
+                    $('.alert_delete_confirmation_modal')
                 );
             }
         });
