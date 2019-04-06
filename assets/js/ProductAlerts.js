@@ -279,13 +279,15 @@ class ProductAlerts
                 this.alert.alert_notify_discord = response.alert_notify_discord;
                 this.alert.alert_notify_email = response.alert_notify_email;
 
+                console.log(response.triggers);
+
                 // find the id triggers and remove them
                 response.triggers.forEach((trigger, index) => {
                     this.addCustomTriggerVisual({
                         id: Math.floor((Math.random() * 99999) + 1),
-                        alert_trigger_field: trigger[0],
-                        alert_trigger_op:    trigger[1],
-                        alert_trigger_value: trigger[3],
+                        alert_trigger_field:        trigger[0],
+                        alert_trigger_op:           trigger[1],
+                        alert_trigger_value:        trigger[2],
                     })
                 });
 

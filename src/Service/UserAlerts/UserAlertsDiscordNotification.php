@@ -36,11 +36,11 @@ class UserAlertsDiscordNotification
 
         $conditions = [];
         foreach($alert->getTriggerConditionsFormatted() as $cond) {
-            [$field, $operator, $value] = $cond;
+            [$field, $operator, $value, $operatorShort, $operatorLong] = $cond;
 
             $conditions[] = [
                 'name'   => $field,
-                'value'  => "`{$operator} {$value}`",
+                'value'  => "`{$operatorLong} {$value}`",
                 'inline' => true,
             ];
         }
@@ -109,14 +109,14 @@ class UserAlertsDiscordNotification
         // print trigger conditions
         $triggers = [];
         foreach($alert->getTriggerConditionsFormatted() as $trigger) {
-            [$field, $op, $value] = $trigger;
+            [$field, $op, $value, $operatorShort, $operatorLong] = $trigger;
             [$type, $field] = explode('_', $field);
             
             if (empty($triggers)) {
                 $triggers[] = "Trigger Conditions ($type):";
             }
             
-            $triggers[] = "- {$field} {$op} {$value}";
+            $triggers[] = "- {$field} {$operatorLong} {$value}";
         }
         $triggers = "```". implode("\n", $triggers) ."```";
         

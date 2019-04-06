@@ -241,10 +241,10 @@ class UserAlert
             $alert->addTriggerCondition(
                 $trigger->alert_trigger_field,
                 $trigger->alert_trigger_op,
-                trim($trigger->alert_trigger_value)
+                $trigger->alert_trigger_value
             );
         }
-
+        
         return $alert;
     }
 
@@ -349,7 +349,7 @@ class UserAlert
             $operatorLong = self::TRIGGER_OPERATORS[$operator];
             $operatorShort = self::TRIGGER_OPERATORS_SHORT[$operator];
             
-            $conditions[] = [$field, $operator, $operatorShort, $operatorLong];
+            $conditions[] = [$field, $operator, $value, $operatorShort, $operatorLong];
         }
 
         return $conditions;
