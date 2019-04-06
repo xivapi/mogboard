@@ -218,8 +218,8 @@ class Users
             
             $this->em->persist($user);
             $this->em->flush();
-            $this->em->clear();
         }
+        $this->em->clear();
         
         $console->writeln('Complete!');
     }
