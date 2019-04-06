@@ -1,9 +1,17 @@
 <script>let alert_trigger_operators = {{ alerts.trigger_operators|json_encode|raw }};</script>
-<div>
+<div class="alert-page">
+    <div class="alert_info_button">
+        <button>Whats an alert <img src="/i/svg/question-circle-light.svg" height="18"></button>
+    </div>
+
     <h3>Create a new alert on server: {{ server.name }}</h3>
 
     {% if auth.online() %}
         <form id="alert_form" class="alert_form" method="post" action="{{ url('alerts_create') }}">
+            <div class="alert-form-loading">
+                <img src="/i/svg/loading3.svg" height="64px">
+            </div>
+
             {# Name #}
             <div class="form_row">
                 <label for="alert_name">Give your alert a name (length: 4-100)</label>
@@ -48,7 +56,7 @@
                 <div class="alert_triggers_form form_row form_columns">
                     <div class="form_col4">
                         <select name="alert_trigger_field" id="alert_trigger_field" class="full">
-                            <option disabled>- Select a Field -</option>
+                            <option disabled selected>- Select a Field -</option>
                             {% for category, triggers in alerts.trigger_fields %}
                                 <optgroup label="{{ category }}">
                                     {% for name in triggers %}
@@ -60,7 +68,7 @@
                     </div>
                     <div class="form_col4">
                         <select name="alert_trigger_op" id="alert_trigger_op" class="full">
-                            <option disabled>- Select an Operator</option>
+                            <option disabled selected>- Select an Operator</option>
                             {% for id,op in alerts.trigger_operators %}
                                 <option value="{{ id }}">{{ op }}</option>
                             {% endfor %}
@@ -76,6 +84,8 @@
                 <small>
                     Trigger values are checked as a series of <strong>AND</strong> conditions.
                     For "Bool" conditions values use 1 = true, 0 = false (eg: Price_IsHQ = 1).
+                    For time related ones "Added" the value would be Epoch Unix Timestamp, work
+                    is being done to improve this experience.
                 </small>
 
             </div>
@@ -104,7 +114,10 @@
 
             {# submit #}
             <div class="form_footer">
-                <button type="submit" class="btn-green btn_create_alert">Create Alert</button>
+                <button type="submit" class="btn-green btn_create_alert">Save Alert</button>
+                <span class="edit_mode_enabled">You are currently editing an alert</span>
+
+                <button type="button" class="btn-white-outline btn_new_alert" data-tippy-content="Reset the form and start a new alert">New Alert</button>
             </div>
         </form>
 
@@ -120,9 +133,115 @@
             You must be logged in to create item alerts.
         </div>
     {% endif %}
+</div>
 
-    <br><hr><br>
+<div class="modal alert_delete_confirmation_modal">
+    <div class="row">
+        <h1></h1>
+        <p>
+            Are you sure you wish to delete this alert?
+        </p>
+        <br>
+        <p>
+            <button type="button" class="btn_alert_delete_confirm">Yes I'm sure, delete it.</button>
+        </p>
+    </div>
+</div>
 
-    <h3><i class="icon-help"></i> All about alerts</h3>
-    <p>Alerts do things!</p>
+{# Information about alerts #}
+<div class="modal alert_info">
+    <div class="row row_top">
+        <h1>What are alerts?</h1>
+        <p>
+            Alerts allow you to setup notification watchers that can track an item and send you information such as price changes or history events.
+        </p>
+        <br><br>
+
+        <h2>Triggers</h2>
+        <p>
+            <strong>Triggers</strong>, these are conditions you can set on the alert to be checked at interval times
+            and if any market entry meets the criteria of the condition then your alert will be "Triggered" and you'll
+            receive a notification either via Discord or EMail.
+        </p>
+        <p>
+            Trigger conditions can be set against any market field and future plans will allow you to manage
+            these dynamically as well as setup automatic triggers based on your retainers current sales.
+        </p>
+        <br><br>
+
+        <h4>Trigger Condition Information</h4>
+        <ul>
+            <li>
+                <strong>Prices/History: Added</strong><br>
+                This is currently an Epoch Unix Timestamp. Work is being done to improve this.
+                <br><br>
+            </li>
+            <li>
+                <strong>Prices/History: "IsXX"</strong><br>
+                The Is condition triggers such as IsHQ are bools and the value must be either 1 or 0 for true / false.
+                <br><br>
+            </li>
+            <li>
+                <strong>History:</strong><br>
+                Events for history will be based on entries added to the history after the event was created.
+                <br><br>
+            </li>
+        </ul>
+
+        <hr>
+
+        <h2>Alert Limits and Configurations</h2>
+        <div class="table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Config</th>
+                        <th>Normal User</th>
+                        <th>Patreon User</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="50%"><span>Max Triggers sent Per Day</span></td>
+                        <td>10</td>
+                        <td>
+                            50<br>
+                            <strong>DPS Tier: 200</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Send delay for same alert</span></td>
+                        <td>1 Hour</td>
+                        <td>
+                            10 Minutes<br>
+                            <strong>DPS Tier: 1 minute</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Auto Price Updating</span></td>
+                        <td>-</td>
+                        <td>
+                            15 Minutes<br>
+                            <strong>DPS Tier: 1 minute</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Max Alerts</span></td>
+                        <td>10</td>
+                        <td>50</td>
+                    </tr>
+                    <tr>
+                        <td><span>Max Alerts</span></td>
+                        <td>10</td>
+                        <td>50</td>
+                    </tr>
+                    <tr>
+                        <td><span>Alert Expiry Time</span></td>
+                        <td>7 days</td>
+                        <td>45 days</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

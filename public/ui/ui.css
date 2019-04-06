@@ -75,13 +75,18 @@ table {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-  max-width: 620px;
+  max-width: 840px;
   background-color: var(--table-color-dark);
   border-radius: 6px;
   box-shadow: 0 2px 5px 1px #000;
   border: solid 1px #000;
   overflow: hidden;
   display: none; }
+  .modal .table {
+    background-color: var(--color5);
+    box-shadow: none; }
+    .modal .table span {
+      color: var(--purple-3x); }
   .modal.open {
     display: block; }
   .modal label {
@@ -108,6 +113,8 @@ table {
   .modal small {
     opacity: 0.5;
     font-size: 14px; }
+  .modal ul li {
+    line-height: 24px; }
   .modal .row {
     padding: 20px; }
     .modal .row.row_top {
@@ -336,6 +343,13 @@ pre, code {
     line-height: 20px; }
     pre.box em, code.box em {
       color: #fff99d; }
+  pre span, code span {
+    color: var(--blue-3x); }
+  pre em, code em {
+    color: var(--color8);
+    font-style: normal; }
+  pre strong, code strong {
+    color: var(--green-3x); }
 
 form label,
 .form label {
@@ -495,7 +509,7 @@ form .form_columns,
     width: 100%; }
     .table table thead {
       background-color: var(--table-color);
-      border-bottom: solid 1px var(--table-color);
+      border-bottom: solid 1px var(--color7);
       box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3); }
       .table table thead th {
         font-size: 14px;
@@ -679,6 +693,12 @@ ul, ol {
   ul li, ol li {
     padding: 5px 8px; }
 
+.loading_interaction {
+  background-image: url("/i/svg/loading3.svg");
+  background-size: auto 70%;
+  background-position: center;
+  background-repeat: no-repeat; }
+
 .text-red {
   color: var(--red-3x); }
 
@@ -833,22 +853,6 @@ ul, ol {
     height: 28px;
     line-height: 28px;
     font-size: 15px; }
-  .btn.btn_loading i, form button.btn_loading i, .form button.btn_loading i {
-    margin: 0;
-    font-size: 28px;
-    height: 28px;
-    width: 28px;
-    margin-top: -2px;
-    animation-name: btn_loading_loop;
-    animation-duration: 1200ms;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear; }
-
-@keyframes btn_loading_loop {
-  0% {
-    transform: rotate(0deg); }
-  100% {
-    transform: rotate(360deg); } }
 
 .alert-default {
   background-color: var(--default); }
@@ -1593,101 +1597,170 @@ ul, ol {
       background: -moz-linear-gradient(top, #262626 0%, #1c1c1c 100%);
       background: -webkit-linear-gradient(top, #262626 0%, #1c1c1c 100%);
       background: linear-gradient(to bottom, #262626 0%, #1c1c1c 100%); }
-  .product .tab-alerts h3 {
-    font-size: 14px;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: var(--highlight); }
-    .product .tab-alerts h3 i {
-      display: inline-block;
-      margin: 0 4px -2px 0;
-      vertical-align: bottom; }
-  .product .tab-alerts > div {
-    padding: 20px 0; }
-  .product .tab-alerts form {
-    background-color: var(--table-color-dark);
-    border-radius: 5px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    padding: 15px; }
-    .product .tab-alerts form .alert_trigger_remove {
-      background-color: transparent;
-      border-right: solid 1px var(--default);
-      border-radius: 0;
-      line-height: 32px;
-      height: 32px; }
-      .product .tab-alerts form .alert_trigger_remove i {
-        margin: 0;
-        font-size: 22px; }
-        .product .tab-alerts form .alert_trigger_remove i:hover {
-          color: var(--red); }
-        .product .tab-alerts form .alert_trigger_remove i:before {
-          margin-bottom: 6px;
-          vertical-align: bottom; }
-    .product .tab-alerts form .alert_entries {
-      margin-bottom: 15px; }
-      .product .tab-alerts form .alert_entries code em {
-        color: var(--color8); }
-      .product .tab-alerts form .alert_entries code strong {
-        color: var(--green-3x); }
-      .product .tab-alerts form .alert_entries > div {
-        display: flex;
-        border: solid 1px var(--default);
-        border-radius: 5px;
-        overflow: hidden;
-        margin-bottom: 5px;
-        position: relative; }
-        .product .tab-alerts form .alert_entries > div > div {
-          flex: 0 1 auto;
-          height: 32px;
-          line-height: 32px;
+  .product .tab-alerts {
+    position: relative; }
+    .product .tab-alerts h3 {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--highlight); }
+      .product .tab-alerts h3 i {
+        display: inline-block;
+        margin: 0 4px -2px 0;
+        vertical-align: bottom; }
+    .product .tab-alerts .alert-page {
+      padding: 20px 0; }
+    .product .tab-alerts .alert_info_button {
+      position: absolute;
+      right: 0;
+      top: 8px; }
+      .product .tab-alerts .alert_info_button > button {
+        line-height: 28px;
+        height: 28px;
+        font-size: 12px;
+        background-color: var(--default);
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        padding: 0 8px;
+        outline: none;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: 250ms; }
+        .product .tab-alerts .alert_info_button > button:hover {
+          opacity: 1; }
+        .product .tab-alerts .alert_info_button > button img {
+          vertical-align: middle;
+          margin: 0 0 2px 3px; }
+    .product .tab-alerts form {
+      background-color: var(--table-color-dark);
+      border-radius: 5px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      overflow: hidden;
+      position: relative; }
+      .product .tab-alerts form .alert-form-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(87, 35, 162, 0.8);
+        z-index: 1000;
+        display: none; }
+        .product .tab-alerts form .alert-form-loading img {
+          position: relative;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%); }
+        .product .tab-alerts form .alert-form-loading.show {
+          display: block; }
+      .product .tab-alerts form.edit_mode {
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), inset 0 0 0 3px rgba(235, 162, 95, 0.81); }
+        .product .tab-alerts form.edit_mode .edit_mode_enabled {
+          display: inline-block; }
+      .product .tab-alerts form .alert_trigger_remove {
+        background-color: transparent;
+        border-right: solid 1px var(--default);
+        border-radius: 0;
+        line-height: 32px;
+        height: 32px; }
+        .product .tab-alerts form .alert_trigger_remove i {
+          margin: 0;
+          font-size: 22px; }
+          .product .tab-alerts form .alert_trigger_remove i:hover {
+            color: var(--red); }
+          .product .tab-alerts form .alert_trigger_remove i:before {
+            margin-bottom: 6px;
+            vertical-align: bottom; }
+      .product .tab-alerts form .alert_entries {
+        margin-bottom: 15px; }
+        .product .tab-alerts form .alert_entries > div {
+          display: flex;
+          border: solid 1px var(--default);
+          border-radius: 5px;
+          overflow: hidden;
+          margin-bottom: 5px;
+          position: relative; }
+          .product .tab-alerts form .alert_entries > div > div {
+            flex: 0 1 auto;
+            height: 32px;
+            line-height: 32px;
+            margin-right: 10px; }
+          .product .tab-alerts form .alert_entries > div .fr {
+            position: absolute;
+            right: 10px;
+            top: 8px;
+            color: var(--default-2x); }
+      .product .tab-alerts form .alert_triggers_form {
+        margin-bottom: 8px; }
+    .product .tab-alerts .alerts_table {
+      background-color: var(--table-color-dark); }
+      .product .tab-alerts .alerts_table h5 {
+        font-size: 18px;
+        margin-bottom: 12px; }
+      .product .tab-alerts .alerts_table small {
+        font-size: 13px;
+        color: var(--color6); }
+      .product .tab-alerts .alerts_table .box {
+        margin-bottom: 0; }
+      .product .tab-alerts .alerts_table .alert_triggers_sent {
+        font-size: 14px;
+        margin-top: 5px; }
+      .product .tab-alerts .alerts_table .alert_info {
+        font-size: 14px;
+        margin-bottom: 5px; }
+        .product .tab-alerts .alerts_table .alert_info i {
+          vertical-align: bottom;
+          margin-bottom: -1px;
+          display: inline-block;
+          font-size: 18px; }
+        .product .tab-alerts .alerts_table .alert_info em {
+          font-style: normal;
+          color: var(--purple);
+          display: inline-block;
           margin-right: 10px; }
-        .product .tab-alerts form .alert_entries > div .fr {
-          position: absolute;
-          right: 10px;
-          top: 8px;
-          color: var(--default-2x); }
-    .product .tab-alerts form .alert_triggers_form {
-      margin-bottom: 8px; }
-  .product .tab-alerts .alerts_table {
-    background-color: var(--table-color-dark); }
-    .product .tab-alerts .alerts_table h5 {
-      font-size: 18px;
-      margin-bottom: 12px; }
-    .product .tab-alerts .alerts_table small {
-      font-size: 13px;
-      color: var(--color6); }
-    .product .tab-alerts .alerts_table .box {
-      margin-bottom: 0; }
-    .product .tab-alerts .alerts_table .alert_triggers_sent {
-      font-size: 14px;
-      margin-top: 5px; }
-    .product .tab-alerts .alerts_table .alert_info {
-      font-size: 14px;
-      margin-bottom: 5px; }
-      .product .tab-alerts .alerts_table .alert_info i {
-        vertical-align: bottom;
-        margin-bottom: -1px;
+        .product .tab-alerts .alerts_table .alert_info span {
+          display: inline-block;
+          margin-right: 10px; }
+      .product .tab-alerts .alerts_table .btn_alert_delete,
+      .product .tab-alerts .alerts_table .btn_alert_edit {
         display: inline-block;
-        font-size: 18px; }
-      .product .tab-alerts .alerts_table .alert_info em {
-        font-style: normal;
-        color: var(--purple);
-        display: inline-block;
-        margin-right: 10px; }
-      .product .tab-alerts .alerts_table .alert_info span {
-        display: inline-block;
-        margin-right: 10px; }
-    .product .tab-alerts .alerts_table .btn_alert_delete {
-      display: inline-block;
-      background-color: var(--red);
-      border: none;
-      color: #fff;
-      padding: 5px 8px;
-      border-radius: 2px;
-      cursor: pointer;
-      outline: none; }
-      .product .tab-alerts .alerts_table .btn_alert_delete:hover {
-        background-color: var(--red-3x); }
+        border: none;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 2px;
+        cursor: pointer;
+        outline: none;
+        width: 100%; }
+      .product .tab-alerts .alerts_table .alert_action_row {
+        margin-bottom: 5px; }
+      .product .tab-alerts .alerts_table .btn_alert_delete {
+        opacity: 0.4;
+        background-color: var(--red); }
+        .product .tab-alerts .alerts_table .btn_alert_delete:hover {
+          opacity: 1;
+          background-color: var(--red-3x); }
+      .product .tab-alerts .alerts_table .btn_alert_edit {
+        background-color: var(--blue); }
+        .product .tab-alerts .alerts_table .btn_alert_edit:hover {
+          background-color: var(--blue-3x); }
+  .product .btn_alert_delete_confirm {
+    background-color: var(--red);
+    color: #fff;
+    font-weight: 400;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer; }
+  .product .btn_new_alert {
+    float: right; }
+  .product .edit_mode_enabled {
+    margin-left: 20px;
+    color: rgba(235, 150, 30, 0.8);
+    display: none; }
 
 .account {
   display: flex; }

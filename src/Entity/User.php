@@ -14,6 +14,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
+    const PATREON_DPS        = 4;
+    const PATREON_HEALER     = 3;
+    const PATREON_TANK       = 2;
+    const PATREON_ADVENTURER = 1;
+    
+    const ALERTS_MAX = 10;
+    const ALERTS_MAX_PATREON = 50;
+    
+    const ALERT_EXPIRY_TIMEOUT = (60 * 60 * 24 * 7);
+    const ALERT_EXPIRY_TIMEOUT_PATREON = (60 * 60 * 24 * 45);
+    
     /**
      * @var string
      * @ORM\Id
@@ -55,14 +66,10 @@ class User
      */
     private $avatar = 'http://xivapi.com/img-misc/chat_messengericon_goldsaucer.png';
     /**
-     * @var boolean
-     * @ORM\Column(type="boolean", options={"default": false})
+     * @var int
+     * @ORM\Column(type="integer")
      */
-    private $patron = false;
-    /**
-     * @ORM\OneToMany(targetEntity="UserAlert", mappedBy="user")
-     */
-    private $alerts;
+    private $patron = 0;
     /**
      * @ORM\OneToMany(targetEntity="UserList", mappedBy="user")
      */
@@ -79,6 +86,22 @@ class User
      * @ORM\OneToMany(targetEntity="UserRetainer", mappedBy="user")
      */
     private $retainers;
+    
+    // -- alerts
+    /**
+     * @ORM\OneToMany(targetEntity="UserAlert", mappedBy="user")
+     */
+    private $alerts;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $alertsMax = self::ALERTS_MAX;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $alertsExpiry = self::ALERT_EXPIRY_TIMEOUT;
     
     // -- discord sso
     /**
@@ -221,6 +244,18 @@ class User
         $this->alerts[] = $alert;
         return $this;
     }
+    
+    public function getAlertsExpiry(): int
+    {
+        return $this->alertsExpiry;
+    }
+    
+    public function setAlertsExpiry(int $alertsExpiry)
+    {
+        $this->alertsExpiry = $alertsExpiry;
+        
+        return $this;
+    }
 
     public function getReports()
     {
@@ -240,14 +275,26 @@ class User
         return $this;
     }
     
-    public function isPatron(): bool
+    public function isPatron(int $tier = null): bool
     {
-        return $this->patron;
+        return $tier ? $this->patron === $tier : $this->patron > 0;
     }
     
-    public function setPatron(bool $patron)
+    public function setPatron(int $patron)
     {
         $this->patron = $patron;
+        
+        return $this;
+    }
+    
+    public function getAlertsMax(): int
+    {
+        return $this->alertsMax;
+    }
+    
+    public function setAlertsMax(int $alertsMax)
+    {
+        $this->alertsMax = $alertsMax;
         
         return $this;
     }

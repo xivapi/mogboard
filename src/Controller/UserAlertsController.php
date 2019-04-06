@@ -37,7 +37,8 @@ class UserAlertsController extends AbstractController
     {
         return $this->json(
             $this->alerts->save(
-                UserAlert::buildFromRequest($request, $alert)
+                UserAlert::buildFromRequest($request, $alert),
+                false
             )
         );
     }
@@ -50,6 +51,23 @@ class UserAlertsController extends AbstractController
         return $this->json(
             $this->alerts->delete($alert)
         );
+    }
+    
+    /**
+     * @Route("/alerts/{alert}/edit", name="alerts_edit")
+     */
+    public function fetchAlertJsonForEditing(UserAlert $alert)
+    {
+        return $this->json([
+            'id'                   => $alert->getId(),
+            'alert_name'           => $alert->getName(),
+            'alert_nq'             => $alert->isTriggerNq(),
+            'alert_hq'             => $alert->isTriggerHq(),
+            'alert_dc'             => $alert->isTriggerDataCenter(),
+            'alert_notify_discord' => $alert->isNotifiedViaDiscord(),
+            'alert_notify_email'   => $alert->isNotifiedViaEmail(),
+            'triggers' => $alert->getTriggerConditionsFormatted(),
+        ]);
     }
 
     /**

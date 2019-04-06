@@ -14,6 +14,13 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UserAlert
 {
+    /**
+     * Patreon tiers:
+     * 4 = dps
+     * 3 = healer
+     * 2 = tank
+     * 1 = adventurer
+     */
     const STRING_PREG = "/[^a-zA-Z0-9\+_\- ]/";
     
     const TRIGGER_FIELDS = [
@@ -72,13 +79,16 @@ class UserAlert
     // the maximum number of times a trigger will send in 1 day
     const LIMIT_DEFAULT = 10;
     const LIMIT_PATREON = 50;
+    const LIMIT_PATREON_TIER4 = 200;
 
     // the delay between sending alerts
-    const DELAY_DEFAULT = (60 * 60);
-    const DELAY_PATREON = (60 * 10);
+    const DELAY_DEFAULT       = (60 * 60);
+    const DELAY_PATREON       = (60 * 15);
+    const DELAY_PATREON_TIER4 = (60 * 1);
 
     // how old data can be before it's requested to be manually updated
-    const PATRON_UPDATE_TIME = 120;
+    const PATRON_UPDATE_TIME = (60 * 15);
+    const PATRON_UPDATE_TIME_TIER4 = 60;
 
     #-------------------------------------------------------------------------------------------------------------------
     
@@ -216,8 +226,18 @@ class UserAlert
             ->setNotifiedViaDiscord($json->alert_notify_discord ?: $alert->isNotifiedViaDiscord())
             ->setNotifiedViaEmail($json->alert_notify_email ?: $alert->isNotifiedViaEmail());
         
+        // reset trigger conditions
+        $alert->setTriggerConditions([]);
+        
         // add triggers
         foreach($json->alert_triggers as $trigger) {
+            if (isset(self::TRIGGER_OPERATORS[$trigger->alert_trigger_op]) === false) {
+                throw new \Exception('Invalid operator');
+            }
+
+            $trigger->alert_trigger_field = substr(strip_tags($trigger->alert_trigger_field), 0, 50);
+            $trigger->alert_trigger_value = substr(strip_tags($trigger->alert_trigger_value), 0, 50);
+            
             $alert->addTriggerCondition(
                 $trigger->alert_trigger_field,
                 $trigger->alert_trigger_op,
@@ -295,7 +315,7 @@ class UserAlert
 
     public function setName(string $name)
     {
-        $this->name = preg_replace(self::STRING_PREG, null, $name);
+        $this->name = substr(strip_tags($name), 0, 100);
 
         return $this;
     }
@@ -325,9 +345,11 @@ class UserAlert
         $conditions = [];
         foreach ($this->triggerConditions as $triggerCondition) {
             [$field, $operator, $value] = explode(',', $triggerCondition);
+    
+            $operatorLong = self::TRIGGER_OPERATORS[$operator];
+            $operatorShort = self::TRIGGER_OPERATORS_SHORT[$operator];
             
-            $operator = self::TRIGGER_OPERATORS_SHORT[$operator];
-            $conditions[] = [$field, $operator, $value];
+            $conditions[] = [$field, $operator, $operatorShort, $operatorLong];
         }
 
         return $conditions;

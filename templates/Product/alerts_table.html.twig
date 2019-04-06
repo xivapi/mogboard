@@ -9,7 +9,7 @@
         </thead>
         <tbody>
         {% for alert in alerts %}
-            <tr>
+            <tr data-name="{{ alert.name }}">
                 <td>
                     <h5>{{ alert.name }} <small>({{ alert.uniq }})</small></h5>
                     <div class="alert_info">
@@ -29,12 +29,17 @@
                 <td>
                     <code class="box">
                     {% for trigger in alert.getTriggerConditionsFormatted %}
-                        {{ trigger[0] }} {{ trigger[1] }} {{ trigger[2] }}<br>
+                        <span>{{ trigger[0] }}</span> <em>{{ trigger[3] }}</em> <strong>{{ trigger[2] > 0 ? trigger[2] : '0' }}</strong><br>
                     {% endfor %}
                     </code>
                 </td>
                 <td>
-                    <button type="button" class="btn_alert_delete" data-id="{{ alert.id }}">Delete</button>
+                    <div class="alert_action_row">
+                        <button type="button" class="btn_alert_edit" data-id="{{ alert.id }}">Edit</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn_alert_delete" data-id="{{ alert.id }}">Delete</button>
+                    </div>
                 </td>
             </tr>
         {% else %}

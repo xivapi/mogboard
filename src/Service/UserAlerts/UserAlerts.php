@@ -2,6 +2,7 @@
 
 namespace App\Service\UserAlerts;
 
+use App\Entity\User;
 use App\Entity\UserAlert;
 use App\Exceptions\UnauthorisedAlertOwnershipException;
 use App\Repository\UserAlertRepository;
@@ -98,7 +99,7 @@ class UserAlerts
     /**
      * Save a new or existing alert
      */
-    public function save(UserAlert $alert)
+    public function save(UserAlert $alert, bool $sendDiscordMessage = true)
     {
         $user = $this->users->getUser();
         
@@ -107,11 +108,18 @@ class UserAlerts
             ->setUser($user)
             ->setTriggerLimit($user->isPatron() ? UserAlert::LIMIT_PATREON : UserAlert::LIMIT_DEFAULT)
             ->setTriggerDelay($user->isPatron() ? UserAlert::DELAY_PATREON : UserAlert::DELAY_DEFAULT);
+        
+        // if DPS patreon tier, increase trigger limit
+        if ($user->isPatron(User::PATREON_DPS)) {
+            $alert
+                ->setTriggerLimit(UserAlert::LIMIT_PATREON_TIER4)
+                ->setTriggerDelay(UserAlert::DELAY_PATREON_TIER4);
+        }
 
         $this->em->persist($alert);
         $this->em->flush();
         
-        if ($alert->isNotifiedViaDiscord()) {
+        if ($sendDiscordMessage && $alert->isNotifiedViaDiscord()) {
             $this->discord->sendSavedAlertNotification($alert);
         }
         

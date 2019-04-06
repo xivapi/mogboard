@@ -519,6 +519,8 @@
     }
 
     .tab-alerts {
+        position: relative;
+
         h3 {
             font-size: 14px;
             font-weight: 600;
@@ -532,8 +534,37 @@
             }
         }
 
-        > div {
+        .alert-page {
             padding: 20px 0;
+        }
+
+        .alert_info_button {
+            position: absolute;
+            right: 0; top: 8px;
+
+            > button {
+                line-height: 28px;
+                height: 28px;
+                font-size: 12px;
+                background-color: var(--default);
+                color: #fff;
+                border: none;
+                border-radius: 3px;
+                padding: 0 8px;
+                outline: none;
+                cursor: pointer;
+                opacity: 0.5;
+                transition: 250ms;
+
+                &:hover {
+                    opacity: 1;
+                }
+
+                img {
+                    vertical-align: middle;
+                    margin: 0 0 2px 3px;
+                }
+            }
         }
 
         form {
@@ -541,6 +572,36 @@
             border-radius: 5px;
             box-shadow: 0 1px 5px rgba(0,0,0,0.2);
             padding: 15px;
+            overflow: hidden;
+
+            position: relative;
+
+            .alert-form-loading {
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background-color: rgba(87, 35, 162, 0.8);
+                z-index: 1000;
+                display: none;
+
+                img {
+                    position: relative;
+                    left: 50%; top: 50%;
+                    transform: translate(-50%, -50%);
+                }
+
+                &.show {
+                    display: block;
+                }
+            }
+
+            &.edit_mode {
+                box-shadow: 0 1px 5px rgba(0,0,0,0.2),
+                            inset 0 0 0 3px rgba(235, 162, 95, 0.81);
+
+                .edit_mode_enabled {
+                    display: inline-block;
+                }
+            }
 
             .alert_trigger_remove {
                 background-color: transparent;
@@ -566,16 +627,6 @@
 
             .alert_entries {
                 margin-bottom: 15px;
-
-                code {
-                    em {
-                        color: var(--color8);
-                    }
-
-                    strong {
-                        color: var(--green-3x);
-                    }
-                }
 
                 > div {
                     display: flex;
@@ -652,20 +703,61 @@
                 }
             }
 
-            .btn_alert_delete {
+            .btn_alert_delete,
+            .btn_alert_edit {
                 display: inline-block;
-                background-color: var(--red);
                 border: none;
                 color: #fff;
-                padding: 5px 8px;
+                padding: 8px 12px;
                 border-radius: 2px;
                 cursor: pointer;
                 outline: none;
+                width: 100%;
+            }
+
+            .alert_action_row {
+                margin-bottom: 5px;
+            }
+
+            .btn_alert_delete {
+                opacity: 0.4;
+                background-color: var(--red);
 
                 &:hover {
+                    opacity: 1;
                     background-color: var(--red-3x);
                 }
             }
+
+            .btn_alert_edit {
+                background-color: var(--blue);
+
+                &:hover {
+                    background-color: var(--blue-3x);
+                }
+            }
         }
+    }
+
+    .btn_alert_delete_confirm {
+        background-color: var(--red);
+        color: #fff;
+        font-weight: 400;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .btn_new_alert {
+        float: right;
+    }
+
+    .edit_mode_enabled {
+        margin-left: 20px;
+        color: rgba(235, 150, 30, 0.8);
+        display: none;
     }
 }

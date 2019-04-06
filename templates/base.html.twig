@@ -58,6 +58,7 @@
                     create: "{{ path('alerts_create') }}",
                     update: "{{ path('alerts_update', { alert: '-id-' }) }}",
                     delete: "{{ path('alerts_delete', { alert: '-id-'}) }}",
+                    edit: "{{ path('alerts_edit', { alert: '-id-' }) }}",
                     renderForItem: "{{ path('alerts_render_item', { itemId: '-id-'}) }}",
                 },
                 characters: {
@@ -65,7 +66,6 @@
                     confirm: "{{ path('characters_confirm', { lodestoneId: '-id-' }) }}"
                 }
             },
-
 
             // old
             url_item_category_list: "{{ path('item_category_list', { categoryId: '-id-' }) }}",

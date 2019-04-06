@@ -148,6 +148,19 @@ pre, code {
             color: #fff99d;
         }
     }
+
+    span {
+        color: var(--blue-3x);
+    }
+
+    em {
+        color: var(--color8);
+        font-style: normal;
+    }
+
+    strong {
+        color: var(--green-3x);
+    }
 }
 
 form,
@@ -317,7 +330,7 @@ form,
 
         thead {
             background-color: var(--table-color);
-            border-bottom: solid 1px var(--table-color);
+            border-bottom: solid 1px var(--color7);
             box-shadow: 0 1px 5px rgba(0,0,0,0.3);
 
             th {
@@ -581,6 +594,13 @@ ul,ol {
     }
 }
 
+.loading_interaction {
+    background-image: url('/i/svg/loading3.svg');
+    background-size: auto 70%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 //
 // Custom elements
 //
@@ -751,26 +771,6 @@ ul,ol {
         height: 28px;
         line-height: 28px;
         font-size: 15px;
-    }
-
-    &.btn_loading {
-        i {
-            margin: 0;
-            font-size: 28px;
-            height: 28px;
-            width: 28px;
-            margin-top: -2px;
-
-            animation-name: btn_loading_loop;
-            animation-duration: 1200ms;
-            animation-iteration-count: infinite;
-            animation-timing-function: linear;
-        }
-
-        @keyframes btn_loading_loop {
-            0% { transform: rotate(0deg) }
-            100% { transform: rotate(360deg) }
-        }
     }
 }
 

@@ -4,16 +4,22 @@ class ButtonLoading
     {
         $ele.attr('data-text', $ele.html());
 
-        $ele.addClass('btn_loading');
+        $ele.addClass('loading_interaction');
         $ele.prop('disabled', true);
-        $ele.html('<i class="icon-load-c"></i>');
+        $ele.css({
+            'min-width': `${$ele.width()}px`,
+            'min-height': `${$ele.height()}px`,
+            display: 'inline-block',
+        });
+
+        $ele.html('&nbsp;');
     }
 
     finish($ele)
     {
         const text = $ele.attr('data-text');
 
-        $ele.removeClass('btn_loading');
+        $ele.removeClass('loading_interaction');
         $ele.prop('disabled', false);
         $ele.html(text);
     }
@@ -22,7 +28,7 @@ class ButtonLoading
     {
         $ele.attr('data-text',$ele.html());
 
-        $ele.removeClass('btn_loading');
+        $ele.removeClass('loading_interaction');
         $ele.prop('disabled', true);
         $ele.html(text);
     }
