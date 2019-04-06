@@ -320,6 +320,7 @@ class ProductAlerts
      */
     deleteAlertConfirmation()
     {
+        this.newAlert();
         const url = mog.urls.alerts.delete.replace('-id-', this.deleteId);
         ButtonLoading.start(this.uiDeleteConfirm);
 
