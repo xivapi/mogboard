@@ -16,9 +16,13 @@ class UserAlertRepository extends ServiceEntityRepository
     public function findPatrons(bool $patron)
     {
         $sql = $this->createQueryBuilder('a');
-        $sql->join('a.user', 'u')
-            ->where('u.patron = :patron')
-            ->setParameter('patron', $patron);
+        $sql->join('a.user', 'u');
+
+        if ($patron) {
+            $sql->where('u.patron > 0');
+        } else {
+            $sql->where('u.patron = 0');
+        }
         
         return $sql->getQuery()->getResult();
     }
