@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="users_alerts_events")
  * @ORM\Entity(repositoryClass="App\Repository\UserAlertEventsRepository")
  */
-class UserAlertEvents
+class UserAlertEvent
 {
     /**
      * @var string
@@ -93,7 +93,7 @@ class UserAlertEvents
         return $this;
     }
     
-    public function getData(): string
+    public function getData(): array
     {
         return json_decode($this->data);
     }

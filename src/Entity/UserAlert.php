@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Service\Common\Language;
+use App\Service\Redis\Redis;
 use App\Utils\Random;
 use Doctrine\Common\Collections\ArrayCollection;
 use Ramsey\Uuid\Uuid;
@@ -195,7 +197,7 @@ class UserAlert
      */
     private $notifiedViaDiscord = false;
     /**
-     * @ORM\OneToMany(targetEntity="UserAlert", mappedBy="user", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="UserAlertEvent", mappedBy="userAlert", cascade={"remove"}, orphanRemoval=true)
      */
     private $events;
 
@@ -294,6 +296,13 @@ class UserAlert
         $this->itemId = $itemId;
 
         return $this;
+    }
+    
+    public function getItem()
+    {
+        $item = Redis::Cache()->get("xiv_Item_{$this->itemId}");
+        $item = Language::handle($item);
+        return $item;
     }
 
     public function getAdded(): int

@@ -1,0 +1,203 @@
+{% extends 'UserAccount/index.html.twig' %}
+{% set title = 'My Account' %}
+{% set accountpage = 'account' %}
+
+{% block account %}
+
+    <h1>Account</h1>
+    <div class="table-dark">
+        <table>
+            <tbody>
+                <tr>
+                    <td width="10%">
+                        <img src="{{ auth.user.avatar }}" height="64" class="user_avatar">
+                    </td>
+                    <td>
+                        <h3>{{ auth.user.username }}</h3>
+                        {{ auth.user.sso|title }} - {{ auth.user.email }} - Timezone: {{ timezone() }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        {% if auth.user.isPatron %}
+                            <small style="margin-bottom: 5px;">PATREON REWARD ACTIVE</small>
+                            <h5 class="text-green">You are a {{ auth.user.patreonTier }} tier supporter!</h5>
+                            <p>
+                                Firstly: a huge thank you to support XIVAPI and MogBoard. This reduces the worry
+                                of building out infrastructure, or paying for market accounts. Your money
+                                goes a long way. If you are interested in seeing the cost of the servers you can
+                                view the <a href="https://xivapi.com/docs/Costs">Costs page on XIVAPI</a>.
+                            </p>
+                            <p>
+                                All your perks on MogBoard and XIVAPI are active, alerts have been retroactively updated
+                                to receive the new benefits. You can view your benefits in the table below.
+                            </p>
+                            <p>
+                                Be sure to say Hi on the <strong>#patreon</strong> discord channel!
+                            </p>
+                            <p>
+                                - PV
+                            </p>
+                        {% else %}
+                            <h5>Patreon</h5>
+                            <p>
+                                Both XIVAPI.com and MogBoard.com are supported by the community via Patreon. By becoming a supporter
+                                you'll receive perks for both sites and help keep the lights on!
+                            </p>
+                            <p>
+                                <a href="https://www.patreon.com/bePatron?u=13230932" target="_blank">
+                                    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png">
+                                </a>
+                            </p>
+                            <br>
+                            <h6>I am a patron!?</h6>
+                            <p>
+                                The site checks the discord #patreon member list every hour, if you've not received your status you
+                                can use the button below to check!
+                            </p>
+                            <p>
+                                <button type="button" class="check_patreon_status">Check Patreon Status</button>
+                            </p>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <h3>Patreon Tiers</h3>
+    <p>
+        Benefit patrons are given extra perks by their friends who are full patreon supporters.
+        So long as your friends have logged into MogBoard you can enter their Discord Username and
+        provide them with a few perks.
+    </p>
+
+    <div class="table-dark">
+        <table>
+            <thead>
+            <tr>
+                <th>Perk</th>
+                <th>Adventurer</th>
+                <th>Tank</th>
+                <th>Healer</th>
+                <th>DPS</th>
+                <th>(Benefits)</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td width="30%">Discord Affiliation</td>
+                    <td>✔</td>
+                    <td>✔</td>
+                    <td>✔</td>
+                    <td>✔</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        Prioritised Character
+                        <small>Your character will update on XIVAPI more frequencly, which is beneficial to
+                        all sites that use XIVAPI.</small>
+                    </td>
+                    <td>✔</td>
+                    <td>✔<br>+ Friends<br>+ FC</td>
+                    <td>✔<br>+ Friends<br>+ FC<br>+ FC Members</td>
+                    <td>✔<br>+ Friends<br>+ FC<br>+ FC Members</td>
+                    <td>✔</td>
+                </tr>
+                <tr>
+                    <td>
+                        Prioritised Alerts
+                        <small>Your item alerts on MogBoard are put into a private queue which means they're
+                        checked more frequently and accurately.</small>
+                    </td>
+                    <td>✔</td>
+                    <td>✔</td>
+                    <td>✔</td>
+                    <td>✔</td>
+                    <td>✔</td>
+                </tr>
+                <tr>
+                    <td>
+                        Friends with Benefits
+                        <small>You can choose which friends receive benefits on Mogboard</small>
+                    </td>
+                    <td>10</td>
+                    <td>10</td>
+                    <td>10</td>
+                    <td>50</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        1 Minute Watcher
+                        <small>Your alerts will trigger items to stay up to date within 1 minute.</small>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>✔</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        Price Updater
+                        <small>Your alerts keep prices up to date</small>
+                    </td>
+                    <td>15 minutes</td>
+                    <td>15 minutes</td>
+                    <td>15 minutes</td>
+                    <td>1 minute</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>
+                        Max Alerts
+                        <small>How many items you can make in total, this is account wide.</small>
+                    </td>
+                    <td>50</td>
+                    <td>50</td>
+                    <td>50</td>
+                    <td>50</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td>
+                        Daily Max Alerts
+                        <small>How often an alert can trigger per day.</small>
+                    </td>
+                    <td>50</td>
+                    <td>50</td>
+                    <td>50</td>
+                    <td>200</td>
+                    <td>50</td>
+                </tr>
+                <tr>
+                    <td>
+                        Delay Between Alerts
+                        <small>Based per alert</small>
+                    </td>
+                    <td>15 minutes</td>
+                    <td>15 minutes</td>
+                    <td>15 minutes</td>
+                    <td>1 minute</td>
+                    <td>15 minutes</td>
+                </tr>
+                <tr>
+                    <td>
+                        Alert Expiry Time
+                        <small>Jump onto the site to refresh.</small>
+                    </td>
+                    <td>45 Days</td>
+                    <td>45 Days</td>
+                    <td>45 Days</td>
+                    <td>45 Days</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

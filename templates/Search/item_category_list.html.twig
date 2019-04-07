@@ -1,6 +1,6 @@
 <div class="item-category-header">
     <div>
-        <span class="icon-{{ category.ID|xivicon }}"></span> {{ category.Name }}
+        <i class="xiv-{{ category.ID|xivicon }}"></i> {{ category.Name }}
     </div>
     <div>
         {{ items|length|number_format }} items
@@ -14,5 +14,6 @@
         {{ item.Name }}
     </a>
     {% endfor %}
+    <small>the end</small>
 </div>
 <script>mogboard.HeaderCategories.setLoadingLazyLoadWatcher();</script>

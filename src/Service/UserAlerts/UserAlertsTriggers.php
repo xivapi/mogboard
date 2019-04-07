@@ -3,23 +3,16 @@
 namespace App\Service\UserAlerts;
 
 use App\Entity\UserAlert;
-use App\Entity\UserAlertEvents;
-use App\Service\Common\Mog;
+use App\Entity\UserAlertEvent;
 use App\Service\Companion\Companion;
 use App\Service\GameData\GameDataSource;
 use App\Service\GameData\GameServers;
-use App\Service\Redis\Redis;
-use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use XIVAPI\XIVAPI;
 
 /**
- * todo - THIS NEEDS REDOING TO MATCH THE NEW CONDITION LOGIC
- *
- * todo - optimise and refactor this, a lot of code duplication
  * todo - email alerts
- * todo - NQ/HQ checking
  */
 class UserAlertsTriggers
 {
@@ -68,6 +61,9 @@ class UserAlertsTriggers
     
         // grab all alerts
         $alerts = $this->userAlerts->getAllByPatronStatus($patrons);
+        $total = count($alerts);
+        
+        $this->console->writeln("Total: {$total}");
         
         /** @var UserAlert $alert */
         foreach ($alerts as $alert) {
@@ -162,8 +158,8 @@ class UserAlertsTriggers
                         $marketValue = $marketRow->{$field};
         
                         // output trigger to console
-                        # $opName = UserAlert::TRIGGER_OPERATORS_SHORT[$op];
-                        # $this->console->writeln("--> <comment>({$category}) {$field}={$marketValue}</comment> {$opName} <info>{$value}</info>");
+                        #$opName = UserAlert::TRIGGER_OPERATORS_SHORT[$op];
+                        #$this->console->writeln("--> <comment>({$category}) {$field}={$marketValue}</comment> {$opName} <info>{$value}</info>");
         
                         // run all trigger tests
                         switch ($op) {
@@ -213,7 +209,7 @@ class UserAlertsTriggers
                     ->incrementTriggersSent()
                     ->setTriggerLastSent(time());
                 
-                $event = new UserAlertEvents();
+                $event = new UserAlertEvent();
                 $event
                     ->setUserId($alert->getUser()->getId())
                     ->setUserAlert($alert)

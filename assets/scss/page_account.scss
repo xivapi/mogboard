@@ -1,114 +1,215 @@
+//
+// Main account bits
+//
 .account {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 3px;
+    box-shadow: 0 1px 5px #000;
+    overflow: hidden;
+    background-color: var(--default);
+
     display: flex;
 
+    > div:nth-of-type(1) {
+        flex: 0 1 300px;
+        background-color: var(--default-2x);
+        border-right: solid 1px #000;
+
+        a {
+            display: block;
+            padding: 12px 15px;
+            color: #fff;
+
+            &:hover {
+                font-weight: 600;
+                text-decoration: underline;
+            }
+
+            &.active {
+                background-color: var(--table-color-dark);
+                margin: 0 -31px;
+                padding: 12px 46px;
+            }
+        }
+    }
+
+    > div:nth-of-type(2) {
+        flex: 0 1 calc(100% - 300px);
+    }
+
     > div {
-        flex: 0 1 50%;
-
-        &:first-of-type {
-            padding-right: 10px;
-        }
-
-        &:last-of-type {
-            padding-left: 10px;
-        }
+        padding: 30px;
     }
 
-    .account-box {
-        border: solid 1px var(--default-3x);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        padding: 20px;
-        border-radius: 4px;
-        margin-bottom: 20px;
-
-        h3 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #ddd;
-
-            span {
-                float: right;
-                font-size: 16px;
-                font-weight: 400;
-                color: var(--color8);
-            }
-        }
-
-        h4 {
-            font-size: 16px;
-            font-weight: 400;
-            margin-bottom: 10px;
-            color: var(--highlight);
-        }
-
-        .table {
-            background: rgb(60,60,60);
-            background: -moz-linear-gradient(top, rgba(60,60,60,1) 0%, rgba(34,34,34,1) 100%);
-            background: -webkit-linear-gradient(top, rgba(60,60,60,1) 0%,rgba(34,34,34,1) 100%);
-            background: linear-gradient(to bottom, rgba(60,60,60,1) 0%,rgba(34,34,34,1) 100%);
-        }
+    h5 {
+        margin-bottom: 30px;
     }
 
-    .account-add-character {
-        display: flex;
-
-        > div {
-            input, select, button {
-                width: 100%;
-            }
-        }
-
-        > div:nth-of-type(1) {
-            flex: 0 1 60%;
-            padding-right: 10px;
-        }
-
-        > div:nth-of-type(2) {
-            flex: 0 1 20%;
-            padding-right: 10px;
-        }
-
-        > div:nth-of-type(3) {
-            flex: 0 1 20%;
-        }
+    h3 {
+        color: var(--color8);
+        margin: 0 0 10px 0;
+        font-size: 18px;
+        font-weight: 400;
+        margin-top: 6px;
+        letter-spacing: 1px;
     }
 
-    .account-check-verification {
-        float: right;
-        background-color: var(--green);
-        box-shadow: 0 1px 3px #000;
+    .user_avatar {
+        border-radius: 5px;
+        box-shadow: 0 1px 5px #000;
+    }
+
+    .check_patreon_status {
+        display: inline-block;
+        background-color: var(--blue);
         border: none;
+        line-height: 34px;
+        height: 32px;
+        border-radius: 3px;
         padding: 0 12px;
         color: #fff;
-        border-radius: 2px;
-        margin: -10px;
-        height: 38px;
-        line-height: 38px;
         cursor: pointer;
-        outline: none;
-        font-size: 17px;
-        font-weight: 300;
+    }
+}
 
-        &:hover {
-            background-color: var(--green-3x);
+//
+// Characters
+//
+.character_form {
+    border-radius: 5px;
+    background-color: var(--table-color-dark);
+    padding: 20px;
+}
+
+.characters {
+    h2 {
+        font-size: 22px;
+        font-weight: 400;
+        text-transform: uppercase;
+    }
+
+    h5 {
+        margin-bottom: 5px;
+        position: relative;
+    }
+
+    h3 {
+        color: var(--color8);
+        margin: 0 0 10px 0;
+        font-size: 18px;
+        font-weight: 400;
+        margin-top: 6px;
+        letter-spacing: 1px;
+        position: relative;
+    }
+
+    .character_auth_code {
+        background-color: #222;
+        border-radius: 50px;
+        padding: 10px 14px;
+        font-size: 18px;
+        color: var(--color8);
+        position: absolute;
+        right: 0;
+        font-family: 'Roboto Mono', monospace;
+    }
+
+    .character_add_instructions {
+        color: var(--color4);
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .character_add_response {
+        text-align: center;
+        padding: 25px 0 5px;
+    }
+
+    .character_avatar {
+        border-radius: 5px;
+        box-shadow: 0 1px 5px #000;
+        display: inherit;
+    }
+
+    .character_name {
+        font-size: 20px;
+        color: var(--blue-3x);
+    }
+
+    .character_table {
+        td {
+            vertical-align: middle;
+        }
+    }
+}
+
+//
+// Alerts
+//
+.alerts {
+    > small {
+        opacity: 0.5;
+        font-size: 13px;
+    }
+
+    h2 {
+        font-size: 18px;
+        font-weight: 400;
+        color: #fff;
+        margin: 0;
+        padding: 8px;
+
+        a {
+            color: #fff;
+
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
 
-    .account-alert-info {
-        margin-top: 5px;
-        display: flex;
+    h6 {
+        text-shadow: none;
+        font-size: 12px;
+        font-weight: 400;
+        text-transform: uppercase;
+        color: var(--color6);
+        margin: 0 0 2px 0;
+    }
 
-        > span {
-            display: inline-block;
-            margin: 0 5px 5px 0;
-            background-color: #222;
-            border-radius: 3px;
-            font-size: 12px;
-            padding: 6px 8px;
+    code.box {
+        margin: 0;
+    }
+
+    .alert_info_box {
+        margin-bottom: 30px;
+
+        td {
+            color: #fff;
         }
     }
 
-    .account-check-verification {
+    .alert_icon {
+        border-radius: 5px;
+        box-shadow: 0 1px 5px #000;
+    }
+    .alert_item_level {
+        display: inline-block;
+        margin-right: 10px;
+        color: var(--color8);
+    }
 
+    .alert_item {
+        font-size: 20px;
+    }
+
+    .alert_events {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 14px;
+        line-height: 16px;
+        padding-top: 4px;
+        color: var(--table-color-3x);
     }
 }

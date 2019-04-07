@@ -20,8 +20,11 @@ ProductAlerts.watch();
 import ProductLists from './ProductLists';
 ProductLists.watch();
 
-import SettingsCharacters from './SettingsCharacters';
-SettingsCharacters.watch();
+import AccountCharacters from './AccountCharacters';
+AccountCharacters.watch();
+
+import AccountPatreon from './AccountPatreon';
+AccountPatreon.watch();
 
 export default {
     HeaderCategories: HeaderCategories

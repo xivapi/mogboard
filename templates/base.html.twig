@@ -62,8 +62,10 @@
                     renderForItem: "{{ path('alerts_render_item', { itemId: '-id-'}) }}",
                 },
                 characters: {
-                    add: "{{ path('characters_add') }}",
-                    confirm: "{{ path('characters_confirm', { lodestoneId: '-id-' }) }}"
+                    add: "{{ path('characters_add', { lodestoneId: '-id-' }) }}"
+                },
+                account: {
+                    check_patreon: "{{ path('user_account_check_patreon') }}"
                 }
             },
 

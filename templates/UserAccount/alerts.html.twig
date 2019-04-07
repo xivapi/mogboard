@@ -1,0 +1,169 @@
+{% extends 'UserAccount/index.html.twig' %}
+{% set title = 'Alerts' %}
+{% set accountpage = 'alerts' %}
+
+{% block account %}
+<div class="alerts">
+    <h5>Alerts</h5>
+    <p>
+        Alerts allow you to track all kinds of information about items on the market and be informed either by
+        discord or email for any changes that meet your requirements. To get started with creating alerts, go
+        search for any item and then click on the Alert tab on the left.
+    </p>
+    <p>
+        You can create: <strong class="text-green">{{ auth.user.alertsMax }}</strong> with an
+        expiry time of: <strong class="text-green">{{ auth.user.alertsExpiry / 24 / 60 / 60 }} days</strong>.
+    </p>
+    <small>
+        <strong>Alert Expiration:</strong> To keep the system clean, alerts will expire after a set amount of time
+        from when they were created. To refresh a notification, come back to this page once they have expired
+        and you can select which alerts you wish to refresh.
+    </small>
+
+    <hr>
+
+    <h3>Total Alerts: {{ auth.user.alerts|length }}</h3>
+
+    {% for alert in auth.user.alerts %}
+        {% set item = alert.item %}
+
+        <div class="alert_info_box table-dark">
+            <table>
+                <thead>
+                <tbody>
+                    <tr>
+                        <td colspan="2">
+                            <h2>
+                                <a href="{{ path('item_page', { itemId: item.ID}) }}">
+                                    ({{ alert.server }}) {{ alert.name }}
+                                </a>
+                            </h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">Item</td>
+                        <td>
+                            <div class="flex">
+                                <div class="flex_10">
+                                    <img src="{{ item.Icon|icon }}" class="alert_icon">
+                                </div>
+                                <div class="flex_90">
+                                    <a href="{{ path('item_page', { itemId: item.ID}) }}" class="alert_item rarity-{{ item.Rarity }}"><span class="alert_item_level">{{ item.LevelItem }}</span>{{ item.Name }}</a>
+                                    <small>{{ item.ItemKind.Name }} - {{ item.ItemSearchCategory.Name }}</small>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Information</td>
+                        <td>
+                            <div class="flex">
+                                <div class="flex_20">
+                                    <h6>Type</h6>
+                                    {{ alert.triggerType|title }}
+                                </div>
+                                <div class="flex_20">
+                                    <h6>Limit/Day</h6>
+                                    {{ alert.triggerLimit }}
+                                </div>
+                                <div class="flex_20">
+                                    <h6>Send Delay</h6>
+                                    {{ alert.triggerDelay }} sec
+                                </div>
+                                <div class="flex_20">
+                                    <h6>Last Sent</h6>
+                                    {{ alert.triggerLastSent ? alert.triggerLastSent|date : 'Never' }}
+                                </div>
+                                <div class="flex_20">
+                                    <h6>Sent Today</h6>
+                                    {{ alert.triggersSent }}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="flex">
+                                <div class="flex_20">
+                                    <h6>Data-Center</h6>
+                                    {{ alert.triggerDataCenter|bool }}
+                                </div>
+                                <div class="flex_20">
+                                    <h6>High-Quality</h6>
+                                    {{ alert.triggerHq|bool }}
+                                </div>
+                                <div class="flex_20">
+                                    <h6>Normal Quality</h6>
+                                    {{ alert.triggerNq|bool }}
+                                </div>
+                                <div class="flex_20">
+                                    <h6>Email</h6>
+                                    {{ alert.notifiedViaEmail|bool }}
+                                </div>
+                                <div class="flex_20">
+                                    <h6>Discord</h6>
+                                    {{ alert.notifiedViaDiscord|bool }}
+                                </div>
+                            </div>
+                            <br>
+                            {{ alert.triggerActive|bool }} {{ alert.triggerActive ? 'Alert is active' : 'Alert has been disabled.' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Conditions</td>
+                        <td>
+                            <code class="box">
+                                {% for trigger in alert.getTriggerConditionsFormatted %}
+                                    <span>{{ trigger[0] }}</span> <em>{{ trigger[4] }}</em> <strong>{{ trigger[2] is empty ? '0' : trigger[2] }}</strong><br>
+                                {% endfor %}
+                            </code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Events<br><small>Max: 5</small></td>
+                        <td>
+                            {% for event in alert.events %}
+                                {% if loop.index < 5 %}
+                                    <div class="table table-light">
+                                        <table class="small">
+                                            <thead>
+                                                <tr>
+                                                    <th>Server</th>
+                                                    <th>Quantity</th>
+                                                    <th>Price Per Unit</th>
+                                                    <th>Price Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="4">
+                                                        Sent: {{ event.added|date }}
+                                                    </td>
+                                                </tr>
+                                            {% for eventData in event.data %}
+                                                {% set eventServer = eventData[0] %}
+                                                {% set eventMarket = eventData[1] %}
+
+                                                <tr>
+                                                    <td>{{ eventServer }}</td>
+                                                    <td>{{ eventMarket.Quantity|number_format }}</td>
+                                                    <td>{{ eventMarket.PricePerUnit|number_format }}</td>
+                                                    <td>{{ eventMarket.PriceTotal|number_format }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                            <small>Alert has not sent any notifications.</small>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert-white">
+            You have no alerts. You can add alerts on item pages.
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

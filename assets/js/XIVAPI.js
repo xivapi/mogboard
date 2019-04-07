@@ -34,6 +34,16 @@ class XIVAPI
     }
 
     /**
+     * Search for a character
+     */
+    searchCharacter(name, server, callback) {
+        this.get(`/character/search`, {
+            name: name,
+            server: server
+        }, callback);
+    }
+
+    /**
      * Get a specific character
      */
     getCharacter(lodestoneId, callback) {
@@ -41,12 +51,11 @@ class XIVAPI
     }
 
     /**
-     * Search for a character
+     * Confirm character verification state
      */
-    searchCharacter(name, server, callback) {
-        this.get(`/character/search`, {
-            name: name,
-            server: server
+    characterVerification(lodestoneId, token, callback) {
+        this.get(`/character/${lodestoneId}/verification`, {
+            token: token
         }, callback);
     }
 

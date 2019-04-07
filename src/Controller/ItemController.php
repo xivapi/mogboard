@@ -102,9 +102,9 @@ class ItemController extends AbstractController
             ],
             'alerts'   => [
                 'users' => $user ? $this->userAlerts->getAllForItemForCurrentUser($itemId) : [],
-                'trigger_fields' => UserAlert::TRIGGER_FIELDS,
+                'trigger_fields'    => UserAlert::TRIGGER_FIELDS,
                 'trigger_operators' => UserAlert::TRIGGER_OPERATORS,
-                'trigger_actions' => [
+                'trigger_actions'   => [
                     UserAlert::TRIGGER_ACTION_CONTINUE => 'Continue',
                     UserAlert::TRIGGER_ACTION_DELETE   => 'Delete',
                     UserAlert::TRIGGER_ACTION_PAUSE    => 'Pause',

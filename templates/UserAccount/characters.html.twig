@@ -1,0 +1,97 @@
+{% extends 'UserAccount/index.html.twig' %}
+{% set title = 'Characters' %}
+{% set accountpage = 'characters' %}
+
+{% block account %}
+<script>let verify_code = '{{ auth.user.getCharacterPassPhrase() }}';</script>
+<div class="characters">
+    <h1>Characters</h1>
+    <p>
+        Add your characters to your MogBoard account, so you can do character stuff!
+    </p>
+
+    <hr>
+
+    <h2>Your characters</h2>
+    <div class="table-dark character_table">
+        <table>
+            <thead>
+                <tr>
+                    <th width="5%"></th>
+                    <th width="40%">Name</th>
+                    <th width="30%">Server</th>
+                    <th align="right">Last Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for character in auth.user.characters %}
+            <tr>
+                <td><img src="{{ character.avatar }}" class="character_avatar" height="32"></td>
+                <td class="character_name">{{ character.name }}</td>
+                <td>{{ character.server }}</td>
+                <td>{{ character.updated|date }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td class="4">You have no characters, why not add one below!</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <h5 class="text-green">
+        Add a new character
+        <span class="character_auth_code">AUTH CODE: {{ auth.user.getCharacterPassPhrase() }}</span>
+    </h5>
+
+
+    <p>
+        To add a new character, you must first add your verification code
+    </p>
+    <ul class="character_add_instructions">
+        <li>
+            Go to Lodestone and Login with your character.
+            Then <a href="https://na.finalfantasyxiv.com/lodestone/my/setting/profile/">Click here to edit your profile</a>.
+        </li>
+        <li>
+            In the text box, enter in your <strong>AUTH CODE</strong>,
+            then click on Confirm (twice).
+        </li>
+        <li>
+            Hop back to MogBoard and fill in the form below.
+            The site will search for your character
+            and confirm auth code.
+        </li>
+    </ul>
+
+
+    <div class="form character_form">
+        <div class="form_row form_columns">
+            <div class="form_col50">
+                <label for="character_string">Name, ID, or Lodestone URL</label>
+                <input type="text" class="full" name="character_string" id="character_string" placeholder="">
+            </div>
+            <div class="form_col40">
+                <label for="character_server">Server</label>
+                <select class="full" name="character_server" id="character_server">
+                    {% for dc, servers in character_servers %}
+                        <optgroup label="{{ dc }}">
+                            {% for server in servers %}
+                                <option value="{{ server }}">{{ server }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form_col20">
+                <label>&nbsp;</label>
+                <button type="button" class="btn-blue character_add">Search</button>
+            </div>
+        </div>
+        <div class="character_add_response"></div>
+    </div>
+</div>
+{% endblock %}

@@ -46,55 +46,38 @@ class UserCharacters
     }
 
     /**
-     * Add a new character to the site
-     */
-    public function add(Request $request)
-    {
-        $lodestoneId = $request->get('lodestone_id');
-
-        if ($this->get($lodestoneId, true)) {
-            throw new GeneralJsonException('Character already exists and is confirmed.');
-        }
-        
-        $user = $this->users->getUser();
-        
-        /** @var UserCharacter $existing */
-        $existing = $this->get($lodestoneId);
-        if ($existing && $existing->getUser() === $user) {
-            throw new GeneralJsonException('You have already added this character...');
-        }
-
-        $character = (new UserCharacter())
-            ->setUser($user)
-            ->setLodestoneId($lodestoneId);
-
-        $this->save($character);
-    }
-
-    /**
      * Confirm a characters ownership
      */
     public function confirm(int $lodestoneId)
     {
-        /** @var UserCharacter $character */
-        $character = $this->get($lodestoneId);
         $user = $this->users->getUser();
 
         // run character verification
-        $verification = $this->xivapi->character->verify($character->getLodestoneId());
+        $verification = $this->xivapi->character->verify($lodestoneId);
 
         // test if our Users pass phrase was found
         if (stripos($verification->Bio, $user->getCharacterPassPhrase()) === false) {
-            throw new GeneralJsonException('Character pass phrase could not be found on the characters profile bio.');
+            throw new GeneralJsonException('Character auth code could not be found on the characters profile bio.');
         }
+        
+        // grab character
+        /** @var \stdClass $character */
+        $json = $this->xivapi->character->get($lodestoneId);
 
         // confirm ownership and save
+        $character = new UserCharacter();
         $character
+            ->setLodestoneId($lodestoneId)
+            ->setName($json->Character->Name)
+            ->setServer($json->Character->Server)
+            ->setAvatar($json->Character->Avatar)
+            ->setUpdated(time())
             ->setUser($user)
             ->setConfirmed(true)
-            ->setMain(empty($user->getCharacters()));
-
+            ->setMain(!empty($user->getCharacters()));
+        
         $this->save($character);
+        return true;
     }
 
     /**

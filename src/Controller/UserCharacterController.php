@@ -19,26 +19,12 @@ class UserCharacterController extends AbstractController
     }
 
     /**
-     * Add a users character to the site, finding the ID should be
-     * done via JS and XIVAPI search before it hits this endpoint
-     *
-     * submit:
-     * - lodestone_id
-     *
-     * @Route("/characters/add", name="characters_add")
-     */
-    public function add(Request $request)
-    {
-        $this->characters->add($request);
-        return $this->json(true);
-    }
-
-    /**
-     * @Route("/characters/{lodestoneId}/confirm", name="characters_confirm")
+     * @Route("/characters/{lodestoneId}/add", name="characters_add")
      */
     public function confirm(int $lodestoneId)
     {
-        $this->characters->confirm($lodestoneId);
-        return $this->json(true);
+        return $this->json(
+            $this->characters->confirm($lodestoneId)
+        );
     }
 }

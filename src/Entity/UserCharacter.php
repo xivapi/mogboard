@@ -34,8 +34,8 @@ class UserCharacter
      */
     private $name;
     /**
-     * @var int
-     * @ORM\Column(type="integer", nullable=true)
+     * @var string
+     * @ORM\Column(type="string", length=32, nullable=true)
      */
     private $server;
     /**
@@ -112,12 +112,12 @@ class UserCharacter
         return $this;
     }
 
-    public function getServer(): ?int
+    public function getServer(): ?string
     {
         return $this->server;
     }
 
-    public function setServer(int $server)
+    public function setServer(string $server)
     {
         $this->server = $server;
 

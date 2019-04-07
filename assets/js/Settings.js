@@ -11,20 +11,25 @@ class Settings
         this.uiModalButton      = $('.btn-settings');
 
         this.defaultLanguage    = 'en';
+        this.defaultTimezone    = 'UTC';
         this.storageKeyServer   = 'mogboard_server';
         this.storageKeyLanguage = 'mogboard_language';
+        this.storageKeyTimezone = 'mogboard_timezone';
 
         this.server             = this.getServer();
         this.language           = this.getLanguage();
+        this.timezone           = this.getTimezone();
     }
 
     init()
     {
         let server   = this.getServer(),
-            language = this.getLanguage();
+            language = this.getLanguage(),
+            timezone = this.getTimezone();
 
         // set default language, this isn't as precious as server
         this.setLanguage(this.defaultLanguage);
+        this.setTimezone(this.defaultTimezone);
 
         // if not set, ask to set
         if (server === null || server.length === 0) {
@@ -37,10 +42,12 @@ class Settings
 
         this.setServer(server);
         this.setLanguage(language);
+        this.setTimezone(timezone);
 
         // set selected items
         this.uiModal.find('select.servers').val(server);
         this.uiModal.find('select.languages').val(language);
+        this.uiModal.find('select.timezones').val(timezone);
     }
 
     watch()
@@ -57,6 +64,11 @@ class Settings
         // language select
         this.uiModal.find('.languages').on('change', event => {
             this.setLanguage($(event.currentTarget).val());
+        });
+
+        // timezone select
+        this.uiModal.find('.timezones').on('change', event => {
+            this.setTimezone($(event.currentTarget).val());
         });
     }
 
@@ -80,6 +92,17 @@ class Settings
     getLanguage()
     {
         return localStorage.getItem(this.storageKeyLanguage);
+    }
+
+    setTimezone(timezone)
+    {
+        localStorage.setItem(this.storageKeyTimezone, timezone);
+        Cookie.set(this.storageKeyTimezone, timezone, { expires: 365, path: '/' });
+    }
+
+    getTimezone()
+    {
+        return localStorage.getItem(this.storageKeyTimezone);
     }
 }
 

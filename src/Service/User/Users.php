@@ -174,60 +174,59 @@ class Users
     /**
      * Checks the patreon status of all users against the discord channel.
      */
-    public function checkPatreonTiers()
+    public function checkPatreonTiersForAllUsers()
     {
-        $console = new ConsoleOutput();
-        $console->writeln('Checking Patreon Tiers...');
-        $section = $console->section();
-        
         /** @var User $user */
         foreach ($this->repository->findAll() as $user) {
-            $discordId = $user->getSsoDiscordId();
-            
-            try {
-                $roleTier = Discord::mog()->getUserRole($discordId);
-                $section->writeln("User: {$user->getUsername()} = {$roleTier}");
-            } catch (\Exception $ex) {
-                $section->writeln("User: {$user->getUsername()} failed to fetch, likely not on the discord server");
-                continue;
-            }
-            
-            // set patreon tier
-            $user->setPatron($roleTier ?: 0);
-            
-            // extra benefits
-            if ($roleTier >= 1) {
-                $user
-                    ->setAlertsMax(User::ALERTS_MAX_PATREON)
-                    ->setAlertsExpiry(User::ALERT_EXPIRY_TIMEOUT_PATREON);
-                
-                // update alerts
-                /** @var UserAlert $alert */
-                foreach ($user->getAlerts() as $alert) {
-                    $alert
-                        ->setTriggerLimit(UserAlert::LIMIT_PATREON)
-                        ->setTriggerDelay(UserAlert::DELAY_PATREON);
-                    
-                    if ($user->isPatron(User::PATREON_DPS)) {
-                        $alert
-                            ->setTriggerLimit(UserAlert::LIMIT_PATREON_TIER4)
-                            ->setTriggerDelay(UserAlert::DELAY_PATREON_TIER4);
-                    }
-                    
-                    $this->em->persist($alert);
-                }
-                
-                $totalAlerts = count($user->getAlerts());
-                $section->writeln("User: {$user->getUsername()} = {$roleTier} - {$totalAlerts} alerts");
-            }
-            
-            $this->em->persist($user);
-            $this->em->flush();
-    
+            $this->checkPatreonTiersForUser($user);
             usleep(200000);
         }
-        $this->em->clear();
         
-        $console->writeln('Complete!');
+        $this->em->clear();
+    }
+    
+    /**
+     * Checks the patreon status for an individual user
+     */
+    public function checkPatreonTiersForUser(User $user)
+    {
+        $discordId = $user->getSsoDiscordId();
+
+        try {
+            $roleTier = Discord::mog()->getUserRole($discordId);
+        } catch (\Exception $ex) {
+            return false;
+        }
+    
+        // set patreon tier
+        $user->setPatron($roleTier ?: 0);
+    
+        // extra benefits
+        if ($roleTier >= 1) {
+            $user
+                ->setAlertsMax(User::ALERTS_MAX_PATREON)
+                ->setAlertsExpiry(User::ALERT_EXPIRY_TIMEOUT_PATREON);
+        
+            // update alerts
+            /** @var UserAlert $alert */
+            foreach ($user->getAlerts() as $alert) {
+                $alert
+                    ->setTriggerLimit(UserAlert::LIMIT_PATREON)
+                    ->setTriggerDelay(UserAlert::DELAY_PATREON);
+            
+                if ($user->isPatron(User::PATREON_DPS)) {
+                    $alert
+                        ->setTriggerLimit(UserAlert::LIMIT_PATREON_TIER4)
+                        ->setTriggerDelay(UserAlert::DELAY_PATREON_TIER4);
+                }
+            
+                $this->em->persist($alert);
+            }
+        }
+    
+        $this->em->persist($user);
+        $this->em->flush();
+        
+        return true;
     }
 }

@@ -5,8 +5,11 @@ namespace App\Twig;
 use App\Service\Common\Environment;
 use App\Service\Common\Language;
 use App\Service\Common\SiteVersion;
+use App\Service\Common\Time;
 use App\Service\Redis\Redis;
+use App\Service\User\Users;
 use Carbon\Carbon;
+use Carbon\CarbonTimeZone;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -16,6 +19,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('date', [$this, 'getDate']),
+            new TwigFilter('bool', [$this, 'getBoolVisual']),
         ];
     }
     
@@ -25,6 +29,8 @@ class AppExtension extends AbstractExtension
             new \Twig_SimpleFunction('siteVersion', [$this, 'getApiVersion']),
             new \Twig_SimpleFunction('favIcon', [$this, 'getFavIcon']),
             new \Twig_SimpleFunction('cache', [$this, 'getCached']),
+            new \Twig_SimpleFunction('timezone', [$this, 'getTimezone']),
+            new \Twig_SimpleFunction('timezones', [$this, 'getTimezones']),
         ];
     }
     
@@ -33,15 +39,39 @@ class AppExtension extends AbstractExtension
      */
     public function getDate($unix)
     {
-        $unix = is_numeric($unix) ? $unix : strtotime($unix);
+        $unix       = is_numeric($unix) ? $unix : strtotime($unix);
         $difference = time() - $unix;
+        $carbon     = Carbon::now()->subSeconds($difference)->setTimezone(new CarbonTimeZone(Time::timezone()));
         
-        // if over 24hrs, show date
-        if ($difference > (60 * 60)) {
-            return date('jS M, H:i:s', $unix);
+        if ($difference > (60 * 180)) {
+            return $carbon->format('jS M, H:i:s');
         }
         
-        return Carbon::now()->subSeconds($difference)->diffForHumans();
+        return $carbon->diffForHumans();
+    }
+    
+    /**
+     * Get Users Timezone
+     */
+    public function getTimezone()
+    {
+        return Time::timezone();
+    }
+    
+    /**
+     * Get supported timezones
+     */
+    public function getTimezones()
+    {
+        return Time::timezones();
+    }
+    
+    /**
+     * Renders a tick or cross for bool visuals
+     */
+    public function getBoolVisual($bool)
+    {
+        return $bool ? '✔' : '✘';
     }
     
     /**

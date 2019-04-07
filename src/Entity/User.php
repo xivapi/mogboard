@@ -14,12 +14,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
+    const PATREON_BENEFIT    = 9;
     const PATREON_DPS        = 4;
     const PATREON_HEALER     = 3;
     const PATREON_TANK       = 2;
     const PATREON_ADVENTURER = 1;
     
     const ALERTS_MAX = 10;
+    const ALERTS_MAX_BENEFIT = 20;
     const ALERTS_MAX_PATREON = 50;
     
     const ALERT_EXPIRY_TIMEOUT = (60 * 60 * 24 * 7);
@@ -285,6 +287,20 @@ class User
         $this->patron = $patron;
         
         return $this;
+    }
+    
+    public function getPatreonTier(): string
+    {
+        $tiers = [
+            'None',
+            self::PATREON_DPS         => 'DPS',
+            self::PATREON_HEALER      => 'Healer',
+            self::PATREON_TANK        => 'Tank',
+            self::PATREON_ADVENTURER  => 'Adventurer',
+            self::PATREON_BENEFIT     => 'Benefit',
+        ];
+        
+        return $tiers[$this->patron] ?? null;
     }
     
     public function getAlertsMax(): int

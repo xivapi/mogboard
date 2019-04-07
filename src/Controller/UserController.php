@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\GameData\GameServers;
 use App\Service\User\SignInDiscord;
 use App\Service\User\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,8 +25,66 @@ class UserController extends AbstractController
     public function account(Request $request)
     {
         $this->users->setLastUrl($request);
-        
-        return $this->render('UserAccount/index.html.twig');
+        return $this->render('UserAccount/account.html.twig');
+    }
+    
+    /**
+     * @Route("/account/check-patreon", name="user_account_check_patreon")
+     */
+    public function checkPatreon(Request $request)
+    {
+        return $this->json([
+            'ok' => $this->users->checkPatreonTiersForUser(
+                $this->users->getUser(true)
+            )
+        ]);
+    }
+    
+    /**
+     * @Route("/account/characters", name="user_account_characters")
+     */
+    public function accountCharacters(Request $request)
+    {
+        $this->users->setLastUrl($request);
+        return $this->render('UserAccount/characters.html.twig', [
+            'character_servers' => GameServers::LIST_DC,
+        ]);
+    }
+    
+    /**
+     * @Route("/account/retainers", name="user_account_retainers")
+     */
+    public function accountRetainers(Request $request)
+    {
+        $this->users->setLastUrl($request);
+        return $this->render('UserAccount/retainers.html.twig');
+    }
+    
+    /**
+     * @Route("/account/alerts", name="user_account_alerts")
+     */
+    public function accountAlerts(Request $request)
+    {
+        $this->users->setLastUrl($request);
+        return $this->render('UserAccount/alerts.html.twig');
+    }
+    
+    /**
+     * @Route("/account/lists", name="user_account_lists")
+     */
+    public function accountLists(Request $request)
+    {
+        $this->users->setLastUrl($request);
+        return $this->render('UserAccount/lists.html.twig');
+    }
+    
+    /**
+     * @Route("/account/reports", name="user_account_reports")
+     */
+    public function accountReports(Request $request)
+    {
+        $this->users->setLastUrl($request);
+        return $this->render('UserAccount/reports.html.twig');
     }
     
     /**
@@ -61,21 +120,5 @@ class UserController extends AbstractController
     {
         $this->users->logout();
         return $this->redirectToRoute('home');
-    }
-
-    /**
-     * @Route("/patreon", name="account_patreon")
-     */
-    public function patreon()
-    {
-
-    }
-
-    /**
-     * @Route("/patreon/success", name="account_patreon_success")
-     */
-    public function patreonSuccess()
-    {
-
     }
 }

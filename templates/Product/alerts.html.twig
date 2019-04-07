@@ -21,16 +21,16 @@
             {# HQ / NQ / Server or DC #}
             <div class="form_row">
                 <div class="form_columns">
-                    <div class="form_col2">
+                    <div class="form_col50">
                         <label>Decide if the trigger should check NQ/HQ or both.</label>
                         <div class="form_columns">
-                            <div class="form_col2">
+                            <div class="form_col50">
                                 <div class="checkbox">
                                     <input type="checkbox" id="alert_nq">
                                     <label for="alert_nq">Normal Quality</label>
                                 </div>
                             </div>
-                            <div class="form_col2">
+                            <div class="form_col50">
                                 <div class="checkbox">
                                     <input type="checkbox" id="alert_hq">
                                     <label for="alert_hq">High-Quality</label>
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form_col2">
+                    <div class="form_col50">
                         <label>Should the alert check the whole Data-Center?</label>
                         <div class="checkbox">
                             <input type="checkbox" id="alert_dc">
@@ -54,7 +54,7 @@
                 <div class="alert_entries"></div>
 
                 <div class="alert_triggers_form form_row form_columns">
-                    <div class="form_col4">
+                    <div class="form_col25">
                         <select name="alert_trigger_field" id="alert_trigger_field" class="full">
                             <option disabled selected>- Select a Field -</option>
                             {% for category, triggers in alerts.trigger_fields %}
@@ -66,7 +66,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form_col4">
+                    <div class="form_col25">
                         <select name="alert_trigger_op" id="alert_trigger_op" class="full">
                             <option disabled selected>- Select an Operator</option>
                             {% for id,op in alerts.trigger_operators %}
@@ -74,10 +74,10 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form_col4">
+                    <div class="form_col25">
                         <input name="alert_trigger_value" id="alert_trigger_value" type="text" placeholder="Condition Value" class="full">
                     </div>
-                    <div class="form_col4">
+                    <div class="form_col25">
                         <button type="button" class="btn-blue alert_trigger_add">Add</button>
                     </div>
                 </div>
@@ -97,13 +97,13 @@
                 <label>How do you want to be notified?</label>
 
                 <div class="form_columns">
-                    <div class="form_col2">
+                    <div class="form_col50">
                         <div class="checkbox">
                             <input type="checkbox" id="alert_notify_discord">
                             <label for="alert_notify_discord">Discord <em>({{ auth.user.username }})</em></label>
                         </div>
                     </div>
-                    <div class="form_col2">
+                    <div class="form_col50">
                         <div class="checkbox">
                             <input type="checkbox" id="alert_notify_email">
                             <label for="alert_notify_email">Email <em>({{ auth.user.email }})</em></label>
@@ -213,7 +213,7 @@
                         <td><span>Send delay for same alert</span></td>
                         <td>1 Hour</td>
                         <td>
-                            10 Minutes<br>
+                            15 Minutes<br>
                             <strong>DPS Tier: 1 minute</strong>
                         </td>
                     </tr>
