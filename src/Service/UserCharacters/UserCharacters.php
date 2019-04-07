@@ -111,7 +111,7 @@ class UserCharacters
 
             $character
                 ->setName($data->Character->Name)
-                ->setServer(GameServers::getServerId($data->Character->Server))
+                ->setServer($data->Character->Server)
                 ->setAvatar($data->Character->Avatar);
 
             $this->save($character);
