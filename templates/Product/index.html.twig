@@ -43,7 +43,7 @@
             </div>
 
             {# Alerts #}
-            <div class="tab-page tab-alerts open">
+            <div class="tab-page tab-alerts">
                 {% include 'Product/alerts.html.twig' %}
             </div>
 
@@ -53,7 +53,7 @@
                 {% set pricesCount = attribute(market, serverName).Prices|length %}
                 {% set historyCount = attribute(market, serverName).History|length %}
 
-                <div class="tab-page tab-cw{{ serverName }} {# {{ open }} #}">
+                <div class="tab-page tab-cw{{ serverName }} {{ open }}">
                     <div class="tab-nav">
                         <div>
                             <button data-tab="cw-prices" class="active">Prices ({{ pricesCount }})</button>
