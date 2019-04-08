@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UserAlert;
+use App\Service\User\Users;
 use App\Service\UserAlerts\UserAlerts;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,12 +11,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserAlertsController extends AbstractController
 {
+    /** @var Users */
+    private $users;
     /** @var UserAlerts */
     private $alerts;
 
-    public function __construct(UserAlerts $alerts)
+    public function __construct(UserAlerts $alerts, Users $users)
     {
         $this->alerts = $alerts;
+        $this->users  = $users;
     }
 
     /**
@@ -23,6 +27,11 @@ class UserAlertsController extends AbstractController
      */
     public function create(Request $request)
     {
+        $users = $this->users->getUser(true);
+        if (count($users->getAlerts()) >= $users->getAlertsMax()) {
+            throw new \Exception('too many alerts!');
+        }
+
         return $this->json(
             $this->alerts->save(
                 UserAlert::buildFromRequest($request)

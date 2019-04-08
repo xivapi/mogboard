@@ -7,6 +7,9 @@
     <h3>Create a new alert on server: {{ server.name }}</h3>
 
     {% if auth.online() %}
+        {% if auth.user.alerts|length >= auth.user.alertsMax %}
+            <div class="alert-default">You are currently max'd out on alerts and will not be able to create anymore.</div>
+        {% endif %}
         <form id="alert_form" class="alert_form" method="post" action="{{ url('alerts_create') }}">
             <div class="alert-form-loading">
                 <img src="/i/svg/loading3.svg" height="64px">
@@ -127,7 +130,6 @@
         <div class="alerts_table">
             <div class="alert-default">Loading alerts...</div>
         </div>
-
     {% else %}
         <div class="alert-default">
             You must be logged in to create item alerts.
