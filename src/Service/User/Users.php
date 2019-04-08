@@ -30,7 +30,7 @@ class Users
     {
         $this->em = $em;
         $this->repository = $em->getRepository(User::class);
-        $this->repositoryAlertQueue = $em->getRepository(UserAlertQueueRepository::class);
+        $this->repositoryAlertQueue = $em->getRepository(UserAlertQueue::class);
     }
 
     /**
