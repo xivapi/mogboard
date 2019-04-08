@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% set title = 'NPC Store' %}
+
+{% block body %}
+<div class="special_shops_list">
+
+    <h1>Special Shops</h1>
+
+    <ul>
+        {% for shop in special_shops %}
+        <li>
+            <a href="{{  }}">{{ shop.Name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+{% endblock %}

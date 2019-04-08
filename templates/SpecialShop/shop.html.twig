@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+{% set title = 'NPC Store' %}
+
+{% block body %}
+    <style>
+        .hq {
+            vertical-align: bottom;
+            display: inline-block;
+            margin: 0 0 3px 5px;
+        }
+        .profit {
+            color: #1aa571;
+        }
+
+        .table small {
+            opacity: 0.4;
+            font-size: 12px;
+        }
+    </style>
+    <div class="special_shops_list">
+
+        <h1>Special Shop: {{ special_shop.ID }} {{ special_shop.Name }}</h1>
+
+        <div class="table">
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Item</th>
+                        <th>Cost</th>
+                        <th>Qty Received</th>
+                        <th>Quantity</th>
+                        <th>Price Per Unit</th>
+                        <th>Price Total</th>
+                        <th>Gil Per Token</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in special_shop_items %}
+                    <tr>
+                        <td width="2">
+                            <img src="{{ item.Item.Icon|icon }}" height="26" style="margin: -8px;">
+                        </td>
+                        <td width="30%">
+                            <a href="{{ path('item_page', { itemId: item.Item.ID }) }}">{{ item.Item.Name_en }}</a>
+                            {{ item.Info.HqReceive ? '<img src="/i/game/hq.png" class="hq">' : '' }}
+                        </td>
+                        <td>
+                            {{ item.Info.ItemCostCount|number_format }}
+                        </td>
+                        <td>
+                            {{ item.Info.ItemCostReceive }} &nbsp;/&nbsp; HQ:{{ item.Info.HqReceive }}
+                        </td>
+                        {% if item.Market %}
+                            {% if item.Market[server].Prices[0] is defined %}
+                                {% set price = item.Market[server].Prices[0] %}
+                                {% set profit = (price.PricePerUnit / item.Info.ItemCostCount)|round(3) %}
+
+                                <td>{{ price.Quantity }}</td>
+                                <td>{{ price.PricePerUnit|number_format }}</td>
+                                <td>{{ price.PriceTotal|number_format }}</td>
+                                <td><span class="profit">{{ profit }}</span></td>
+                            {% else %}
+                                <td colspan="6">
+                                    <small>None on the market board</small>
+                                </td>
+                            {% endif %}
+                        {% else %}
+                        <td colspan="6">
+                            <small>CANNOT BE SOLD</small>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{% endblock %}
