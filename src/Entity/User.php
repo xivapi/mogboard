@@ -58,14 +58,14 @@ class User
             'MAX_NOTIFICATIONS'     => 500,
             'NOTIFY_TIMEOUT'        => (60 * 1),
             'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 14),
-            'UPDATE_TIMEOUT'        => false,
+            'UPDATE_TIMEOUT'        => (60 * 10),
         ],
         self::PATREON_BENEFIT => [
             'MAX'                   => 5,
             'MAX_NOTIFICATIONS'     => 10,
             'NOTIFY_TIMEOUT'        => (60 * 15),
             'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 3),
-            'UPDATE_TIMEOUT'        => (60 * 10),
+            'UPDATE_TIMEOUT'        => false,
         ]
     ];
 
