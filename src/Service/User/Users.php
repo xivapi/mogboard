@@ -256,7 +256,7 @@ class Users
     
     public function createPrivateAlertQueues()
     {
-        foreach (range(0,100) as $i) {
+        foreach (range(0,40) as $i) {
             $queue = new UserAlertQueue();
             $queue->setNumber($i);
             $this->em->persist($queue);
