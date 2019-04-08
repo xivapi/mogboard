@@ -2,6 +2,7 @@
 
 namespace App\Service\UserAlerts;
 
+use App\Entity\User;
 use App\Entity\UserAlert;
 use App\Entity\UserAlertEvent;
 use App\Service\Companion\Companion;
@@ -62,7 +63,6 @@ class UserAlertsTriggers
         // grab all alerts
         $alerts = $this->userAlerts->getAllByPatronStatus($patrons);
         $total = count($alerts);
-        
         $this->console->writeln("Total: {$total}");
         
         /** @var UserAlert $alert */
@@ -74,51 +74,63 @@ class UserAlertsTriggers
                 $this->userAlerts->delete($alert, true);
                 continue;
             }
-            
-            //
-            // handle server
-            //
-            $dc         = GameServers::getDataCenter($alert->getServer());
-            $dcServers  = GameServers::getDataCenterServers($alert->getServer());
-            $servers    = $alert->isTriggerDataCenter() ? $dcServers : [ $alert->getServer() ];
+
+            // get user for the alert
+            $user = $alert->getUser();
+
+            /**
+             * Handle the server for the alert,
+             * todo - this should be reverted back to DC once World Visit is available.
+             */
+            $servers = [ $alert->getServer() ];
+
+            # $dc         = GameServers::getDataCenter($alert->getServer());
+            # $dcServers  = GameServers::getDataCenterServers($alert->getServer());
+            # $servers    = $alert->isTriggerDataCenter() ? $dcServers : [ $alert->getServer() ];
             $this->console->writeln("--> Data Center: <info>{$dc}</info>: ". implode(', ', $servers));
-            
-            // grab market data
+
+
+            /**
+             * todo - this should use Companion internally. Look into making the Companion code "common"
+             * Fetch the market data from companion
+             */
             $this->console->writeln("--> Getting market info");
             $market = $this->companion->getByServers($servers, $alert->getItemId());
-            
-            // - if this user is a patron user and the prices are older than a few minutes
-            //   it will query companion directly.
-            if ($patrons) {
-                // different patreon tiers get different timeouts
-                $patreonTimeoutInSeconds = UserAlert::PATRON_UPDATE_TIME;
-                if ($alert->getUser()->isPatron(UserAlert::PATRON_UPDATE_TIME_TIER4)) {
-                    $patreonTimeoutInSeconds = UserAlert::PATRON_UPDATE_TIME_TIER4;
-                }
-                
-                $patronTimeout = time() - $patreonTimeoutInSeconds;
+
+            /**
+             * DPS patrons get auto-price updating.
+             */
+            if ($user->isPatron(User::PATREON_DPS)) {
+                // Calculate out of date timestamp
+                $outOfDateTimePeriod = time() - $user->getAlertsUpdateTimeout();
+
                 foreach ($market as $server => $marketData) {
                     // if out of date, request update
-                    if ($marketData->Updated < $patronTimeout) {
+                    if ($marketData->Updated < $outOfDateTimePeriod) {
                         // this only needs to request once as it does the whole DC regardless of the alert choice.
                         $this->console->writeln('--> Requesting manual update');
                         $this->xivapi->market->manualUpdateItem(getenv('XIVAPI_COMPANION_KEY'), $alert->getItemId(), $alert->getServer());
-                        break;
                     }
                 }
             }
 
-            // check if the alert has been sent recently, wait the delay
-            $timeout = $alert->getTriggerLastSent() + $alert->getTriggerDelay();
-            if ($timeout > time()) {
-                $this->console->writeln('--> Skipping as alert was triggered recently.');
+            /**
+             * Handle alert delay
+             * if the notification delay is greater than the current time, we skip
+             */
+            $alertNotificationDelay = $alert->getTriggerLastSent() + $user->getAlertNotifyTimeout();
+            if ($alertNotificationDelay > time()) {
+                $this->console->writeln('--> Skipping: Alert is on notification cooldown.');
                 unset($market);
                 continue;
             }
 
-            // check if the trigger has exceeded its limit
-            if ($alert->getTriggersSent() > $alert->getTriggerLimit()) {
-                $this->console->writeln('--> This trigger has exceeded its limit');
+            /**
+             * Handle max alert notifications.
+             * If the user has hit the daily limit, we skip.
+             */
+            if ($user->isAtMaxNotifications()) {
+                $this->console->writeln('--> Skipping: User has reached maximum alerts.');
                 unset($market);
                 continue;
             }
@@ -130,36 +142,43 @@ class UserAlertsTriggers
                     break;
                 }
 
-                // grab dataset
+                /**
+                 * Grab the market data
+                 */
                 $marketDataSet = $data->{$alert->getTriggerType()};
     
                 // loop through data
                 foreach ($marketDataSet as $marketRow) {
+                    /**
+                     * if we hit the maximum number of triggers for an individual alert, break
+                     */
                     if ($this->atMaxTriggers()) {
                         break;
                     }
-                    
-                    // if quality is wrong, skip
+
+                    /**
+                     * If the item quality is incorrect, we skip
+                     */
                     if ($this->isCorrectQuality($alert, $marketRow) == false) {
                         continue;
                     }
-                    
-                    // if alert type is "history", ignore anything from before the alert was created
+
+                    /**
+                     * If the alert type is a "History" event, we ignore any market
+                     * entries prior to when the alert was created
+                     */
                     if ($alert->getTriggerType() === 'History' && $marketRow->PurchaseDate < $alert->getAdded()) {
                         continue;
                     }
                     
                     // loop through triggers
+                    $triggers = [];
                     foreach ($alert->getTriggerConditions() as $i => $trigger) {
                         [$field, $op, $value] = explode(',', $trigger);
                         [$category, $field]   = explode('_', $field);
 
                         // grab value for this field
                         $marketValue = $marketRow->{$field};
-        
-                        // output trigger to console
-                        #$opName = UserAlert::TRIGGER_OPERATORS_SHORT[$op];
-                        #$this->console->writeln("--> <comment>({$category}) {$field}={$marketValue}</comment> {$opName} <info>{$value}</info>");
         
                         // run all trigger tests
                         switch ($op) {
@@ -205,6 +224,8 @@ class UserAlertsTriggers
     
             // if alerts, send them
             if ($this->triggered) {
+                $user->incrementNotificationCount();
+
                 $alert
                     ->incrementTriggersSent()
                     ->setTriggerLastSent(time());
@@ -214,7 +235,8 @@ class UserAlertsTriggers
                     ->setUserId($alert->getUser()->getId())
                     ->setUserAlert($alert)
                     ->setData($this->triggered);
-    
+
+                $this->em->persist($user);
                 $this->em->persist($alert);
                 $this->em->persist($event);
                 $this->em->flush();

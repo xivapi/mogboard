@@ -16,15 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UserAlert
 {
-    /**
-     * Patreon tiers:
-     * 4 = dps
-     * 3 = healer
-     * 2 = tank
-     * 1 = adventurer
-     */
-    const STRING_PREG = "/[^a-zA-Z0-9\+_\- ]/";
-    
     const TRIGGER_FIELDS = [
         // Prices
         'Prices' => [
@@ -78,20 +69,6 @@ class UserAlert
     const TRIGGER_ACTION_DELETE   = 'delete';
     const TRIGGER_ACTION_PAUSE    = 'pause';
 
-    // the maximum number of times a trigger will send in 1 day
-    const LIMIT_DEFAULT = 10;
-    const LIMIT_PATREON = 50;
-    const LIMIT_PATREON_TIER4 = 200;
-
-    // the delay between sending alerts
-    const DELAY_DEFAULT       = (60 * 60);
-    const DELAY_PATREON       = (60 * 15);
-    const DELAY_PATREON_TIER4 = (60 * 1);
-
-    // how old data can be before it's requested to be manually updated
-    const PATRON_UPDATE_TIME = (60 * 15);
-    const PATRON_UPDATE_TIME_TIER4 = 60;
-
     #-------------------------------------------------------------------------------------------------------------------
     
     /**
@@ -141,16 +118,6 @@ class UserAlert
      * @ORM\Column(type="string", length=100)
      */
     private $triggerType;
-    /**
-     * @var int
-     * @ORM\Column(type="integer")
-     */
-    private $triggerLimit = self::LIMIT_DEFAULT;
-    /**
-     * @var int
-     * @ORM\Column(type="integer")
-     */
-    private $triggerDelay = self::DELAY_DEFAULT;
     /**
      * @var int
      * @ORM\Column(type="integer")
@@ -217,7 +184,6 @@ class UserAlert
         $json  = \GuzzleHttp\json_decode($request->getContent());
         $alert = $alert ?: new UserAlert();
  
-        // preg_replace(self::STRING_PREG, null, $name);
         $alert
             ->setItemId($json->alert_item_id ?: $alert->getItemId())
             ->setName($json->alert_name ?: $alert->getName())
@@ -336,7 +302,7 @@ class UserAlert
 
     public function setServer(string $server)
     {
-        $this->server = preg_replace(self::STRING_PREG, null, $server);
+        $this->server = preg_replace("/[^a-zA-Z0-9]/", null, $server);
 
         return $this;
     }
@@ -386,30 +352,6 @@ class UserAlert
     public function addTriggerCondition($field, $op, $value)
     {
         $this->triggerConditions[] = sprintf("%s,%s,%s", $field, $op, $value);
-        return $this;
-    }
-
-    public function getTriggerLimit(): int
-    {
-        return $this->triggerLimit;
-    }
-
-    public function setTriggerLimit(int $triggerLimit)
-    {
-        $this->triggerLimit = $triggerLimit;
-
-        return $this;
-    }
-
-    public function getTriggerDelay(): int
-    {
-        return $this->triggerDelay;
-    }
-
-    public function setTriggerDelay(int $triggerDelay)
-    {
-        $this->triggerDelay = $triggerDelay;
-
         return $this;
     }
 

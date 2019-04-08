@@ -14,19 +14,53 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
-    const PATREON_BENEFIT    = 9;
-    const PATREON_DPS        = 4;
-    const PATREON_HEALER     = 3;
-    const PATREON_TANK       = 2;
     const PATREON_ADVENTURER = 1;
-    
-    const ALERTS_MAX = 10;
-    const ALERTS_MAX_BENEFIT = 20;
-    const ALERTS_MAX_PATREON = 50;
-    
-    const ALERT_EXPIRY_TIMEOUT = (60 * 60 * 24 * 7);
-    const ALERT_EXPIRY_TIMEOUT_PATREON = (60 * 60 * 24 * 45);
-    
+    const PATREON_TANK       = 2;
+    const PATREON_HEALER     = 3;
+    const PATREON_DPS        = 4;
+    const PATREON_BENEFIT    = 9;
+
+    /**
+     * Alert benefits per patreon
+     */
+    const ALERT_LIMITS = [
+        self::PATREON_ADVENTURER => [
+            'MAX'                   => 5,
+            'MAX_NOTIFICATIONS'     => 10,
+            'NOTIFY_TIMEOUT'        => (60 * 60),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 3),
+            'UPDATE_TIMEOUT'        => false,
+        ],
+        self::PATREON_TANK => [
+            'MAX'                   => 10,
+            'MAX_NOTIFICATIONS'     => 50,
+            'NOTIFY_TIMEOUT'        => (60 * 15),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 7),
+            'UPDATE_TIMEOUT'        => false,
+        ],
+        self::PATREON_HEALER => [
+            'MAX'                   => 10,
+            'MAX_NOTIFICATIONS'     => 50,
+            'NOTIFY_TIMEOUT'        => (60 * 15),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 7),
+            'UPDATE_TIMEOUT'        => false,
+        ],
+        self::PATREON_DPS => [
+            'MAX'                   => 20,
+            'MAX_NOTIFICATIONS'     => 500,
+            'NOTIFY_TIMEOUT'        => (60 * 1),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 14),
+            'UPDATE_TIMEOUT'        => false,
+        ],
+        self::PATREON_BENEFIT => [
+            'MAX'                   => 5,
+            'MAX_NOTIFICATIONS'     => 10,
+            'NOTIFY_TIMEOUT'        => (60 * 15),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 3),
+            'UPDATE_TIMEOUT'        => (60 * 10),
+        ]
+    ];
+
     /**
      * @var string
      * @ORM\Id
@@ -89,7 +123,10 @@ class User
      */
     private $retainers;
     
-    // -- alerts
+    //
+    // -------- ALERTS --------
+    //
+
     /**
      * @ORM\OneToMany(targetEntity="UserAlert", mappedBy="user")
      */
@@ -98,14 +135,42 @@ class User
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $alertsMax = self::ALERTS_MAX;
+    private $alertQueue = 0;
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $alertsExpiry = self::ALERT_EXPIRY_TIMEOUT;
-    
-    // -- discord sso
+    private $alertsMax = 0;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $alertsMaxNotifications = 0;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $alertsNotificationCount = 0;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $alertNotifyTimeout = 0;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $alertsExpiry = 0;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $alertsUpdateTimeout = 0;
+
+    //
+    // -------- DISCORD SSO --------
+    //
+
     /**
      * @var string
      * @ORM\Column(type="string", length=100, nullable=true)
@@ -229,6 +294,22 @@ class User
         return $this;
     }
 
+    //
+    // Alerts ----------------------------------------------------------------------------------------------------------
+    //
+
+    public function getAlertQueue(): int
+    {
+        return $this->alertQueue;
+    }
+
+    public function setAlertQueue(int $alertQueue)
+    {
+        $this->alertQueue = $alertQueue;
+
+        return $this;
+    }
+
     public function getAlerts()
     {
         return $this->alerts;
@@ -241,23 +322,92 @@ class User
         return $this;
     }
 
-    public function addAlert(UserAlert $alert)
+    public function getAlertsMax(): int
     {
-        $this->alerts[] = $alert;
+        return $this->alertsMax;
+    }
+
+    public function setAlertsMax(int $alertsMax)
+    {
+        $this->alertsMax = $alertsMax;
+
         return $this;
     }
-    
+
+    public function getAlertsMaxNotifications(): int
+    {
+        return $this->alertsMaxNotifications;
+    }
+
+    public function setAlertsMaxNotifications(int $alertsMaxNotifications)
+    {
+        $this->alertsMaxNotifications = $alertsMaxNotifications;
+
+        return $this;
+    }
+
+    public function getAlertsNotificationCount(): int
+    {
+        return $this->alertsNotificationCount;
+    }
+
+    public function setAlertsNotificationCount(int $alertsNotificationCount)
+    {
+        $this->alertsNotificationCount = $alertsNotificationCount;
+
+        return $this;
+    }
+
+    public function getAlertNotifyTimeout(): int
+    {
+        return $this->alertNotifyTimeout;
+    }
+
+    public function setAlertNotifyTimeout(int $alertNotifyTimeout)
+    {
+        $this->alertNotifyTimeout = $alertNotifyTimeout;
+
+        return $this;
+    }
+
     public function getAlertsExpiry(): int
     {
         return $this->alertsExpiry;
     }
-    
+
     public function setAlertsExpiry(int $alertsExpiry)
     {
         $this->alertsExpiry = $alertsExpiry;
-        
+
         return $this;
     }
+
+    public function getAlertsUpdateTimeout(): int
+    {
+        return $this->alertsUpdateTimeout;
+    }
+
+    public function setAlertsUpdateTimeout(int $alertsUpdateTimeout)
+    {
+        $this->alertsUpdateTimeout = $alertsUpdateTimeout;
+
+        return $this;
+    }
+
+    public function isAtMaxNotifications()
+    {
+        return $this->alertsNotificationCount >= $this->alertsMaxNotifications;
+    }
+
+    public function incrementNotificationCount()
+    {
+        $this->alertsNotificationCount++;
+        return $this;
+    }
+
+    //
+    // -----------------------------------------------------------------------------------------------------------------
+    //
 
     public function getReports()
     {
@@ -301,18 +451,6 @@ class User
         ];
         
         return $tiers[$this->patron] ?? null;
-    }
-    
-    public function getAlertsMax(): int
-    {
-        return $this->alertsMax;
-    }
-    
-    public function setAlertsMax(int $alertsMax)
-    {
-        $this->alertsMax = $alertsMax;
-        
-        return $this;
     }
     
     public function getLists()
@@ -398,6 +536,10 @@ class User
     {
         return strtoupper('mb'. substr(sha1($this->id), 0, 5));
     }
+
+    //
+    // Discord SSO -----------------------------------------------------------------------------------------------------
+    //
     
     public function getSsoDiscordId(): string
     {

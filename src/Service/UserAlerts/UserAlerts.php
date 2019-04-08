@@ -105,16 +105,7 @@ class UserAlerts
         
         $alert
             ->setServer(GameServers::getServer())
-            ->setUser($user)
-            ->setTriggerLimit($user->isPatron() ? UserAlert::LIMIT_PATREON : UserAlert::LIMIT_DEFAULT)
-            ->setTriggerDelay($user->isPatron() ? UserAlert::DELAY_PATREON : UserAlert::DELAY_DEFAULT);
-        
-        // if DPS patreon tier, increase trigger limit
-        if ($user->isPatron(User::PATREON_DPS)) {
-            $alert
-                ->setTriggerLimit(UserAlert::LIMIT_PATREON_TIER4)
-                ->setTriggerDelay(UserAlert::DELAY_PATREON_TIER4);
-        }
+            ->setUser($user);
 
         $this->em->persist($alert);
         $this->em->flush();
@@ -146,30 +137,5 @@ class UserAlerts
         }
         
         return true;
-    }
-    
-    /**
-     * Clean up alerts by resetting triggers and deleting old triggers
-     */
-    public function clear()
-    {
-        $alerts = $this->repository->findAll();
-        $total  = count($alerts);
-        
-        $this->console->writeln("Cleaning up: {$total} alerts");
-        
-        /** @var UserAlert $alert */
-        foreach ($alerts as $alert) {
-            $this->console->writeln("- {$alert->getName()}");
-            // reset trigger limit
-            $alert->setTriggersSent(0);
-            
-            // todo - delete old ones
-            // todo - handle trigger action
-            
-            $this->em->persist($alert);
-        }
-        
-        $this->em->flush();
     }
 }

@@ -3,12 +3,12 @@
 namespace App\Service\User;
 
 use App\Entity\User;
-use App\Entity\UserAlert;
+use App\Entity\UserAlertQueue;
+use App\Repository\UserAlertQueueRepository;
 use App\Repository\UserRepository;
 use App\Service\ThirdParty\Discord\Discord;
 use Delight\Cookie\Cookie;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -21,13 +21,16 @@ class Users
     private $em;
     /** @var UserRepository */
     private $repository;
+    /** @var UserAlertQueueRepository */
+    private $repositoryAlertQueue;
     /** @var SignInInterface */
     private $sso;
 
     public function __construct(EntityManagerInterface $em)
     {
-        $this->em         = $em;
+        $this->em = $em;
         $this->repository = $em->getRepository(User::class);
+        $this->repositoryAlertQueue = $em->getRepository(UserAlertQueue::class);
     }
 
     /**
@@ -203,30 +206,48 @@ class Users
     
         // extra benefits
         if ($roleTier >= 1) {
-            $user
-                ->setAlertsMax(User::ALERTS_MAX_PATREON)
-                ->setAlertsExpiry(User::ALERT_EXPIRY_TIMEOUT_PATREON);
-        
-            // update alerts
-            /** @var UserAlert $alert */
-            foreach ($user->getAlerts() as $alert) {
-                $alert
-                    ->setTriggerLimit(UserAlert::LIMIT_PATREON)
-                    ->setTriggerDelay(UserAlert::DELAY_PATREON);
-            
-                if ($user->isPatron(User::PATREON_DPS)) {
-                    $alert
-                        ->setTriggerLimit(UserAlert::LIMIT_PATREON_TIER4)
-                        ->setTriggerDelay(UserAlert::DELAY_PATREON_TIER4);
+            //
+            // Set Alert Benefits
+            //
+            $benefits = User::ALERT_LIMITS[$roleTier];
+
+            /** @var UserAlertQueue $queue */
+            // grab alert queue
+            $alertQueueNumber = null;
+            foreach ($this->repositoryAlertQueue->findAll() as $queue) {
+                if (empty($queue->getUser())) {
+                    $alertQueueNumber = $queue->getNumber();
+                    break;
                 }
-            
-                $this->em->persist($alert);
             }
+
+            // update user
+            $user
+                ->setAlertQueue($alertQueueNumber)
+                ->setAlertsMax($benefits['MAX'])
+                ->setAlertsMaxNotifications($benefits['MAX_NOTIFICATIONS'])
+                ->setAlertNotifyTimeout($benefits['NOTIFY_TIMEOUT'])
+                ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT'])
+                ->setAlertsUpdateTimeout($benefits['UPDATE_TIMEOUT']);
         }
     
         $this->em->persist($user);
         $this->em->flush();
         
         return true;
+    }
+
+    /**
+     * Clear alert tracking values
+     */
+    public function clearAlertTracking()
+    {
+        /** @var User $user */
+        foreach ($this->repository->findAll() as $user) {
+            $user->setAlertsNotificationCount(0);
+
+            $this->em->persist($user);
+            $this->em->flush();
+        }
     }
 }
