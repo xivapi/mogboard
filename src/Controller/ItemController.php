@@ -101,17 +101,13 @@ class ItemController extends AbstractController
                 'dc_servers' => $dcServers
             ],
             'alerts'   => [
-                'users' => $user ? $this->userAlerts->getAllForItemForCurrentUser($itemId) : [],
+                'users'             => $user ? $this->userAlerts->getAllForItemForCurrentUser($itemId) : [],
                 'trigger_fields'    => UserAlert::TRIGGER_FIELDS,
                 'trigger_operators' => UserAlert::TRIGGER_OPERATORS,
                 'trigger_actions'   => [
                     UserAlert::TRIGGER_ACTION_CONTINUE => 'Continue',
                     UserAlert::TRIGGER_ACTION_DELETE   => 'Delete',
                     UserAlert::TRIGGER_ACTION_PAUSE    => 'Pause',
-                ],
-                'trigger_limits' => [
-                    'max_sent_per_day' => ($user && $user->isPatron()) ? UserAlert::LIMIT_PATREON : UserAlert::LIMIT_DEFAULT,
-                    'max_delay_per_alert' => ($user && $user->isPatron()) ? UserAlert::DELAY_PATREON : UserAlert::DELAY_DEFAULT,
                 ],
             ],
         ]);
