@@ -22,8 +22,6 @@ class Users
     private $em;
     /** @var UserRepository */
     private $repository;
-    /** @var UserAlertQueueRepository */
-    private $repositoryAlertQueue;
     /** @var SignInInterface */
     private $sso;
 
@@ -31,7 +29,6 @@ class Users
     {
         $this->em = $em;
         $this->repository = $em->getRepository(User::class);
-        $this->repositoryAlertQueue = $em->getRepository(UserAlertQueue::class);
     }
 
     /**
