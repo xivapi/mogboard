@@ -87,8 +87,6 @@ class UserAlertsTriggers
             # $dc         = GameServers::getDataCenter($alert->getServer());
             # $dcServers  = GameServers::getDataCenterServers($alert->getServer());
             # $servers    = $alert->isTriggerDataCenter() ? $dcServers : [ $alert->getServer() ];
-            $this->console->writeln("--> Data Center: <info>{$dc}</info>: ". implode(', ', $servers));
-
 
             /**
              * todo - this should use Companion internally. Look into making the Companion code "common"
