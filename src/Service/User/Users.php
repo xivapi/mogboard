@@ -250,4 +250,15 @@ class Users
             $this->em->flush();
         }
     }
+    
+    public function createPrivateAlertQueues()
+    {
+        foreach (range(0,100) as $i) {
+            $queue = new UserAlertQueue();
+            $queue->setNumber($i);
+            $this->em->persist($queue);
+        }
+        
+        $this->em->flush();
+    }
 }
