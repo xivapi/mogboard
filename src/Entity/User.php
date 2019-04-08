@@ -132,10 +132,10 @@ class User
      */
     private $alerts;
     /**
-     * @var int
-     * @ORM\Column(type="integer")
+     * @var string
+     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
      */
-    private $alertQueue = 0;
+    private $alertQueue;
     /**
      * @var int
      * @ORM\Column(type="integer")
@@ -298,12 +298,12 @@ class User
     // Alerts ----------------------------------------------------------------------------------------------------------
     //
 
-    public function getAlertQueue(): int
+    public function getAlertQueue(): string
     {
         return $this->alertQueue;
     }
 
-    public function setAlertQueue(int $alertQueue)
+    public function setAlertQueue(string $alertQueue)
     {
         $this->alertQueue = $alertQueue;
 

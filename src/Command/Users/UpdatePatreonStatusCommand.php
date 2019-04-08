@@ -31,5 +31,6 @@ class UpdatePatreonStatusCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->users->checkPatreonTiersForAllUsers();
+        $output->writeln('Done');
     }
 }

@@ -29,18 +29,6 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/account/check-patreon", name="user_account_check_patreon")
-     */
-    public function checkPatreon(Request $request)
-    {
-        return $this->json([
-            'ok' => $this->users->checkPatreonTiersForUser(
-                $this->users->getUser(true)
-            )
-        ]);
-    }
-    
-    /**
      * @Route("/account/characters", name="user_account_characters")
      */
     public function accountCharacters(Request $request)

@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use App\Service\ThirdParty\Discord\Discord;
 use Delight\Cookie\Cookie;
 use Doctrine\ORM\EntityManagerInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -181,62 +182,40 @@ class Users
     {
         /** @var User $user */
         foreach ($this->repository->findAll() as $user) {
-            $this->checkPatreonTiersForUser($user);
-            usleep(200000);
+            $discordId = $user->getSsoDiscordId();
+    
+            try {
+                $roleTier = Discord::mog()->getUserRole($discordId);
+            } catch (\Exception $ex) {
+                return false;
+            }
+    
+            // set patreon tier
+            $user->setPatron($roleTier ?: 0);
+    
+            // extra benefits
+            if ($roleTier >= 1) {
+                //
+                // Set Alert Benefits
+                //
+                $benefits = User::ALERT_LIMITS[$roleTier];
+
+                // update user
+                $user
+                    ->setAlertQueue(Uuid::uuid4()->toString())
+                    ->setAlertsMax($benefits['MAX'])
+                    ->setAlertsMaxNotifications($benefits['MAX_NOTIFICATIONS'])
+                    ->setAlertNotifyTimeout($benefits['NOTIFY_TIMEOUT'])
+                    ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT'])
+                    ->setAlertsUpdateTimeout($benefits['UPDATE_TIMEOUT']);
+            }
+    
+            $this->em->persist($user);
+            $this->em->flush();
+            usleep(100000);
         }
         
         $this->em->clear();
-    }
-    
-    /**
-     * Checks the patreon status for an individual user
-     */
-    public function checkPatreonTiersForUser(User $user)
-    {
-        $discordId = $user->getSsoDiscordId();
-
-        try {
-            $roleTier = Discord::mog()->getUserRole($discordId);
-        } catch (\Exception $ex) {
-            return false;
-        }
-    
-        // set patreon tier
-        $user->setPatron($roleTier ?: 0);
-    
-        // extra benefits
-        if ($roleTier >= 1) {
-            //
-            // Set Alert Benefits
-            //
-            $benefits = User::ALERT_LIMITS[$roleTier];
-
-            /** @var UserAlertQueue $userAlertQueue */
-            $queue = null;
-            foreach ($this->repositoryAlertQueue->findAll() as $userAlertQueue) {
-                if ($userAlertQueue->isActive() === false) {
-                    $queue = $userAlertQueue;
-                    break;
-                }
-            }
-
-            $queue->setUser("{$user->getSsoDiscordId()} {$user->getUsername()}");
-            $this->em->persist($queue);
-            
-            // update user
-            $user
-                ->setAlertQueue($queue->getNumber())
-                ->setAlertsMax($benefits['MAX'])
-                ->setAlertsMaxNotifications($benefits['MAX_NOTIFICATIONS'])
-                ->setAlertNotifyTimeout($benefits['NOTIFY_TIMEOUT'])
-                ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT'])
-                ->setAlertsUpdateTimeout($benefits['UPDATE_TIMEOUT']);
-        }
-    
-        
-        $this->em->persist($user);
-        $this->em->flush();
-        
         return true;
     }
 
@@ -252,16 +231,5 @@ class Users
             $this->em->persist($user);
             $this->em->flush();
         }
-    }
-    
-    public function createPrivateAlertQueues()
-    {
-        foreach (range(0,40) as $i) {
-            $queue = new UserAlertQueue();
-            $queue->setNumber($i);
-            $this->em->persist($queue);
-        }
-        
-        $this->em->flush();
     }
 }
