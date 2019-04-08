@@ -212,18 +212,20 @@ class Users
             $benefits = User::ALERT_LIMITS[$roleTier];
 
             /** @var UserAlertQueue $queue */
-            // grab alert queue
-            $alertQueueNumber = null;
+            $queue = null;
             foreach ($this->repositoryAlertQueue->findAll() as $queue) {
                 if (empty($queue->getUser())) {
-                    $alertQueueNumber = $queue->getNumber();
+                    $queue = $queue->getNumber();
                     break;
                 }
             }
 
+            $queue->setUser("{$user->getSsoDiscordId()} {$user->getUsername()}");
+            $this->em->persist($queue);
+            
             // update user
             $user
-                ->setAlertQueue($alertQueueNumber)
+                ->setAlertQueue($queue->getNumber())
                 ->setAlertsMax($benefits['MAX'])
                 ->setAlertsMaxNotifications($benefits['MAX_NOTIFICATIONS'])
                 ->setAlertNotifyTimeout($benefits['NOTIFY_TIMEOUT'])
@@ -231,6 +233,7 @@ class Users
                 ->setAlertsUpdateTimeout($benefits['UPDATE_TIMEOUT']);
         }
     
+        
         $this->em->persist($user);
         $this->em->flush();
         
