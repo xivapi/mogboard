@@ -70,4 +70,9 @@ class UserAlertQueue
 
         return $this;
     }
+    
+    public function isActive(): bool
+    {
+        return !empty($this->user);
+    }
 }

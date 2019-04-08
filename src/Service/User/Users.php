@@ -211,11 +211,11 @@ class Users
             //
             $benefits = User::ALERT_LIMITS[$roleTier];
 
-            /** @var UserAlertQueue $queue */
+            /** @var UserAlertQueue $userAlertQueue */
             $queue = null;
-            foreach ($this->repositoryAlertQueue->findAll() as $queue) {
-                if (empty($queue->getUser())) {
-                    $queue = $queue->getNumber();
+            foreach ($this->repositoryAlertQueue->findAll() as $userAlertQueue) {
+                if ($userAlertQueue->isActive() === false) {
+                    $queue = $userAlertQueue;
                     break;
                 }
             }
