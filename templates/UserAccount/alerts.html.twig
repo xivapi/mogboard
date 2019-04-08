@@ -22,7 +22,7 @@
 
     <hr>
 
-    <h3>Alert Limits</h3>
+    <h3>Alerts</h3>
 
     <div class="alert_info_box table-dark">
         <table>
@@ -37,7 +37,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ auth.user.alertsMax }}</td>
+                    <td>{{ auth.user.alerts|length }} / {{ auth.user.alertsMax }}</td>
                     <td>{{ auth.user.alertsNotificationCount }} / {{ auth.user.alertsMaxNotifications }}</td>
                     <td>{{ auth.user.alertNotifyTimeout ? auth.user.alertNotifyTimeout / 60 ~ ' minutes' : '-' }}</td>
                     <td>{{ auth.user.alertsExpiry / 60 / 60 / 24 }} days</td>
@@ -48,8 +48,7 @@
 
     </div>
 
-
-    <h3>Total Alerts: {{ auth.user.alerts|length }}</h3>
+    <br>
 
     {% for alert in auth.user.alerts %}
         {% set item = alert.item %}
