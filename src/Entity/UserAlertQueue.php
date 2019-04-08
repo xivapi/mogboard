@@ -26,7 +26,7 @@ class UserAlertQueue
      * Not a relationship as it changes frequently and never needs to associate directly.
      *
      * @var string
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $user;
 
