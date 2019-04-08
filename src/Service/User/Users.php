@@ -182,30 +182,32 @@ class Users
             $discordId = $user->getSsoDiscordId();
     
             try {
-                $roleTier = Discord::mog()->getUserRole($discordId);
+                $tier = Discord::mog()->getUserRole($discordId);
             } catch (\Exception $ex) {
                 return false;
             }
     
-            // set patreon tier
-            $user->setPatron($roleTier ?: 0);
+            // check or set default
+            $tier = $tier ?: 0;
     
-            // extra benefits
-            if ($roleTier >= 1) {
-                //
-                // Set Alert Benefits
-                //
-                $benefits = User::ALERT_LIMITS[$roleTier];
-
-                // update user
-                $user
-                    ->setAlertQueue(Uuid::uuid4()->toString())
-                    ->setAlertsMax($benefits['MAX'])
-                    ->setAlertsMaxNotifications($benefits['MAX_NOTIFICATIONS'])
-                    ->setAlertNotifyTimeout($benefits['NOTIFY_TIMEOUT'])
-                    ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT'])
-                    ->setAlertsUpdateTimeout($benefits['UPDATE_TIMEOUT']);
-            }
+            // set patreon tier
+            $user->setPatron($tier);
+    
+            /**
+             * Alerts!
+             */
+            
+            // Get Alert Limits
+            $benefits = User::ALERT_LIMITS[$tier];
+    
+            // update user
+            $user
+                ->setAlertQueue(Uuid::uuid4()->toString())
+                ->setAlertsMax($benefits['MAX'])
+                ->setAlertsMaxNotifications($benefits['MAX_NOTIFICATIONS'])
+                ->setAlertNotifyTimeout($benefits['NOTIFY_TIMEOUT'])
+                ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT'])
+                ->setAlertsUpdateTimeout($benefits['UPDATE_TIMEOUT']);
     
             $this->em->persist($user);
             $this->em->flush();

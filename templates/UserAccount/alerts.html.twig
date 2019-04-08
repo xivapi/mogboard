@@ -22,6 +22,33 @@
 
     <hr>
 
+    <h3>Alert Limits</h3>
+
+    <div class="alert_info_box table-dark">
+        <table>
+            <thead>
+                <tr>
+                    <th>Max Alerts</th>
+                    <th>Daily Notifications</th>
+                    <th>Notify Delay</th>
+                    <th>Alert Expiry Time</th>
+                    <th>Alert Update Timeout</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ auth.user.alertsMax }}</td>
+                    <td>{{ auth.user.alertsNotificationCount }} / {{ auth.user.alertsMaxNotifications }}</td>
+                    <td>{{ auth.user.alertNotifyTimeout ? auth.user.alertNotifyTimeout / 60 ~ 'Minutes' : '-' }}</td>
+                    <td>{{ auth.user.alertsExpiry / 60 / 60 / 24 }} Days</td>
+                    <td>{{ auth.user.alertsUpdateTimeout ? auth.user.alertsUpdateTimeout / 60 ~ 'Minutes' : '-' }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
     <h3>Total Alerts: {{ auth.user.alerts|length }}</h3>
 
     {% for alert in auth.user.alerts %}
@@ -29,7 +56,6 @@
 
         <div class="alert_info_box table-dark">
             <table>
-                <thead>
                 <tbody>
                     <tr>
                         <td colspan="2">
@@ -58,25 +84,17 @@
                         <td>Information</td>
                         <td>
                             <div class="flex">
-                                <div class="flex_20">
+                                <div class="flex_30">
                                     <h6>Type</h6>
                                     {{ alert.triggerType|title }}
                                 </div>
-                                <div class="flex_20">
-                                    <h6>Limit/Day</h6>
-                                    {{ alert.triggerLimit }}
-                                </div>
-                                <div class="flex_20">
-                                    <h6>Send Delay</h6>
-                                    {{ alert.triggerDelay }} sec
-                                </div>
-                                <div class="flex_20">
-                                    <h6>Last Sent</h6>
-                                    {{ alert.triggerLastSent ? alert.triggerLastSent|date : 'Never' }}
-                                </div>
-                                <div class="flex_20">
+                                <div class="flex_30">
                                     <h6>Sent Today</h6>
                                     {{ alert.triggersSent }}
+                                </div>
+                                <div class="flex_30">
+                                    <h6>Last Sent</h6>
+                                    {{ alert.triggerLastSent ? alert.triggerLastSent|date : 'Never' }}
                                 </div>
                             </div>
                             <br>

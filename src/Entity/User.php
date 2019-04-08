@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
+    const NORMAL_USER        = 0;
     const PATREON_ADVENTURER = 1;
     const PATREON_TANK       = 2;
     const PATREON_HEALER     = 3;
@@ -24,11 +25,18 @@ class User
      * Alert benefits per patreon
      */
     const ALERT_LIMITS = [
+        self::NORMAL_USER => [
+            'MAX'                   => 3,
+            'MAX_NOTIFICATIONS'     => 5,
+            'NOTIFY_TIMEOUT'        => (60 * 60),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 3),
+            'UPDATE_TIMEOUT'        => false,
+        ],
         self::PATREON_ADVENTURER => [
             'MAX'                   => 5,
             'MAX_NOTIFICATIONS'     => 10,
-            'NOTIFY_TIMEOUT'        => (60 * 60),
-            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 3),
+            'NOTIFY_TIMEOUT'        => (60 * 15),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 5),
             'UPDATE_TIMEOUT'        => false,
         ],
         self::PATREON_TANK => [
