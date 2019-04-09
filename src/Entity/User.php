@@ -56,7 +56,7 @@ class User
         self::PATREON_DPS => [
             'MAX'                   => 20,
             'MAX_NOTIFICATIONS'     => 500,
-            'NOTIFY_TIMEOUT'        => (60 * 1),
+            'NOTIFY_TIMEOUT'        => (60 * 5),
             'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 14),
             'UPDATE_TIMEOUT'        => (60 * 10),
         ],
