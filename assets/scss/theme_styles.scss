@@ -433,6 +433,15 @@ form,
     }
 }
 
+.table-sortable {
+    th[data-sort]:hover {
+        background-color: var(--table-color-3x);
+        position: relative;
+        box-shadow: 0 0 5px #000;
+        cursor: pointer;
+    }
+}
+
 hr {
     border: none;
     background-color: var(--default-2x);
@@ -666,6 +675,8 @@ ul,ol {
 //
 // Custom elements
 //
+.tac { text-align: center !important; }
+
 .text-red { color: var(--red-3x) };
 .text-blue { color: var(--blue-3x) };
 .text-green { color: var(--green-3x) };

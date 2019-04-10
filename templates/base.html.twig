@@ -73,9 +73,12 @@
             url_lists_add_item: "{{ path('lists_add_item', { list: '-id-' }) }}",
             url_lists_favourite: "{{ path('lists_favourite') }}",
         };
+        // tooltips
         tippy('[data-tippy-content]', {
             arrow: true,
         });
+        // sortable tables
+        $(".table-sortable").stupidtable();
     </script>
     <script src="/ui/app.js?v={{ siteVersion().hash }}"></script>
     {% block javascripts %}{% endblock %}

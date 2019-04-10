@@ -8,6 +8,7 @@ use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
 use App\Service\GameData\GameServers;
 use App\Service\Items\ItemPopularity;
+use App\Service\Redis\Redis;
 use App\Service\User\Users;
 use App\Service\UserAlerts\UserAlerts;
 use Doctrine\ORM\EntityManagerInterface;
@@ -86,21 +87,30 @@ class ItemController extends AbstractController
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
         $market     = $this->companion->getByDataCenter($dc, $itemId);
-        $census     = $this->companionCensus->generate($market);
+        
+        // build census
+        $census = Redis::Cache()->get("census_{$dc}_{$itemId}");
+        if ($census === null) {
+            // generate census and cache it, it's only cached for a short
+            // period just to avoid spamming and multiple users.
+            $census = $this->companionCensus->generate($market)->getCensus();
+            Redis::Cache()->set("census_{$dc}_{$itemId}", $census, 30);
+        }
         
         return $this->render('Product/index.html.twig', [
-            'item'     => $item,
-            'market'   => $market,
-            'census'   => $census,
-            'recipes'  => $recipes,
-            'faved'    => $user ? $user->hasFavouriteItem($itemId) : false,
-            'lists'    => $user ? $user->getListsPersonal() : [],
-            'server'   => [
+            'item'      => $item,
+            'market'    => $market,
+            'census'    => $census,
+            'recipes'   => $recipes,
+            'faved'     => $user ? $user->hasFavouriteItem($itemId) : false,
+            'lists'     => $user ? $user->getListsPersonal() : [],
+            'api_stats' => Redis::Cache()->get('stats_CompanionUpdateStatistics'),
+            'server'    => [
                 'name'       => $server,
                 'dc'         => $dc,
                 'dc_servers' => $dcServers
             ],
-            'alerts'   => [
+            'alerts'    => [
                 'users'             => $user ? $this->userAlerts->getAllForItemForCurrentUser($itemId) : [],
                 'trigger_fields'    => UserAlert::TRIGGER_FIELDS,
                 'trigger_operators' => UserAlert::TRIGGER_OPERATORS,

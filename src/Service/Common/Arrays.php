@@ -4,6 +4,18 @@ namespace App\Service\Common;
 
 class Arrays
 {
+    /**
+     * Converts a stdClass to an array, including all nested objects and removing private/functions,
+     * this is not performance since it uses JSON methods.
+     */
+    public static function stdClassToArray($stdClass)
+    {
+        return json_decode(json_encode($stdClass), true);
+    }
+    
+    /**
+     * Sort an array by a specific sub key
+     */
     public static function sortBySubKey(&$array, $subkey, $sort_ascending = false)
     {
         if ($array) {

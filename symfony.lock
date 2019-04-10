@@ -105,6 +105,9 @@
     "league/oauth2-client": {
         "version": "2.4.1"
     },
+    "markrogoyski/math-php": {
+        "version": "v0.49.0"
+    },
     "nesbot/carbon": {
         "version": "2.14.2"
     },

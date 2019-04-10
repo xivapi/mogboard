@@ -590,6 +590,12 @@ form .form_columns,
     border-bottom: solid 1px var(--table-color-4x);
     border-right: solid 1px var(--table-color-4x); }
 
+.table-sortable th[data-sort]:hover {
+  background-color: var(--table-color-3x);
+  position: relative;
+  box-shadow: 0 0 5px #000;
+  cursor: pointer; }
+
 hr {
   border: none;
   background-color: var(--default-2x);
@@ -758,6 +764,9 @@ ul, ol {
   background-position: center;
   background-repeat: no-repeat;
   transition: none; }
+
+.tac {
+  text-align: center !important; }
 
 .text-red {
   color: var(--red-3x); }

@@ -38,8 +38,8 @@
 
         <div class="tab">
             {# Summary #}
-            <div class="tab-page tab-summary">
-                Cross-World Summary
+            <div class="tab-page tab-summary open">
+                {% include 'Product/item_market_summary.html.twig' %}
             </div>
 
             {# Alerts #}
@@ -53,7 +53,7 @@
                 {% set pricesCount = attribute(market, serverName).Prices|length %}
                 {% set historyCount = attribute(market, serverName).History|length %}
 
-                <div class="tab-page tab-cw{{ serverName }} {{ open }}">
+                <div class="tab-page tab-cw{{ serverName }} {# {{ open }} #}">
                     <div class="tab-nav">
                         <div>
                             <button data-tab="cw-prices" class="active">Prices ({{ pricesCount }})</button>
@@ -106,8 +106,6 @@
         <div class="box box_item_details">
             {% include 'Product/item_details.html.twig' %}
         </div>
-
     </div>
-
 </div>
 {% endblock %}
