@@ -16,8 +16,7 @@
     </p>
     <small>
         <strong>Alert Expiration:</strong> To keep the system clean, alerts will expire after a set amount of time
-        from when they were created. To refresh a notification, come back to this page once they have expired
-        and you can select which alerts you wish to refresh.
+        from when they were created. To refresh a notification you must return to MogBoard and be logged in.
     </small>
 
     <hr>
@@ -119,7 +118,7 @@
                                 </div>
                             </div>
                             <br>
-                            {{ alert.triggerActive|bool }} {{ alert.triggerActive ? 'Alert is active' : 'Alert has been disabled.' }}
+                            {{ alert.triggerActive|bool }} {{ alert.triggerActive ? 'Alert is active' : 'Alert has been disabled.' }} - Expires: {{ alert.expiry|date }}
                         </td>
                     </tr>
                     <tr>
