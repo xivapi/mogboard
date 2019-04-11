@@ -40,10 +40,12 @@ class AppExtension extends AbstractExtension
     public function getDate($unix)
     {
         $unix       = is_numeric($unix) ? $unix : strtotime($unix);
-        $difference = time() - $unix;
-        $carbon     = Carbon::now()->subSeconds($difference)->setTimezone(new CarbonTimeZone(Time::timezone()));
+        $difference = abs(time() - $unix);
+        $carbon     = $unix > time()
+            ? Carbon::now()->addSeconds($difference)->setTimezone(new CarbonTimeZone(Time::timezone()))
+            : Carbon::now()->subSeconds($difference)->setTimezone(new CarbonTimeZone(Time::timezone()));
         
-        if ($difference > (60 * 180)) {
+        if ($difference > (60 * 60 * 3)) {
             return $carbon->format('jS M, H:i:s');
         }
         
