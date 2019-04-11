@@ -104,7 +104,7 @@ class UserAlertsTriggers
                 $this->xivapi->market->manualUpdateItem(
                     getenv('XIVAPI_COMPANION_KEY'),
                     $alert->getItemId(),
-                    $alert->getServer()
+                    GameServers::getServerId($alert->getServer())
                 );
                 $this->console->writeln('--> Done');
             }
