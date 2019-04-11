@@ -106,6 +106,7 @@ class UserAlertsTriggers
                     $alert->getItemId(),
                     $alert->getServer()
                 );
+                $this->console->writeln('--> Done');
             }
 
             /**
@@ -249,6 +250,8 @@ class UserAlertsTriggers
                 $this->console->writeln("--> No triggers to send");
             }
         }
+
+        $this->console->writeln("Finished.");
     }
     
     /**
