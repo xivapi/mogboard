@@ -107,7 +107,11 @@ class UserAlertsTriggers
                     if ($marketData->Updated < $outOfDateTimePeriod) {
                         // this only needs to request once as it does the whole DC regardless of the alert choice.
                         $this->console->writeln('--> Requesting manual update');
-                        $this->xivapi->market->manualUpdateItem(getenv('XIVAPI_COMPANION_KEY'), $alert->getItemId(), $alert->getServer());
+                        $this->xivapi->market->manualUpdateItem(
+                            getenv('XIVAPI_COMPANION_KEY'),
+                            $alert->getItemId(),
+                            $alert->getServer()
+                        );
                     }
                 }
             }
