@@ -255,7 +255,7 @@ class UserAlertsTriggers
                 $this->em->flush();
 
                 if ($alert->isNotifiedViaDiscord()) {
-                    $this->discord->sendAlertTriggerNotification($alert, $this->triggered);
+                    $this->discord->sendAlertTriggerNotification($alert, $this->triggered, $hash);
                 }
                 
                 if ($alert->isNotifiedViaEmail()) {
