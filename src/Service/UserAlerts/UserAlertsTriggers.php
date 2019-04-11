@@ -8,6 +8,7 @@ use App\Entity\UserAlertEvent;
 use App\Service\Companion\Companion;
 use App\Service\GameData\GameDataSource;
 use App\Service\GameData\GameServers;
+use App\Service\Redis\Redis;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use XIVAPI\XIVAPI;
@@ -114,16 +115,14 @@ class UserAlertsTriggers
                     $alert->getItemId(),
                     GameServers::getServerId($alert->getServer())
                 );
-                $this->console->writeln('--> Done');
             }
 
             /**
-             * Handle alert delay
-             * if the notification delay is greater than the current time, we skip
+             * Handle alert delay - if the notification delay is greater than the current time, we skip
              */
-            $alertNotificationDelay = $alert->getTriggerLastSent() + $user->getAlertsNotifyTimeout();
+            $alertNotificationDelay = ($alert->getTriggerLastSent() + $user->getAlertsNotifyTimeout());
             if ($alertNotificationDelay > time()) {
-                $this->console->writeln('--> Skipping: Alert is on notification cooldown.');
+                $this->console->writeln('--> Skipping: Alert is on notification cool-down.');
                 unset($market);
                 continue;
             }
@@ -227,6 +226,17 @@ class UserAlertsTriggers
     
             // if alerts, send them
             if ($this->triggered) {
+                $hash    = sha1(json_encode($this->triggered) . $alert->getUser()->getId());
+                $hashKey = "mogboard_alerts_sent_hash_{$hash}";
+
+                if (Redis::Cache()->get($hashKey)) {
+                    $this->console->writeln("+++ Already sent a notification with the same data to the same server");
+                    continue;
+                }
+
+                // prevent sending same notification within an hour
+                Redis::Cache()->set($hashKey, true, (60 * 60));
+
                 $user->incrementNotificationCount();
 
                 $alert
