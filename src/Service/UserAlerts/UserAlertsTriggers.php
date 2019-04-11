@@ -75,6 +75,14 @@ class UserAlertsTriggers
                 continue;
             }
 
+            // check if the alert has expired, if so, delete it
+            // todo - enable this at launch
+            if ($alert->isExpired()) {
+                # $this->userAlerts->delete($alert, true);
+                # continue;
+            }
+
+
             // get user for the alert
             $user = $alert->getUser();
 

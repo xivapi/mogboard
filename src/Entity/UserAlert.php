@@ -109,6 +109,11 @@ class UserAlert
      */
     private $server;
     /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $expiry = 0;
+    /**
      * @var array
      * @ORM\Column(type="array")
      */
@@ -305,6 +310,23 @@ class UserAlert
         $this->server = preg_replace("/[^a-zA-Z0-9]/", null, $server);
 
         return $this;
+    }
+
+    public function getExpiry(): int
+    {
+        return $this->expiry;
+    }
+
+    public function setExpiry(int $expiry)
+    {
+        $this->expiry = $expiry;
+
+        return $this;
+    }
+
+    public function isExpired()
+    {
+        return time() > $this->expiry;
     }
 
     public function getTriggerConditions(): array

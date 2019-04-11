@@ -3,6 +3,7 @@
 namespace App\Service\User;
 
 use App\Entity\User;
+use App\Entity\UserAlert;
 use App\Entity\UserAlertQueue;
 use App\Repository\UserAlertQueueRepository;
 use App\Repository\UserRepository;
@@ -228,5 +229,28 @@ class Users
             $this->em->persist($user);
             $this->em->flush();
         }
+    }
+
+    /**
+     * This extends the expiry time of the users alerts.
+     */
+    public function refreshUsersAlerts()
+    {
+        $user = $this->getUser(false);
+
+        if ($user === null) {
+            return;
+        }
+
+        /** @var UserAlert $alert */
+        foreach ($user->getAlerts() as $alert) {
+            $alert->setExpiry(
+                time() + $user->getAlertsExpiry()
+            );
+
+            $this->em->persist($alert);
+        }
+
+        $this->em->flush();
     }
 }
