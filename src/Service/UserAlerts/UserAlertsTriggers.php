@@ -230,7 +230,8 @@ class UserAlertsTriggers
                 $this->triggered = [];
 
                 // ignore duplicates
-                if ($this->isDuplicate($alert)) {
+                [$isDuplicate, $hash] = $this->isDuplicate($alert);
+                if ($isDuplicate) {
                     continue;
                 }
 
@@ -286,12 +287,12 @@ class UserAlertsTriggers
 
         if (Redis::Cache()->get($hashKey)) {
             $this->console->writeln("+++ Already sent a notification with the same data to the same server");
-            return true;
+            return [true, $hash];
         }
 
         // prevent sending same notification within an hour
         Redis::Cache()->set($hashKey, true, (60 * 60));
-        return false;
+        return [false, $hash];
     }
     
     /**
