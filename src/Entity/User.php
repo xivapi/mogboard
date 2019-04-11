@@ -140,11 +140,6 @@ class User
      */
     private $alerts;
     /**
-     * @var string
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $alertQueue;
-    /**
      * @var int
      * @ORM\Column(type="integer")
      */
@@ -163,17 +158,12 @@ class User
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $alertNotifyTimeout = 0;
+    private $alertsNotifyTimeout = 0;
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
     private $alertsExpiry = 0;
-    /**
-     * @var int
-     * @ORM\Column(type="integer")
-     */
-    private $alertsUpdateTimeout = 0;
 
     //
     // -------- DISCORD SSO --------
@@ -306,18 +296,6 @@ class User
     // Alerts ----------------------------------------------------------------------------------------------------------
     //
 
-    public function getAlertQueue(): string
-    {
-        return $this->alertQueue;
-    }
-
-    public function setAlertQueue(string $alertQueue)
-    {
-        $this->alertQueue = $alertQueue;
-
-        return $this;
-    }
-
     public function getAlerts()
     {
         return $this->alerts;
@@ -366,14 +344,14 @@ class User
         return $this;
     }
 
-    public function getAlertNotifyTimeout(): int
+    public function getAlertsNotifyTimeout(): int
     {
-        return $this->alertNotifyTimeout;
+        return $this->alertsNotifyTimeout;
     }
 
-    public function setAlertNotifyTimeout(int $alertNotifyTimeout)
+    public function setAlertsNotifyTimeout(int $alertsNotifyTimeout)
     {
-        $this->alertNotifyTimeout = $alertNotifyTimeout;
+        $this->alertsNotifyTimeout = $alertsNotifyTimeout;
 
         return $this;
     }
@@ -386,18 +364,6 @@ class User
     public function setAlertsExpiry(int $alertsExpiry)
     {
         $this->alertsExpiry = $alertsExpiry;
-
-        return $this;
-    }
-
-    public function getAlertsUpdateTimeout(): int
-    {
-        return $this->alertsUpdateTimeout;
-    }
-
-    public function setAlertsUpdateTimeout(int $alertsUpdateTimeout)
-    {
-        $this->alertsUpdateTimeout = $alertsUpdateTimeout;
 
         return $this;
     }

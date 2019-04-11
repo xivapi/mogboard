@@ -99,28 +99,20 @@ class UserAlertsTriggers
              * DPS patrons get auto-price updating.
              */
             if ($user->isPatron(User::PATREON_DPS)) {
-                // Calculate out of date timestamp
-                $outOfDateTimePeriod = time() - $user->getAlertsUpdateTimeout();
-
-                foreach ($market as $server => $marketData) {
-                    // if out of date, request update
-                    if ($marketData->Updated < $outOfDateTimePeriod) {
-                        // this only needs to request once as it does the whole DC regardless of the alert choice.
-                        $this->console->writeln('--> Requesting manual update');
-                        $this->xivapi->market->manualUpdateItem(
-                            getenv('XIVAPI_COMPANION_KEY'),
-                            $alert->getItemId(),
-                            $alert->getServer()
-                        );
-                    }
-                }
+                // Send an update request, XIVAPI handles throttling this.
+                $this->console->writeln('--> Requesting manual update');
+                $this->xivapi->market->manualUpdateItem(
+                    getenv('XIVAPI_COMPANION_KEY'),
+                    $alert->getItemId(),
+                    $alert->getServer()
+                );
             }
 
             /**
              * Handle alert delay
              * if the notification delay is greater than the current time, we skip
              */
-            $alertNotificationDelay = $alert->getTriggerLastSent() + $user->getAlertNotifyTimeout();
+            $alertNotificationDelay = $alert->getTriggerLastSent() + $user->getAlertsNotifyTimeout();
             if ($alertNotificationDelay > time()) {
                 $this->console->writeln('--> Skipping: Alert is on notification cooldown.');
                 unset($market);

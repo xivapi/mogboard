@@ -202,13 +202,11 @@ class Users
     
             // update user
             $user
-                ->setAlertQueue(Uuid::uuid4()->toString())
                 ->setAlertsMax($benefits['MAX'])
                 ->setAlertsMaxNotifications($benefits['MAX_NOTIFICATIONS'])
-                ->setAlertNotifyTimeout($benefits['NOTIFY_TIMEOUT'])
-                ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT'])
-                ->setAlertsUpdateTimeout($benefits['UPDATE_TIMEOUT']);
-    
+                ->setAlertsNotifyTimeout($benefits['NOTIFY_TIMEOUT'])
+                ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT']);
+
             $this->em->persist($user);
             $this->em->flush();
             usleep(100000);
