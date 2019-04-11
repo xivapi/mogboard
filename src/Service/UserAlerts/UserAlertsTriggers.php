@@ -226,7 +226,7 @@ class UserAlertsTriggers
     
             // if alerts, send them
             if ($this->triggered) {
-                $hash    = sha1(json_encode($this->triggered) . $alert->getUser()->getId());
+                $hash    = sha1(json_encode($this->triggered) . $alert->getUser()->getId() . $alert->getId());
                 $hashKey = "mogboard_alerts_sent_hash_{$hash}";
 
                 if (Redis::Cache()->get($hashKey)) {
