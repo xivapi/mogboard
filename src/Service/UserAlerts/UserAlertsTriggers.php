@@ -226,6 +226,9 @@ class UserAlertsTriggers
     
             // if alerts, send them
             if ($this->triggered) {
+                // reset
+                $this->triggered = [];
+
                 // ignore duplicates
                 if ($this->isDuplicate($alert)) {
                     continue;
@@ -255,9 +258,6 @@ class UserAlertsTriggers
                 if ($alert->isNotifiedViaEmail()) {
                     // todo - email logic
                 }
-                
-                // reset
-                $this->triggered = [];
             } else {
                 $this->console->writeln("--> No triggers to send");
             }
