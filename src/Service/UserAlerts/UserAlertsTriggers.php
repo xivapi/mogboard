@@ -226,16 +226,10 @@ class UserAlertsTriggers
     
             // if alerts, send them
             if ($this->triggered) {
-                $hash    = sha1(json_encode($this->triggered) . $alert->getUser()->getId() . $alert->getId());
-                $hashKey = "mogboard_alerts_sent_hash_{$hash}";
-
-                if (Redis::Cache()->get($hashKey)) {
-                    $this->console->writeln("+++ Already sent a notification with the same data to the same server");
+                // ignore duplicates
+                if ($this->isDuplicate($alert)) {
                     continue;
                 }
-
-                // prevent sending same notification within an hour
-                Redis::Cache()->set($hashKey, true, (60 * 60));
 
                 $user->incrementNotificationCount();
 
@@ -270,6 +264,34 @@ class UserAlertsTriggers
         }
 
         $this->console->writeln("Finished.");
+    }
+
+    private function isDuplicate(UserAlert $alert)
+    {
+        /**
+         * Throw together some semi-static data to generate a consistent hash
+         */
+        $data = [
+            $alert->getUser()->getId(),
+            $alert->getId()
+        ];
+
+        foreach ($this->triggered as $trig) {
+            [$server, $row] = $trig;
+            $data[] = $server . $row->ID;
+        }
+
+        $hash    = sha1(implode("_", $data));
+        $hashKey = "mogboard_alerts_sent_hash_{$hash}";
+
+        if (Redis::Cache()->get($hashKey)) {
+            $this->console->writeln("+++ Already sent a notification with the same data to the same server");
+            return true;
+        }
+
+        // prevent sending same notification within an hour
+        Redis::Cache()->set($hashKey, true, (60 * 60));
+        return false;
     }
     
     /**
