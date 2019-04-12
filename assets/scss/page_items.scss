@@ -1,37 +1,71 @@
 :root {
     --columnMid: 100%;
-    --columnRight: 300px;
     --box-padding: 16px;
 }
 
 .product {
-    display: flex;
-    padding-bottom: 20px;
+    .item_top {
+        display: flex;
+        margin-bottom: 30px;
+    }
+
+    .item_icon {
+        flex: 0 1 120px;
+
+        img {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px #000;
+        }
+    }
 
     .item_header {
-        display: flex;
-        margin-bottom: 20px;
+        flex: 0 1 calc(100% - 120px);
+        padding-left: 30px;
+        position: relative;
 
-        .item_icon {
-            flex: 0 1 100px;
+        .box_lists {
+            position: absolute;
+            right: 0;
+            top: 0;
 
-            img {
-                width: 100px;
-                height: 100px;
-                border-radius: 12px;
-                box-shadow: 0 1px 5px #000;
+            button {
+                height: 32px;
+                line-height: 32px;
+                font-size: 14px;
+                padding: 0 12px;
+                background-color: var(--default-3x);
+                border-radius: 50px;
+
+                &:hover {
+                    background-color: var(--table-color);
+                }
+
+                &.btn_addto_fave {
+                    margin-left: 10px;
+                    
+                    &.on {
+                        background-color: var(--red-2x);
+                    }
+                }
+
+                i {
+                    margin-bottom: -3px;
+                }
             }
         }
 
         .item_info {
+            display: flex;
             flex: 0 1 calc(100% - 128px);
-            padding-left: 30px;
+            height: 80px;
 
             h1 {
                 font-size: 34px;
                 font-weight: 300;
                 display: inline-block;
-                margin: 12px 0 15px 0;
+                margin: 15px 20px 15px 0;
 
                 span {
                     color: var(--highlight);
@@ -44,6 +78,7 @@
             > div {
                 font-size: 18px;
                 color: #888;
+                padding-top: 24px;
 
                 i {
                     font-size: 26px;
@@ -61,7 +96,7 @@
     }
 
     .item_nav {
-        border: solid 1px var(--default);
+        background-color: var(--default);
         border-radius: 5px;
         overflow: hidden;
         display: flex;
@@ -75,11 +110,13 @@
             font-size: 16px;
             color: #fff;
             border: none;
-            border-right: solid 1px var(--default);
+            border-right: solid 1px #000;
             outline: none;
             transition: 150ms;
             text-shadow: 0 1px 3px #000;
-            font-weight: 400;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
 
             em {
                 display: inline-block;
@@ -96,7 +133,7 @@
             }
 
             &:hover {
-                background-color: var(--default);
+                background-color: var(--table-color-2x);
                 cursor: pointer;
                 position: relative;
                 z-index: 3;
@@ -104,7 +141,7 @@
             }
 
             &.open {
-                background-color: var(--color1);
+                background-color: var(--table-color-dark);
                 position: relative;
                 z-index: 2;
                 color: #fff;
@@ -117,14 +154,13 @@
             right: 0;
 
             button {
-                border-left: solid 1px var(--default);
+                border-left: solid 1px #000;
                 border-right: none;
             }
         }
     }
 
     > div:nth-of-type(1) {
-        flex: 0 1 calc(var(--columnMid) - var(--columnRight));
         padding-right: 10px;
 
         .tab-page {
@@ -148,230 +184,6 @@
                     opacity: 0.5;
                 }
             }
-
-            .tab-top {
-                font-weight: 400;
-                display: block;
-                padding: 15px 0;
-                font-size: 14px;
-                color: #666;
-
-                span {
-                    display: inline-block;
-
-                    margin-right: 15px;
-                }
-            }
-        }
-    }
-
-    > div:nth-of-type(2) {
-        flex: 0 1 var(--columnRight);
-
-        .box {
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
-            border-radius: 4px;
-            overflow: hidden;
-            background-color: var(--table-color-dark);
-            margin-bottom: 10px;
-
-            .table em {
-                display: inline-block;
-                font-style: normal;
-                color: var(--purple-3x);
-            }
-
-            .box_row {
-                padding: 10px;
-                border-bottom: solid 1px var(--table-color);
-            }
-
-            .box_form {
-                padding: 10px;
-                background-color: var(--table-color-dark);
-                transition: 100ms;
-
-                h3 {
-                    font-size: 24px;
-                }
-
-                p {
-                    font-size: 14px;
-                }
-
-                .box_flex {
-                    display: flex;
-
-                    > button {
-                        width: 50%;
-
-                        &:first-of-type {
-                            margin-right: 10px;
-                        }
-
-                        &:last-of-type {
-                            margin-left: 10px;
-                        }
-                    }
-                }
-            }
-
-            .btn_addto_fave,
-            .btn_addto_list {
-                i {
-                    margin-right: 5px;
-                    margin-bottom: -2px;
-                    display: inline-block;
-                    vertical-align: middle;
-                }
-
-                &.on {
-                    background-color: var(--red-2x);
-                }
-            }
-        }
-
-        .box_updated {
-            display: flex;
-
-            > div:nth-of-type(1) {
-                flex: 0 1 50%;
-                padding: 15px;
-
-                h6 {
-                    font-size: 13px;
-                    font-weight: 500;
-                    color: var(--table-color-3x);
-                    text-transform: uppercase;
-                    text-shadow: none;
-                    margin-bottom: 4px;
-                }
-            }
-
-            > div:nth-of-type(2) {
-                flex: 0 1 50%;
-                padding: 15px;
-                text-align: right;
-
-                button i {
-                    vertical-align: middle;
-                }
-            }
-        }
-
-        .box_third_party {
-            tr td:first-of-type {
-                text-align: center;
-            }
-
-            img {
-                border-radius: 2px;
-                display: inline;
-                vertical-align: middle;
-            }
-        }
-
-        .box_teamcraft {
-            .table {
-                box-shadow: none;
-                border-radius: 0;
-
-                em {
-                    display: inline-block;
-                    font-weight: 400;
-                    color: var(--highlight2x);
-                    margin-right: 5px;
-                }
-            }
-
-            .tc-img {
-                margin: -4px;
-            }
-
-            .tc-top {
-                padding: 10px 0 14px 10px;
-                text-align: left;
-                display: flex;
-                border-bottom: solid 1px var(--table-color);
-
-                > div:last-of-type {
-                    padding: 5px 0 0 12px;
-                    text-align: left;
-                }
-
-                h4 {
-                    font-size: 20px;
-                    font-weight: 400;
-                    margin-bottom: 3px;
-                }
-
-                small {
-                    font-size: 13px;
-                    opacity: 0.5;
-                }
-
-                img {
-                    margin-top: 5px;
-                }
-            }
-        }
-
-        .box_item_details {
-            small {
-                font-size: 12px;
-                letter-spacing: 2px;
-                display: block;
-                color: var(--purple);
-                margin-bottom: 2px;
-            }
-
-            .item_attributes,
-            .item_connections {
-                font-size: 13px;
-
-                em {
-                    display: inline-block;
-                    width: 40px;
-                }
-
-                strong {
-                    display: block;
-                    padding: 0 0 8px 8px;
-                    color: var(--highlight2x);
-                    font-weight: 400;
-                }
-
-                div {
-                    padding: 3px 4px;
-                }
-
-                span {
-                    color: var(--green-3x);
-                    display: inline-block;
-                    width: 40px;
-                }
-            }
-
-            .item_description {
-                font-size: 13px;
-            }
-        }
-
-        .box_lists {
-            button {
-                height: 36px;
-                line-height: 36px;
-                font-size: 14px;
-            }
-        }
-
-        .box-language table {
-            font-size: 13px;
-
-            td {
-                padding: 6px;
-                color: #aaa;
-            }
         }
     }
 
@@ -384,6 +196,7 @@
 
         .cw-history,
         .cw-prices {
+            position: relative;
             flex: 0 1 50%;
 
             @include mq($until: wide) {
@@ -484,10 +297,23 @@
                     }
                 }
             }
+
+            .cw-small-info {
+                position: absolute;
+                right: 0;
+                top: 10px;
+                font-size: 13px;
+                color: #888;
+                outline: none;
+            }
         }
 
         .cw-prices {
             padding-right: 5px;
+
+            .cw-small-info {
+                right: 10px;
+            }
         }
 
         .cw-history {
@@ -519,13 +345,9 @@
             }
         }
 
-        .alert-page {
-            padding: 20px 0;
-        }
-
         .alert_info_button {
             position: absolute;
-            right: 0; top: 15px;
+            right: 0; top: -10px;
 
             > button {
                 line-height: 28px;
@@ -719,6 +541,22 @@
 
                 &:hover {
                     background-color: var(--blue-3x);
+                }
+            }
+        }
+
+        .alert-section {
+            display: flex;
+
+            > div {
+                flex: 0 1 50%;
+
+                &:first-of-type {
+                    padding-right: 10px;
+                }
+
+                &:last-of-type {
+                    padding-left: 10px;
                 }
             }
         }

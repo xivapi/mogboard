@@ -7,11 +7,18 @@
 
     <div>
         <div class="item_top">
+            {# Icon #}
+            <div class="item_icon">
+                <img src="{{ item.ID|icon2x }}">
+            </div>
+
             {# Item info #}
             <div class="item_header">
-                <div class="item_icon">
-                    <img src="{{ item.ID|icon3x }}">
+
+                <div class="box box_lists">
+                    {% include 'Product/lists.html.twig' %}
                 </div>
+
                 <div class="item_info">
                     {# title #}
                     <h1 class="rarity-{{ item.Rarity }}">
@@ -24,38 +31,47 @@
                         <span>{{ item.ItemUICategory.Name }}</span>
                     </div>
                 </div>
-            </div>
 
-            <div class="item_nav">
-                {# Server List #}
-                {% for serverName in server.dc_servers %}
-                    {% set icon = serverName == server.name ? 'ItemShard cw-home' : '' %}
-                    {% set className = serverName == server.name ? 'home-world open' : '' %}
-                    {% set salesCount = attribute(market, serverName).Prices is defined ? attribute(market, serverName).Prices|length|number_format : '-' %}
-                    <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}">
-                        {% if serverName == server.name %}
-                            <i class="xiv-ItemShard cw-home"></i>
-                        {% endif %}
-                        {{ serverName }} <em>{{ salesCount }}</em>
-                    </button>
-                {% endfor %}
+                <div class="item_nav">
+                    {# Server List #}
+                    {% for serverName in server.dc_servers %}
+                        {% set icon = serverName == server.name ? 'ItemShard cw-home' : '' %}
+                        {% set className = serverName == server.name ? 'home-world open' : '' %}
+                        {% set salesCount = attribute(market, serverName).Prices is defined ? attribute(market, serverName).Prices|length|number_format : '-' %}
+                        <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}">
+                            {% if serverName == server.name %}
+                                <i class="xiv-ItemShard cw-home"></i>
+                            {% endif %}
+                            {{ serverName }}
+                        </button>
+                    {% endfor %}
 
-                {# Custom Pages #}
-                <div class="item_nav_custom">
-                    <button type="button" data-tab="summary" class="btn-summary">
-                        <i class="xiv-Market cw-summary"></i> Summary
-                    </button>
-                    <button type="button" data-tab="alerts" class="btn-alerts">
-                        <i class="xiv-app_drawer_news cw-alerts"></i> Alerts
-                    </button>
+                    {# Custom Pages #}
+                    <div class="item_nav_custom">
+                        <button type="button" data-tab="summary" class="btn-summary">
+                            <i class="xiv-Market cw-summary"></i> Summary
+                        </button>
+                        <button type="button" data-tab="details" class="btn-details">
+                            <i class="xiv-ArmoryChest cw-details"></i> Details
+                        </button>
+                        <button type="button" data-tab="alerts" class="btn-alerts">
+                            <i class="xiv-app_drawer_news cw-alerts"></i> Alerts
+                        </button>
+                    </div>
                 </div>
             </div>
+
         </div>
 
         <div class="tab">
             {# Summary #}
             <div class="tab-page tab-summary open">
                 {% include 'Product/item_market_summary.html.twig' %}
+            </div>
+
+            {# Details #}
+            <div class="tab-page tab-details">
+                {% include 'Product/item_details.html.twig' %}
             </div>
 
             {# Alerts #}
@@ -71,26 +87,13 @@
                 {% set historyCount = marketData.History|length %}
                 {% set updateInfo = api_stats.Report[marketData.UpdatePriority] %}
                 <div class="tab-page tab-cw{{ serverName }} {{ open }}">
-                    <div class="tab-top">
-                        {#
-                        <div>
-                            <button data-tab="cw-prices" class="active">Prices ({{ pricesCount }})</button>
-                            <button data-tab="cw-history">History ({{ historyCount }})</button>
-                        </div>
-                        #}
-
-                        <div>
-                            <span>
-                                <strong>{{ serverName }}</strong> ({{ server.dc }})
-                            </span>
-                            <span data-tippy-content="ETA: {{ updateInfo.CycleTime }}">
-                                <strong>Updated</strong> &nbsp; {{ marketData.Updated|date }}
-                            </span>
-                        </div>
-                    </div>
                     <div class="tab-market-tables">
                         <div class="cw-table cw-prices">
                             <h4>PRICES <small>MAX: 50</small></h4>
+                            <span class="cw-small-info" data-tippy-content="ETA: {{ updateInfo.CycleTime }}">
+                                <strong>Updated</strong> &nbsp; {{ marketData.Updated|date }}
+                            </span>
+
                             {% if marketData.Prices is defined %}
                                 {% include 'Product/prices.html.twig' with { 'prices': marketData.Prices } %}
                             {% else %}
@@ -106,6 +109,10 @@
                         </div>
                         <div class="cw-table cw-history">
                             <h4>HISTORY <small>MAX: 100</small></h4>
+                            <span class="cw-small-info">
+                                <strong>{{ serverName }}</strong> - {{ server.dc }}
+                            </span>
+
                             {% if marketData.History is defined %}
                                 {% include 'Product/history.html.twig' with { 'history': marketData.History } %}
                             {% else %}
@@ -115,30 +122,6 @@
                     </div>
                 </div>
             {% endfor %}
-        </div>
-    </div>
-    <div>
-        <div class="box box_lists">
-            {% include 'Product/lists.html.twig' %}
-        </div>
-
-        {# Multi-Language display #}
-        <div class="box box-language">
-            {% include 'Product/language.html.twig' %}
-        </div>
-
-        {# Team Craft #}
-        <div class="box box_teamcraft">
-            {% include 'Product/teamcraft.html.twig' %}
-        </div>
-
-        {# Third Party Links #}
-        <div class="box box_third_party">
-            {% include 'Product/third_party.html.twig' %}
-        </div>
-
-        <div class="box box_item_details">
-            {% include 'Product/item_details.html.twig' %}
         </div>
     </div>
 </div>

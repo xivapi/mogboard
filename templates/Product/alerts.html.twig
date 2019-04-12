@@ -4,131 +4,136 @@
         <button>Whats an alert <img src="/i/svg/question-circle-light.svg" height="18"></button>
     </div>
 
-    <h3>Create a new alert on server: {{ server.name }}</h3>
+
 
     {% if auth.online() %}
         {% if auth.user.alerts|length >= auth.user.alertsMax %}
             <div class="alert-default">You are currently max'd out on alerts and will not be able to create anymore.</div>
         {% endif %}
-        <form id="alert_form" class="alert_form" method="post" action="{{ url('alerts_create') }}">
-            <div class="alert-form-loading">
-                <img src="/i/svg/loading3.svg" height="64px">
-            </div>
 
-            {# Name #}
-            <div class="form_row">
-                <label for="alert_name">Give your alert a name (length: 4-100)</label>
-                <input name="alert_name" id="alert_name" type="text" placeholder="Name" class="full">
-            </div>
+        <div class="alert-section">
+            <div>
+                <h3>Create a new alert on server: {{ server.name }}</h3>
+                <form id="alert_form" class="alert_form" method="post" action="{{ url('alerts_create') }}">
+                    <div class="alert-form-loading">
+                        <img src="/i/svg/loading3.svg" height="64px">
+                    </div>
 
-            {# HQ / NQ / Server or DC #}
-            <div class="form_row">
-                <div class="form_columns">
-                    <div class="form_col50">
-                        <label>Decide if the trigger should check NQ/HQ or both.</label>
+                    {# Name #}
+                    <div class="form_row">
+                        <label for="alert_name">Give your alert a name (length: 4-100)</label>
+                        <input name="alert_name" id="alert_name" type="text" placeholder="Name" class="full">
+                    </div>
+
+                    {# HQ / NQ / Server or DC #}
+                    <div class="form_row">
+                        <div class="form_columns">
+                            <div class="form_col50">
+                                <label>Decide if the trigger should check NQ/HQ or both.</label>
+                                <div class="form_columns">
+                                    <div class="form_col50">
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="alert_nq">
+                                            <label for="alert_nq">Normal Quality</label>
+                                        </div>
+                                    </div>
+                                    <div class="form_col50">
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="alert_hq">
+                                            <label for="alert_hq">High-Quality</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form_col50">
+                                <label>Should the alert check the whole Data-Center?</label>
+                                <div class="checkbox">
+                                    <input type="checkbox" id="alert_dc">
+                                    <label for="alert_dc">Check entire Data-Center ({{ server.dc }})</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Triggers #}
+                    <div class="form_row">
+                        <label>Setup Triggers <strong>(Max: 15)</strong></label>
+                        <div class="alert_entries"></div>
+
+                        <div class="alert_triggers_form form_row form_columns">
+                            <div class="form_col35">
+                                <select name="alert_trigger_field" id="alert_trigger_field" class="full">
+                                    <option disabled selected>- Select a Field -</option>
+                                    {% for category, triggers in alerts.trigger_fields %}
+                                        <optgroup label="{{ category }}">
+                                            {% for name in triggers %}
+                                                <option value="{{ name }}">{{ name }}</option>
+                                            {% endfor %}
+                                        </optgroup>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form_col20">
+                                <select name="alert_trigger_op" id="alert_trigger_op" class="full">
+                                    <option disabled selected>- Select an Operator</option>
+                                    {% for id,op in alerts.trigger_operators %}
+                                        <option value="{{ id }}">{{ op }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form_col35">
+                                <input name="alert_trigger_value" id="alert_trigger_value" type="text" placeholder="Condition Value" class="full">
+                            </div>
+                            <div class="form_col10">
+                                <button type="button" class="btn-blue alert_trigger_add">Add</button>
+                            </div>
+                        </div>
+                        <small>
+                            Trigger values are checked as a series of <strong>AND</strong> conditions.
+                            For "Bool" conditions values use 1 = true, 0 = false (eg: Price_IsHQ = 1).
+                            For time related ones "Added" the value would be Epoch Unix Timestamp, work
+                            is being done to improve this experience.
+                        </small>
+
+                    </div>
+
+                    <br>
+
+                    {# Notifications #}
+                    <div class="form_row">
+                        <label>How do you want to be notified?</label>
+
                         <div class="form_columns">
                             <div class="form_col50">
                                 <div class="checkbox">
-                                    <input type="checkbox" id="alert_nq">
-                                    <label for="alert_nq">Normal Quality</label>
+                                    <input type="checkbox" id="alert_notify_discord">
+                                    <label for="alert_notify_discord">Discord <em>({{ auth.user.username }})</em></label>
                                 </div>
                             </div>
                             <div class="form_col50">
                                 <div class="checkbox">
-                                    <input type="checkbox" id="alert_hq">
-                                    <label for="alert_hq">High-Quality</label>
+                                    <input type="checkbox" id="alert_notify_email">
+                                    <label for="alert_notify_email">Email <em>({{ auth.user.email }})</em></label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form_col50">
-                        <label>Should the alert check the whole Data-Center?</label>
-                        <div class="checkbox">
-                            <input type="checkbox" id="alert_dc">
-                            <label for="alert_dc">Check entire Data-Center ({{ server.dc }})</label>
-                        </div>
+
+                    {# submit #}
+                    <div class="form_footer">
+                        <button type="submit" class="btn-green btn_create_alert">Save Alert</button>
+                        <span class="edit_mode_enabled">You are currently editing an alert</span>
+
+                        <button type="button" class="btn-white-outline btn_new_alert" data-tippy-content="Reset the form and start a new alert">New Alert</button>
                     </div>
+                </form>
+            </div>
+            <div>
+                <h3>Current alerts for: {{ item.Name }}</h3>
+                <div class="alerts_table">
+                    <div class="alert-default">Loading alerts...</div>
                 </div>
             </div>
-
-            {# Triggers #}
-            <div class="form_row">
-                <label>Setup Triggers <strong>(Max: 15)</strong></label>
-                <div class="alert_entries"></div>
-
-                <div class="alert_triggers_form form_row form_columns">
-                    <div class="form_col25">
-                        <select name="alert_trigger_field" id="alert_trigger_field" class="full">
-                            <option disabled selected>- Select a Field -</option>
-                            {% for category, triggers in alerts.trigger_fields %}
-                                <optgroup label="{{ category }}">
-                                    {% for name in triggers %}
-                                        <option value="{{ name }}">{{ name }}</option>
-                                    {% endfor %}
-                                </optgroup>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form_col25">
-                        <select name="alert_trigger_op" id="alert_trigger_op" class="full">
-                            <option disabled selected>- Select an Operator</option>
-                            {% for id,op in alerts.trigger_operators %}
-                                <option value="{{ id }}">{{ op }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form_col25">
-                        <input name="alert_trigger_value" id="alert_trigger_value" type="text" placeholder="Condition Value" class="full">
-                    </div>
-                    <div class="form_col25">
-                        <button type="button" class="btn-blue alert_trigger_add">Add</button>
-                    </div>
-                </div>
-                <small>
-                    Trigger values are checked as a series of <strong>AND</strong> conditions.
-                    For "Bool" conditions values use 1 = true, 0 = false (eg: Price_IsHQ = 1).
-                    For time related ones "Added" the value would be Epoch Unix Timestamp, work
-                    is being done to improve this experience.
-                </small>
-
-            </div>
-
-            <br>
-
-            {# Notifications #}
-            <div class="form_row">
-                <label>How do you want to be notified?</label>
-
-                <div class="form_columns">
-                    <div class="form_col50">
-                        <div class="checkbox">
-                            <input type="checkbox" id="alert_notify_discord">
-                            <label for="alert_notify_discord">Discord <em>({{ auth.user.username }})</em></label>
-                        </div>
-                    </div>
-                    <div class="form_col50">
-                        <div class="checkbox">
-                            <input type="checkbox" id="alert_notify_email">
-                            <label for="alert_notify_email">Email <em>({{ auth.user.email }})</em></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {# submit #}
-            <div class="form_footer">
-                <button type="submit" class="btn-green btn_create_alert">Save Alert</button>
-                <span class="edit_mode_enabled">You are currently editing an alert</span>
-
-                <button type="button" class="btn-white-outline btn_new_alert" data-tippy-content="Reset the form and start a new alert">New Alert</button>
-            </div>
-        </form>
-
-        <br><br>
-
-        <h3>Current alerts for: {{ item.Name }}</h3>
-        <div class="alerts_table">
-            <div class="alert-default">Loading alerts...</div>
         </div>
     {% else %}
         <div class="alert-default">

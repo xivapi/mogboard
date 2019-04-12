@@ -58,7 +58,7 @@ class ItemController extends AbstractController
     public function index(Request $request, int $itemId)
     {
         $this->users->setLastUrl($request);
-        
+
         $user = $this->users->getUser(false);
         
         /** @var \stdClass $item */
@@ -99,7 +99,7 @@ class ItemController extends AbstractController
             Redis::Cache()->set("census_{$dc}_{$itemId}", $census, 30);
         }
         
-        return $this->render('Product/index.html.twig', [
+        $data = [
             'item'      => $item,
             'market'    => $market,
             'census'    => $census,
@@ -122,6 +122,8 @@ class ItemController extends AbstractController
                     UserAlert::TRIGGER_ACTION_PAUSE    => 'Pause',
                 ],
             ],
-        ]);
+        ];
+        
+        return $this->render('Product/index.html.twig', $data);
     }
 }
