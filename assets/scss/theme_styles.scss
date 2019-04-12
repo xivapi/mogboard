@@ -1,54 +1,3 @@
-//
-// MOGBOARD THEME
-//
-:root {
-    --color1: #5723a2;
-    --color2: #7a42c9;
-    --color3: #e6e6e6;
-    --color4: #c1c1c1;
-    --color5: #252830;
-    --color6: #717988;
-    --color7: #1c1c1c;
-    --color8: #fff97b;
-    --color9: #798ebb;
-
-    --highlight: #fffca6;
-    --highlight2x: #b6b476;
-    --highlight3x: #feffc8;
-
-    --default: #434857;
-    --default-2x: #4f5463;
-    --default-3x: #333a41;
-    --red: #E64759;
-    --red-2x: #b13b4c;
-    --red-3x: #ee6b75;
-    --blue: #007bff;
-    --blue-2x: #005cb8;
-    --blue-3x: #58b4ff;
-    --green: #1aa571;
-    --green-2x: #1a8255;
-    --green-3x: #2cdd8f;
-    --green-4x: #84fbbe;
-    --purple: #9F86FF;
-    --purple-2x: #6e5ab4;
-    --purple-3x: #adaaff;
-    --white: #fff;
-    --white-2x: #fff;
-
-    --general-border-radius: 6px;
-    --default-outline-size: 1px;
-    --table-color: #434857;
-    --table-color-2x: #393e4a;
-    --table-color-3x: #666d81;
-    --table-color-4x: #232b30;
-    --table-color-dark: #282b34;
-    --search-active: #888a3b;
-    --search-complete: #61aa6c;
-    --form-field-height: 38px;
-    --form-field-height2: 48px;
-    --transition-speed: 100ms;
-}
-
 // Rarity colors from the game
 .rarity-1 { color: #eee; }
 .rarity-2 { color: #89ffbc; }
@@ -362,7 +311,7 @@ form,
         }
 
         th, td {
-            padding: 12px;
+            padding: 10px;
             text-align: left;
             border-bottom: solid 1px var(--table-color);
         }
@@ -375,6 +324,10 @@ form,
             &:last-of-type {
                 border-right: none;
             }
+        }
+
+        tr:last-of-type td {
+            border-bottom: none;
         }
 
         tr {

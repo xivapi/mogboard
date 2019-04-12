@@ -6,7 +6,7 @@ class Product
 {
     constructor()
     {
-        this.uiButtons = $('.product .menu');
+        this.uiButtons = $('.product .item_nav');
         this.uiTabs = $('.product .tab');
         this.uiCategory = $('.product .product-search-cat');
         this.uiRefreshButton = $('.btn_request_update');

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UserAlert;
+use App\Service\Common\Arrays;
 use App\Service\GameData\GameDataSource;
 use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
@@ -87,6 +88,7 @@ class ItemController extends AbstractController
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
         $market     = $this->companion->getByDataCenter($dc, $itemId);
+        $apiStats   = Arrays::stdClassToArray(Redis::Cache()->get('stats_CompanionUpdateStatistics'));
         
         // build census
         $census = Redis::Cache()->get("census_{$dc}_{$itemId}");
@@ -104,7 +106,7 @@ class ItemController extends AbstractController
             'recipes'   => $recipes,
             'faved'     => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'     => $user ? $user->getListsPersonal() : [],
-            'api_stats' => Redis::Cache()->get('stats_CompanionUpdateStatistics'),
+            'api_stats' => $apiStats,
             'server'    => [
                 'name'       => $server,
                 'dc'         => $dc,

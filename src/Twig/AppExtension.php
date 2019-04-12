@@ -19,6 +19,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('date', [$this, 'getDate']),
+            new TwigFilter('dateSimple', [$this, 'getDateSimple']),
             new TwigFilter('bool', [$this, 'getBoolVisual']),
         ];
     }
@@ -44,7 +45,23 @@ class AppExtension extends AbstractExtension
         $carbon     = Carbon::now()->subSeconds($difference)->setTimezone(new CarbonTimeZone(Time::timezone()));
         
         if ($difference > (60 * 180)) {
-            return $carbon->format('jS M, H:i:s');
+            return $carbon->format('j M, H:i:s');
+        }
+        
+        return $carbon->diffForHumans();
+    }
+    
+    /**
+     * Get date in a nice format.
+     */
+    public function getDateSimple($unix)
+    {
+        $unix       = is_numeric($unix) ? $unix : strtotime($unix);
+        $difference = time() - $unix;
+        $carbon     = Carbon::now()->subSeconds($difference)->setTimezone(new CarbonTimeZone(Time::timezone()));
+        
+        if ($difference > (60 * 180)) {
+            return $carbon->format('j M, H:i');
         }
         
         return $carbon->diffForHumans();

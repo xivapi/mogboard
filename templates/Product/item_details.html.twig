@@ -1,6 +1,13 @@
 <div class="table">
     <table>
         <tbody>
+            {% if item.Description %}
+            <tr>
+                <td colspan="2" class="item_description">
+                    {{ item.Description|raw }}
+                </td>
+            </tr>
+            {% endif %}
             {% if item.ClassJobCategory %}
             <tr>
                 <td colspan="2"><em>{{ item.LevelEquip }}</em> {{ item.ClassJobCategory.Name ?? '' }}</td>

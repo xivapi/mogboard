@@ -1,5 +1,5 @@
 <div class="table">
-    <table class="striped">
+    <table class="table-sortable">
         <thead>
         <tr>
             <th data-sort="int" width="2%" class="tac">#</th>
@@ -22,7 +22,11 @@
                 <td class="price-buyer">
                     <a href="#" data-tippy-content="{{ row.CharacterID }}">{{ row.CharacterName }}</a>
                 </td>
-                <td class="price-date" data-sort-value="{{ row.PurchaseDate }}">{{ row.PurchaseDate|date }}</td>
+                <td class="price-date" data-sort-value="{{ row.PurchaseDate }}">{{ row.PurchaseDate|dateSimple }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">No History. This item is either rare or new.</td>
             </tr>
         {% endfor %}
         </tbody>
