@@ -27,43 +27,43 @@ class User
     const ALERT_LIMITS = [
         self::NORMAL_USER => [
             'MAX'                   => 3,
-            'MAX_NOTIFICATIONS'     => 5,
+            'MAX_NOTIFICATIONS'     => 20,
             'NOTIFY_TIMEOUT'        => (60 * 60),
             'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 3),
             'UPDATE_TIMEOUT'        => false,
         ],
         self::PATREON_ADVENTURER => [
-            'MAX'                   => 5,
-            'MAX_NOTIFICATIONS'     => 10,
-            'NOTIFY_TIMEOUT'        => (60 * 15),
-            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 5),
+            'MAX'                   => 10,
+            'MAX_NOTIFICATIONS'     => 100,
+            'NOTIFY_TIMEOUT'        => (60 * 10),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 10),
             'UPDATE_TIMEOUT'        => false,
         ],
         self::PATREON_TANK => [
             'MAX'                   => 10,
-            'MAX_NOTIFICATIONS'     => 50,
-            'NOTIFY_TIMEOUT'        => (60 * 15),
-            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 7),
+            'MAX_NOTIFICATIONS'     => 100,
+            'NOTIFY_TIMEOUT'        => (60 * 10),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 10),
             'UPDATE_TIMEOUT'        => false,
         ],
         self::PATREON_HEALER => [
             'MAX'                   => 10,
-            'MAX_NOTIFICATIONS'     => 50,
-            'NOTIFY_TIMEOUT'        => (60 * 15),
-            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 7),
+            'MAX_NOTIFICATIONS'     => 100,
+            'NOTIFY_TIMEOUT'        => (60 * 10),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 10),
             'UPDATE_TIMEOUT'        => false,
         ],
         self::PATREON_DPS => [
-            'MAX'                   => 20,
-            'MAX_NOTIFICATIONS'     => 500,
-            'NOTIFY_TIMEOUT'        => (60 * 5),
-            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 14),
+            'MAX'                   => 25,
+            'MAX_NOTIFICATIONS'     => 9999,
+            'NOTIFY_TIMEOUT'        => (60 * 10),
+            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 20),
             'UPDATE_TIMEOUT'        => (60 * 10),
         ],
         self::PATREON_BENEFIT => [
             'MAX'                   => 5,
-            'MAX_NOTIFICATIONS'     => 10,
-            'NOTIFY_TIMEOUT'        => (60 * 15),
+            'MAX_NOTIFICATIONS'     => 20,
+            'NOTIFY_TIMEOUT'        => (60 * 10),
             'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 3),
             'UPDATE_TIMEOUT'        => false,
         ]
@@ -140,11 +140,6 @@ class User
      */
     private $alerts;
     /**
-     * @var string
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $alertQueue;
-    /**
      * @var int
      * @ORM\Column(type="integer")
      */
@@ -163,17 +158,12 @@ class User
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $alertNotifyTimeout = 0;
+    private $alertsNotifyTimeout = 0;
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
     private $alertsExpiry = 0;
-    /**
-     * @var int
-     * @ORM\Column(type="integer")
-     */
-    private $alertsUpdateTimeout = 0;
 
     //
     // -------- DISCORD SSO --------
@@ -306,18 +296,6 @@ class User
     // Alerts ----------------------------------------------------------------------------------------------------------
     //
 
-    public function getAlertQueue(): string
-    {
-        return $this->alertQueue;
-    }
-
-    public function setAlertQueue(string $alertQueue)
-    {
-        $this->alertQueue = $alertQueue;
-
-        return $this;
-    }
-
     public function getAlerts()
     {
         return $this->alerts;
@@ -366,14 +344,14 @@ class User
         return $this;
     }
 
-    public function getAlertNotifyTimeout(): int
+    public function getAlertsNotifyTimeout(): int
     {
-        return $this->alertNotifyTimeout;
+        return $this->alertsNotifyTimeout;
     }
 
-    public function setAlertNotifyTimeout(int $alertNotifyTimeout)
+    public function setAlertsNotifyTimeout(int $alertsNotifyTimeout)
     {
-        $this->alertNotifyTimeout = $alertNotifyTimeout;
+        $this->alertsNotifyTimeout = $alertsNotifyTimeout;
 
         return $this;
     }
@@ -386,18 +364,6 @@ class User
     public function setAlertsExpiry(int $alertsExpiry)
     {
         $this->alertsExpiry = $alertsExpiry;
-
-        return $this;
-    }
-
-    public function getAlertsUpdateTimeout(): int
-    {
-        return $this->alertsUpdateTimeout;
-    }
-
-    public function setAlertsUpdateTimeout(int $alertsUpdateTimeout)
-    {
-        $this->alertsUpdateTimeout = $alertsUpdateTimeout;
 
         return $this;
     }

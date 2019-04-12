@@ -74,7 +74,7 @@ class UserAlertsDiscordNotification
     /**
      * Send a notification regarding triggers
      */
-    public function sendAlertTriggerNotification(UserAlert $alert, array $triggeredMarketRows)
+    public function sendAlertTriggerNotification(UserAlert $alert, array $triggeredMarketRows, string $hash)
     {
         $item = Redis::Cache()->get("xiv_Item_{$alert->getItemId()}");
 
@@ -120,7 +120,7 @@ class UserAlertsDiscordNotification
         
         // modify footer
         $footer = self::FOOTER;
-        $footer['text'] = "{$footer['text']} - Alert ID: {$alert->getUniq()}";
+        $footer['text'] = "{$footer['text']} - Alert ID: {$alert->getUniq()} - {$hash}";
         
         // build embed
         $embed = [

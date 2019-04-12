@@ -8,6 +8,7 @@ use App\Entity\UserAlertEvent;
 use App\Service\Companion\Companion;
 use App\Service\GameData\GameDataSource;
 use App\Service\GameData\GameServers;
+use App\Service\Redis\Redis;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use XIVAPI\XIVAPI;
@@ -55,6 +56,7 @@ class UserAlertsTriggers
     
     /**
      * Trigger alerts, intended to be called from commands
+     * todo - there is so much shit in here.. it really needs breaking up
      */
     public function trigger(bool $patrons = false)
     {
@@ -74,6 +76,14 @@ class UserAlertsTriggers
                 $this->userAlerts->delete($alert, true);
                 continue;
             }
+
+            // check if the alert has expired, if so, delete it
+            // todo - enable this at launch
+            if ($alert->isExpired()) {
+                # $this->userAlerts->delete($alert, true);
+                # continue;
+            }
+
 
             // get user for the alert
             $user = $alert->getUser();
@@ -99,26 +109,21 @@ class UserAlertsTriggers
              * DPS patrons get auto-price updating.
              */
             if ($user->isPatron(User::PATREON_DPS)) {
-                // Calculate out of date timestamp
-                $outOfDateTimePeriod = time() - $user->getAlertsUpdateTimeout();
-
-                foreach ($market as $server => $marketData) {
-                    // if out of date, request update
-                    if ($marketData->Updated < $outOfDateTimePeriod) {
-                        // this only needs to request once as it does the whole DC regardless of the alert choice.
-                        $this->console->writeln('--> Requesting manual update');
-                        $this->xivapi->market->manualUpdateItem(getenv('XIVAPI_COMPANION_KEY'), $alert->getItemId(), $alert->getServer());
-                    }
-                }
+                // Send an update request, XIVAPI handles throttling this.
+                $this->console->writeln('--> Requesting manual update');
+                $this->xivapi->market->manualUpdateItem(
+                    getenv('XIVAPI_COMPANION_KEY'),
+                    $alert->getItemId(),
+                    GameServers::getServerId($alert->getServer())
+                );
             }
 
             /**
-             * Handle alert delay
-             * if the notification delay is greater than the current time, we skip
+             * Handle alert delay - if the notification delay is greater than the current time, we skip
              */
-            $alertNotificationDelay = $alert->getTriggerLastSent() + $user->getAlertNotifyTimeout();
+            $alertNotificationDelay = ($alert->getTriggerLastSent() + $user->getAlertsNotifyTimeout());
             if ($alertNotificationDelay > time()) {
-                $this->console->writeln('--> Skipping: Alert is on notification cooldown.');
+                $this->console->writeln('--> Skipping: Alert is on notification cool-down.');
                 unset($market);
                 continue;
             }
@@ -222,6 +227,14 @@ class UserAlertsTriggers
     
             // if alerts, send them
             if ($this->triggered) {
+                // ignore duplicates
+                [$isDuplicate, $hash] = $this->isDuplicate($alert);
+                if ($isDuplicate) {
+                    // reset
+                    $this->triggered = [];
+                    continue;
+                }
+
                 $user->incrementNotificationCount();
 
                 $alert
@@ -240,19 +253,52 @@ class UserAlertsTriggers
                 $this->em->flush();
 
                 if ($alert->isNotifiedViaDiscord()) {
-                    $this->discord->sendAlertTriggerNotification($alert, $this->triggered);
+                    $this->discord->sendAlertTriggerNotification($alert, $this->triggered, $hash);
                 }
                 
                 if ($alert->isNotifiedViaEmail()) {
                     // todo - email logic
                 }
-                
+
                 // reset
                 $this->triggered = [];
             } else {
                 $this->console->writeln("--> No triggers to send");
             }
         }
+
+        $this->console->writeln("Finished.");
+    }
+
+    /**
+     * Checks if the trigger was a duplicate
+     */
+    private function isDuplicate(UserAlert $alert)
+    {
+        /**
+         * Throw together some semi-static data to generate a consistent hash
+         */
+        $data = [
+            $alert->getUser()->getId(),
+            $alert->getId()
+        ];
+
+        foreach ($this->triggered as $trig) {
+            [$server, $row] = $trig;
+            $data[] = $server . $row->ID;
+        }
+
+        $hash    = sha1(implode("_", $data));
+        $hashKey = "mogboard_alerts_sent_hash_{$hash}";
+
+        if (Redis::Cache()->get($hashKey)) {
+            $this->console->writeln("+++ Already sent a notification with the same data to the same server");
+            return [true, $hash];
+        }
+
+        // prevent sending same notification within an hour
+        Redis::Cache()->set($hashKey, true, (60 * 60));
+        return [false, $hash];
     }
     
     /**

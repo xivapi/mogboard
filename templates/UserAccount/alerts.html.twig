@@ -16,8 +16,7 @@
     </p>
     <small>
         <strong>Alert Expiration:</strong> To keep the system clean, alerts will expire after a set amount of time
-        from when they were created. To refresh a notification, come back to this page once they have expired
-        and you can select which alerts you wish to refresh.
+        from when they were created. To refresh a notification you must return to MogBoard and be logged in.
     </small>
 
     <hr>
@@ -32,16 +31,14 @@
                     <th>Daily Notifications</th>
                     <th>Notify Delay</th>
                     <th>Alert Expiry Time</th>
-                    <th>Item Update Check</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>{{ auth.user.alerts|length }} / {{ auth.user.alertsMax }}</td>
                     <td>{{ auth.user.alertsNotificationCount }} / {{ auth.user.alertsMaxNotifications }}</td>
-                    <td>{{ auth.user.alertNotifyTimeout ? auth.user.alertNotifyTimeout / 60 ~ ' min' : '-' }}</td>
+                    <td>{{ auth.user.alertsNotifyTimeout ? auth.user.alertsNotifyTimeout / 60 ~ ' min' : '-' }}</td>
                     <td>{{ auth.user.alertsExpiry / 60 / 60 / 24 }} days</td>
-                    <td>{{ auth.user.alertsUpdateTimeout ? auth.user.alertsUpdateTimeout / 60 ~ ' min' : '-' }}</td>
                 </tr>
             </tbody>
         </table>
@@ -120,7 +117,7 @@
                                 </div>
                             </div>
                             <br>
-                            {{ alert.triggerActive|bool }} {{ alert.triggerActive ? 'Alert is active' : 'Alert has been disabled.' }}
+                            {{ alert.triggerActive|bool }} {{ alert.triggerActive ? 'Alert is active' : 'Alert has been disabled.' }} - Expires: {{ alert.expiry|date }}
                         </td>
                     </tr>
                     <tr>
