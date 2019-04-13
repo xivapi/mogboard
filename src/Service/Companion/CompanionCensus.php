@@ -316,12 +316,15 @@ class CompanionCensus
         $chartDataHQ = [];
         $chartDataNQ = [];
         
+        $colors = [];
+        
      
         /**
          * Calculate the max for scaling factors
          */
         foreach ($tableData as $row) {
             $variations[$row->Quantity] = 1;
+            $colors[$row->_Server ?? $server] = sprintf("rgb(%s,%s,%s)", mt_rand(100,255),mt_rand(100,255),mt_rand(100,255));
             
             if ($row->IsHQ && $row->Quantity > $bubbleScaleFactorHQ) {
                 $bubbleScaleFactorHQ = $row->Quantity;
@@ -352,6 +355,8 @@ class CompanionCensus
                     'y' => $row->PricePerUnit,
                     'r' => $radius,
                     'server' => $row->_Server ?? $server,
+                    'backgroundColor' => $colors[$row->_Server ?? $server],
+                    'borderColor' => $colors[$row->_Server ?? $server],
                 ];
             } else {
                 $chartDataNQ[] = [
