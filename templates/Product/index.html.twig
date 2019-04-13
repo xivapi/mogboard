@@ -2,9 +2,12 @@
 {% set title = item.Name %}
 
 {% block body %}
+{% set chartMax = 50 %}
+{% include 'Product/chart_js.html.twig' %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 <script>let itemId = {{ item.ID }};</script>
 <div class="product">
-
     <div>
         <div class="item_top">
             {# Icon #}
@@ -25,7 +28,7 @@
                         <span>{{ item.LevelItem }}</span>
                         {{ item.Name }}
                     </h1>
-                    <div>
+                    <div class="item_info_small">
                         <span><i class="xiv-{{ item.ItemSearchCategory.ID|xivicon }}"></i></span>
                         <span>{{ item.ItemKind.Name }}</span>
                         <span>{{ item.ItemUICategory.Name }}</span>
@@ -33,27 +36,33 @@
                 </div>
 
                 <div class="item_nav">
-                    {# Server List #}
-                    {% for serverName in server.dc_servers %}
-                        {% set icon = serverName == server.name ? 'ItemShard cw-home' : '' %}
-                        {% set className = serverName == server.name ? 'home-world open' : '' %}
-                        {% set salesCount = attribute(market, serverName).Prices is defined ? attribute(market, serverName).Prices|length|number_format : '-' %}
-                        <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}">
-                            {% if serverName == server.name %}
-                                <i class="xiv-ItemShard cw-home"></i>
-                            {% endif %}
-                            {{ serverName }}
+                    <div class="item_nav_servers">
+                        {# Cross World #}
+                        <button type="button" data-tab="summary" class="btn-summary open">
+                            <i class="xiv-CrossWorld cw-summary"></i> Cross-World
                         </button>
-                    {% endfor %}
+
+                        {# Server List #}
+                        {% for serverName in server.dc_servers %}
+                            {% set icon = serverName == server.name ? 'ItemShard cw-home' : '' %}
+                            {% set className = serverName == server.name ? 'home-world' : '' %}
+                            {% set salesCount = attribute(market, serverName).Prices is defined ? attribute(market, serverName).Prices|length|number_format : '-' %}
+                            <button type="button" data-tab="cw{{ serverName }}" class="{{ className }}">
+                                {% if serverName == server.name %}
+                                    <i class="xiv-ItemShard cw-home"></i>
+                                {% endif %}
+                                {{ serverName }}
+                            </button>
+                        {% endfor %}
+                    </div>
 
                     {# Custom Pages #}
                     <div class="item_nav_custom">
-                        <button type="button" data-tab="summary" class="btn-summary">
-                            <i class="xiv-Market cw-summary"></i> Summary
-                        </button>
+                        {# Item Details #}
                         <button type="button" data-tab="details" class="btn-details">
                             <i class="xiv-ArmoryChest cw-details"></i> Details
                         </button>
+                        {# Alerts #}
                         <button type="button" data-tab="alerts" class="btn-alerts">
                             <i class="xiv-app_drawer_news cw-alerts"></i> Alerts
                         </button>
@@ -81,12 +90,11 @@
 
             {# Server Pages #}
             {% for serverName in server.dc_servers %}
-                {% set open = serverName == server.name ? 'open' : '' %}
                 {% set marketData = attribute(market, serverName) %}
                 {% set pricesCount = marketData.Prices|length %}
                 {% set historyCount = marketData.History|length %}
                 {% set updateInfo = api_stats.Report[marketData.UpdatePriority] %}
-                <div class="tab-page tab-cw{{ serverName }} {{ open }}">
+                <div class="tab-page tab-cw{{ serverName }}">
                     <div class="tab-market-tables">
                         <div class="cw-table cw-prices">
                             <h4>PRICES <small>MAX: 50</small></h4>
@@ -94,8 +102,35 @@
                                 <strong>Updated</strong> &nbsp; {{ marketData.Updated|date }}
                             </span>
 
+                            {# PRICE VS QUANTITY #}
+                            <div class="cross_world_chart" style="position: relative; height: 350px; width: 100%"><canvas id="Prices_BubbleChart_{{ serverName }}"></canvas></div>
+                            <script>
+                                renderChart(
+                                    'Prices_BubbleChart_{{ serverName }}',
+                                    'bubble',
+                                    [
+                                        'High-Quality',
+                                        'Normal Quality'
+                                    ],
+                                    1,
+                                        {{ [
+                                            attribute(census, serverName).Prices_BubbleChart_HQ|slice(0,chartMax)|length,
+                                            attribute(census, serverName).Prices_BubbleChart_NQ|slice(0,chartMax)|length
+                                        ]|max }},
+                                    [
+                                        {{ attribute(census, serverName).PricesQuantity_Chart_PricePerUnit_HQ|json_encode|raw }},
+                                        {{ attribute(census, serverName).PricesQuantity_Chart_PricePerUnit_NQ|json_encode|raw }}
+                                    ],
+                                    {{ attribute(census, serverName).Prices_BubbleChart_HQ|slice(0,chartMax)|json_encode|raw }},
+                                    {{ attribute(census, serverName).Prices_BubbleChart_NQ|slice(0,chartMax)|json_encode|raw }},
+                                );
+                            </script>
+                            <br><br>
+
                             {% if marketData.Prices is defined %}
-                                {% include 'Product/prices.html.twig' with { 'prices': marketData.Prices } %}
+                                {% include 'Product/prices.html.twig' with {
+                                    'prices': marketData.Prices,
+                                } %}
                             {% else %}
                                 <div>umm, prices missing? huh</div>
                             {% endif %}
@@ -112,9 +147,34 @@
                             <span class="cw-small-info">
                                 <strong>{{ serverName }}</strong> - {{ server.dc }}
                             </span>
+                            <div class="cross_world_chart" style="position: relative; height: 350px; width: 100%"><canvas id="History_BubbleChart_{{ serverName }}"></canvas></div>
+                            <script>
+                                renderChart(
+                                    'History_BubbleChart_{{ serverName }}',
+                                    'bubble',
+                                    [
+                                        'High-Quality',
+                                        'Normal Quality'
+                                    ],
+                                    1,
+                                        {{ [
+                                            attribute(census, serverName).History_BubbleChart_HQ|slice(0,chartMax)|length,
+                                            attribute(census, serverName).History_BubbleChart_NQ|slice(0,chartMax)|length
+                                        ]|max }},
+                                    [
+                                        {{ attribute(census, serverName).HistoryQuantity_Chart_PricePerUnit_HQ|json_encode|raw }},
+                                        {{ attribute(census, serverName).HistoryQuantity_Chart_PricePerUnit_NQ|json_encode|raw }}
+                                    ],
+                                    {{ attribute(census, serverName).History_BubbleChart_HQ|slice(0,chartMax)|json_encode|raw }},
+                                    {{ attribute(census, serverName).History_BubbleChart_NQ|slice(0,chartMax)|json_encode|raw }},
+                                );
+                            </script>
+                            <br><br>
 
                             {% if marketData.History is defined %}
-                                {% include 'Product/history.html.twig' with { 'history': marketData.History } %}
+                                {% include 'Product/history.html.twig' with {
+                                    'history': marketData.History,
+                                } %}
                             {% else %}
                                 <div>hmm, history missing to....</div>
                             {% endif %}
@@ -125,4 +185,17 @@
         </div>
     </div>
 </div>
+
+<small class="cross_world_foot_note">
+    <strong>Market Data Information</strong>
+    <p>
+        Item prices that are 10x the average have been removed from all Cross-World views.
+    </p>
+    <p>
+        Items will update in the backend based on their sale frequency,
+        this is being continuously tweaked and is mostly automated.
+    </p>
+</small>
+
+
 {% endblock %}

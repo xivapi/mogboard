@@ -412,11 +412,11 @@ header {
 
     > div:first-of-type {
         display: flex;
-        flex: 0 1 70%;
+        flex: 0 1 calc(100% - 400px);
 
         > div {
             flex: 0 1 auto;
-            padding-right: 20px;
+            padding-right: 10px;
         }
 
         .btn-home {
@@ -456,6 +456,10 @@ header {
             color: #fff;
             box-shadow: inset 0 0 3px #000;
 
+            @include mq($until: wide) {
+                width: auto;
+            }
+
             &:hover {
                 background-color: rgba(0,0,0,0.2);
             }
@@ -484,9 +488,8 @@ header {
             .btn-market-board {
                 height: 50px;
                 transition: var(--transition-speed);
-                margin: 0 15px 0 0;
                 position: relative;
-                padding: 0 20px 0 55px;
+                padding: 0 20px;
                 font-size: 19px;
                 font-weight: 400;
                 border-radius: var(--general-border-radius);
@@ -495,12 +498,11 @@ header {
                 border: solid 1px var(--default);
                 color: #aaa;
 
-                span {
+                i {
+                    vertical-align: middle;
+                    margin: -4px 4px 0 -3px;
                     font-size: 28px;
                     line-height: 0;
-                    position: absolute;
-                    left: 16px;
-                    top: 10px;
                 }
 
                 &:hover {
@@ -508,39 +510,55 @@ header {
                     background-color: rgba(0,0,0,0.1);
                     color: #fff;
                 }
+
+                @include mq($until: wide) {
+                    span {
+                        display: none;
+                    }
+
+                    i {
+                        margin-right: 0;
+                    }
+                }
             }
         }
     }
 
     > div:last-of-type {
         display: flex;
-        flex: 0 1 30%;
+        flex: 0 1 400px;
         text-align: right;
         flex-direction: row;
         justify-content: flex-end;
 
         > div {
             flex: 0 1 auto;
-            padding-left: 20px;
         }
 
         a {
             color: #888;
             display: inline-block;
-            font-size: 20px;
-            font-weight: 300;
+            font-size: 18px;
+            font-weight: 400;
             padding: 15px 20px 0 0;
+            transition: 150ms;
+
+            &:hover {
+                color: #fff;
+            }
         }
 
         .username {
             color: var(--color8);
             display: inline-block;
-            font-size: 20px;
-            font-weight: 300;
-            padding: 15px 0 0 0;
+            font-size: 18px;
+            font-weight: 400;
+            padding: 15px 10px 0 0;
         }
 
         .img-avatar {
+            height: 42px;
+            width: 42px;
             border-radius: 50px;
             box-shadow: 0 1px 5px #000;
         }
@@ -566,7 +584,7 @@ header {
         .btn-settings {
             height: var(--form-field-height);
             border: none;
-            padding: 6px 2px 0 2px;
+            padding: 8px 2px 0 2px;
             background-color: transparent;
             outline: none;
             cursor: pointer;

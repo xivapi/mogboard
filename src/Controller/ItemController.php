@@ -92,7 +92,7 @@ class ItemController extends AbstractController
         
         // build census
         $census = Redis::Cache()->get("census_{$dc}_{$itemId}");
-        if ($census === null) {
+        if ($census == null) {
             // generate census and cache it, it's only cached for a short
             // period just to avoid spamming and multiple users.
             $census = $this->companionCensus->generate($market)->getCensus();

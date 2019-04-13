@@ -6,13 +6,13 @@
             </a>
         </div>
         <div>
-            <input type="text" class="search" placeholder="Search for something awesome">
+            <input type="text" class="search" placeholder="Search">
         </div>
         <div>
             <nav class="form">
                 <button class="btn-market-board">
-                    <span class="xiv-Market"></span>
-                    Market Board
+                    <i class="xiv-Market"></i>
+                    <span>Market Board</span>
                 </button>
             </nav>
         </div>
@@ -22,9 +22,6 @@
         <div>
             <a href="{{ path('user_account') }}">My Account</a>
             <span class="username">{{ auth.user.username|title }}</span>
-        </div>
-        <div>
-            <img class="img-avatar" src="{{ auth.user.avatar }}" height="50">
         </div>
         {% else %}
             <a href="{{ path('user_login_discord') }}" class="btn-login">Login via Discord</a>

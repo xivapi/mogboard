@@ -2,12 +2,10 @@
 
 namespace App\Twig;
 
-use App\Service\Common\Environment;
 use App\Service\Common\Language;
 use App\Service\Common\SiteVersion;
 use App\Service\Common\Time;
 use App\Service\Redis\Redis;
-use App\Service\User\Users;
 use Carbon\Carbon;
 use Carbon\CarbonTimeZone;
 use Twig\Extension\AbstractExtension;
@@ -21,6 +19,8 @@ class AppExtension extends AbstractExtension
             new TwigFilter('date', [$this, 'getDate']),
             new TwigFilter('dateSimple', [$this, 'getDateSimple']),
             new TwigFilter('bool', [$this, 'getBoolVisual']),
+            new TwigFilter('max', [$this, 'getMaxValue']),
+            new TwigFilter('min', [$this, 'getMinValue']),
         ];
     }
     
@@ -91,6 +91,22 @@ class AppExtension extends AbstractExtension
     public function getBoolVisual($bool)
     {
         return $bool ? '✔' : '✘';
+    }
+    
+    /**
+     * Return max value in an array
+     */
+    public function getMaxValue($array)
+    {
+        return $array ? max($array) : 0;
+    }
+    
+    /**
+     * Return min value in an array
+     */
+    public function getMinValue($array)
+    {
+        return $array ? min($array) : 0;
     }
     
     /**
