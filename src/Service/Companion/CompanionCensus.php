@@ -29,7 +29,7 @@ class CompanionCensus
      */
     public function generate($market): self
     {
-        file_put_contents(__DIR__.'/market.json', json_encode($market, JSON_PRETTY_PRINT));
+        # file_put_contents(__DIR__.'/market.json', json_encode($market, JSON_PRETTY_PRINT));
         
         // server users home world
         $this->homeServer = GameServers::getServer();
@@ -69,7 +69,7 @@ class CompanionCensus
         $this->calculateAverageSaleDuration('_Global', $this->census->_Global);
         $this->calculateNumericStatistics('_Global', $this->census->_Global);
         
-        file_put_contents(__DIR__.'/market_census.json', json_encode($this->census, JSON_PRETTY_PRINT));
+        # file_put_contents(__DIR__.'/market_census.json', json_encode($this->census, JSON_PRETTY_PRINT));
         
         return $this;
     }
