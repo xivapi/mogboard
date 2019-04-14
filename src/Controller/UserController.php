@@ -29,6 +29,20 @@ class UserController extends AbstractController
     }
     
     /**
+     * @Route("/account/confirm-patreon", name="user_account_confirm_patreon")
+     */
+    public function accountConfirmPatreon(Request $request)
+    {
+        $status = $this->users->checkPatreonTierForUser(
+            $this->users->getUser()
+        );
+        
+        $this->redirectToRoute('user_account', [
+            'status' => $status ? 'failed' : 'success',
+        ]);
+    }
+    
+    /**
      * @Route("/account/characters", name="user_account_characters")
      */
     public function accountCharacters(Request $request)

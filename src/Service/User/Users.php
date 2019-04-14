@@ -11,6 +11,7 @@ use App\Service\ThirdParty\Discord\Discord;
 use Delight\Cookie\Cookie;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -180,40 +181,48 @@ class Users
     {
         /** @var User $user */
         foreach ($this->repository->findAll() as $user) {
-            $discordId = $user->getSsoDiscordId();
-    
-            try {
-                $tier = Discord::mog()->getUserRole($discordId);
-            } catch (\Exception $ex) {
-                return false;
-            }
-    
-            // check or set default
-            $tier = $tier ?: 0;
-    
-            // set patreon tier
-            $user->setPatron($tier);
-    
-            /**
-             * Alerts!
-             */
-            
-            // Get Alert Limits
-            $benefits = User::ALERT_LIMITS[$tier];
-    
-            // update user
-            $user
-                ->setAlertsMax($benefits['MAX'])
-                ->setAlertsMaxNotifications($benefits['MAX_NOTIFICATIONS'])
-                ->setAlertsNotifyTimeout($benefits['NOTIFY_TIMEOUT'])
-                ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT']);
-
-            $this->em->persist($user);
-            $this->em->flush();
-            usleep(100000);
+            $this->checkPatreonTierForUser($user);
         }
         
         $this->em->clear();
+        return true;
+    }
+    
+    public function checkPatreonTierForUser(User $user)
+    {
+        $console = new ConsoleOutput();
+        $console->writeln("User: {$user->getUsername()} {$user->getSsoDiscordId()}");
+        
+        try {
+            $tier = Discord::mog()->getUserRole($user->getSsoDiscordId());
+        } catch (\Exception $ex) {
+            $console->writeln($ex->getMessage());
+            return false;
+        }
+    
+        // check or set default
+        $tier = $tier ?: 0;
+    
+        // set patreon tier
+        $user->setPatron($tier);
+    
+        /**
+         * Alerts!
+         */
+    
+        // Get Alert Limits
+        $benefits = User::ALERT_LIMITS[$tier];
+    
+        // update user
+        $user
+            ->setAlertsMax($benefits['MAX'])
+            ->setAlertsMaxNotifications($benefits['MAX_NOTIFICATIONS'])
+            ->setAlertsNotifyTimeout($benefits['NOTIFY_TIMEOUT'])
+            ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT']);
+    
+        $this->em->persist($user);
+        $this->em->flush();
+        usleep(100000);
         return true;
     }
 
