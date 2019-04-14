@@ -3,6 +3,7 @@
     <div class="cheapest">
         <h2>Cheapest High-Quality</h2>
         {% if item.CanBeHq %}
+            {% if census._Global.Prices_CheapestHQ %}
             <div class="cheapest_price">
                 <i class="xiv-Gil"></i>
                 <em>{{ census._Global.Prices_CheapestHQ.Quantity|number_format }} x</em>
@@ -13,7 +14,9 @@
                     Total: <strong>{{ census._Global.Prices_CheapestHQ.PriceTotal|number_format }}</strong>
                 </span>
             </div>
-
+            {% else %}
+                No HQ for sale!
+            {% endif %}
         {% else %}
             <p>Item has no High-Quality variant</p>
         {% endif %}
