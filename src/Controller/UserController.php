@@ -38,7 +38,7 @@ class UserController extends AbstractController
         );
         
         return $this->redirectToRoute('user_account', [
-            'status' => $status ? 'failed' : 'success',
+            'status' => $status ? 'success' : 'failed',
         ]);
     }
     
