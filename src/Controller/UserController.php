@@ -37,7 +37,7 @@ class UserController extends AbstractController
             $this->users->getUser()
         );
         
-        $this->redirectToRoute('user_account', [
+        return $this->redirectToRoute('user_account', [
             'status' => $status ? 'failed' : 'success',
         ]);
     }
