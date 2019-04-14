@@ -252,8 +252,8 @@
                 ],
                 {{ census._Global.Prices_Chart_PricePerUnit_HQ|slice(0,chartMax)|json_encode|raw }},
                 {{ census._Global.Prices_Chart_PricePerUnit_NQ|slice(0,chartMax)|json_encode|raw }},
-                {{ (item.CanBeHq ? census._Global.Prices_Chart_PricePerUnit_HQ : census._Global.Prices_Chart_PricePerUnit_NQ)|keys|json_encode|raw }},
-                {{ (item.CanBeHq ? census._Global.Prices_Chart_PricePerUnit_HQ : census._Global.Prices_Chart_PricePerUnit_NQ)|slice(0,chartMax)|max }},
+                {{ ((item.CanBeHq and census._Global.Prices_CheapestHQ) ? census._Global.Prices_Chart_PricePerUnit_HQ : census._Global.Prices_Chart_PricePerUnit_NQ)|keys|json_encode|raw }},
+                {{ ((item.CanBeHq and census._Global.Prices_CheapestHQ) ? census._Global.Prices_Chart_PricePerUnit_HQ : census._Global.Prices_Chart_PricePerUnit_NQ)|slice(0,chartMax)|max }},
                 {{ census._Global.Prices_Chart_PricePerUnit_NQ|slice(0,chartMax)|min * 0.90 }},
                 [
                     {{ census._Global.PricesServer_Chart_PricePerUnit_HQ|json_encode|raw }},
@@ -284,8 +284,8 @@
                 ],
                 {{ census._Global.History_Chart_PricePerUnit_HQ|slice(0,chartMax)|json_encode|raw }},
                 {{ census._Global.History_Chart_PricePerUnit_NQ|slice(0,chartMax)|json_encode|raw }},
-                {{ (item.CanBeHq ? census._Global.History_Chart_PricePerUnit_HQ : census._Global.History_Chart_PricePerUnit_NQ)|keys|json_encode|raw }},
-                {{ (item.CanBeHq ? census._Global.History_Chart_PricePerUnit_HQ : census._Global.History_Chart_PricePerUnit_NQ)|slice(0,chartMax)|max }},
+                {{ ((item.CanBeHq and census._Global.Prices_CheapestHQ) ? census._Global.History_Chart_PricePerUnit_HQ : census._Global.History_Chart_PricePerUnit_NQ)|keys|json_encode|raw }},
+                {{ ((item.CanBeHq and census._Global.Prices_CheapestHQ) ? census._Global.History_Chart_PricePerUnit_HQ : census._Global.History_Chart_PricePerUnit_NQ)|slice(0,chartMax)|max }},
                 {{ census._Global.History_Chart_PricePerUnit_NQ|slice(0,chartMax)|min * 0.90 }},
                 [
                     {{ census._Global.HistoryServer_Chart_PricePerUnit_HQ|json_encode|raw }},
