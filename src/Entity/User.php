@@ -66,7 +66,7 @@ class User
             'NOTIFY_TIMEOUT'        => (60 * 10),
             'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 3),
             'UPDATE_TIMEOUT'        => false,
-        ]
+        ],
     ];
 
     /**
@@ -306,6 +306,24 @@ class User
         $this->alerts = $alerts;
 
         return $this;
+    }
+    
+    public function getAlertsPerItem()
+    {
+        $itemAlerts = [];
+        
+        /** @var UserAlert $alert */
+        foreach ($this->alerts as $alert) {
+            $itemId = $alert->getItemId();
+            
+            if (!isset($itemAlerts[$itemId])) {
+                $itemAlerts[$itemId] = [];
+            }
+    
+            $itemAlerts[$itemId][] = $alert;
+        }
+        
+        return $itemAlerts;
     }
 
     public function getAlertsMax(): int

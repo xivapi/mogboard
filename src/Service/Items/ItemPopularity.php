@@ -30,7 +30,36 @@ class ItemPopularity
      */
     public function get()
     {
-        return $this->repository->findBy([], [ 'count' => 'desc' ], 20);
+        $ids = Redis::Cache()->get('mogboard_trending_items');
+
+        if ($ids == null) {
+            $ids   = [];
+            $items = (array)$this->repository->findBy([], [ 'count' => 'desc' ], 10);
+            
+            /** @var PopularItem $item */
+            foreach ($items as $item) {
+                $ids[] = $item->getItem();
+            }
+            shuffle($ids);
+            
+            Redis::Cache()->set('mogboard_trending_items', $ids, self::MAX_DELAY);
+        }
+
+        return $ids;
+    }
+    
+    /**
+     * Resets popular items by resetting all the counts back to 0.
+     * This should be done every 12 hours so data can be collected every AM/PM
+     */
+    public function reset()
+    {
+        /** @var PopularItem $item */
+        foreach ($this->repository->findAll() as $item) {
+            $item->setCount(0)->setUpdated(time());
+            $this->em->persist($item);
+            $this->em->flush();
+        }
     }
     
     /**

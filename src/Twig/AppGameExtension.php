@@ -28,7 +28,7 @@ class AppGameExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('gamedata', [$this, 'getGameDataSource']),
+            new TwigFunction('game', [$this, 'getGameDataSource']),
             new TwigFunction('getServer', [$this, 'getServer']),
             new TwigFunction('getGameServers', [$this, 'getGameServers']),
             new TwigFunction('getGameDataCenters', [$this, 'getGameDataCenters']),

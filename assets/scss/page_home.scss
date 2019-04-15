@@ -1,133 +1,283 @@
-.welcome-banner {
-    text-align: center;
-    margin: 20px 0;
-
-    h1 {
-        font-size: 16px;
-        opacity: 0.5;
-    }
-
-    p {
-        display: block;
-        margin-top: 10px;
-        font-size: 14px;
-        color: #666;
-    }
-}
-
 .home {
     display: flex;
+    max-width: 1400px;
+    width: 100%;
 
-    > div:nth-of-type(1) {
+    > div:first-of-type {
+        flex: 0 1 1000px;
+        padding-right: 20px;
+    }
+
+    > div:last-of-type {
         flex: 0 1 400px;
     }
 
-    > div:nth-of-type(2) {
-        flex: 0 1 calc(100% - 400px - 400px);
-        padding: 0 20px;
+    @include mq($until: desktop) {
+        display: block;
+
+        > div:first-of-type,
+        > div:last-of-type {
+            flex: none;
+            width: auto;
+            margin: 0 10px;
+            padding: 0;
+        }
     }
 
-    > div:nth-of-type(3) {
-        flex: 0 1 400px;
-    }
-
-    .home-outline,
-    .home-box {
+    h2 {
+        font-weight: 500;
+        font-size: 17px;
         padding: 15px;
-        border-radius: var(--general-border-radius);
-        margin-bottom: 10px;
+        text-transform: uppercase;
+        text-shadow: none;
+        background-color: var(--dark-blue);
+        margin: 0;
+    }
 
-        p:last-of-type {
-            margin: 0;
+    h3 {
+        font-weight: 500;
+        font-size: 20px;
+        text-shadow: none;
+        color: var(--color9);
+        margin: 0;
+    }
+
+    h4 {
+        font-weight: 500;
+        font-size: 20px;
+        text-transform: uppercase;
+        text-shadow: none;
+        color: #888;
+    }
+
+    h5 {
+        font-size: 16px;
+        font-weight: 500;
+        text-transform: uppercase;
+        text-shadow: none;
+        color: var(--blue-3x);
+        letter-spacing: 2px;
+        text-align: center;
+    }
+
+    .home-box,
+    .home-box2 {
+        background-color: var(--dark-blue);
+        box-shadow: 0 1px 3px #000;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        overflow: hidden;
+
+        .home-row {
+            padding: 15px;
+            border-bottom: solid 1px #000;
         }
     }
 
-    .home-outline {
-        border: solid 1px var(--default-3x);
+    .home-box2 {
+        background-color: var(--dark-blue2);
     }
 
-    .home-box {
-        background-color: var(--default-3x);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    //
+    // Welcome
+    //
+    .welcome-banner {
+        text-align: center;
+        padding: 15px 0 0 0
+    }
 
-        h4 {
-            font-size: 22px;
-            font-style: italic;
-            font-weight: 600;
-            color: #ff6566;
+    .welcome-info {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    //
+    // Patreon
+    //
+    .patreon-info {
+        img {
+            border-radius: 3px;
+            width: 120px;
+
+            position: relative;
+            transition: 150ms;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+
+        h6 {
+            color: var(--highlight3x);
+            font-size: 20px;
+            font-weight: 400;
+            margin: 0 0 8px 0;
+        }
+
+        > div:first-of-type {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .patreon-info-text {
+            font-size: 14px;
+            line-height: 18px;
+        }
+
+        .patreon-link {
+            color: #ffbcc8;
+            font-weight: bold;
         }
     }
 
-    ul {
-        margin: 10px 0 30px 50px;
-        list-style: disc;
+    //
+    // Trending
+    //
+    .home-trending {
+        > div {
+            display: flex;
+            border-bottom: solid 1px #000;
 
-        li {
-            margin-bottom: 20px;
+            > div:first-of-type {
+                flex: 0 1 50px;
+                border-right: solid 1px #000;
+                overflow: hidden;
+                position: relative;
+                width: 50px;
+                height: 50px;
 
-            &:last-of-type {
-                margin-bottom: 0;
+                img {
+                    position: absolute;
+                    width: 55px;
+                    height: 55px;
+                    top: 50%; left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+            }
+
+            > div:last-of-type {
+                flex: 0 1 calc(100% - 50px);
+                padding-left: 10px;
+
+                > div {
+                    margin-top: 8px;
+                }
+
+                small {
+                    font-size: 12px;
+                }
             }
         }
     }
 
-    .alert-row {
-        line-height: 22px;
-        font-size: 18px;
-
-        code {
-            display: block;
-            padding: 4px 6px;
-            background-color: #333;
-            margin-top: 8px;
-            color: #ffcc00;
-        }
-
+    //
+    // Mog Market Stats
+    //
+    .home-mog-status {
         small {
-            font-size: 13px;
-            color: #888;
-            display: inline-block;
-            margin-left: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            text-shadow: none;
+            color: #999;
+            display: block;
+            margin-bottom: 5px;
         }
-    }
-}
 
-.home-patron {
-    background-color: #f96854;
-    border-radius: 6px;
-    overflow: hidden;
-
-    display: flex;
-
-    > div:first-of-type {
-        flex: 0 1 70px;
-        text-align: center;
-        padding: 14px 4px 10px 10px;
-
-        img {
-            margin-bottom: -5px;
+        strong {
+            color: var(--highlight2x);
         }
-    }
 
-    > div:last-of-type {
-        flex: 0 1 calc(100% - 70px);
-        padding: 10px 0 10px 20px;
-        background-color: #f96854;
-        transition: 100ms;
+        .home-mog-queue {
+            font-size: 12px;
+            margin-bottom: 20px;
 
-        &:hover {
-            background-color: #ff897b;
+            > strong {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            span {
+                display: inline-block;
+                float: right;
+            }
         }
     }
 
-    text-shadow: none;
-    color: #052d49;
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 26px;
-    margin-bottom: 10px;
+    //
+    // Home Alerts
+    //
+    .home-alert-row {
+        padding: 15px;
+        border-bottom: solid 1px #000;
+        display: flex;
 
-    &:hover, &:focus {
-        color: #052d49;
+        > div:first-of-type {
+            flex: 0 1 64px;
+        }
+
+        > div:last-of-type {
+            flex: 0 1 calc(100% - 64px);
+            padding-left: 15px;
+        }
+
+        .item_icon {
+            height: 64px;
+            width: 64px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px #000;
+        }
+
+        .home-alert-item-info {
+            > div:first-of-type {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+            > div:last-of-type {
+                > strong {
+                    display: block;
+                    font-size: 12px;
+                    font-weight: 500;
+                    text-shadow: none;
+                    color: var(--color6);
+                    margin-bottom: 8px;
+                }
+
+                .home-alert-watcher {
+                    padding: 6px 10px;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+
+    //
+    // Home Item Lists
+    //
+    .home-itemlist {
+        padding: 15px;
+
+        ul {
+            margin: 10px 0 0 0;
+            list-style: none;
+
+            li {
+                img {
+                    height: 32px;
+                    vertical-align: middle;
+                    border-radius: 3px;
+                    display: inline-table;
+                    margin: 0 10px 0 0;
+                }
+
+                small {
+                    display: inline-block;
+                    margin-left: 10px;
+                    font-size: 13px;
+                    text-shadow: none;
+                    color: var(--search-complete);
+                }
+            }
+        }
     }
 }

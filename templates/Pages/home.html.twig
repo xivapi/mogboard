@@ -1,99 +1,178 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-    <div class="home">
-        <div>
-            <div class="home-outline">
-                <p><strong>(PLAYER STUFF)</strong></p>
-                <p>Friends</p>
-                <p>Tracked Retainers</p>
-                <p>Other player statz</p>
-                <p>Recent Items</p>
-                <hr>
-                <p>Popular items</p>
-                <ul>
-                {#
-                {% for popular in popular_items %}
-                    <li>{{ gamedata().getItem(popular.item).Name }}</li>
-                {% endfor %}
-                #}
-                </ul>
+<div class="home">
+    <div>
+        {# News #}
+        <div class="home-box2">
+            <div class="home-row">
+                <strong>Welcome to Mogboard.com - A FINAL FANTASY XIV: Online Market Board Site.</strong>
+                <a href="#">Click here to learn all about it!</a>
             </div>
         </div>
-        <div>
-            <div class="home-outline">
-                <p><strong>(TRACKED STUFF)</strong></p>
-                <p>Recent "watched item" notification</p>
-                <p>Player "sold item" notification</p>
-                <p>Tracked items with graph porn and sales figures</p>
 
 
-                {% if auth.online() %}
-                    <br><hr><br>
-
-                    <h4>Alerts</h4>
-                    <ul>
-                        {% for alert in auth.user.alerts %}
-                            <li class="alert-row">
+        {% if auth.online() %}
+            {# Alerts #}
+            <div class="home-box2">
+                <h2>Your Alerts</h2>
+                {% for itemId, alerts in auth.user.alertsPerItem %}
+                    {% set item = game().item(itemId) %}
+                    <div class="home-alert-row">
+                        <div>
+                            <a href="{{ path('item_page', { itemId: itemId }) }}">
+                                <img src="{{ item.ID|icon2x }}" class="item_icon">
+                            </a>
+                        </div>
+                        <div>
+                            <div class="home-alert-item-info">
                                 <div>
-                                    <strong>({{ alert.server }}) {{ alert.name }}</strong>
-                                    <a href="{{ path('item_page', { itemId: alert.itemId }) }}">{{ gamedata().getItem(alert.itemId).Name }}</a>
-                                    <small>Last Sent: {{ alert.triggerLastSent ? alert.triggerLastSent|date : 'Never' }}
-                                    - Total: {{ alert.triggersSent|number_format }}</small>
+                                    {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                                    <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
                                 </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                                <div>
+                                    <strong>ALERT WATCHERS</strong>
+                                    {% for alert in alerts %}
+                                    <div class="home-alert-watcher">
+                                        {{ loop.index }}. {{ alert.Name }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
 
-                    <br><hr><br>
-
-                    <h4>Lists</h4>
-                    {% for list in auth.user.lists %}
-                        <p>Name: {{ list.name }}</p>
+            {# Lists #}
+            <div class="home-box2">
+                <h2>Item Lists</h2>
+                {% for list in auth.user.lists %}
+                    <div class="home-itemlist">
+                        <h3>{{ list.name }} ({{ list.items|length }} items)</h3>
                         <ul>
-                            {% for id in list.items %}
-                            <li>
-                                <a href="{{ path('item_page', { itemId: id }) }}">{{ gamedata().getItem(id).Name }}</a>
-                            </li>
+                            {% for itemId in list.items %}
+                                {% set item = game().item(itemId) %}
+                                <li>
+                                    <img src="{{ item.ID|icon2x }}">
+                                    {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                                    <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                                    <small>
+                                        {{ item.ItemKind.Name }} -
+                                        {{ item.ItemSearchCategory.Name }}
+                                    </small>
+                                </li>
                             {% endfor %}
                         </ul>
-                    {% endfor %}
-
-                {% endif %}
-
+                    </div>
+                {% endfor %}
             </div>
-        </div>
-        <div>
-            <div class="home-box">
-                <div class="welcome-banner">
-                    <img src="/i/brand/mogboard/mogboard_light.svg" height="32">
-                </div>
-                <h4>beta</h4>
-                <p>
-                    Mogboard.com Is still heavily in progress, if you have any feedback please
-                    be sure to jump onto the Discord and shout at <strong class="text-blue">@vekien</strong>
-                </p>
-                <p>
-                    Discord: <a href="https://discord.gg/MFFVHWC">discord.gg/MFFVHWC</a>
-                </p>
-            </div>
-            <a class="home-patron"href="https://www.patreon.com/vekien">
-                <div>
-                    <img src="/i/brand/patreon/logo.jpg" height="46px">
-                </div>
-                <div>
-                    Support <strong>Mogboard and XIVAPI</strong><br>
-                    by becoming a <strong>Patron</strong>!
-                </div>
-            </a>
-            <div class="home-outline">
-                <p><strong>(MOGBOARD SITE STUFF)</strong></p>
-                <p>Mogboard News</p>
-                <p>Server Status</p>
 
+            {# todo #}
+            <div class="home-box2">
+                <h2>Todo:</h2>
+                <br><br>
+                <ul>
+                    <li>Add a "Recently Viewed" list</li>
+                    <li>Add Retainer features (show items up, show if any sold recently, etc)</li>
+                    <li>Add Friends Features (show items purchased, etc)</li>
+                    <li>Recent sale figures for items on alerts, recently viewed or lists</li>
+                    <li>Some graph porn</li>
+                    <li>Not-thought-of-just-yet features.</li>
+                </ul>
             </div>
-        </div>
+        {% else %}
+            <div class="home-box2">
+                <div class="home-row">
+                    Login to track items, create alerts and have a personalised home-page feed.
+                    (todo - improve this)
+                </div>
+            </div>
+        {% endif %}
     </div>
+    <div>
+        <div class="home-box">
+            <div class="welcome-banner">
+                <img src="/i/brand/mogboard/mogboard_light.svg" height="22">
+            </div>
+            <div class="welcome-info home-row">
+                Mogboard.com is in heavy development, if you have any feedback or suggestions
+                be sure to jump into the discord and shout at <strong class="text-blue">@vekien</strong>,
+                thank you! -PV
+            </div>
+            <div class="home-row">
+                Discord: <a href="https://discord.gg/MFFVHWC">discord.gg/MFFVHWC</a>
+            </div>
+            <div class="patreon-info home-row">
+                <div>
+                    <a href="https://www.patreon.com/vekien" target="_blank"><img src="/i/brand/patreon/logo_name.jpg"></a>
+                </div>
+                <div>
+                    <p class="patreon-info-text">
+                        Both <strong>MogBoard.com</strong> site and <strong>XIVAPI</strong> are fully funded via patreon supporters,
+                        this helps keep the site and API alive for everyone to enjoy. If you
+                        are interested in becoming a patreon you'll receive small perks here
+                        and be helping the entire FFXIV Developer Community.
+                    </p>
+                    <p>
+                        <a href="https://www.patreon.com/vekien" target="_blank" class="patreon-link">Learn More at Patreon</a>
+                    </p>
+                </div>
+            </div>
+        </div>
 
+        <h4>Trending Today</h4>
+        <div class="home-box home-trending">
+            {% for itemId in popular_items %}
+                {% set item = game().item(itemId) %}
+                <div>
+                    <div>
+                        <img src="{{ item.ID|icon2x }}">
+                    </div>
+                    <div>
+                        <div>
+                            {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                            <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                        </div>
+                        <small>{{ item.ItemSearchCategory.Name }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h4>Mog Market Status</h4>
+        <div class="home-box home-mog-status">
+            <div class="home-row flex">
+                <div class="flex_50">
+                    <small>Moogles Online</small>
+                    <strong>{{ market_stats.Stats.DatabaseSqlReport.characters_online }}</strong>
+                </div>
+                <div class="flex_50">
+                    <small>Market Items</small>
+                    <strong>{{ market_stats.Stats.DatabaseSqlReport.total_entries }}</strong>
+                </div>
+            </div>
+            <div class="home-row">
+                <h5>Auto-Update Status</h5>
+                {% for queue in market_stats.Stats.Report %}
+                <div class="home-mog-queue" data-tippy-content="{{ queue.CycleDifferenceSec < 300 ? 'Items in this queue are updating <br> as fast as expected.' : 'Items in this queue are updating <br> slower than expected' }}">
+                    <strong>Queue: {{ queue.Name }}</strong>
+                    <div class="flex">
+                        <div class="flex_40">
+                            <small>Items</small>
+                            {{ queue.TotalItems }}
+                        </div>
+                        <div class="flex_60">
+                            <small>Speed</small>
+                            {{ queue.CycleTime }}
+                            <span class="{{ queue.CycleDifferenceSec < 300 ? 'text-green' : 'text-red' }}">{{ queue.CycleDifferenceSec|title }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}

@@ -242,47 +242,8 @@ form,
         display: flex;
         margin: 0 -10px;
 
-        .form_colauto,
-        .form_col100,
-        .form_col50,
-        .form_col40,
-        .form_col33,
-        .form_col25,
-        .form_col20,
-        .form_col10 {
+        > div {
             padding: 0 10px;
-        }
-
-        .form_colauto {
-            flex: 0 1 auto;
-        }
-
-        .form_col100 {
-            flex: 0 1 100%;
-        }
-
-        .form_col50 {
-            flex: 0 1 50%;
-        }
-
-        .form_col40 {
-            flex: 0 1 40%;
-        }
-
-        .form_col33 {
-            flex: 0 1 33%;
-        }
-
-        .form_col25 {
-            flex: 0 1 25%;
-        }
-
-        .form_col20 {
-            flex: 0 1 20%;
-        }
-
-        .form_col10 {
-            flex: 0 1 10%;
         }
     }
 }
@@ -406,32 +367,65 @@ header {
     width: 100%;
     display: flex;
 
+    @include mq($until: desktop) {
+        display: block;
+        border-bottom: solid 2px var(--default);
+    }
+
     > div {
         padding: 30px 30px 20px 30px;
+
+        @include mq($until: desktop) {
+            padding: 10px;
+        }
     }
 
     > div:first-of-type {
         display: flex;
         flex: 0 1 calc(100% - 400px);
 
+        @include mq($until: desktop) {
+            flex: none;
+            padding-bottom: 0;
+        }
+
         > div {
             flex: 0 1 auto;
             padding-right: 10px;
+
+            @include mq($until: desktop) {
+
+                &:nth-of-type(1) {
+                    flex: 0 1 60px;
+                }
+
+                &:nth-of-type(2) {
+                    flex: 0 1 calc(100% - 60px - 64px);
+                    padding-right: 25px;
+                }
+
+                &:nth-of-type(3) {
+                    flex: 0 1 64px;
+                }
+            }
         }
 
         .btn-home {
             color: #fff;
-            font-size: 40px;
-            line-height: 40px;
+            height: 50px;
             display: inline-block;
+
+            @include mq($until: desktop) {
+                margin-top: -5px;
+            }
 
             img {
                 transition: var(--transition-speed);
-                margin: -20px 0 0 0;
+                margin: -14px 5px 0 0;
 
                 filter: grayscale(100%);
                 -webkit-filter: grayscale(100%);
-                opacity: 0.6;
+                height: 64px;
             }
 
             &:hover img {
@@ -442,23 +436,25 @@ header {
         }
 
         .search {
-            height: 50px;
-            width: 500px;
+            height: 44px;
+            line-height: 44px;
+            width: 400px;
             margin: 0 0 0 10px;
             font-size: 19px;
             border-radius: var(--general-border-radius);
-            padding: 12px 20px;
+            padding: 0 20px;
             transition: var(--transition-speed);
             outline: none;
+
+            @include mq($until: desktop) {
+                width: calc(100% - 15px);
+                max-width: 800px;
+            }
 
             background-color: transparent;
             border: solid 1px var(--default-2x);
             color: #fff;
             box-shadow: inset 0 0 3px #000;
-
-            @include mq($until: wide) {
-                width: auto;
-            }
 
             &:hover {
                 background-color: rgba(0,0,0,0.2);
@@ -486,7 +482,7 @@ header {
             display: flex;
 
             .btn-market-board {
-                height: 50px;
+                height: 44px;
                 transition: var(--transition-speed);
                 position: relative;
                 padding: 0 20px;
@@ -501,7 +497,7 @@ header {
                 i {
                     vertical-align: middle;
                     margin: -4px 4px 0 -3px;
-                    font-size: 28px;
+                    font-size: 24px;
                     line-height: 0;
                 }
 
@@ -530,6 +526,13 @@ header {
         text-align: right;
         flex-direction: row;
         justify-content: flex-end;
+
+        @include mq($until: desktop) {
+            padding: 0 0 10px 0;
+            flex: none;
+            justify-content: center;
+            text-align: center;
+        }
 
         > div {
             flex: 0 1 auto;
@@ -605,6 +608,10 @@ header {
 
 main {
     padding: 10px 30px;
+
+    @include mq($until: desktop) {
+        padding: 10px;
+    }
 }
 
 footer {
@@ -647,6 +654,12 @@ ul,ol {
 // Custom elements
 //
 .tac { text-align: center !important; }
+.ilv {
+    font-style: normal;
+    display: inline-block;
+    margin-right: 5px;
+    color: var(--color8);
+}
 
 .text-red { color: var(--red-3x) };
 .text-blue { color: var(--blue-3x) };
@@ -901,8 +914,6 @@ ul,ol {
 
 .modal_settings
 {
-    width: 520px;
-
     .modal_settings-form {
         display: flex;
 
@@ -914,7 +925,6 @@ ul,ol {
 
     .logout {
         color: rgba(255, 79, 71, 0.84);
-        opacity: 0.5;
 
         &:hover {
             opacity: 1;
@@ -924,14 +934,21 @@ ul,ol {
 
 .search-results-container {
     position: absolute;
-    top: 70px;
-    left: 89px;
+    top: 60px;
+    left: 76px;
     padding: 20px;
     display: none;
     z-index: 50;
 
     &.open {
         display: block;
+    }
+
+    @include mq($until: desktop) {
+        top: 60px;
+        left: 0;
+        right: 0;
+        padding: 10px;
     }
 }
 
@@ -940,7 +957,11 @@ ul,ol {
     border-radius: 6px;
     box-shadow: 0 1px 10px #111, inset 0 0 3px #333;
     overflow: hidden;
-    width: 710px;
+    width: 540px;
+
+    @include mq($until: desktop) {
+        width: auto;
+    }
 
     a {
         display: flex;
@@ -1033,14 +1054,21 @@ ul,ol {
 .market-board-container,
 .market-category-container {
     position: absolute;
-    top: 70px;
-    left: 400px;
+    top: 60px;
+    left: 260px;
     padding: 20px;
     display: none;
     z-index: 50;
 
     &.open {
         display: block;
+    }
+
+    @include mq($until: desktop) {
+        top: 60px;
+        left: 0;
+        right: 0;
+        padding: 10px;
     }
 }
 
@@ -1052,7 +1080,12 @@ ul,ol {
     width: 590px;
     padding-bottom: 10px;
 
+    @include mq($until: desktop) {
+        width: 100%;
+    }
+
     h2 {
+        color: var(--highlight);
         font-size: 14px;
         letter-spacing: 2px;
         font-weight: 500;
@@ -1062,6 +1095,10 @@ ul,ol {
 
     .categories {
         padding: 14px 18px;
+
+        @include mq($until: desktop) {
+            padding: 10px;
+        }
     }
 
     .categories-list {
@@ -1107,6 +1144,10 @@ ul,ol {
     overflow: hidden;
     width: 590px;
     padding-bottom: 10px;
+
+    @include mq($until: desktop) {
+        width: auto;
+    }
 
     a {
         display: flex;

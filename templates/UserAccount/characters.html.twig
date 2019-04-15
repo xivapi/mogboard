@@ -70,11 +70,11 @@
 
     <div class="form character_form">
         <div class="form_row form_columns">
-            <div class="form_col50">
+            <div class="flex_50">
                 <label for="character_string">Name, ID, or Lodestone URL</label>
                 <input type="text" class="full" name="character_string" id="character_string" placeholder="">
             </div>
-            <div class="form_col40">
+            <div class="flex_40">
                 <label for="character_server">Server</label>
                 <select class="full" name="character_server" id="character_server">
                     {% for dc, servers in character_servers %}
@@ -86,7 +86,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="form_col20">
+            <div class="flex_20">
                 <label>&nbsp;</label>
                 <button type="button" class="btn-blue character_add">Search</button>
             </div>

@@ -502,4 +502,9 @@ class UserAlert
 
         return $this;
     }
+    
+    public function recentEvent(): UserAlertEvent
+    {
+        return $this->events->last();
+    }
 }
