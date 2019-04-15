@@ -90,7 +90,7 @@ class ItemController extends AbstractController
         $market     = $this->companion->getByDataCenter($dc, $itemId);
 
         // todo - this is temp as there is no balmung data
-        unset($market['Balmung']);
+        unset($market->Balmung);
 
         $apiStats   = Arrays::stdClassToArray(Redis::Cache()->get('stats_CompanionUpdateStatistics'));
         
