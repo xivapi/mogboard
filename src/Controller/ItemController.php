@@ -88,6 +88,10 @@ class ItemController extends AbstractController
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
         $market     = $this->companion->getByDataCenter($dc, $itemId);
+
+        // todo - this is temp as there is no balmung data
+        unset($market['Balmung']);
+
         $apiStats   = Arrays::stdClassToArray(Redis::Cache()->get('stats_CompanionUpdateStatistics'));
         
         // build census
