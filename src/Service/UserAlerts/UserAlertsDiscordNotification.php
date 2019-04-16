@@ -84,7 +84,7 @@ class UserAlertsDiscordNotification
             [$server, $row] = $marketRow;
             
             $name = sprintf(
-                "%s @ %s Gil - Total: %s",
+                "%sx %s Gil - Total: %s",
                 number_format($row->Quantity),
                 number_format($row->PricePerUnit),
                 number_format($row->PriceTotal),
