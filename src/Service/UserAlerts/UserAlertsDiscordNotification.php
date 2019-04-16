@@ -5,6 +5,7 @@ namespace App\Service\UserAlerts;
 use App\Entity\UserAlert;
 use App\Service\Redis\Redis;
 use App\Service\ThirdParty\Discord\Discord;
+use Carbon\Carbon;
 
 class UserAlertsDiscordNotification
 {
@@ -90,11 +91,18 @@ class UserAlertsDiscordNotification
                 $row->IsHQ ? 'HQ' : 'NQ',
                 $alert->getTriggerType() == 'Prices' ? $row->RetainerName : $row->CharacterName
             );
+            
+            $purchaseDate = null;
+            if ($alert->getTriggerType() == 'History') {
+                $carbon = Carbon::createFromTimestamp($row->PurchaseDate);
+                $purchaseDate = $carbon->fromNow();
+            }
     
             $value = sprintf(
-                "Server: %s - %s",
-                $server,
-                $alert->getTriggerType() == 'Prices' ? "Retainer: {$row->RetainerName}" : "Buyer: {$row->CharacterName}"
+                "%s - %s - %s",
+                "({$server})",
+                $alert->getTriggerType() == 'Prices' ? "Retainer: {$row->RetainerName}" : "Buyer: {$row->CharacterName}",
+                $alert->getTriggerType() == 'Prices' ? "Signature: {$row->CreatorSignatureName}" : "Purchased: {$purchaseDate}"
             );
 
             $fields[] = [
