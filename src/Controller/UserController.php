@@ -48,9 +48,7 @@ class UserController extends AbstractController
     public function accountCharacters(Request $request)
     {
         $this->users->setLastUrl($request);
-        return $this->render('UserAccount/characters.html.twig', [
-            'character_servers' => GameServers::LIST_DC,
-        ]);
+        return $this->render('UserAccount/characters.html.twig');
     }
     
     /**

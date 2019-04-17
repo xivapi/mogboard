@@ -61,6 +61,10 @@
                 },
                 characters: {
                     add: "{{ path('characters_add', { lodestoneId: '-id-' }) }}"
+                },
+                retainers: {
+                    add: "{{ path('retainers_add') }}",
+                    confirm: "{{ path('retainers_confirm', { retainer: '-id-' }) }}"
                 }
             },
 

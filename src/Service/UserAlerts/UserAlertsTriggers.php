@@ -84,7 +84,6 @@ class UserAlertsTriggers
                 # continue;
             }
 
-
             // get user for the alert
             $user = $alert->getUser();
 
@@ -111,7 +110,7 @@ class UserAlertsTriggers
             if ($user->isPatron(User::PATREON_DPS)) {
                 // Send an update request, XIVAPI handles throttling this.
                 $this->console->writeln('--> Requesting manual update');
-                $this->xivapi->market->manualUpdateItem(
+                $this->xivapi->_private->manualItemUpdate(
                     getenv('XIVAPI_COMPANION_KEY'),
                     $alert->getItemId(),
                     GameServers::getServerId($alert->getServer())

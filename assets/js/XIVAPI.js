@@ -34,6 +34,21 @@ class XIVAPI
     }
 
     /**
+     * A limited search
+     */
+    searchLimited(string, callback) {
+        let params = {
+            indexes: 'item',
+            filters: 'ItemSearchCategory.ID>=1',
+            columns: 'ID,Name',
+            string:  string.trim(),
+            limit:   10,
+        };
+
+        this.get(`/search`, params, callback);
+    }
+
+    /**
      * Search for a character
      */
     searchCharacter(name, server, callback) {
@@ -71,6 +86,19 @@ class XIVAPI
      */
     getServerList(callback) {
         this.get('/servers/dc', {}, callback);
+    }
+
+    /**
+     *
+     */
+    getMarketPrices(itemId, server, callback)
+    {
+        const options = {
+            columns: 'Prices,Item',
+            servers: server,
+        };
+
+        this.get(`/market/item/${itemId}`, options, callback);
     }
 }
 

@@ -29,8 +29,9 @@ class UserRetainerController extends AbstractController
      */
     public function add(Request $request)
     {
-        $this->retainers->add($request);
-        return $this->json(true);
+        return $this->json(
+            $this->retainers->add($request)
+        );
     }
 
     /**
@@ -38,7 +39,8 @@ class UserRetainerController extends AbstractController
      */
     public function confirm(UserRetainer $retainer)
     {
-        $this->retainers->confirm($retainer);
-        return $this->json(true);
+        return $this->json(
+            $this->retainers->confirm($retainer)
+        );
     }
 }

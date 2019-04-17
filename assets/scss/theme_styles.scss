@@ -230,7 +230,7 @@ form,
     }
 
     .form_row {
-        margin-bottom: 30px;
+        margin-bottom: 20px !important;
 
         small {
             font-size: 13px;
@@ -653,6 +653,7 @@ ul,ol {
 //
 // Custom elements
 //
+.fr { float: right; }
 .tac { text-align: center !important; }
 .ilv {
     font-style: normal;
@@ -665,7 +666,10 @@ ul,ol {
 .text-blue { color: var(--blue-3x) };
 .text-green { color: var(--green-3x) };
 .text-purple { color: var(--purple-3x) };
-.text-white  { color: var(--white ) };
+.text-white  { color: var(--white) };
+.text-yellow  { color: var(--color8) };
+.text-gray  { color: var(--color6) };
+.text-highlight  { color: var(--highlight) };
 
 .alert-default,
 .alert-red,

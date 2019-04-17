@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Service\GameData\GameServers;
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,7 +27,7 @@ class UserRetainer
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    private $unique;
+    private $uniq;
     /**
      * @var string
      * @ORM\Column(type="string", length=100)
@@ -40,8 +39,8 @@ class UserRetainer
      */
     private $name;
     /**
-     * @var int
-     * @ORM\Column(type="integer", nullable=true)
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
      */
     private $server;
     /**
@@ -70,27 +69,30 @@ class UserRetainer
      */
     private $updated;
     /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $added;
+    /**
      * - The ID of the retainer on XIVAPI
      * @var string
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $apiRetainerId;
     
     public function __construct()
     {
         $this->id = Uuid::uuid4();
-
-        // confirmation will be a shard, crystal or cluster sold at a very high price
-        $this->confirmItem  = mt_rand(2, 19);
-        $this->confirmPrice = mt_rand(9999,999999);
+        $this->updated = time();
+        $this->added = time();
     }
 
     /**
      * Generate a consistent unique id for the retainer
      */
-    public static function unique(string $name, int $server)
+    public static function unique(string $name, string $server)
     {
-        $name   = strtolower($name);
+        $name = strtolower($name);
 
         return sha1(sprintf('%s_%s', $name, $server));
     }
@@ -118,16 +120,16 @@ class UserRetainer
 
         return $this;
     }
-
-    public function getUnique(): string
+    
+    public function getUniq(): string
     {
-        return $this->unique;
+        return $this->uniq;
     }
-
-    public function setUnique(string $unique)
+    
+    public function setUniq(string $uniq)
     {
-        $this->unique = $unique;
-
+        $this->uniq = $uniq;
+        
         return $this;
     }
 
@@ -143,7 +145,7 @@ class UserRetainer
         }
 
         // slug = name-server
-        $this->slug = preg_replace("/[^A-Za-z]/", '', strtolower($slug)) .'-'. GameServers::LIST[$this->server];
+        $this->slug = preg_replace("/[^A-Za-z]/", '', strtolower($slug)) .'-'. $this->server;
 
         return $this;
     }
@@ -160,12 +162,12 @@ class UserRetainer
         return $this;
     }
 
-    public function getServer(): ?int
+    public function getServer(): ?string
     {
         return $this->server;
     }
 
-    public function setServer(int $server)
+    public function setServer(string $server)
     {
         $this->server = $server;
 
@@ -230,6 +232,28 @@ class UserRetainer
         $this->updated = $updated;
 
         return $this;
+    }
+    
+    public function isRecent(): bool
+    {
+        return $this->updated > time() - 900;
+    }
+    
+    public function getAdded(): int
+    {
+        return $this->added;
+    }
+    
+    public function setAdded(int $added)
+    {
+        $this->added = $added;
+        
+        return $this;
+    }
+    
+    public function nextOwnershipAttempt()
+    {
+        return $this->updated + 900;
     }
 
     public function getApiRetainerId()

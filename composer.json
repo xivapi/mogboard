@@ -25,7 +25,7 @@
         "symfony/yaml": "4.2.*",
         "wohali/oauth2-discord-new": "^1.0",
         "xivapi/companion-php": "^0.1.7",
-        "xivapi/xivapi-php": "1.6.3"
+        "xivapi/xivapi-php": "1.6.5"
     },
     "config": {
         "preferred-install": {

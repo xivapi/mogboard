@@ -7,8 +7,8 @@ class ButtonLoading
         $ele.addClass('loading_interaction');
         $ele.prop('disabled', true);
         $ele.css({
-            'min-width': `${$ele.width()}px`,
-            'min-height': `${$ele.height()}px`,
+            'min-width': `${$ele.outerWidth()}px`,
+            'min-height': `${$ele.outerHeight()}px`,
             display: 'inline-block',
         });
 

@@ -3,6 +3,7 @@
 {% set accountpage = 'characters' %}
 
 {% block account %}
+<script>let appEnableCharacters = 1;</script>
 <script>let verify_code = '{{ auth.user.getCharacterPassPhrase() }}';</script>
 <div class="characters">
     <h1>Characters</h1>
@@ -33,7 +34,7 @@
             </tr>
             {% else %}
             <tr>
-                <td class="4">You have no characters, why not add one below!</td>
+                <td colspan="4">You have no characters, why not add one below!</td>
             </tr>
             {% endfor %}
             </tbody>
@@ -46,7 +47,6 @@
         Add a new character
         <span class="character_auth_code">AUTH CODE: {{ auth.user.getCharacterPassPhrase() }}</span>
     </h5>
-
 
     <p>
         To add a new character, you must first add your verification code
@@ -69,7 +69,7 @@
 
 
     <div class="form character_form">
-        <div class="form_row form_columns">
+        <div class="form_row form_columns flex">
             <div class="flex_50">
                 <label for="character_string">Name, ID, or Lodestone URL</label>
                 <input type="text" class="full" name="character_string" id="character_string" placeholder="">
@@ -77,16 +77,16 @@
             <div class="flex_40">
                 <label for="character_server">Server</label>
                 <select class="full" name="character_server" id="character_server">
-                    {% for dc, servers in character_servers %}
+                    {% for dc, servers in getGameDataCenters() %}
                         <optgroup label="{{ dc }}">
                             {% for server in servers %}
-                                <option value="{{ server }}">{{ server }}</option>
+                                <option value="{{ server }}" {{ server == getServer() ? 'selected' : '' }}>{{ server }}</option>
                             {% endfor %}
                         </optgroup>
                     {% endfor %}
                 </select>
             </div>
-            <div class="flex_20">
+            <div class="flex_10">
                 <label>&nbsp;</label>
                 <button type="button" class="btn-blue character_add">Search</button>
             </div>

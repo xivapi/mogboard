@@ -74,8 +74,26 @@
     }
 }
 
+.account-panel {
+    background-color: var(--dark-blue2);
+    box-shadow: 0 0 3px rgba(200,200,200,0.2);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    overflow: hidden;
+
+    > div {
+        padding: 15px;
+        border-bottom: solid 1px #000;
+    }
+
+    .account-none {
+        padding: 10px;
+    }
+}
+
 //
 // Characters
+// Retainers
 //
 .character_form {
     border-radius: 5px;
@@ -83,16 +101,12 @@
     padding: 20px;
 }
 
-.characters {
+.characters,
+.retainers {
     h2 {
         font-size: 22px;
         font-weight: 400;
         text-transform: uppercase;
-    }
-
-    h5 {
-        margin-bottom: 5px;
-        position: relative;
     }
 
     h3 {
@@ -104,6 +118,18 @@
         letter-spacing: 1px;
         position: relative;
     }
+
+    h4 {
+        font-size: 24px;
+        font-weight: 400;
+        margin-bottom: 8px;
+    }
+
+    h5 {
+        margin-bottom: 5px;
+        position: relative;
+    }
+
 
     .character_auth_code {
         background-color: #222;
@@ -133,15 +159,111 @@
         display: inherit;
     }
 
-    .character_name {
+    .character_name,
+    .retainer_name {
         font-size: 20px;
         color: var(--blue-3x);
     }
 
-    .character_table {
+    .character_table,
+    .retainer_table {
         td {
             vertical-align: middle;
         }
+    }
+}
+
+.retainer_coin {
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
+
+    &.unconfirmed {
+        filter: grayscale(100%);
+        -webkit-filter: grayscale(100%);
+    }
+}
+
+.ret_name {
+    display: inline-block;
+    margin-top: 6px;
+}
+
+.ret_verified {
+    display: inline-block;
+    margin-left: 15px;
+    color: var(--green-4x);
+
+    i {
+        display: inline-table;
+        vertical-align: middle;
+    }
+}
+
+.retainer_verify {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #111;
+    border-radius: 5px;
+
+    p {
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+
+    .alert-blue {
+        margin-bottom: 0;
+    }
+}
+
+.retainer_confirm {
+    background-color: var(--blue-2x);
+    color: #fff;
+    font-weight: 500;
+    line-height: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px #000;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--blue);
+    }
+}
+
+.retainer_instructions {
+    font-size: 19px;
+}
+
+.retainer_item_search_response {
+    .item_button {
+        display: block;
+        background-color: #eee;
+        padding: 0 10px;
+        margin-bottom: 1px;
+        height: 32px;
+        line-height: 0;
+        color: #333;
+        width: 100%;
+        text-shadow: none;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    p {
+        padding: 15px;
+    }
+}
+
+.retainer_how_does_it_work {
+    margin-top: 10px;
+
+    p, strong {
+        font-size: 13px;
+        line-height: 22px;
     }
 }
 

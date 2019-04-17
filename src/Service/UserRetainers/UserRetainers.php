@@ -11,6 +11,7 @@ use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Request;
+use XIVAPI\XIVAPI;
 
 class UserRetainers
 {
@@ -25,8 +26,11 @@ class UserRetainers
     /** @var ConsoleOutput */
     private $console;
 
-    public function __construct(EntityManagerInterface $em, Users $users, Companion $companion)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        Users $users,
+        Companion $companion
+    ) {
         $this->em         = $em;
         $this->users      = $users;
         $this->companion  = $companion;
@@ -40,7 +44,7 @@ class UserRetainers
     public function get(string $unique, bool $confirmed = false)
     {
         return $this->repository->findOneBy([
-            'unique'    => $unique,
+            'uniq'    => $unique,
             'confirmed' => $confirmed,
         ]);
     }
@@ -50,8 +54,10 @@ class UserRetainers
      */
     public function add(Request $request)
     {
-        $name   = $request->get('name');
-        $server = GameServers::getServerId($request->get('server'));
+        $name   = trim($request->get('name'));
+        $server = ucwords(trim($request->get('server')));
+        $itemId = (int)trim($request->get('itemId'));
+        
         $unique = UserRetainer::unique($name, $server);
 
         if ($this->get($unique, true)) {
@@ -62,10 +68,13 @@ class UserRetainers
             ->setUser($this->users->getUser())
             ->setName($name)
             ->setServer($server)
-            ->setUnique($unique)
-            ->setSlug($name);
+            ->setUniq($unique)
+            ->setSlug($name)
+            ->setConfirmItem($itemId)
+            ->setConfirmPrice(mt_rand(1000000, 15000000));
 
         $this->save($retainer);
+        return true;
     }
 
     /**
@@ -73,22 +82,52 @@ class UserRetainers
      */
     public function confirm(UserRetainer $retainer)
     {
-        $user = $this->users->getUser();
+        // enforce the user is online
+        $this->users->getUser();
+        
+        // if the retainer was updated recently, don't do anything
+        if ($retainer->isRecent()) {
+            return false;
+        }
 
         // confirmation variables
-        $server    = GameServers::LIST[$retainer->getServer()];
+        $server    = $retainer->getServer();
         $itemId    = $retainer->getConfirmItem();
         $itemPrice = $retainer->getConfirmPrice();
         $name      = $retainer->getName();
-
-        // todo - add real-time market query onto XIVAPI so we can get the current listed prices
-
-        return;
+        
+        // query market
+        $xivapi = new XIVAPI();
+        $market = $xivapi->_private->itemPrices(
+            getenv('XIVAPI_COMPANION_KEY'),
+            $itemId,
+            $server
+        );
+        
+        // find listing
+        $found = false;
+        foreach ($market->entries as $entry) {
+            if ($entry->sellRetainerName == $name && $entry->sellPrice == $itemPrice) {
+                $found = true;
+                break;
+            }
+        }
+        
+        if ($found === false) {
+            $retainer->setUpdated(time());
+            $this->save($retainer);
+            return false;
+        }
 
         // confirm ownership and save
-        $retainer->setConfirmed(true)->setUpdated(time());
+        $retainer
+            ->setConfirmPrice(0)
+            ->setConfirmItem(0)
+            ->setConfirmed(true)
+            ->setUpdated(time());
 
         $this->save($retainer);
+        return true;
     }
 
     /**
@@ -99,5 +138,33 @@ class UserRetainers
         $this->em->persist($obj);
         $this->em->flush();
         return true;
+    }
+    
+    /**
+     * Confirm ownership
+     */
+    public function confirmOwnership()
+    {
+        $retainers = $this->repository->findBy(
+            [ 'confirmed' => false ],
+            [ 'updated' => 'desc' ],
+            50
+        );
+        
+        $console = new ConsoleOutput();
+        $console = $console->section();
+        
+        /** @var UserRetainer $retainer */
+        foreach ($retainers as $retainer) {
+            $console->overwrite("Checking: {$retainer->getName()} on {$retainer->getServer()}");
+            
+            $market = $this->companion->getByServer(
+                $retainer->getServer(),
+                $retainer->getConfirmItem()
+            );
+            
+            print_r($market);
+            die;
+        }
     }
 }

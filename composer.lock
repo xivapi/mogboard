@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "751cbc8ce56f96d50855cc1e4ec938c7",
+    "content-hash": "9bdcce1eeb94dcbbf78169e6c81bcef8",
     "packages": [
         {
             "name": "art4/json-api-client",
@@ -5035,16 +5035,16 @@
         },
         {
             "name": "xivapi/xivapi-php",
-            "version": "1.6.3",
+            "version": "1.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xivapi/xivapi-php.git",
-                "reference": "5897e91e365141a843502a8ae37cb73021e660ba"
+                "reference": "8779b925a597797d6eff94106a666a56a08710e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xivapi/xivapi-php/zipball/5897e91e365141a843502a8ae37cb73021e660ba",
-                "reference": "5897e91e365141a843502a8ae37cb73021e660ba",
+                "url": "https://api.github.com/repos/xivapi/xivapi-php/zipball/8779b925a597797d6eff94106a666a56a08710e7",
+                "reference": "8779b925a597797d6eff94106a666a56a08710e7",
                 "shasum": ""
             },
             "require": {
@@ -5080,7 +5080,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2019-04-11T14:17:31+00:00"
+            "time": "2019-04-17T21:44:02+00:00"
         },
         {
             "name": "zendframework/zend-code",
