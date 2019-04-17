@@ -155,17 +155,17 @@
             <div class="home-row">
                 <h5>Auto-Update Status</h5>
                 {% for queue in market_stats.Stats.Report %}
-                <div class="home-mog-queue" data-tippy-content="{{ queue.CycleDifferenceSec < 300 ? 'Items in this queue are updating <br> as fast as expected.' : 'Items in this queue are updating <br> slower than expected' }}">
-                    <strong>Queue: {{ queue.Name }}</strong>
+                <div class="home-mog-queue" data-tippy-content="{{ queue.CycleDiffSec < 300 ? 'Items in this queue are updating <br> as fast as expected.' : 'Items in this queue are updating <br> slower than expected' }}">
+                    <strong>Queue: ({{ queue.Priority }}) {{ queue.Name }}</strong>
                     <div class="flex">
                         <div class="flex_40">
                             <small>Items</small>
-                            {{ queue.TotalItems }}
+                            {{ queue.Items }}
                         </div>
                         <div class="flex_60">
                             <small>Speed</small>
-                            {{ queue.CycleTime }}
-                            <span class="{{ queue.CycleDifferenceSec < 300 ? 'text-green' : 'text-red' }}">{{ queue.CycleDifferenceSec|title }}</span>
+                            {{ queue.CycleTimeReal }}
+                            <span class="{{ queue.CycleDiffSec < 300 ? 'text-green' : 'text-red' }}">{{ queue.CycleDiffSec|title }}</span>
                         </div>
                     </div>
                 </div>
