@@ -165,7 +165,7 @@
                         <div class="flex_60">
                             <small>Speed</small>
                             {{ queue.CycleTimeReal }}
-                            <span class="{{ queue.CycleDiffSec < 300 ? 'text-green' : 'text-red' }}">{{ queue.CycleDiffSec|title }}</span>
+                            <span class="{{ queue.CycleDiffSec|replace({ ',', '' }) < 300 ? 'text-green' : 'text-red' }}">{{ queue.CycleDiffSec|title }}</span>
                         </div>
                     </div>
                 </div>
