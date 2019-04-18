@@ -1,7 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<div class="page-list">
+    <h1>{{ list.name }}</h1>
+    <small>Items: {{ list.items|length }} - by: {{ list.user.username }}</small>
 
-    <h3>User List!</h3>
+    <ul>
+        {% for itemId in list.items %}
+            {% set item = game().item(itemId) %}
+            <li>
+                <img src="{{ item.ID|icon2x }}">
+                {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                <small>
+                    {{ item.ItemKind.Name }} -
+                    {{ item.ItemSearchCategory.Name }}
+                </small>
+            </li>
+        {% endfor %}
+    </ul>
 
-{% endfor %}
+    <div class="page-footer">
+        <h4>Share this list</h4>
+        <div class="form">
+            <input type="text" class="full" value="{{ app.request.getSchemeAndHttpHost() }}{{ path('lists_view', { slug: list.slug }) }}">
+        </div>
+    </div>
+</div>
+{% endblock %}

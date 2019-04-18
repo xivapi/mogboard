@@ -384,4 +384,17 @@
             }
         }
     }
+
+    .delete-list-block {
+        padding: 0 15px 15px 0;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 14px;
+        opacity: 0.5;
+        transition: 100ms;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
 }

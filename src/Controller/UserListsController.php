@@ -6,6 +6,7 @@ use App\Entity\UserList;
 use App\Service\UserLists\UserLists;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserListsController extends AbstractController
@@ -55,12 +56,18 @@ class UserListsController extends AbstractController
     }
     
     /**
-     * @Route("/lists/{list}", name="lists_view")
+     * @Route("/list/{slug}", name="lists_view")
      */
-    public function view(UserList $userList, Request $request)
+    public function view(string $slug)
     {
+        $list = $this->lists->getSlugList($slug);
+        
+        if ($list === null) {
+            throw new NotFoundHttpException('Could not find item list for the requested url.');
+        }
+        
         return $this->render('UserLists/index.html.twig', [
-            'list' => $userList
+            'list' => $list
         ]);
     }
 
@@ -69,8 +76,12 @@ class UserListsController extends AbstractController
      */
     public function delete(UserList $list)
     {
+        if ($list->isCustom()) {
+            throw new \Exception('Cannot delete custom made lists.');
+        }
+        
         $this->lists->delete($list);
-        return $this->json(true);
+        return $this->redirectToRoute('user_account_lists');
     }
     
     /**

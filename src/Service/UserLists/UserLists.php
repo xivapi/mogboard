@@ -87,6 +87,9 @@ class UserLists
         return $list;
     }
     
+    /**
+     * Get recently viewed lists
+     */
     public function getRecentlyViewed(User $user)
     {
         $filters = [
@@ -107,6 +110,18 @@ class UserLists
             ->setSlug();
     
         return $list;
+    }
+    
+    /**
+     * Get a list via its slug
+     */
+    public function getSlugList($slug)
+    {
+        $filters = [
+            'slug' => $slug
+        ];
+        
+        return $this->repository->findOneBy($filters);
     }
 
     /**
