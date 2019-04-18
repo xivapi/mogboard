@@ -16,7 +16,7 @@ class UserList
      * @ORM\Id
      * @ORM\Column(type="guid")
      */
-    private $id;
+    public $id;
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="User", inversedBy="lists")
@@ -27,17 +27,17 @@ class UserList
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    private $slug;
+    public $slug;
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $added;
+    public $added;
     /**
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    private $name;
+    public $name;
     /**
      * @var boolean
      * @ORM\Column(type="boolean", options={"default": false})
@@ -47,12 +47,12 @@ class UserList
      * @var array
      * @ORM\Column(type="array")
      */
-    private $items = [];
+    public $items = [];
     
     public function __construct()
     {
-        $this->id     = Uuid::uuid4();
-        $this->added  = time();
+        $this->id    = Uuid::uuid4();
+        $this->added = time();
     }
 
     /**

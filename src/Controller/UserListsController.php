@@ -23,11 +23,11 @@ class UserListsController extends AbstractController
      */
     public function favourite(Request $request)
     {
-        $json = json_decode($request->getContent());
-        $list = $this->lists->handleFavourite($json->itemId);
+        $itemId = (int)$request->get('itemId');
+        $list   = $this->lists->handleFavourite($itemId);
 
         return $this->json([
-            'state' => $list->hasItem($json->itemId)
+            'state' => $list->hasItem($itemId)
         ]);
     }
     
@@ -36,7 +36,12 @@ class UserListsController extends AbstractController
      */
     public function create(Request $request)
     {
-        // todo - logic to create a new list
+        return $this->json(
+            $this->lists->create(
+                $request->get('name'),
+                $request->get('itemId')
+            )
+        );
     }
 
     /**
@@ -44,15 +49,21 @@ class UserListsController extends AbstractController
      */
     public function delete(UserList $list)
     {
-        // todo - logic to delete a list
+        $this->lists->delete($list);
+        return $this->json(true);
     }
     
     /**
-     * @Route("/lists/{list}/update", name="list_update")
+     * @Route("/lists/{list}/rename", name="list_rename")
      */
     public function update(Request $request, UserList $list)
     {
-        // todo - logic to update a list
+        return $this->json(
+            $this->lists->rename(
+                $list,
+                $request->get('name')
+            )
+        );
     }
     
     /**
@@ -60,7 +71,12 @@ class UserListsController extends AbstractController
      */
     public function addItem(Request $request, UserList $list)
     {
-        // todo - add item
+        return $this->json(
+            $this->lists->addItem(
+                $list,
+                $request->get('itemId')
+            )
+        );
     }
     
     /**
@@ -68,6 +84,11 @@ class UserListsController extends AbstractController
      */
     public function removeItem(Request $request, UserList $list)
     {
-        // todo - remove item
+        return $this->json(
+            $this->lists->removeItem(
+                $list,
+                $request->get('itemId')
+            )
+        );
     }
 }

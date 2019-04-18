@@ -1,6 +1,7 @@
 import Modals from "./Modals";
 import Popup from "./Popup";
 import ButtonLoading from "./ButtonLoading";
+import Ajax from "./Ajax";
 
 class ProductLists
 {
@@ -21,13 +22,10 @@ class ProductLists
         this.uiForm.on('submit', event => {
             event.preventDefault();
 
-            const payload = {
-                itemId: this.uiForm.find('#list_item_id').val().trim(),
-                name:   this.uiForm.find('#list_name').val().trim(),
-                option: this.uiForm.find('#list_option').val().trim(),
-            };
+            const name   = this.uiForm.find('#list_name').val().trim();
+            const itemId = this.uiForm.find('#list_item_id').val().trim();
 
-            this.create(payload);
+            this.create(name, itemId);
         });
 
         // on fave clicking
@@ -36,25 +34,22 @@ class ProductLists
         });
     }
 
+    /**
+     * Add an item to your favourites.
+     */
     addToFavourite()
     {
         ButtonLoading.start(this.uiFaveButton);
 
-        // itemId
-        // todo - do it
-
-        // send request
         $.ajax({
-            url: mog.url_lists_favourite,
-            type: "POST",
-            dataType: "json",
-            data: JSON.stringify({
+            url: mog.urls.lists.favourite,
+            method: 'POST',
+            data: {
                 itemId: itemId,
-            }),
-            contentType: "application/json",
+            },
             success: response => {
                 response.state ? this.uiFaveButton.addClass('on') : this.uiFaveButton.removeClass('on');
-                ButtonLoading.finish(this.uiFaveButton);
+
                 this.uiFaveButton.find('span').text(response.state ? 'Faved' : 'Favourite');
                 Modals.close(this.uiModal);
                 Popup.success(
@@ -62,51 +57,59 @@ class ProductLists
                     response.state ? 'Why you love this item so much!? Added to your favourites.' : 'Unpopular item ey, removed from your favourites.'
                 );
             },
-            error: (a,b,c) => {
+            error: response => {
                 Popup.error('Error 37', 'Could not add to favourites!');
-                console.log('--- ERROR ---');
-                console.log(a,b,c)
+                console.error(response);
+                ButtonLoading.finish(this.uiFaveButton);
             }
         });
     }
 
-    create(payload)
+    /**
+     * Create a new list
+     */
+    create(name, itemId)
     {
-        const $btn = this.uiForm.find('button[type="submit"]');
-        ButtonLoading.start($btn);
+        const $button = this.uiForm.find('button[type="submit"]');
+        ButtonLoading.start($button);
 
+        const data = {
+            name: name,
+            itemId: itemId
+        };
+
+        const success = response => {
+            console.log(response);
+        };
+
+        const complete = () => {
+            ButtonLoading.finish($button);
+        };
+
+        Ajax.post(mog.urls.lists.create, data, success, complete);
+    }
+
+    /**
+     * Add an item to an existing list
+     */
+    addItem(listId, itemId)
+    {
         // send request
         $.ajax({
-            url: mog.url_create_alert,
+            url: mog.urls.lists.addItem.replace('-id-', listId),
             type: "POST",
-            dataType: "json",
-            data: JSON.stringify(payload),
-            contentType: "application/json",
+            data: {
+                itemId: itemId
+            },
             success: response => {
-                ButtonLoading.finish($btn);
-
-                // if alert ok
-                if (response.ok) {
-                    // load current alerts
-                    this.loadItemAlerts();
-
-                    // close modals
-                    Modals.close(this.uiModal);
-
-                    // todo - reset form
-
-                    // confirm
-                    Popup.success('Alert Created','Information on this alert will appear on the homepage!');
-                    return;
-                }
-
-                // error
-                Popup.success('Error',response.message);
+                console.log(response);
             },
             error: (a,b,c) => {
-                Popup.error('Error 37', 'Could not create alert.');
-                console.log('--- ERROR ---');
-                console.log(a,b,c)
+                Popup.error('Error 37', 'Could not add an item.');
+                console.error(a,b,c);
+            },
+            complete: () => {
+                ButtonLoading.finish($button);
             }
         });
     }

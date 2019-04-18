@@ -59,6 +59,14 @@
                     edit: "{{ path('alerts_edit', { alert: '-id-' }) }}",
                     renderForItem: "{{ path('alerts_render_item', { itemId: '-id-'}) }}",
                 },
+                lists: {
+                    favourite: "{{ path('lists_favourite') }}",
+                    create: "{{ path('lists_create') }}",
+                    delete: "{{ path('list_delete', { list: '-id-' }) }}",
+                    rename: "{{ path('list_rename', { list: '-id-' }) }}",
+                    addItem: "{{ path('lists_add_item', { list: '-id-' }) }}",
+                    removeItem: "{{ path('lists_remove_item', { list: '-id-' }) }}",
+                },
                 characters: {
                     add: "{{ path('characters_add', { lodestoneId: '-id-' }) }}"
                 },
@@ -71,9 +79,6 @@
             // old
             url_item_category_list: "{{ path('item_category_list', { categoryId: '-id-' }) }}",
             url_item: "{{ path('item_page', { itemId: '-id-' }) }}",
-            url_lists_create: "{{ path('lists_create') }}",
-            url_lists_add_item: "{{ path('lists_add_item', { list: '-id-' }) }}",
-            url_lists_favourite: "{{ path('lists_favourite') }}",
         };
         // tooltips
         tippy('[data-tippy-content]', {

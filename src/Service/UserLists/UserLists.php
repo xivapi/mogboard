@@ -4,6 +4,7 @@ namespace App\Service\UserLists;
 
 use App\Entity\User;
 use App\Entity\UserList;
+use App\Exceptions\UnauthorisedListOwnershipException;
 use App\Repository\UserListRepository;
 use App\Service\Companion\Companion;
 use App\Service\User\Users;
@@ -23,8 +24,11 @@ class UserLists
     /** @var ConsoleOutput */
     private $console;
 
-    public function __construct(EntityManagerInterface $em, Users $users, Companion $companion)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        Users $users,
+        Companion $companion
+    ) {
         $this->em           = $em;
         $this->users        = $users;
         $this->companion    = $companion;
@@ -66,12 +70,90 @@ class UserLists
     }
 
     /**
-     * Save a new or existing alert
+     * Add an item to a list
      */
-    public function save(UserList $list)
+    public function addItem(UserList $userList, int $itemId): UserList
+    {
+        if ($userList->getUser() !== $this->users->getUser()) {
+            throw new UnauthorisedListOwnershipException();
+        }
+
+        if ($userList->hasItem($itemId) === false) {
+            return $userList;
+        }
+
+        $userList->addItem($itemId);
+        $this->save($userList);
+        return $userList;
+    }
+
+    /**
+     * Remove an item from a list
+     */
+    public function removeItem(UserList $userList, int $itemId): UserList
+    {
+        if ($userList->getUser() !== $this->users->getUser()) {
+            throw new UnauthorisedListOwnershipException();
+        }
+
+        if ($userList->hasItem($itemId) === false) {
+            return $userList;
+        }
+
+        $userList->removeItem($itemId);
+        $this->save($userList);
+        return $userList;
+    }
+
+    /**
+     * Create a brand new list
+     */
+    public function create(string $name, int $itemId): UserList
+    {
+        $list = new UserList();
+        $list
+            ->setUser($this->users->getUser())
+            ->setName(trim($name))
+            ->setItems([ $itemId ])
+            ->setSlug();
+
+        $this->save($list);
+        return $list;
+    }
+
+    /**
+     * Rename a list
+     */
+    public function rename(UserList $userList, string $name): UserList
+    {
+        if ($userList->getUser() !== $this->users->getUser()) {
+            throw new UnauthorisedListOwnershipException();
+        }
+
+        $userList->setName(trim($name));
+        $this->save($userList);
+        return $userList;
+    }
+
+    /**
+     * Save a list
+     */
+    public function save(UserList $list): void
     {
         $this->em->persist($list);
         $this->em->flush();
-        return true;
+    }
+
+    /**
+     * Delete a list
+     */
+    public function delete(UserList $list): void
+    {
+        if ($list->getUser() !== $this->users->getUser()) {
+            throw new UnauthorisedListOwnershipException();
+        }
+
+        $this->em->remove($list);
+        $this->em->flush();
     }
 }
