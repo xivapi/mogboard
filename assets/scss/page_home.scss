@@ -279,4 +279,17 @@
             }
         }
     }
+
+    //
+    // Retainers
+    //
+    .home-retainer {
+        padding: 15px;
+        border-bottom: solid 1px #000;
+        display: flex;
+
+        > div:first-of-type {
+            flex: 0 1 30%;
+        }
+    }
 }

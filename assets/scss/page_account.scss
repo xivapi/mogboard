@@ -243,20 +243,36 @@
 }
 
 .retainer_item_search_response {
+    margin: 10px 0;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #222;
+
     .item_button {
         display: block;
-        background-color: #eee;
-        padding: 0 10px;
-        margin-bottom: 1px;
-        height: 32px;
-        line-height: 0;
+        background-color: #ddd;
+        border-radius: 0;
+        border: none;
+        border-bottom: solid 1px #aaa;
+        box-shadow: none;
+
+        padding: 0 12px;
+        height: 35px;
+        line-height: 35px;
         color: #333;
         width: 100%;
         text-shadow: none;
         text-align: left;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 600;
+
+        &:hover {
+            background-color: var(--blue);
+            border-bottom: solid 1px var(--blue);
+            color: #fff;
+        }
     }
+
     p {
         padding: 15px;
     }

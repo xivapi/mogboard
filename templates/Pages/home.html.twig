@@ -1,160 +1,176 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="home">
-    <div>
-        {# News #}
-        <div class="home-box2">
-            <div class="home-row">
-                <strong>Welcome to Mogboard.com - A FINAL FANTASY XIV: Online Market Board Site.</strong>
-                <a href="#">Click here to learn all about it!</a>
-            </div>
-        </div>
-
-        {% if auth.online() %}
-            {# Alerts #}
+    <div class="home">
+        <div>
+            {# News #}
             <div class="home-box2">
-                <h2>Your Alerts</h2>
-                {% for itemId, alerts in auth.user.alertsPerItem %}
-                    {% set item = game().item(itemId) %}
-                    <div class="home-alert-row">
-                        <div>
-                            <a href="{{ path('item_page', { itemId: itemId }) }}">
-                                <img src="{{ item.ID|icon2x }}" class="item_icon">
-                            </a>
+                <div class="home-row">
+                    <strong>Welcome to Mogboard.com - A FINAL FANTASY XIV: Online Market Board Site.</strong>
+                    <a href="#">Click here to learn all about it!</a>
+                </div>
+            </div>
+
+            {% if auth.online() %}
+                {# Retainers #}
+                <div class="home-box2">
+                    <h2>Retainers</h2>
+                    {% for retainer in auth.user.retainers %}
+                        <div class="home-retainer">
+                            <div>
+                                {{ retainer.name }}
+                            </div>
+                            <div>
+                                <a href="{{ path('retainer_store', { slug: retainer.slug }) }}">View Store</a>
+                            </div>
                         </div>
-                        <div>
-                            <div class="home-alert-item-info">
-                                <div>
-                                    {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
-                                    <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
-                                </div>
-                                <div>
-                                    <strong>ALERT WATCHERS</strong>
-                                    {% for alert in alerts %}
-                                    <div class="home-alert-watcher">
-                                        {{ loop.index }}. {{ alert.Name }}
+                    {% else %}
+                        <p>You have not yet added any retainers!</p>
+                    {% endfor %}
+                </div>
+
+                {# Alerts #}
+                <div class="home-box2">
+                    <h2>Alerts</h2>
+                    {% for itemId, alerts in auth.user.alertsPerItem %}
+                        {% set item = game().item(itemId) %}
+                        <div class="home-alert-row">
+                            <div>
+                                <a href="{{ path('item_page', { itemId: itemId }) }}">
+                                    <img src="{{ item.ID|icon2x }}" class="item_icon">
+                                </a>
+                            </div>
+                            <div>
+                                <div class="home-alert-item-info">
+                                    <div>
+                                        {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                                        <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
                                     </div>
-                                    {% endfor %}
+                                    <div>
+                                        <strong>ALERT WATCHERS</strong>
+                                        {% for alert in alerts %}
+                                            <div class="home-alert-watcher">
+                                                {{ loop.index }}. {{ alert.Name }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
-
-            {# Lists #}
-            <div class="home-box2">
-                <h2>Item Lists</h2>
-                {% for list in auth.user.lists %}
-                    <div class="home-itemlist">
-                        <h3>Items: {{ list.items|length }} - <a href="{{ path('lists_view', { slug: list.slug }) }}">{{ list.name }}</a></h3>
-                        <ul>
-                            {% for itemId in list.items %}
-                                {% set item = game().item(itemId) %}
-                                <li>
-                                    <img src="{{ item.ID|icon2x }}">
-                                    {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
-                                    <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
-                                    <small>
-                                        {{ item.ItemKind.Name }} -
-                                        {{ item.ItemSearchCategory.Name }}
-                                    </small>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% else %}
-                    <div class="home-itemlist">
-                        You have no lists, visit some items and create some!
-                    </div>
-                {% endfor %}
-            </div>
-
-            {# todo #}
-            <div class="home-box2">
-                <h2>Todo:</h2>
-                <br><br>
-                <ul>
-                    <li>Add a "Recently Viewed" list</li>
-                    <li>Add Retainer features (show items up, show if any sold recently, etc)</li>
-                    <li>Add Friends Features (show items purchased, etc)</li>
-                    <li>Recent sale figures for items on alerts, recently viewed or lists</li>
-                    <li>Some graph porn</li>
-                    <li>Not-thought-of-just-yet features.</li>
-                </ul>
-            </div>
-        {% else %}
-            <div class="home-box2">
-                <div class="home-row">
-                    Login to track items, create alerts and have a personalised home-page feed.
-                    (todo - improve this)
+                    {% endfor %}
                 </div>
-            </div>
-        {% endif %}
-    </div>
-    <div>
-        <div class="home-box patreon-discord">
-            <a href="https://discord.gg/MFFVHWC" class="discord" target="_blank">
-                <span><img src="/i/brand/discord/logo_white.png"> DISCORD</span>
-            </a>
-            <a href="https://www.patreon.com/vekien" class="patreon" target="_blank">
-                <span><img src="/i/brand/patreon/logo_name.jpg"></span>
-            </a>
-        </div>
 
-        <h4>Trending Today</h4>
-        <div class="home-box home-trending">
-            {% for itemId in popular_items %}
-                {% set item = game().item(itemId) %}
-                <div>
-                    <div>
-                        <img src="{{ item.ID|icon2x }}">
+                {# Lists #}
+                <div class="home-box2">
+                    <h2>Item Lists</h2>
+                    {% for list in auth.user.lists %}
+                        <div class="home-itemlist">
+                            <h3>Items: {{ list.items|length }} - <a href="{{ path('lists_view', { slug: list.slug }) }}">{{ list.name }}</a></h3>
+                            <ul>
+                                {% for itemId in list.items %}
+                                    {% set item = game().item(itemId) %}
+                                    <li>
+                                        <img src="{{ item.ID|icon2x }}">
+                                        {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                                        <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                                        <small>
+                                            {{ item.ItemKind.Name }} -
+                                            {{ item.ItemSearchCategory.Name }}
+                                        </small>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <div class="home-itemlist">
+                            You have no lists, visit some items and create some!
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {# todo #}
+                <div class="home-box2">
+                    <h2>Todo:</h2>
+                    <br><br>
+                    <ul>
+                        <li>Add Retainer features (show items up, show if any sold recently, etc)</li>
+                        <li>Add Friends Features (show items purchased, etc)</li>
+                        <li>Recent sale figures for items on alerts, recently viewed or lists</li>
+                        <li>Some graph porn</li>
+                        <li>Not-thought-of-just-yet features.</li>
+                    </ul>
+                </div>
+            {% else %}
+                <div class="home-box2">
+                    <div class="home-row">
+                        Login to track items, create alerts and have a personalised home-page feed.
+                        (todo - improve this)
                     </div>
+                </div>
+            {% endif %}
+        </div>
+        <div>
+            <div class="home-box patreon-discord">
+                <a href="https://discord.gg/MFFVHWC" class="discord" target="_blank">
+                    <span><img src="/i/brand/discord/logo_white.png"> DISCORD</span>
+                </a>
+                <a href="https://www.patreon.com/vekien" class="patreon" target="_blank">
+                    <span><img src="/i/brand/patreon/logo_name.jpg"></span>
+                </a>
+            </div>
+
+            <h4>Trending Today</h4>
+            <div class="home-box home-trending">
+                {% for itemId in popular_items %}
+                    {% set item = game().item(itemId) %}
                     <div>
                         <div>
-                            {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
-                            <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                            <img src="{{ item.ID|icon2x }}">
                         </div>
-                        <small>{{ item.ItemSearchCategory.Name }}</small>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-
-        <h4>Mog Market Status</h4>
-        <div class="home-box home-mog-status">
-            <div class="home-row flex">
-                <div class="flex_50">
-                    <small>Moogles Online</small>
-                    <strong>{{ market_stats.Stats.DatabaseSqlReport.characters_online }}</strong>
-                </div>
-                <div class="flex_50">
-                    <small>Market Items</small>
-                    <strong>{{ market_stats.Stats.DatabaseSqlReport.total_entries }}</strong>
-                </div>
-            </div>
-            <div class="home-row">
-                <h5>Auto-Update Status</h5>
-                {% for queue in market_stats.Stats.Report %}
-                <div class="home-mog-queue" data-tippy-content="{{ queue.CycleDiffSec < 300 ? 'Items in this queue are updating <br> as fast as expected.' : 'Items in this queue are updating <br> slower than expected' }}">
-                    <strong>Queue: ({{ queue.Priority }}) {{ queue.Name }}</strong>
-                    <div class="flex">
-                        <div class="flex_40">
-                            <small>Items</small>
-                            {{ queue.Items }}
-                        </div>
-                        <div class="flex_60">
-                            <small>Speed</small>
-                            {{ queue.CycleTimeReal }}
-                            <span class="{{ queue.CycleDiffSec|replace({ ',': '' }) < 300 ? 'text-green' : 'text-red' }}">{{ queue.CycleDiffSec|title }}</span>
+                        <div>
+                            <div>
+                                {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                                <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                            </div>
+                            <small>{{ item.ItemSearchCategory.Name }}</small>
                         </div>
                     </div>
-                </div>
                 {% endfor %}
             </div>
-        </div>
 
+            <h4>Mog Market Status</h4>
+            <div class="home-box home-mog-status">
+                <div class="home-row flex">
+                    <div class="flex_50">
+                        <small>Moogles Online</small>
+                        <strong>{{ market_stats.Stats.DatabaseSqlReport.characters_online }}</strong>
+                    </div>
+                    <div class="flex_50">
+                        <small>Market Items</small>
+                        <strong>{{ market_stats.Stats.DatabaseSqlReport.total_entries }}</strong>
+                    </div>
+                </div>
+                <div class="home-row">
+                    <h5>Auto-Update Status</h5>
+                    {% for queue in market_stats.Stats.Report %}
+                        <div class="home-mog-queue" data-tippy-content="{{ queue.CycleDiffSec < 300 ? 'Items in this queue are updating <br> as fast as expected.' : 'Items in this queue are updating <br> slower than expected' }}">
+                            <strong>Queue: ({{ queue.Priority }}) {{ queue.Name }}</strong>
+                            <div class="flex">
+                                <div class="flex_40">
+                                    <small>Items</small>
+                                    {{ queue.Items }}
+                                </div>
+                                <div class="flex_60">
+                                    <small>Speed</small>
+                                    {{ queue.CycleTimeReal }}
+                                    <span class="{{ queue.CycleDiffSec|replace({ ',': '' }) < 300 ? 'text-green' : 'text-red' }}">{{ queue.CycleDiffSec|title }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
 {% endblock %}

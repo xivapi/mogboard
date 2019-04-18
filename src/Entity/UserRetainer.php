@@ -138,14 +138,19 @@ class UserRetainer
         return $this->slug;
     }
 
-    public function setSlug(string $slug)
+    public function setSlug()
     {
         if (empty($this->server)) {
             throw new \Exception('Please set the server before setting the retainer slug.');
         }
 
-        // slug = name-server
-        $this->slug = preg_replace("/[^A-Za-z]/", '', strtolower($slug)) .'-'. $this->server;
+        // slug = 1a2b-name-server
+        $this->slug = strtolower(sprintf(
+            '%s-%s-%s',
+            substr(sha1($this->id), 0, 5),
+            preg_replace("/[^A-Za-z]/", '', strtolower($this->name)),
+            $this->server
+        ));
 
         return $this;
     }

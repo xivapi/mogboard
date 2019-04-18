@@ -71,7 +71,7 @@ class AccountRetainers
             }
 
             searched = string;
-            this.uiItemSearchResponse.html('<p>Search...</p>');
+            this.uiItemSearchResponse.html('<div align="center"><img src="/i/svg/loading3.svg" height="32"></div>');
 
             timeout = setTimeout(() => {
                 if (string.length > 1) {

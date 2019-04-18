@@ -6,6 +6,7 @@ use App\Entity\UserRetainer;
 use App\Service\UserRetainers\UserRetainers;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserRetainerController extends AbstractController
@@ -42,5 +43,21 @@ class UserRetainerController extends AbstractController
         return $this->json(
             $this->retainers->confirm($retainer)
         );
+    }
+    
+    /**
+     * @Route("/retainers/{slug}", name="retainer_store")
+     */
+    public function store(string $slug)
+    {
+        $retainer = $this->retainers->getSlugRetainer($slug);
+        
+        if ($retainer === null) {
+            throw new NotFoundHttpException("Could not find a retainer for that url.");
+        }
+        
+        return $this->render('UserRetainers/index.html.twig', [
+            'retainer' => $retainer
+        ]);
     }
 }

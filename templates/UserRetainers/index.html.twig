@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="page-retainer">
+        <h1>{{ retainer.name }}</h1>
+        <small>{{ retainer.server }}</small>
+
+        <div class="page-retainer-store">
+            <h3>Items for sale:</h3>
+            <p>[todo]</p>
+        </div>
+
+
+        <div class="page-footer">
+            <h4>Share this list</h4>
+            <div class="form">
+                <input type="text" class="full" value="{{ app.request.getSchemeAndHttpHost() }}{{ path('retainer_store', { slug: retainer.slug }) }}">
+            </div>
+        </div>
+    </div>
+{% endblock %}

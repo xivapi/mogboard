@@ -48,6 +48,16 @@ class UserRetainers
             'confirmed' => $confirmed,
         ]);
     }
+    
+    /**
+     * Get a retainer via its slug
+     */
+    public function getSlugRetainer(string $slug)
+    {
+        return $this->repository->findOneBy([
+            'slug' => $slug,
+        ]);
+    }
 
     /**
      * Add a new character to the site
@@ -69,7 +79,7 @@ class UserRetainers
             ->setName($name)
             ->setServer($server)
             ->setUniq($unique)
-            ->setSlug($name)
+            ->setSlug()
             ->setConfirmItem($itemId)
             ->setConfirmPrice(mt_rand(1000000, 15000000));
 
