@@ -35,9 +35,8 @@ class Ajax
             success: success,
             complete: complete,
             error: (a,b,c) => {
-                Popup.error('Error 37', 'Could not create list.');
+                Popup.error(`Error ${error[0]}`, error[1]);
                 console.error(a,b,c);
-                error(a,b,c);
             },
         });
     }

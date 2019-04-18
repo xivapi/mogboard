@@ -1,16 +1,19 @@
+import ButtonLoading from "./ButtonLoading";
+import Errors from "./Errors";
 import Modals from "./Modals";
 import Popup from "./Popup";
-import ButtonLoading from "./ButtonLoading";
 import Ajax from "./Ajax";
 
 class ProductLists
 {
     constructor()
     {
-        this.uiForm             = $('.create_list_form');
-        this.uiModal            = $('.list_modal');
-        this.uiModalButton      = $('.btn_addto_list');
-        this.uiFaveButton       = $('.btn_addto_fave');
+        this.uiModal       = $('.list_modal');
+        this.uiModalButton = $('.btn_addto_list');
+        this.uiFaveButton  = $('.btn_addto_fave');
+        this.uiCreateForm  = $('.create_list_form');
+        this.uiListsView   = $('.user_lists');
+
     }
 
     watch()
@@ -18,14 +21,25 @@ class ProductLists
         // add modals
         Modals.add(this.uiModal, this.uiModalButton);
 
+        // load lists
+        this.loadLists();
+
         // on submitting a new
-        this.uiForm.on('submit', event => {
+        this.uiCreateForm.on('submit', event => {
             event.preventDefault();
 
-            const name   = this.uiForm.find('#list_name').val().trim();
-            const itemId = this.uiForm.find('#list_item_id').val().trim();
+            this.create(
+                this.uiCreateForm.find('#list_name').val().trim(),
+                itemId
+            );
+        });
 
-            this.create(name, itemId);
+        // on adding to an existing list
+        this.uiCreateForm.on('click', '.user_list_existing_button', event => {
+            const listId = $(event.currentTarget).attr('data-id');
+            const action = $(event.currentTarget).attr('data-action');
+
+            action == 'add' ? this.addItem(listId, itemId) : this.removeItem(listId, itemId);
         });
 
         // on fave clicking
@@ -35,34 +49,50 @@ class ProductLists
     }
 
     /**
+     * Render the users list
+     */
+    loadLists()
+    {
+        const data = {
+            itemId: itemId
+        };
+
+        const success = html => {
+            this.uiListsView.html(html);
+        };
+
+        Ajax.get(mog.urls.lists.render, data, success);
+    }
+
+    /**
      * Add an item to your favourites.
      */
     addToFavourite()
     {
         ButtonLoading.start(this.uiFaveButton);
 
-        $.ajax({
-            url: mog.urls.lists.favourite,
-            method: 'POST',
-            data: {
-                itemId: itemId,
-            },
-            success: response => {
-                response.state ? this.uiFaveButton.addClass('on') : this.uiFaveButton.removeClass('on');
+        const data = {
+            itemId: itemId,
+        };
 
-                this.uiFaveButton.find('span').text(response.state ? 'Faved' : 'Favourite');
-                Modals.close(this.uiModal);
-                Popup.success(
-                    response.state ? 'Added to Faves' : 'Removed from Faves',
-                    response.state ? 'Why you love this item so much!? Added to your favourites.' : 'Unpopular item ey, removed from your favourites.'
-                );
-            },
-            error: response => {
-                Popup.error('Error 37', 'Could not add to favourites!');
-                console.error(response);
-                ButtonLoading.finish(this.uiFaveButton);
-            }
-        });
+        const success = response => {
+            response.state ? this.uiFaveButton.addClass('on') : this.uiFaveButton.removeClass('on');
+
+            this.uiFaveButton.find('span').text(response.state ? 'Faved' : 'Favourite');
+            Modals.close(this.uiModal);
+            Popup.success(
+                response.state ? 'Added to Faves' : 'Removed from Faves',
+                response.state ? 'Why you love this item so much!? Added to your favourites.' : 'Unpopular item ey, removed from your favourites.'
+            );
+
+            this.loadLists();
+        };
+
+        const complete = () =>{
+            ButtonLoading.finish(this.uiFaveButton);
+        };
+
+        Ajax.post(mog.urls.lists.favourite, data, success, complete, Errors.lists.couldNotFavourite);
     }
 
     /**
@@ -70,7 +100,7 @@ class ProductLists
      */
     create(name, itemId)
     {
-        const $button = this.uiForm.find('button[type="submit"]');
+        const $button = this.uiCreateForm.find('button[type="submit"]');
         ButtonLoading.start($button);
 
         const data = {
@@ -79,14 +109,19 @@ class ProductLists
         };
 
         const success = response => {
-            console.log(response);
+            this.loadLists();
+            Modals.close(this.uiModal);
+            Popup.success(
+                'Created list',
+                'Your new list has been created and the item added to it!'
+            );
         };
 
         const complete = () => {
             ButtonLoading.finish($button);
         };
 
-        Ajax.post(mog.urls.lists.create, data, success, complete);
+        Ajax.post(mog.urls.lists.create, data, success, complete, Errors.lists.couldNotCreateNewList);
     }
 
     /**
@@ -94,24 +129,45 @@ class ProductLists
      */
     addItem(listId, itemId)
     {
-        // send request
-        $.ajax({
-            url: mog.urls.lists.addItem.replace('-id-', listId),
-            type: "POST",
-            data: {
-                itemId: itemId
-            },
-            success: response => {
-                console.log(response);
-            },
-            error: (a,b,c) => {
-                Popup.error('Error 37', 'Could not add an item.');
-                console.error(a,b,c);
-            },
-            complete: () => {
-                ButtonLoading.finish($button);
-            }
-        });
+        this.uiListsView.html('<div align="center"><img src="/i/svg/loading3.svg" height="32"></div>');
+
+        const data = {
+            itemId: itemId
+        };
+
+        const success = response => {
+            this.loadLists();
+            Modals.close(this.uiModal);
+            Popup.success(
+                'Added to list',
+                'Your item has been saved to this list!'
+            );
+        };
+
+        Ajax.post(mog.urls.lists.addItem.replace('-id-', listId), data, success, null, Errors.lists.couldNotAddItem);
+    }
+
+    /**
+     * Remove item from a list
+     */
+    removeItem(listId, itemId)
+    {
+        this.uiListsView.html('<div align="center"><img src="/i/svg/loading3.svg" height="32"></div>');
+
+        const data = {
+            itemId: itemId
+        };
+
+        const success = response => {
+            this.loadLists();
+            Modals.close(this.uiModal);
+            Popup.success(
+                'Removed from list',
+                'Item has been removed from the list.'
+            );
+        };
+
+        Ajax.post(mog.urls.lists.removeItem.replace('-id-', listId), data, success, null, Errors.lists.couldNotRemoveItem);
     }
 }
 

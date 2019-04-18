@@ -30,7 +30,8 @@
             right: 0;
             top: 0;
 
-            button {
+            .btn_addto_list,
+            .btn_addto_fave {
                 height: 32px;
                 line-height: 32px;
                 font-size: 14px;
@@ -742,6 +743,59 @@
             }
         }
     }
+
+    .user_lists {
+        border: solid 1px #000;
+        background-color: #111;
+        border-radius: 5px;
+        overflow: hidden;
+        max-height: 400px;
+        display: block;
+
+        .user_no_lists {
+            padding: 10px;
+            text-align: center;
+            color: #aaa;
+        }
+
+        .user_lists_loading {
+            opacity: 0.5;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        .user_list_existing_button {
+            display: block;
+            width: 100%;
+            border-radius: 0;
+            text-align: left;
+
+            &.user_list_inlist {
+                opacity: 0.6;
+            }
+
+            span {
+                float: right;
+                display: inline-block;
+                color: var(--red);
+                font-size: 12px;
+                font-weight: bold;
+            }
+
+            strong {
+                display: inline-block;
+                color: var(--color8);
+                margin-right: 10px;
+            }
+        }
+
+
+    }
+}
+
+.list_modal {
+    max-width: 500px;
 }
 
 .cross_world_foot_note {

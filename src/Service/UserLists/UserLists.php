@@ -78,7 +78,7 @@ class UserLists
             throw new UnauthorisedListOwnershipException();
         }
 
-        if ($userList->hasItem($itemId) === false) {
+        if ($userList->hasItem($itemId) == true) {
             return $userList;
         }
 
@@ -96,7 +96,7 @@ class UserLists
             throw new UnauthorisedListOwnershipException();
         }
 
-        if ($userList->hasItem($itemId) === false) {
+        if ($userList->hasItem($itemId) == false) {
             return $userList;
         }
 

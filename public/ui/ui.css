@@ -1478,20 +1478,25 @@ ul, ol {
     position: absolute;
     right: 0;
     top: 0; }
-    .product .item_header .box_lists button {
+    .product .item_header .box_lists .btn_addto_list,
+    .product .item_header .box_lists .btn_addto_fave {
       height: 32px;
       line-height: 32px;
       font-size: 14px;
       padding: 0 12px;
       background-color: var(--default-3x);
       border-radius: 50px; }
-      .product .item_header .box_lists button:hover {
+      .product .item_header .box_lists .btn_addto_list:hover,
+      .product .item_header .box_lists .btn_addto_fave:hover {
         background-color: var(--table-color); }
-      .product .item_header .box_lists button.btn_addto_fave {
+      .product .item_header .box_lists .btn_addto_list.btn_addto_fave,
+      .product .item_header .box_lists .btn_addto_fave.btn_addto_fave {
         margin-left: 10px; }
-        .product .item_header .box_lists button.btn_addto_fave.on {
+        .product .item_header .box_lists .btn_addto_list.btn_addto_fave.on,
+        .product .item_header .box_lists .btn_addto_fave.btn_addto_fave.on {
           background-color: var(--red-2x); }
-      .product .item_header .box_lists button i {
+      .product .item_header .box_lists .btn_addto_list i,
+      .product .item_header .box_lists .btn_addto_fave i {
         margin-bottom: -3px; }
   .product .item_header .item_info {
     display: flex;
@@ -1967,6 +1972,43 @@ ul, ol {
   .product .item_details .item_attributes em, .product .item_details .item_attributes span {
     display: inline-block;
     width: 60px; }
+
+.product .user_lists {
+  border: solid 1px #000;
+  background-color: #111;
+  border-radius: 5px;
+  overflow: hidden;
+  max-height: 400px;
+  display: block; }
+  .product .user_lists .user_no_lists {
+    padding: 10px;
+    text-align: center;
+    color: #aaa; }
+  .product .user_lists .user_lists_loading {
+    opacity: 0.5;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px; }
+  .product .user_lists .user_list_existing_button {
+    display: block;
+    width: 100%;
+    border-radius: 0;
+    text-align: left; }
+    .product .user_lists .user_list_existing_button.user_list_inlist {
+      opacity: 0.6; }
+    .product .user_lists .user_list_existing_button span {
+      float: right;
+      display: inline-block;
+      color: var(--red);
+      font-size: 12px;
+      font-weight: bold; }
+    .product .user_lists .user_list_existing_button strong {
+      display: inline-block;
+      color: var(--color8);
+      margin-right: 10px; }
+
+.list_modal {
+  max-width: 500px; }
 
 .cross_world_foot_note {
   font-size: 13px;

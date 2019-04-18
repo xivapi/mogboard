@@ -32,6 +32,16 @@ class UserListsController extends AbstractController
     }
     
     /**
+     * @Route("/lists/render", name="lists_render")
+     */
+    public function renderListTable(Request $request)
+    {
+        return $this->render('Product/lists_table.html.twig', [
+            'itemId' => $request->get('itemId')
+        ]);
+    }
+    
+    /**
      * @Route("/lists/create", name="lists_create")
      */
     public function create(Request $request)

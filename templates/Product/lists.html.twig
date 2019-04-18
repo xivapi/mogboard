@@ -16,40 +16,21 @@
 
         {# list form #}
         <form method="post" class="modal_form create_list_form">
-            <p>WIP - Soon(tm)</p>
-            {# hidden stuff #}
-            <input type="hidden" id="list_item_id" value="{{ item.ID }}">
-
             {# Name #}
-            <div class="modal_form_row_1">
-                <p>Option 1) Create a new list, enter the name below.</p>
-            </div>
-            <div class="modal_form_row_1">
-                <div class="row_flex_2">
-                    <div>
-                        <input name="list_name" id="list_name" type="text" placeholder="Name" class="full">
-                    </div>
-                </div>
-            </div>
-
-            {# Existing #}
-            <div class="modal_form_row_1">
-                <p>Option 2) Add to an existing list.</p>
-            </div>
-            <div class="modal_form_row_2">
-                {% if lists %}
-                    <select name="list_option" id="list_option" class="full">
-
-                    </select>
-                {% else %}
-                    <section class="alert-default">
-                        <h1>No lists created</h1>
-                        <p>Use the name field to create your very first list!</p>
-                    </section>
-                {% endif %}
+            <p>Option 1) Create a new list:</p>
+            <div>
+                <input name="list_name" id="list_name" type="text" placeholder="Name" class="full">
             </div>
 
             <br>
+
+            {# Lists #}
+            <p>Option 2) Use an existing list:</p>
+            <div data-simplebar class="user_lists">
+                <div class="user_lists_loading">Loading your item lists</div>
+            </div>
+
+            <br><br>
 
             {# done #}
             <div class="modal_form_end">

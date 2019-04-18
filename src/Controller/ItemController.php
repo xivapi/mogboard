@@ -109,7 +109,7 @@ class ItemController extends AbstractController
             'census'    => $census,
             'recipes'   => $recipes,
             'faved'     => $user ? $user->hasFavouriteItem($itemId) : false,
-            'lists'     => $user ? $user->getListsPersonal() : [],
+            'lists'     => $user ? $user->getCustomLists() : [],
             'api_stats' => $apiStats,
             'server'    => [
                 'name'       => $server,

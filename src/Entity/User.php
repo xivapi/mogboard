@@ -460,7 +460,7 @@ class User
     /**
      * Get personal lists
      */
-    public function getListsPersonal()
+    public function getCustomLists()
     {
         $lists = [];
         
