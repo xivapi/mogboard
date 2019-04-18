@@ -11,6 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserList
 {
+    const CUSTOM_FAVOURITES = 10;
+    const CUSTOM_RECENTLY_VIEWED = 20;
+    
+    const MAX_ITEMS = 20;
+    
     /**
      * @var string
      * @ORM\Id
@@ -42,7 +47,12 @@ class UserList
      * @var boolean
      * @ORM\Column(type="boolean", options={"default": false})
      */
-    private $favourite = false;
+    private $custom = false;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $customType;
     /**
      * @var array
      * @ORM\Column(type="array")
@@ -121,14 +131,26 @@ class UserList
         return $this;
     }
     
-    public function isFavourite(): bool
+    public function isCustom(): bool
     {
-        return $this->favourite;
+        return $this->custom;
     }
     
-    public function setFavourite(bool $favourite)
+    public function setCustom(bool $custom)
     {
-        $this->favourite = $favourite;
+        $this->custom = $custom;
+        
+        return $this;
+    }
+    
+    public function getCustomType(): int
+    {
+        return $this->customType;
+    }
+    
+    public function setCustomType(int $customType)
+    {
+        $this->customType = $customType;
         
         return $this;
     }
@@ -151,8 +173,9 @@ class UserList
         if (in_array($itemId, $this->items)) {
             return $this;
         }
-        
-        $this->items[] = $itemId;
+    
+        array_unshift($this->items, $itemId);
+        array_splice($this->items, self::MAX_ITEMS);
         
         return $this;
     }

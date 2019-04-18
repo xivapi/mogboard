@@ -53,6 +53,16 @@ class UserListsController extends AbstractController
             )
         );
     }
+    
+    /**
+     * @Route("/lists/{list}", name="lists_view")
+     */
+    public function view(UserList $userList, Request $request)
+    {
+        return $this->render('UserLists/index.html.twig', [
+            'list' => $userList
+        ]);
+    }
 
     /**
      * @Route("/lists/{list}/delete", name="list_delete")

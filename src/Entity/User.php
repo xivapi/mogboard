@@ -466,7 +466,7 @@ class User
         
         /** @var UserList $list */
         foreach ($this->lists as $list) {
-            if ($list->isFavourite()) {
+            if ($list->isCustom()) {
                 continue;
             }
             
@@ -480,7 +480,7 @@ class User
     {
         /** @var UserList $list */
         foreach ($this->lists as $list) {
-            if ($list->isFavourite() && $list->hasItem($itemId)) {
+            if ($list->getCustomType() === UserList::CUSTOM_FAVOURITES && $list->hasItem($itemId)) {
                 return true;
             }
         }

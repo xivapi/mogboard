@@ -11,7 +11,7 @@
                 <a href="{{ path('user_account_retainers') }}" class="{{ accountpage == 'retainers' ? 'active' : '' }}">Retainers</a>
                 <a href="{{ path('user_account_alerts') }}" class="{{ accountpage == 'alerts' ? 'active' : '' }}">Alerts</a>
                 <a href="{{ path('user_account_lists') }}" class="{{ accountpage == 'lists' ? 'active' : '' }}">Lists</a>
-                <a href="{{ path('user_account_reports') }}" class="{{ accountpage == 'reports' ? 'active' : '' }}">Reports</a>
+                {# <a href="{{ path('user_account_reports') }}" class="{{ accountpage == 'reports' ? 'active' : '' }}">Reports</a> #}
             </div>
             <div>
                 {% block account %}{% endblock %}

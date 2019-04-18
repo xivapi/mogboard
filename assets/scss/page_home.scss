@@ -37,9 +37,9 @@
 
     h3 {
         font-weight: 500;
-        font-size: 20px;
+        font-size: 18px;
         text-shadow: none;
-        color: var(--color9);
+        color: var(--color10);
         margin: 0;
     }
 
@@ -80,54 +80,52 @@
     }
 
     //
-    // Welcome
-    //
-    .welcome-banner {
-        text-align: center;
-        padding: 15px 0 0 0
-    }
-
-    .welcome-info {
-        font-size: 14px;
-        line-height: 20px;
-    }
-
-    //
     // Patreon
+    // Discord
     //
-    .patreon-info {
-        img {
-            border-radius: 3px;
-            width: 120px;
+    .patreon-discord {
+        display: flex;
+        overflow: hidden;
 
-            position: relative;
-            transition: 150ms;
-
-            &:hover {
-                transform: scale(1.1);
-            }
-        }
-
-        h6 {
-            color: var(--highlight3x);
-            font-size: 20px;
-            font-weight: 400;
-            margin: 0 0 8px 0;
-        }
-
-        > div:first-of-type {
+        a {
+            flex: 0 1 50%;
+            display: inline-block;
+            height: 60px;
+            line-height: 60px;
             text-align: center;
-            margin-bottom: 15px;
-        }
+            position: relative;
 
-        .patreon-info-text {
-            font-size: 14px;
-            line-height: 18px;
-        }
+            > span {
+                transition: 100ms;
+                display: inline-block;
+                position: relative;
+            }
 
-        .patreon-link {
-            color: #ffbcc8;
-            font-weight: bold;
+            &:hover > span {
+                transform: scale(1.25);
+            }
+
+            &.patreon {
+                background-color: #f86754;
+                border-left: solid 2px #000;
+
+                img {
+                    vertical-align: middle;
+                    height: 60px;
+                }
+            }
+
+            &.discord {
+                background-color: #7289DA;
+                font-weight: bold;
+                text-shadow: none;
+                color: #fff;
+
+                img {
+                    vertical-align: middle;
+                    height: 30px;
+                }
+            }
         }
     }
 

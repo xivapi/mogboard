@@ -55,6 +55,7 @@ table {
   --color7: #1c1c1c;
   --color8: #fff97b;
   --color9: #798ebb;
+  --color10: #c2ccff;
   --highlight: #fffca6;
   --highlight2x: #b6b476;
   --highlight3x: #feffc8;
@@ -1309,9 +1310,9 @@ ul, ol {
     margin: 0; }
   .home h3 {
     font-weight: 500;
-    font-size: 20px;
+    font-size: 18px;
     text-shadow: none;
-    color: var(--color9);
+    color: var(--color10);
     margin: 0; }
   .home h4 {
     font-weight: 500;
@@ -1340,33 +1341,36 @@ ul, ol {
       border-bottom: solid 1px #000; }
   .home .home-box2 {
     background-color: var(--dark-blue2); }
-  .home .welcome-banner {
-    text-align: center;
-    padding: 15px 0 0 0; }
-  .home .welcome-info {
-    font-size: 14px;
-    line-height: 20px; }
-  .home .patreon-info img {
-    border-radius: 3px;
-    width: 120px;
-    position: relative;
-    transition: 150ms; }
-    .home .patreon-info img:hover {
-      transform: scale(1.1); }
-  .home .patreon-info h6 {
-    color: var(--highlight3x);
-    font-size: 20px;
-    font-weight: 400;
-    margin: 0 0 8px 0; }
-  .home .patreon-info > div:first-of-type {
-    text-align: center;
-    margin-bottom: 15px; }
-  .home .patreon-info .patreon-info-text {
-    font-size: 14px;
-    line-height: 18px; }
-  .home .patreon-info .patreon-link {
-    color: #ffbcc8;
-    font-weight: bold; }
+  .home .patreon-discord {
+    display: flex;
+    overflow: hidden; }
+    .home .patreon-discord a {
+      flex: 0 1 50%;
+      display: inline-block;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+      position: relative; }
+      .home .patreon-discord a > span {
+        transition: 100ms;
+        display: inline-block;
+        position: relative; }
+      .home .patreon-discord a:hover > span {
+        transform: scale(1.25); }
+      .home .patreon-discord a.patreon {
+        background-color: #f86754;
+        border-left: solid 2px #000; }
+        .home .patreon-discord a.patreon img {
+          vertical-align: middle;
+          height: 60px; }
+      .home .patreon-discord a.discord {
+        background-color: #7289DA;
+        font-weight: bold;
+        text-shadow: none;
+        color: #fff; }
+        .home .patreon-discord a.discord img {
+          vertical-align: middle;
+          height: 30px; }
   .home .home-trending > div {
     display: flex;
     border-bottom: solid 1px #000; }
@@ -2348,4 +2352,35 @@ ul, ol {
   line-height: 16px;
   padding-top: 4px;
   color: var(--table-color-3x); }
+
+.lists h3 {
+  font-size: 18px;
+  font-weight: 400;
+  color: #fff;
+  margin: 0;
+  padding: 8px; }
+
+.lists ul {
+  list-style: none;
+  margin: 10px 0; }
+  .lists ul li {
+    margin-bottom: 10px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 5px;
+    padding: 0 15px 0 0;
+    overflow: hidden; }
+    .lists ul li:hover {
+      background-color: rgba(20, 20, 20, 0.3); }
+    .lists ul li small {
+      display: inline-block;
+      float: right;
+      opacity: 0.6; }
+    .lists ul li img {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      vertical-align: middle;
+      display: inline-table;
+      margin-right: 20px; }
 

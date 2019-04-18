@@ -11,7 +11,6 @@
             </div>
         </div>
 
-
         {% if auth.online() %}
             {# Alerts #}
             <div class="home-box2">
@@ -49,7 +48,7 @@
                 <h2>Item Lists</h2>
                 {% for list in auth.user.lists %}
                     <div class="home-itemlist">
-                        <h3>{{ list.name }} ({{ list.items|length }} items)</h3>
+                        <h3>Items: {{ list.items|length }} - <a href="{{ path('lists_view', { list: list.id }) }}">{{ list.name }}</a></h3>
                         <ul>
                             {% for itemId in list.items %}
                                 {% set item = game().item(itemId) %}
@@ -64,6 +63,10 @@
                                 </li>
                             {% endfor %}
                         </ul>
+                    </div>
+                {% else %}
+                    <div class="home-itemlist">
+                        You have no lists, visit some items and create some!
                     </div>
                 {% endfor %}
             </div>
@@ -91,34 +94,13 @@
         {% endif %}
     </div>
     <div>
-        <div class="home-box">
-            <div class="welcome-banner">
-                <img src="/i/brand/mogboard/mogboard_light.svg" height="22">
-            </div>
-            <div class="welcome-info home-row">
-                Mogboard.com is in heavy development, if you have any feedback or suggestions
-                be sure to jump into the discord and shout at <strong class="text-blue">@vekien</strong>,
-                thank you! -PV
-            </div>
-            <div class="home-row">
-                Discord: <a href="https://discord.gg/MFFVHWC">discord.gg/MFFVHWC</a>
-            </div>
-            <div class="patreon-info home-row">
-                <div>
-                    <a href="https://www.patreon.com/vekien" target="_blank"><img src="/i/brand/patreon/logo_name.jpg"></a>
-                </div>
-                <div>
-                    <p class="patreon-info-text">
-                        Both <strong>MogBoard.com</strong> site and <strong>XIVAPI</strong> are fully funded via patreon supporters,
-                        this helps keep the site and API alive for everyone to enjoy. If you
-                        are interested in becoming a patreon you'll receive small perks here
-                        and be helping the entire FFXIV Developer Community.
-                    </p>
-                    <p>
-                        <a href="https://www.patreon.com/vekien" target="_blank" class="patreon-link">Learn More at Patreon</a>
-                    </p>
-                </div>
-            </div>
+        <div class="home-box patreon-discord">
+            <a href="https://discord.gg/MFFVHWC" class="discord" target="_blank">
+                <span><img src="/i/brand/discord/logo_white.png"> DISCORD</span>
+            </a>
+            <a href="https://www.patreon.com/vekien" class="patreon" target="_blank">
+                <span><img src="/i/brand/patreon/logo_name.jpg"></span>
+            </a>
         </div>
 
         <h4>Trending Today</h4>

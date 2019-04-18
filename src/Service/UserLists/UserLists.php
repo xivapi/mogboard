@@ -49,6 +49,18 @@ class UserLists
         $this->save($list);
         return $list;
     }
+    
+    /**
+     * Handle adding the item to the recently viewed list
+     */
+    public function handleRecentlyViewed(int $itemId): UserList
+    {
+        $user = $this->users->getUser();
+        $list = $this->getRecentlyViewed($user);
+        $list->addItem($itemId);
+        $this->save($list);
+        return $list;
+    }
 
     /**
      * Get a users favourites list
@@ -56,8 +68,8 @@ class UserLists
     public function getFavourites(User $user)
     {
         $filters = [
-            'favourite' => true,
-            'user'      => $user
+            'customType' => UserList::CUSTOM_FAVOURITES,
+            'user'       => $user
         ];
 
         if ($list = $this->repository->findOneBy($filters)) {
@@ -65,7 +77,35 @@ class UserLists
         }
 
         $list = new UserList();
-        $list->setName('Favourites')->setFavourite(true)->setUser($user)->setSlug();
+        $list
+            ->setName('Favourites')
+            ->setCustomType(UserList::CUSTOM_FAVOURITES)
+            ->setCustom(true)
+            ->setUser($user)
+            ->setSlug();
+        
+        return $list;
+    }
+    
+    public function getRecentlyViewed(User $user)
+    {
+        $filters = [
+            'customType' => UserList::CUSTOM_RECENTLY_VIEWED,
+            'user'       => $user
+        ];
+    
+        if ($list = $this->repository->findOneBy($filters)) {
+            return $list;
+        }
+    
+        $list = new UserList();
+        $list
+            ->setName('Recently Viewed')
+            ->setCustomType(UserList::CUSTOM_RECENTLY_VIEWED)
+            ->setCustom(true)
+            ->setUser($user)
+            ->setSlug();
+    
         return $list;
     }
 

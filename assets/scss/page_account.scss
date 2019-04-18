@@ -339,3 +339,49 @@
         color: var(--table-color-3x);
     }
 }
+
+//
+// Lists
+//
+.lists {
+    h3 {
+        font-size: 18px;
+        font-weight: 400;
+        color: #fff;
+        margin: 0;
+        padding: 8px;
+    }
+
+    ul {
+        list-style: none;
+        margin: 10px 0;
+
+        li {
+            margin-bottom: 10px;
+            height: 36px;
+            line-height: 36px;
+            border-radius: 5px;
+            padding: 0 15px 0 0;
+            overflow: hidden;
+
+            &:hover {
+                background-color: rgba(20,20,20,0.3);
+            }
+
+            small {
+                display: inline-block;
+                float: right;
+                opacity: 0.6;
+            }
+
+            img {
+                width: 36px;
+                height: 36px;
+                border-radius: 6px;
+                vertical-align: middle;
+                display: inline-table;
+                margin-right: 20px;
+            }
+        }
+    }
+}

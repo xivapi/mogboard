@@ -12,6 +12,7 @@ use App\Service\Items\ItemPopularity;
 use App\Service\Redis\Redis;
 use App\Service\User\Users;
 use App\Service\UserAlerts\UserAlerts;
+use App\Service\UserLists\UserLists;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +32,8 @@ class ItemController extends AbstractController
     private $users;
     /** @var UserAlerts */
     private $userAlerts;
+    /** @var userLists */
+    private $userLists;
     /** @var ItemPopularity */
     private $itemPopularity;
     
@@ -41,6 +44,7 @@ class ItemController extends AbstractController
         CompanionCensus $companionCensus,
         Users $users,
         UserAlerts $userAlerts,
+        UserLists $userLists,
         ItemPopularity $itemPopularity
     ) {
         $this->em = $em;
@@ -49,6 +53,7 @@ class ItemController extends AbstractController
         $this->companionCensus = $companionCensus;
         $this->users = $users;
         $this->userAlerts = $userAlerts;
+        $this->userLists = $userLists;
         $this->itemPopularity = $itemPopularity;
     }
     
@@ -103,6 +108,10 @@ class ItemController extends AbstractController
             Redis::Cache()->set("census_{$dc}_{$itemId}", $census, 60);
         }
         
+        // add to recently viewed
+        $this->userLists->handleRecentlyViewed($itemId);
+        
+        // response
         $data = [
             'item'      => $item,
             'market'    => $market,

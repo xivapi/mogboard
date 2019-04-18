@@ -21,9 +21,12 @@ Search.watch();
 /**
  * Item Pages
  */
-Product.watch();
-ProductAlerts.watch();
-ProductLists.watch();
+if (typeof  appEnabledItemPage !== 'undefined' && appEnabledItemPage === 1) {
+    Product.watch();
+    ProductAlerts.watch();
+    ProductLists.watch();
+}
+
 
 /**
  * Account page
