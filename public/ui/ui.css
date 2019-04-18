@@ -2139,6 +2139,11 @@ ul, ol {
   margin-bottom: 5px;
   position: relative; }
 
+.characters h6,
+.retainers h6 {
+  font-weight: 600;
+  margin-bottom: 5px; }
+
 .characters .character_auth_code,
 .retainers .character_auth_code {
   background-color: #222;
