@@ -88,7 +88,6 @@ class Settings
 
     setLanguage(language)
     {
-        console.log('lang = ' + language);
         localStorage.setItem(this.storageKeyLanguage, language);
         Cookie.set(this.storageKeyLanguage, language, { expires: 365, path: '/' });
     }

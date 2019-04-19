@@ -21,7 +21,7 @@ Search.watch();
 /**
  * Item Pages
  */
-if (typeof  appEnabledItemPage !== 'undefined' && appEnabledItemPage === 1) {
+if (typeof appEnableItemPage !== 'undefined' && appEnableItemPage === 1) {
     Product.watch();
     ProductAlerts.watch();
     ProductLists.watch();
@@ -33,7 +33,7 @@ if (typeof  appEnabledItemPage !== 'undefined' && appEnabledItemPage === 1) {
  */
 AccountPatreon.watch();
 
-if (typeof appEnabledCharacters !== 'undefined' && appEnabledCharacters === 1) {
+if (typeof appEnableCharacters !== 'undefined' && appEnableCharacters === 1) {
     AccountCharacters.watch();
 }
 

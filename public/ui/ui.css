@@ -2259,7 +2259,8 @@ ul, ol {
 .characters .character_add_response,
 .retainers .character_add_response {
   text-align: center;
-  padding: 25px 0 5px; }
+  padding: 15px;
+  background-color: #111; }
 
 .characters .character_avatar,
 .retainers .character_avatar {
