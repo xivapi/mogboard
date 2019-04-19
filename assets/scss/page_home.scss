@@ -283,6 +283,11 @@
     //
     // Retainers
     //
+    .home-retainer-none {
+        padding: 10px;
+        text-align: center;
+        color: #aaa;
+    }
     .home-retainer {
         padding: 15px;
         border-bottom: solid 1px #000;
@@ -290,12 +295,6 @@
 
         > div:first-of-type {
             flex: 0 1 30%;
-        }
-
-        .home-retainer-none {
-            padding: 10px;
-            text-align: center;
-            color: #aaa;
         }
     }
 }

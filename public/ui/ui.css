@@ -1470,16 +1470,16 @@ ul, ol {
         font-size: 13px;
         text-shadow: none;
         color: var(--search-complete); }
+  .home .home-retainer-none {
+    padding: 10px;
+    text-align: center;
+    color: #aaa; }
   .home .home-retainer {
     padding: 15px;
     border-bottom: solid 1px #000;
     display: flex; }
     .home .home-retainer > div:first-of-type {
       flex: 0 1 30%; }
-    .home .home-retainer .home-retainer-none {
-      padding: 10px;
-      text-align: center;
-      color: #aaa; }
 
 :root {
   --columnMid: 100%;
