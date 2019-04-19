@@ -1,0 +1,51 @@
+<div style="padding: 20px;">
+    <img src="https://beta.mogboard.com/i/brand/mogboard/email.png" height="24">
+    <br>
+    <p>
+        <img src="https://xivapi.com/{{ item.Icon }}" height="32" style="vertical-align: middle;display: inline-table; margin-right: 10px;">
+        <a href="https://beta.mogboard.com/market/{{ item.ID }}" style="font-size: 18px;">{{ item.Name }} -- {{ alert.name }}</a>
+    </p>
+
+    {% for trigger in alert.getTriggerConditionsFormatted %}
+    <pre>{{ trigger[0] }} {{ trigger[3] }} {{ trigger[2] }}</pre>
+    {% endfor %}
+
+    <br><br>
+    <div style="border: solid 1px #ccc;border-radius: 5px; overflow: hidden; display: inline-block;">
+        <table style="margin: 0;">
+            <thead>
+            <tr>
+                <th style="padding: 5px; margin: 0; background-color: #eee;">Server</th>
+                <th style="padding: 5px; margin: 0; background-color: #eee;">Per Unit</th>
+                <th style="padding: 5px; margin: 0; background-color: #eee;">Qty</th>
+                <th style="padding: 5px; margin: 0; background-color: #eee;">Total</th>
+                <th style="padding: 5px; margin: 0; background-color: #eee;">HQ?</th>
+                <th style="padding: 5px; margin: 0; background-color: #eee;">Name</th>
+                {% if alert.triggerType == 'History' %}
+                    <th style="padding: 5px; margin: 0;">Purchase Date</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for marketRow in triggeredMarketRows %}
+                {% set server = marketRow[0] %}
+                {% set row = marketRow[1] %}
+                <tr>
+                    <td style="padding: 5px; margin: 0;">{{ server }}</td>
+                    <td style="padding: 5px; margin: 0;"><strong>{{ row.PricePerUnit|number_format }}</strong></td>
+                    <td style="padding: 5px; margin: 0;">{{ row.Quantity|number_format }}</td>
+                    <td style="padding: 5px; margin: 0;"><em>{{ row.PriceTotal|number_format }}</em></td>
+                    <td style="padding: 5px; margin: 0;">{{ row.IsHQ ? '<img src="https://beta.mogboard.com/i/game/hq.png">' : '' }}</td>
+                    <td style="padding: 5px; margin: 0;">{{ alert.triggerType == 'Prices' ? row.RetainerName : row.CharacterName }}</td>
+                    {% if alert.triggerType == 'History' %}
+                        <td style="padding: 5px;">
+                            {{ row.PurchaseDate|date }}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+

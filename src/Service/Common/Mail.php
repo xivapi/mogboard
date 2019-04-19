@@ -2,19 +2,50 @@
 
 namespace App\Service\Common;
 
+use App\Service\Redis\Redis;
 use Postmark\PostmarkClient;
+use Twig\Environment;
 
 class Mail
 {
-    public static function send($to)
-    {
-        $client = new PostmarkClient(getenv('POSTMARK_KEY'));
+    /** @var Environment */
+    private $twig;
     
-        $sendResult = $client->sendEmail(
-            "sender@example.org",
-            "josh@viion.co.uk",
-            "Hello from Postmark!",
-            "This is just a friendly 'hello' from your friends at Postmark."
+    /**
+     * TestTwig constructor.
+     */
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
+    
+    /**
+     * Send an email
+     */
+    public function send(
+        string $email,
+        string $subject,
+        string $template,
+        array $templateVariables
+    ) {
+        // build html
+        $html = $this->twig->render($template, $templateVariables);
+        $hash = sha1($html);
+        
+        // don't send the same email
+        if (Redis::Cache()->get("email_spam_reduce_{$hash}")) {
+            return;
+        }
+    
+        Redis::Cache()->set("email_spam_reduce_{$hash}", true);
+    
+        // send
+        $client = new PostmarkClient(getenv('POSTMARK_KEY'));
+        $client->sendEmail(
+            "mog@mogboard.com",
+            $email,
+            $subject,
+            $html
         );
     }
 }

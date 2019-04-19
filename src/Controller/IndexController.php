@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Service\Companion\CompanionStatistics;
 use App\Service\Items\ItemPopularity;
-use App\Service\Redis\Redis;
 use App\Service\User\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,8 +37,6 @@ class IndexController extends AbstractController
      */
     public function home(Request $request)
     {
-        
-        
         $this->users->setLastUrl($request);
 
         return $this->render('Pages/home.html.twig',[

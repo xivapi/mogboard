@@ -13,9 +13,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use XIVAPI\XIVAPI;
 
-/**
- * todo - email alerts
- */
 class UserAlertsTriggers
 {
     const MAX_TRIGGERS_PER_ALERT = 5;
@@ -26,6 +23,8 @@ class UserAlertsTriggers
     private $userAlerts;
     /** @var UserAlertsDiscordNotification */
     private $discord;
+    /** @var UserAlertsEmailNotification */
+    private $email;
     /** @var Companion */
     private $companion;
     /** @var GameDataSource */
@@ -41,6 +40,7 @@ class UserAlertsTriggers
     public function __construct(
         EntityManagerInterface $em,
         UserAlertsDiscordNotification $userAlertsDiscordNotification,
+        UserAlertsEmailNotification $userAlertsEmailNotification,
         UserAlerts $userAlerts,
         Companion $companion,
         GameDataSource $gamedata
@@ -48,6 +48,7 @@ class UserAlertsTriggers
         $this->em           = $em;
         $this->userAlerts   = $userAlerts;
         $this->discord      = $userAlertsDiscordNotification;
+        $this->email        = $userAlertsEmailNotification;
         $this->companion    = $companion;
         $this->gamedata     = $gamedata;
         $this->console      = new ConsoleOutput();
@@ -80,8 +81,8 @@ class UserAlertsTriggers
             // check if the alert has expired, if so, delete it
             // todo - enable this at launch
             if ($alert->isExpired()) {
-                # $this->userAlerts->delete($alert, true);
-                # continue;
+                $this->userAlerts->delete($alert, true);
+                continue;
             }
 
             // get user for the alert
@@ -256,7 +257,7 @@ class UserAlertsTriggers
                 }
                 
                 if ($alert->isNotifiedViaEmail()) {
-                    // todo - email logic
+                    $this->email->sendAlertTriggerNotification($alert, $this->triggered, $hash);
                 }
 
                 // reset
