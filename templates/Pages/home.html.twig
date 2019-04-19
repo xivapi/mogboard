@@ -25,7 +25,9 @@
                             </div>
                         </div>
                     {% else %}
-                        <p>You have not yet added any retainers!</p>
+                        <div class="home-retainer-none">
+                            You have no retainers, <a href="{{ path('user_account_retainers') }}">add them to your account</a>.
+                        </div>
                     {% endfor %}
                 </div>
 

@@ -1476,6 +1476,10 @@ ul, ol {
     display: flex; }
     .home .home-retainer > div:first-of-type {
       flex: 0 1 30%; }
+    .home .home-retainer .home-retainer-none {
+      padding: 10px;
+      text-align: center;
+      color: #aaa; }
 
 :root {
   --columnMid: 100%;
