@@ -95,12 +95,6 @@
 // Characters
 // Retainers
 //
-.character_form {
-    border-radius: 5px;
-    background-color: var(--table-color-dark);
-    padding: 20px;
-}
-
 .characters,
 .retainers {
     h2 {
@@ -161,19 +155,16 @@
         border-radius: 5px;
         box-shadow: 0 1px 5px #000;
         display: inherit;
+        height: 72px;
+        width: 72px;
     }
 
-    .character_name,
-    .retainer_name {
+    .char_name {
         font-size: 20px;
-        color: var(--blue-3x);
     }
 
-    .character_table,
-    .retainer_table {
-        td {
-            vertical-align: middle;
-        }
+    .character_info {
+        padding: 15px 0 0 15px;
     }
 }
 

@@ -2207,11 +2207,6 @@ ul, ol {
   .account-panel .account-none {
     padding: 10px; }
 
-.character_form {
-  border-radius: 5px;
-  background-color: var(--table-color-dark);
-  padding: 20px; }
-
 .characters h2,
 .retainers h2 {
   font-size: 22px;
@@ -2270,20 +2265,17 @@ ul, ol {
 .retainers .character_avatar {
   border-radius: 5px;
   box-shadow: 0 1px 5px #000;
-  display: inherit; }
+  display: inherit;
+  height: 72px;
+  width: 72px; }
 
-.characters .character_name,
-.characters .retainer_name,
-.retainers .character_name,
-.retainers .retainer_name {
-  font-size: 20px;
-  color: var(--blue-3x); }
+.characters .char_name,
+.retainers .char_name {
+  font-size: 20px; }
 
-.characters .character_table td,
-.characters .retainer_table td,
-.retainers .character_table td,
-.retainers .retainer_table td {
-  vertical-align: middle; }
+.characters .character_info,
+.retainers .character_info {
+  padding: 15px 0 0 15px; }
 
 .retainer_coin {
   height: 50px;
