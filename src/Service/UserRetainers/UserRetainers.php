@@ -165,34 +165,6 @@ class UserRetainers
     }
     
     /**
-     * Confirm ownership
-     */
-    public function confirmOwnership()
-    {
-        $retainers = $this->repository->findBy(
-            [ 'confirmed' => false ],
-            [ 'updated' => 'desc' ],
-            50
-        );
-        
-        $console = new ConsoleOutput();
-        $console = $console->section();
-        
-        /** @var UserRetainer $retainer */
-        foreach ($retainers as $retainer) {
-            $console->overwrite("Checking: {$retainer->getName()} on {$retainer->getServer()}");
-            
-            $market = $this->companion->getByServer(
-                $retainer->getServer(),
-                $retainer->getConfirmItem()
-            );
-            
-            print_r($market);
-            die;
-        }
-    }
-    
-    /**
      * This will remove retainers which have not been verified for more than 2 hours.
      */
     public function removeLurkingRetainers()
