@@ -3,6 +3,7 @@ class Modals
     constructor()
     {
         this.modalCover = $('.modal_cover');
+        this.modelCloseButton = $('.modal_close_button');
     }
 
     add(modal, button)
@@ -15,6 +16,11 @@ class Modals
 
         // close modal
         this.modalCover.on('click', event => {
+            this.modalCover.removeClass('open');
+            modal.removeClass('open');
+        });
+
+        this.modelCloseButton.on('click', event => {
             this.modalCover.removeClass('open');
             modal.removeClass('open');
         });

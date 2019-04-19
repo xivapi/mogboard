@@ -129,6 +129,27 @@ table {
   border: solid 1px #000;
   overflow: hidden;
   display: none; }
+  .modal .modal_close_button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: transparent;
+    border: none;
+    color: #aaa;
+    font-size: 24px;
+    line-height: 24px;
+    height: 24px;
+    width: 24px;
+    padding: 0;
+    cursor: pointer;
+    outline: none; }
+    .modal .modal_close_button:hover {
+      color: #fff; }
+    .modal .modal_close_button i {
+      vertical-align: middle;
+      width: 24px;
+      height: 24px;
+      display: inline-block; }
   .modal .table {
     background-color: var(--color5);
     box-shadow: none; }

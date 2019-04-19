@@ -127,7 +127,9 @@
                     {% set item = game().item(itemId) %}
                     <div>
                         <div>
-                            <img src="{{ item.ID|icon2x }}">
+                            <a href="{{ path('item_page', { itemId: itemId }) }}">
+                                <img src="{{ item.ID|icon2x }}">
+                            </a>
                         </div>
                         <div>
                             <div>
