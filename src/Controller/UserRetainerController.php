@@ -47,6 +47,15 @@ class UserRetainerController extends AbstractController
     }
     
     /**
+     * @Route("/retainers/{retainer}/delete", name="retainers_delete")
+     */
+    public function delete(UserRetainer $retainer)
+    {
+        $this->retainers->delete($retainer);
+        return $this->redirectToRoute('user_account_retainers');
+    }
+    
+    /**
      * @Route("/retainers/{slug}", name="retainer_store")
      */
     public function store(string $slug)

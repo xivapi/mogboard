@@ -2566,3 +2566,13 @@ ul, ol {
     right: 0;
     font-size: 13px; }
 
+.retainer_remove {
+  color: var(--red);
+  font-size: 13px;
+  font-weight: bold;
+  float: right;
+  margin-top: 25px;
+  opacity: 0.5; }
+  .retainer_remove:hover {
+    opacity: 1; }
+

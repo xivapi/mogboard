@@ -4,6 +4,7 @@ namespace App\Service\UserRetainers;
 
 use App\Entity\UserRetainer;
 use App\Exceptions\GeneralJsonException;
+use App\Exceptions\UnauthorisedRetainerOwnershipException;
 use App\Repository\UserRetainerRepository;
 use App\Service\Companion\Companion;
 use App\Service\GameData\GameServers;
@@ -157,14 +158,26 @@ class UserRetainers
     /**
      * Save a new or existing alert
      */
-    public function save(UserRetainer $obj)
+    public function save(UserRetainer $userRetainer)
     {
-        $this->em->persist($obj);
+        $this->em->persist($userRetainer);
         $this->em->flush();
         return true;
     }
     
-
+    /**
+     * Delete a retainer
+     */
+    public function delete(UserRetainer $userRetainer)
+    {
+        if ($userRetainer->getUser() !== $this->users->getUser()) {
+            throw new UnauthorisedRetainerOwnershipException();
+        }
+        
+        $this->em->remove($userRetainer);
+        $this->em->flush();
+        return true;
+    }
     
     /**
      * This will remove retainers which have not been verified for more than 2 hours.

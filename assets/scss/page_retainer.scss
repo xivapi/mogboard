@@ -106,3 +106,16 @@
         font-size: 13px;
     }
 }
+
+.retainer_remove {
+    color: var(--red);
+    font-size: 13px;
+    font-weight: bold;
+    float: right;
+    margin-top: 25px;
+    opacity: 0.5;
+
+    &:hover {
+        opacity: 1;
+    }
+}

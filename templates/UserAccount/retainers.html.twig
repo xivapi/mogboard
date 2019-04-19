@@ -53,6 +53,7 @@
                         </div>
                         {% else %}
                             <button class="retainer_confirm" data-id="{{ retainer.id }}">Confirm Ownership</button>
+                            <a href="{{ path('retainers_delete', { retainer: retainer.id }) }}" class="retainer_remove">REMOVE RETAINER</a>
                         {% endif %}
                     </div>
                     {% endif %}
