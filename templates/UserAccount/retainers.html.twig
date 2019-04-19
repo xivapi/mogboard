@@ -20,6 +20,7 @@
                     {% if retainer.confirmed %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> Verified</span>{% endif %}
                     {% if retainer.apiRetainerId %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> XIVAPI Linked</span>{% endif %}
 
+                    <a href="{{ path('retainers_delete', { retainer: retainer.id }) }}" class="retainer_remove">REMOVE</a>
                     <small class="fr">Updated: {{ retainer.updated|date }}</small>
 
                     {% if retainer.confirmed %}
@@ -53,7 +54,6 @@
                         </div>
                         {% else %}
                             <button class="retainer_confirm" data-id="{{ retainer.id }}">Confirm Ownership</button>
-                            <a href="{{ path('retainers_delete', { retainer: retainer.id }) }}" class="retainer_remove">REMOVE RETAINER</a>
                         {% endif %}
                     </div>
                     {% endif %}

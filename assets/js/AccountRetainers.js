@@ -6,6 +6,8 @@ class AccountRetainers
 {
     constructor()
     {
+        this.stateAdding = false;
+
         this.uiAddRetainerResponse = $('.retainer_add_response');
         this.uiItemSearchResponse = $('.retainer_item_search_response');
     }
@@ -127,6 +129,10 @@ class AccountRetainers
 
         // add retainer clicked
         $button.on('click', event => {
+            if (this.stateAdding) {
+                return;
+            }
+
             // grab entered info
             const retainer = {
                 name: $('#retainer_string').val().trim(),
@@ -140,6 +146,7 @@ class AccountRetainers
             }
 
             ButtonLoading.start($button);
+            this.stateAdding = true;
 
             $.ajax({
                 url: mog.urls.retainers.add,
@@ -161,6 +168,7 @@ class AccountRetainers
                     console.error(a,b,c);
                 },
                 complete: () => {
+                    this.stateAdding = false;
                     this.uiAddRetainerResponse.html('');
                     ButtonLoading.finish($button);
                 }

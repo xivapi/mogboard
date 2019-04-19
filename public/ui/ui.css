@@ -2359,15 +2359,19 @@ ul, ol {
     line-height: 22px; }
 
 .retainer-gilcheck {
-  border: solid 1px #444;
+  border: solid 1px var(--highlight);
   border-radius: 4px;
   padding: 6px;
   display: inline-block;
   background-color: transparent;
   color: var(--highlight);
-  font-size: 18px;
-  margin: 0 8px;
-  width: 120px; }
+  font-size: 17px;
+  margin: 0 5px;
+  width: 120px;
+  outline: none;
+  text-align: center; }
+  .retainer-gilcheck:hover {
+    background-color: var(--dark-blue2); }
 
 .alerts > small {
   opacity: 0.5;
@@ -2589,10 +2593,9 @@ ul, ol {
 
 .retainer_remove {
   color: var(--red);
-  font-size: 13px;
   font-weight: bold;
   float: right;
-  margin-top: 25px;
+  margin: 0 0 0 20px;
   opacity: 0.5; }
   .retainer_remove:hover {
     opacity: 1; }

@@ -280,15 +280,21 @@
 }
 
 .retainer-gilcheck {
-    border: solid 1px #444;
+    border: solid 1px var(--highlight);
     border-radius: 4px;
     padding: 6px;
     display: inline-block;
     background-color: transparent;
     color: var(--highlight);
-    font-size: 18px;
-    margin: 0 8px;
+    font-size: 17px;
+    margin: 0 5px;
     width: 120px;
+    outline: none;
+    text-align: center;
+
+    &:hover {
+        background-color: var(--dark-blue2);
+    }
 }
 
 //

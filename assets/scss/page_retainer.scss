@@ -109,10 +109,9 @@
 
 .retainer_remove {
     color: var(--red);
-    font-size: 13px;
     font-weight: bold;
     float: right;
-    margin-top: 25px;
+    margin: 0 0 0 20px;
     opacity: 0.5;
 
     &:hover {
