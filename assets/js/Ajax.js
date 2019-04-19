@@ -1,3 +1,5 @@
+import Popup from './Popup';
+
 class Ajax
 {
     /**
