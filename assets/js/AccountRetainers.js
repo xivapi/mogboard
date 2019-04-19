@@ -66,7 +66,7 @@ class AccountRetainers
             const string = $input.val().trim();
             clearTimeout(timeout);
 
-            if (string.length < 2) {
+            if (string.length < 2 || string == searched) {
                 return;
             }
 
