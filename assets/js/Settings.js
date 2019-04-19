@@ -27,9 +27,12 @@ class Settings
             language = this.getLanguage(),
             timezone = this.getTimezone();
 
+        language = language ? language : this.defaultTimezone;
+        timezone = timezone ? timezone : this.defaultTimezone;
+
         // set default language, this isn't as precious as server
-        this.setLanguage(this.defaultLanguage);
-        this.setTimezone(this.defaultTimezone);
+        this.setLanguage(language);
+        this.setTimezone(timezone);
 
         // if not set, ask to set
         if (server === null || server.length === 0) {
@@ -85,6 +88,7 @@ class Settings
 
     setLanguage(language)
     {
+        console.log('lang = ' + language);
         localStorage.setItem(this.storageKeyLanguage, language);
         Cookie.set(this.storageKeyLanguage, language, { expires: 365, path: '/' });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Service\Common;
 
+use Delight\Cookie\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -18,9 +19,15 @@ class Language
         'kr',
         'cn'
     ];
-
+    const LANGUAGES_ACTIVE = [
+        'en',
+        'de',
+        'fr',
+        'ja',
+    ];
+    
     private static $lang = self::DEFAULT;
-
+    
     /**
      * Confirm a language param provided is legit
      */
@@ -29,22 +36,22 @@ class Language
         if (in_array($language, self::LANGUAGES)) {
             return $language;
         }
-
+        
         return self::DEFAULT;
     }
     
     /**
      * Set the language for the API
      */
-    public static function set(Request $request): void
+    public static function register(Request $request): void
     {
-        self::$lang = $request->get('language') ?? self::DEFAULT;
+        self::$lang = $request->get('language') ?? self::userLanguage();
         
         if (!in_array(self::$lang, self::LANGUAGES)) {
-            self::$lang = self::DEFAULT;
+            self::$lang = self::userLanguage();
         }
     }
-
+    
     /**
      * Return the current language
      */
@@ -59,7 +66,7 @@ class Language
     public static function handle($data, string $language = null)
     {
         $language = substr(strtolower($language ?: self::$lang), 0, 2);
-
+        
         if (!in_array($language, self::LANGUAGES)) {
             $language = self::LANGUAGES[0];
         }
@@ -78,5 +85,13 @@ class Language
         }
         
         return $data;
+    }
+    
+    /**
+     * Get the users language
+     */
+    public static function userLanguage()
+    {
+        return Cookie::get('mogboard_language') ?: self::DEFAULT;
     }
 }
