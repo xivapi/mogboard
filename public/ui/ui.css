@@ -2093,6 +2093,16 @@ ul, ol {
     font-size: 15px;
     color: #afffa1;
     text-align: right; }
+  .product_table table .price-diff {
+    color: #888; }
+    .product_table table .price-diff.price-diff-bad {
+      color: #90482e; }
+    .product_table table .price-diff.price-diff-good {
+      color: #17875b; }
+    .product_table table .price-diff.price-diff-oopz {
+      color: #277f95; }
+  .product_table table .price-diff-oops td {
+    background-color: rgba(62, 74, 133, 0.35); }
   .product_table table .price-retainer,
   .product_table table .price-creator,
   .product_table table .price-buyer,

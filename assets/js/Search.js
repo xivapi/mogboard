@@ -12,7 +12,7 @@ class Search
         this.uiLazy = null;
 
         this.timeout = null;
-        this.timeoutDelay = 350;
+        this.timeoutDelay = 200;
         this.searching = false;
         this.searchTerm = null;
     }

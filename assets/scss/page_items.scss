@@ -885,6 +885,28 @@
             text-align: right;
         }
 
+        .price-diff {
+            color: #888;
+
+            &.price-diff-bad {
+                color: #90482e;
+            }
+
+            &.price-diff-good {
+                color: #17875b;
+            }
+
+            &.price-diff-oopz {
+                color: #277f95;
+            }
+        }
+
+        .price-diff-oops {
+            td {
+                background-color: rgba(62, 74, 133, 0.35);
+            }
+        }
+
         .price-retainer,
         .price-creator,
         .price-buyer,

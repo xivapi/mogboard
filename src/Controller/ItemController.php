@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use XIVAPI\XIVAPI;
 
 class ItemController extends AbstractController
 {
@@ -36,6 +37,8 @@ class ItemController extends AbstractController
     private $userLists;
     /** @var ItemPopularity */
     private $itemPopularity;
+    /** @var XIVAPI */
+    private $xivapi;
     
     public function __construct(
         EntityManagerInterface $em,
@@ -47,14 +50,15 @@ class ItemController extends AbstractController
         UserLists $userLists,
         ItemPopularity $itemPopularity
     ) {
-        $this->em = $em;
-        $this->gameDataSource = $gameDataSource;
-        $this->companion = $companion;
-        $this->companionCensus = $companionCensus;
-        $this->users = $users;
-        $this->userAlerts = $userAlerts;
-        $this->userLists = $userLists;
-        $this->itemPopularity = $itemPopularity;
+        $this->em               = $em;
+        $this->gameDataSource   = $gameDataSource;
+        $this->companion        = $companion;
+        $this->companionCensus  = $companionCensus;
+        $this->users            = $users;
+        $this->userAlerts       = $userAlerts;
+        $this->userLists        = $userLists;
+        $this->itemPopularity   = $itemPopularity;
+        $this->xivapi           = new XIVAPI();
     }
     
     /**
@@ -96,8 +100,13 @@ class ItemController extends AbstractController
 
         // todo - this is temp as there is no balmung data
         unset($market->Balmung);
-
-        $apiStats   = Arrays::stdClassToArray(Redis::Cache()->get('stats_CompanionUpdateStatistics'));
+        
+        // get market status
+        $apiStats = Redis::Cache()->get('mogboard_companion_update_stats');
+        if ($apiStats == null) {
+            $apiStats = $this->xivapi->market->stats();
+            Redis::Cache()->set('mogboard_companion_update_stats', $apiStats);
+        }
         
         // build census
         $census = Redis::Cache()->get("census_{$dc}_{$itemId}");
@@ -111,10 +120,17 @@ class ItemController extends AbstractController
         // add to recently viewed
         $this->userLists->handleRecentlyViewed($itemId);
         
+        // work out cheapest per server
+        $cheapest = [];
+        foreach ($market as $server => $m) {
+            $cheapest[$server] = $m->Prices[0]->PricePerUnit;
+        }
+
         // response
         $data = [
             'item'      => $item,
             'market'    => $market,
+            'cheapest'  => $cheapest,
             'census'    => $census,
             'recipes'   => $recipes,
             'faved'     => $user ? $user->hasFavouriteItem($itemId) : false,
