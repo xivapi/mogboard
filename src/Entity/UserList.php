@@ -143,7 +143,7 @@ class UserList
         return $this;
     }
     
-    public function getCustomType(): int
+    public function getCustomType(): ?int
     {
         return $this->customType;
     }
