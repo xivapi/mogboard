@@ -33,7 +33,7 @@ class AccountRetainers
                 url: mog.urls.retainers.confirm.replace('-id-', id),
                 success: response => {
                     if (response == false) {
-                        Popup.error('Not yet!', 'Could not find your retainer on the market board for the chosen item. <br><br> It may be that Companion has not yet synchronised with the game servers. <br><br> Try again in 15 minutes or contact Vekien on discord for help!');
+                        Popup.error('Not yet!', 'Could not find your retainer on the market board for the chosen item. It may be that Companion has not yet synchronised with the game servers. <br><br> Try again in 15 minutes or contact Vekien on discord for help!');
                         return;
                     }
 
@@ -66,30 +66,28 @@ class AccountRetainers
             const string = $input.val().trim();
             clearTimeout(timeout);
 
-            if (searched === string) {
+            if (string.length < 2) {
                 return;
             }
 
-            searched = string;
             this.uiItemSearchResponse.html('<div align="center"><img src="/i/svg/loading3.svg" height="32"></div>');
 
             timeout = setTimeout(() => {
-                if (string.length > 1) {
-                    xivapi.searchLimited(string, response => {
-                        if (response.Pagination.Results == 0) {
-                            this.uiItemSearchResponse.html('<p>Could not find an item</p>');
-                            return;
-                        }
+                xivapi.searchLimited(string, response => {
+                    searched = string;
+                    if (response == null || response.Pagination.Results == 0) {
+                        this.uiItemSearchResponse.html('<p>Could not find an item</p>');
+                        return;
+                    }
 
-                        this.uiItemSearchResponse.html('');
-                        response.Results.forEach(item => {
-                            this.uiItemSearchResponse.append(
-                                `<button class="item_button" data-id="${item.ID}">${item.Name}</button>`
-                            );
-                        });
-                    })
-                }
-            }, 500);
+                    this.uiItemSearchResponse.html('');
+                    response.Results.forEach(item => {
+                        this.uiItemSearchResponse.append(
+                            `<button class="item_button" data-id="${item.ID}">${item.Name}</button>`
+                        );
+                    });
+                })
+            }, 250);
         });
 
         this.uiItemSearchResponse.on('click', 'button', event => {
