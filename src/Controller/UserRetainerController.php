@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use XIVAPI\XIVAPI;
 
 class UserRetainerController extends AbstractController
 {
@@ -50,14 +51,32 @@ class UserRetainerController extends AbstractController
      */
     public function store(string $slug)
     {
-        $retainer = $this->retainers->getSlugRetainer($slug);
+        $isStoreSlug = substr($slug, 0, 3) == 'mb-';
+    
+        /** @var UserRetainer $retainer */
+        $retainer = $isStoreSlug
+            ? $this->retainers->getSlugRetainer($slug)
+            : $this->retainers->getCompanionApiRetainer($slug);
         
+        if ($isStoreSlug && $retainer === null) {
+            throw new NotFoundHttpException('Could not find a retainer for this slug.');
+        }
+        
+        $xivapi = new XIVAPI();
+        $items  = $xivapi->market->retainer(
+            $retainer ? $retainer->getApiRetainerId() : $slug
+        );
+        
+        // if no retainer, find name from 1st item and make a temp user retainer object
         if ($retainer === null) {
-            throw new NotFoundHttpException("Could not find a retainer for that url.");
+            $name = $items[0]->Prices[0]->RetainerName;
+            $retainer = new UserRetainer();
+            $retainer->setName($name);
         }
         
         return $this->render('UserRetainers/index.html.twig', [
-            'retainer' => $retainer
+            'retainer' => $retainer,
+            'items'    => $items
         ]);
     }
 }

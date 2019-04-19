@@ -3,19 +3,43 @@
 {% block body %}
     <div class="page-retainer">
         <h1>{{ retainer.name }}</h1>
-        <small>{{ retainer.server }}</small>
+        <small>
+            {% if retainer.confirmed %}
+                {{ retainer.server }}
+                {# Status #}
+
+                {% if retainer.confirmed %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> Verified</span>{% endif %}
+                {% if retainer.apiRetainerId %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> XIVAPI Linked</span>{% endif %}
+            {% else %}
+                Retainer not linked to any account.
+            {% endif %}
+        </small>
 
         <div class="page-retainer-store">
-            <h3>Items for sale:</h3>
-            <p>[todo]</p>
-        </div>
+            {% for listing in items %}
+                {% set item = game().item(listing.Item.ID) %}
+                <div class="flex retainer-item">
+                    <div class="flex_5">
+                        <img src="{{ item.ID|icon2x }}" class="retainer-item-icon">
+                    </div>
+                    <div class="flex_95 flex retainer-item-details">
+                        <h3 class="rarity-{{ item.Rarity }}">
+                            {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                            {{ item.Name }}
+                        </h3>
+                        <span class="retainer-item-info">
+                                {{ item.ItemKind.Name }} - {{ item.ItemSearchCategory.Name }}
+                            </span>
+                    </div>
+                </div>
 
+                {% include 'Product/prices.html.twig' with {
+                    'prices': listing.Prices,
+                } %}
 
-        <div class="page-footer">
-            <h4>Share this list</h4>
-            <div class="form">
-                <input type="text" class="full" value="{{ app.request.getSchemeAndHttpHost() }}{{ path('retainer_store', { slug: retainer.slug }) }}">
-            </div>
+                <br><br><br>
+
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

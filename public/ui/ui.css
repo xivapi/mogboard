@@ -2516,6 +2516,20 @@ ul, ol {
 .page-retainer-store {
   padding: 30px; }
   .page-retainer-store h3 {
-    font-size: 24px;
-    color: var(--color8); }
+    font-size: 20px;
+    display: inline-block;
+    margin: 0 20px 0 0; }
+  .page-retainer-store .retainer-item {
+    margin-bottom: 10px;
+    height: 36px;
+    line-height: 36px; }
+  .page-retainer-store .retainer-item-details {
+    padding-left: 20px; }
+  .page-retainer-store .retainer-item-info {
+    color: #888; }
+  .page-retainer-store .retainer-item-icon {
+    height: 36px;
+    width: 36px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #000; }
 

@@ -14,12 +14,16 @@
                     <img src="/i/game/coin2.png" class="retainer_coin {{ retainer.confirmed ? '' : 'unconfirmed' }}">
                 </div>
                 <div class="flex_90">
-                    <h4 class="ret_name">{{ retainer.name }}</h4>
+                    <h4 class="ret_name">{{ retainer ? retainer.name : '' }}</h4>
+
+                    {# Status #}
                     {% if retainer.confirmed %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> Verified</span>{% endif %}
+                    {% if retainer.apiRetainerId %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> XIVAPI Linked</span>{% endif %}
+
                     <small class="fr">Updated: {{ retainer.updated|date }}</small>
 
                     {% if retainer.confirmed %}
-                        <p><strong class="text-highlight">Retainer Options:</strong></p>
+                        <br><br>
                         <ul>
                             <li>
                                 <h6><a href="{{ path('retainer_store', { slug: retainer.slug }) }}">View Shop</a></h6>

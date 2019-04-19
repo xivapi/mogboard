@@ -47,7 +47,7 @@
                 <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
                 <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
                 <td class="price-retainer">
-                    <a href="#" data-tippy-content="{{ row.RetainerID }}">{{ row.RetainerName }}</a>
+                    <a href="{{ path('retainer_store', { slug: row.RetainerID }) }}" data-tippy-content="{{ row.RetainerID }}">{{ row.RetainerName }}</a>
                     <img src="{{ cityflags[row.TownID]|icon }}" class="price-city-flag">
                 </td>
                 <td class="price-creator">

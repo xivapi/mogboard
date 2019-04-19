@@ -19,12 +19,5 @@
                 </li>
             {% endfor %}
         </ul>
-
-        <div class="page-footer">
-            <h4>Share this list</h4>
-            <div class="form">
-                <input type="text" class="full" value="{{ app.request.getSchemeAndHttpHost() }}{{ path('lists_view', { slug: list.slug }) }}">
-            </div>
-        </div>
     </div>
 {% endblock %}

@@ -73,7 +73,29 @@
     padding: 30px;
 
     h3 {
-        font-size: 24px;
-        color: var(--color8);
+        font-size: 20px;
+        display: inline-block;
+        margin: 0 20px 0 0;
+    }
+
+    .retainer-item {
+        margin-bottom: 10px;
+        height: 36px;
+        line-height: 36px;
+    }
+
+    .retainer-item-details {
+        padding-left: 20px;
+    }
+
+    .retainer-item-info {
+        color: #888;
+    }
+
+    .retainer-item-icon {
+        height: 36px;
+        width: 36px;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px #000;
     }
 }

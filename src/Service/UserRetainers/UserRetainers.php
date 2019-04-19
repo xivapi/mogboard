@@ -7,6 +7,7 @@ use App\Exceptions\GeneralJsonException;
 use App\Repository\UserRetainerRepository;
 use App\Service\Companion\Companion;
 use App\Service\GameData\GameServers;
+use App\Service\ThirdParty\Discord\Discord;
 use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -15,6 +16,9 @@ use XIVAPI\XIVAPI;
 
 class UserRetainers
 {
+    // the maximum amount of time an unconfirmed retainer may exist.
+    const MAX_LURK_TIME = (60 * 60 * 2);
+    
     /** @var EntityManagerInterface */
     private $em;
     /** @var Users */
@@ -56,6 +60,16 @@ class UserRetainers
     {
         return $this->repository->findOneBy([
             'slug' => $slug,
+        ]);
+    }
+    
+    /**
+     * Get a retainer via its apiRetainerId
+     */
+    public function getCompanionApiRetainer(string $apiRetainerId)
+    {
+        return $this->repository->findOneBy([
+            'apiRetainerId' => $apiRetainerId,
         ]);
     }
 
@@ -175,6 +189,66 @@ class UserRetainers
             
             print_r($market);
             die;
+        }
+    }
+    
+    /**
+     * This will remove retainers which have not been verified for more than 2 hours.
+     */
+    public function removeLurkingRetainers()
+    {
+        $retainers = $this->repository->findBy([ 'confirmed' => false ], [ 'added' => 'asc' ]);
+        $deadline  = time() - self::MAX_LURK_TIME;
+        
+        /** @var UserRetainer $retainer */
+        foreach ($retainers as $retainer) {
+            if ($deadline > $retainer->getAdded()) {
+                $this->em->remove($retainer);
+                $this->em->flush();
+            }
+        }
+    }
+    
+    /**
+     * This will link retainers to the companion api ID
+     */
+    public function linkCompanionApiIdentities()
+    {
+        $console = new ConsoleOutput();
+        $console->writeln("Finding retainers on the companion database.");
+        
+        $retainers = $this->repository->findBy(
+            [
+                'confirmed' => true,
+                'apiRetainerId' => '',
+            ],
+            [
+                'updated' => 'desc',
+            ],
+            50
+        );
+        
+        $console->writeln(count($retainers) .' retainers to find.');
+        $console = $console->section();
+        
+        /** @var UserRetainer $retainer */
+        foreach ($retainers as $retainer) {
+            $console->overwrite("Finding: {$retainer->getName()} - {$retainer->getServer()}");
+            
+            // find retainer in companion table
+            $companionData = $this->repository->findRetainerInCompanionTable(
+                $retainer->getName(),
+                GameServers::getServerId($retainer->getServer())
+            );
+            
+            // if it isn't null, assign it!
+            if ($companionData !== null) {
+                $retainer->setApiRetainerId($companionData['id']);
+            }
+            
+            $retainer->setUpdated(time());
+            $this->em->persist($retainer);
+            $this->em->flush();
         }
     }
 }

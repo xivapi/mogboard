@@ -109,7 +109,7 @@ class UserRetainer
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -121,7 +121,7 @@ class UserRetainer
         return $this;
     }
     
-    public function getUniq(): string
+    public function getUniq(): ?string
     {
         return $this->uniq;
     }
@@ -146,8 +146,8 @@ class UserRetainer
 
         // slug = 1a2b-name-server
         $this->slug = strtolower(sprintf(
-            '%s-%s-%s',
-            substr(sha1($this->id), 0, 5),
+            'mb-%s-%s-%s',
+            mt_rand(1111,9999),
             preg_replace("/[^A-Za-z]/", '', strtolower($this->name)),
             $this->server
         ));
@@ -203,7 +203,7 @@ class UserRetainer
         return $this;
     }
 
-    public function getConfirmItem(): int
+    public function getConfirmItem(): ?int
     {
         return $this->confirmItem;
     }
@@ -215,7 +215,7 @@ class UserRetainer
         return $this;
     }
 
-    public function getConfirmPrice(): int
+    public function getConfirmPrice(): ?int
     {
         return $this->confirmPrice;
     }
@@ -227,7 +227,7 @@ class UserRetainer
         return $this;
     }
 
-    public function getUpdated(): int
+    public function getUpdated(): ?int
     {
         return $this->updated;
     }
