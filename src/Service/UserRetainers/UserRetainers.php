@@ -194,7 +194,7 @@ class UserRetainers
         $retainers = $this->repository->findBy(
             [
                 'confirmed' => true,
-                'apiRetainerId' => '',
+                'apiRetainerId' => null,
             ],
             [
                 'updated' => 'desc',
