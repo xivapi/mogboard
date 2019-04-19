@@ -67,7 +67,7 @@ class UserRetainerController extends AbstractController
          */
         try {
             $apiRetainer  = (new XIVAPI())->market->retainer(
-                $retainer->hasApiRetainerId() ? $retainer->getApiRetainerId() : $slug
+                ($retainer && $retainer->hasApiRetainerId()) ? $retainer->getApiRetainerId() : $slug
             );
         } catch (\Exception $ex) {
             $apiRetainer = null;

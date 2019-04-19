@@ -9,7 +9,7 @@
 <div data-simplebar class="item-category-list" id="item-category-list">
     {% for item in items %}
     <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">
-        <span><img src="http://xivapi.com/mb/loading.svg" class="lazy" data-src="{{ item.Icon|icon }}"></span>
+        <span><img src="https://xivapi.com/mb/loading.svg" class="lazy" data-src="{{ item.Icon|icon }}"></span>
         <span class="item-level">{{ item.LevelItem }}</span>
         {{ item.Name }}
     </a>
