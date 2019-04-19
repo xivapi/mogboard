@@ -128,6 +128,7 @@ class User
     private $characters;
     /**
      * @ORM\OneToMany(targetEntity="UserRetainer", mappedBy="user")
+     * @ORM\OrderBy({"added" = "DESC"})
      */
     private $retainers;
     
