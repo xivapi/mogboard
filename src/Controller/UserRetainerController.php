@@ -61,13 +61,13 @@ class UserRetainerController extends AbstractController
         if ($isStoreSlug && $retainer === null) {
             throw new NotFoundHttpException('Could not find a retainer for this slug.');
         }
-    
+        
         /**
          * Grab the retainer from the API
          */
         try {
             $apiRetainer  = (new XIVAPI())->market->retainer(
-                $retainer ? $retainer->getApiRetainerId() : $slug
+                $retainer->hasApiRetainerId() ? $retainer->getApiRetainerId() : $slug
             );
         } catch (\Exception $ex) {
             $apiRetainer = null;

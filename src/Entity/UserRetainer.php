@@ -272,4 +272,9 @@ class UserRetainer
 
         return $this;
     }
+    
+    public function hasApiRetainerId()
+    {
+        return !empty($this->apiRetainerId);
+    }
 }

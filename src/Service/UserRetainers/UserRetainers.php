@@ -164,6 +164,8 @@ class UserRetainers
         return true;
     }
     
+
+    
     /**
      * This will remove retainers which have not been verified for more than 2 hours.
      */
