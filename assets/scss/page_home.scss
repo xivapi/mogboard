@@ -96,13 +96,13 @@
             position: relative;
 
             > span {
-                transition: 100ms;
+                transition: 150ms cubic-bezier(0.4, 0, 1, 1);
                 display: inline-block;
                 position: relative;
             }
 
             &:hover > span {
-                transform: scale(1.25);
+                transform: scale(1.4);
             }
 
             &.patreon {
