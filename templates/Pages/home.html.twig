@@ -156,18 +156,21 @@
                 </div>
                 <div class="home-row">
                     <h5>Auto-Update Status</h5>
-                    {% for queue in market_stats.Stats.Report %}
-                        <div class="home-mog-queue" data-tippy-content="{{ queue.CycleDiffSec < 300 ? 'Items in this queue are updating <br> as fast as expected.' : 'Items in this queue are updating <br> slower than expected' }}">
-                            <strong>Queue: ({{ queue.Priority }}) {{ queue.Name }}</strong>
+                    {% for queue in [1,2,3,4,5,6,7] %}
+                        {% set report = attribute(market_stats.Stats.Report, queue) %}
+                        <div class="home-mog-queue" data-tippy-content="{{ report.CycleDiffSec < 300 ? 'Items in this queue are updating <br> as fast as expected.' : 'Items in this queue are updating <br> slower than expected' }}">
                             <div class="flex">
                                 <div class="flex_40">
-                                    <small>Items</small>
-                                    {{ queue.Items }}
+                                    <small>({{ report.Priority }}) {{ report.Name }}</small>
+                                    {{ report.Items }} items
                                 </div>
-                                <div class="flex_60">
+                                <div class="flex_35">
                                     <small>Speed</small>
-                                    {{ queue.CycleTimeReal }}
-                                    <span class="{{ queue.CycleDiffSec|replace({ ',': '' }) < 300 ? 'text-green' : 'text-red' }}">{{ queue.CycleDiffSec|title }}</span>
+                                    {{ report.CycleTimeReal }}
+                                </div>
+                                <div class="flex_25">
+                                    <small>On-Time?</small>
+                                    <span class="{{ report.CycleDiffSec|replace({ ',': '' }) < 300 ? 'text-green' : 'text-red' }}">{{ report.CycleDiff }}</span>
                                 </div>
                             </div>
                         </div>

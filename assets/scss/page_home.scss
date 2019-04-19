@@ -175,29 +175,22 @@
     .home-mog-status {
         small {
             font-size: 12px;
+            font-weight: 500;
+            display: block;
             text-transform: uppercase;
             text-shadow: none;
-            color: #999;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        strong {
-            color: var(--highlight2x);
+            color: var(--color9);
+            margin-bottom: 10px;
         }
 
         .home-mog-queue {
-            font-size: 12px;
-            margin-bottom: 20px;
-
-            > strong {
-                display: block;
-                margin-bottom: 5px;
-            }
+            font-size: 14px;
+            background-color: rgba(20,20,20,0.3);
+            margin: 0 -15px;
+            padding: 15px;
 
             span {
                 display: inline-block;
-                float: right;
             }
         }
     }

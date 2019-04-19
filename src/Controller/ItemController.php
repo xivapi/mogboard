@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UserAlert;
-use App\Service\Common\Arrays;
+use App\Service\Companion\CompanionStatistics;
 use App\Service\GameData\GameDataSource;
 use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
@@ -29,6 +29,8 @@ class ItemController extends AbstractController
     private $companion;
     /** @var Companion */
     private $companionCensus;
+    /** @var CompanionStatistics */
+    private $companionStatistics;
     /** @var Users */
     private $users;
     /** @var UserAlerts */
@@ -45,20 +47,22 @@ class ItemController extends AbstractController
         GameDataSource $gameDataSource,
         Companion $companion,
         CompanionCensus $companionCensus,
+        CompanionStatistics $companionStatistics,
         Users $users,
         UserAlerts $userAlerts,
         UserLists $userLists,
         ItemPopularity $itemPopularity
     ) {
-        $this->em               = $em;
-        $this->gameDataSource   = $gameDataSource;
-        $this->companion        = $companion;
-        $this->companionCensus  = $companionCensus;
-        $this->users            = $users;
-        $this->userAlerts       = $userAlerts;
-        $this->userLists        = $userLists;
-        $this->itemPopularity   = $itemPopularity;
-        $this->xivapi           = new XIVAPI();
+        $this->em                  = $em;
+        $this->gameDataSource      = $gameDataSource;
+        $this->companion           = $companion;
+        $this->companionCensus     = $companionCensus;
+        $this->companionStatistics = $companionStatistics;
+        $this->users               = $users;
+        $this->userAlerts          = $userAlerts;
+        $this->userLists           = $userLists;
+        $this->itemPopularity      = $itemPopularity;
+        $this->xivapi              = new XIVAPI();
     }
     
     /**
@@ -101,13 +105,6 @@ class ItemController extends AbstractController
         // todo - this is temp as there is no balmung data
         unset($market->Balmung);
         
-        // get market status
-        $apiStats = Redis::Cache()->get('mogboard_companion_update_stats');
-        if ($apiStats == null) {
-            $apiStats = $this->xivapi->market->stats();
-            Redis::Cache()->set('mogboard_companion_update_stats', $apiStats);
-        }
-        
         // build census
         $census = Redis::Cache()->get("census_{$dc}_{$itemId}");
         if ($census == null) {
@@ -135,7 +132,7 @@ class ItemController extends AbstractController
             'recipes'   => $recipes,
             'faved'     => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'     => $user ? $user->getCustomLists() : [],
-            'api_stats' => $apiStats,
+            'api_stats' => $this->companionStatistics->stats(),
             'server'    => [
                 'name'       => $server,
                 'dc'         => $dc,

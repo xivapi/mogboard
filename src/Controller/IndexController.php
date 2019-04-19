@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\Companion\CompanionStatistics;
 use App\Service\Items\ItemPopularity;
 use App\Service\Redis\Redis;
 use App\Service\User\Users;
@@ -14,6 +15,8 @@ class IndexController extends AbstractController
 {
     /** @var ItemPopularity */
     private $itemPopularity;
+    /** @var CompanionStatistics */
+    private $companionStatistics;
     /** @var Users */
     private $users;
     /** @var XIVAPI */
@@ -21,11 +24,13 @@ class IndexController extends AbstractController
     
     public function __construct(
         ItemPopularity $itemPopularity,
+        CompanionStatistics $companionStatistics,
         Users $users
     ) {
-        $this->itemPopularity   = $itemPopularity;
-        $this->users            = $users;
-        $this->xivapi           = new XIVAPI();
+        $this->itemPopularity      = $itemPopularity;
+        $this->companionStatistics = $companionStatistics;
+        $this->users               = $users;
+        $this->xivapi              = new XIVAPI();
     }
     
     /**
@@ -33,22 +38,13 @@ class IndexController extends AbstractController
      */
     public function home(Request $request)
     {
+        
+        
         $this->users->setLastUrl($request);
-    
-        /**
-         * Market Statistics
-         * todo - this should have a service
-         */
-        $marketStats = Redis::Cache()->get('mogboard_market_statistics');
-        if (true || $marketStats == null) {
-            $marketStats = $this->xivapi->market->stats();
-            $marketStats->Stats->Report = (array)$marketStats->Stats->Report;
-            Redis::Cache()->set('mogboard_market_statistics', $marketStats);
-        }
 
         return $this->render('Pages/home.html.twig',[
             'popular_items' => $this->itemPopularity->get(),
-            'market_stats'  => $marketStats,
+            'market_stats'  => $this->companionStatistics->stats(),
         ]);
     }
     
