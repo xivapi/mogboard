@@ -50,7 +50,7 @@ class UserList
     private $custom = false;
     /**
      * @var int
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $customType;
     /**
