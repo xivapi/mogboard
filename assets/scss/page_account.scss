@@ -287,6 +287,18 @@
     }
 }
 
+.retainer-gilcheck {
+    border: solid 1px #444;
+    border-radius: 4px;
+    padding: 6px;
+    display: inline-block;
+    background-color: transparent;
+    color: var(--highlight);
+    font-size: 18px;
+    margin: 0 8px;
+    width: 120px;
+}
+
 //
 // Alerts
 //

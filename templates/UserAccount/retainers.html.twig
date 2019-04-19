@@ -36,10 +36,10 @@
                         <strong class="text-highlight">VERIFICATION</strong>
                         <p class="retainer_instructions">
                             Place 1x <span class="text-green">{{ item.Name }}</span>
-                            on the market board for:
-                            <span class="text-highlight">{{ retainer.confirmPrice|number_format }} Gil</span>
+                            for:
+                            <input type="text" class="retainer-gilcheck" value="{{ retainer.confirmPrice }}">
+                            <span class="text-highlight">Gil</span>
                         </p>
-                        <hr>
                         <p>
                             Once your item is on the market board, please allow 15 minutes for the Game Servers
                             to synchronise with the Companion API. You can attempt to confirm ownership every
