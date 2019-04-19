@@ -72,12 +72,6 @@
 .page-retainer-store {
     padding: 30px;
 
-    h3 {
-        font-size: 20px;
-        display: inline-block;
-        margin: 0 20px 0 0;
-    }
-
     .retainer-item {
         margin-bottom: 10px;
         height: 36px;
@@ -86,6 +80,13 @@
 
     .retainer-item-details {
         padding-left: 20px;
+        position: relative;
+
+        a {
+            font-size: 20px;
+            display: inline-block;
+            margin: 0 20px 0 0;
+        }
     }
 
     .retainer-item-info {
@@ -97,5 +98,11 @@
         width: 36px;
         border-radius: 5px;
         box-shadow: 0 1px 3px #000;
+    }
+
+    .retainer-item-updated {
+        position: absolute;
+        right: 0;
+        font-size: 13px;
     }
 }

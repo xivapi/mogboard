@@ -61,22 +61,27 @@ class UserRetainerController extends AbstractController
         if ($isStoreSlug && $retainer === null) {
             throw new NotFoundHttpException('Could not find a retainer for this slug.');
         }
-        
-        $xivapi = new XIVAPI();
-        $items  = $xivapi->market->retainer(
-            $retainer ? $retainer->getApiRetainerId() : $slug
-        );
+    
+        /**
+         * Grab the retainer from the API
+         */
+        try {
+            $apiRetainer  = (new XIVAPI())->market->retainer(
+                $retainer ? $retainer->getApiRetainerId() : $slug
+            );
+        } catch (\Exception $ex) {
+            $apiRetainer = null;
+        }
         
         // if no retainer, find name from 1st item and make a temp user retainer object
         if ($retainer === null) {
-            $name = $items[0]->Prices[0]->RetainerName;
             $retainer = new UserRetainer();
-            $retainer->setName($name);
+            $retainer->setName($apiRetainer->Name)->setServer($apiRetainer->Server);
         }
         
         return $this->render('UserRetainers/index.html.twig', [
-            'retainer' => $retainer,
-            'items'    => $items
+            'retainer'    => $retainer,
+            'apiRetainer' => $apiRetainer
         ]);
     }
 }

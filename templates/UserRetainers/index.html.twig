@@ -6,8 +6,8 @@
         <small>
             {% if retainer.confirmed %}
                 {{ retainer.server }}
-                {# Status #}
 
+                {# Status #}
                 {% if retainer.confirmed %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> Verified</span>{% endif %}
                 {% if retainer.apiRetainerId %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> XIVAPI Linked</span>{% endif %}
             {% else %}
@@ -16,30 +16,38 @@
         </small>
 
         <div class="page-retainer-store">
-            {% for listing in items %}
-                {% set item = game().item(listing.Item.ID) %}
-                <div class="flex retainer-item">
-                    <div class="flex_5">
-                        <img src="{{ item.ID|icon2x }}" class="retainer-item-icon">
-                    </div>
-                    <div class="flex_95 flex retainer-item-details">
-                        <h3 class="rarity-{{ item.Rarity }}">
-                            {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
-                            {{ item.Name }}
-                        </h3>
-                        <span class="retainer-item-info">
+            {% if apiRetainer %}
+                {% for listing in apiRetainer.Items %}
+                    {% set item = game().item(listing.Item.ID) %}
+                    <div class="flex retainer-item">
+                        <div class="flex_5">
+                            <img src="{{ item.ID|icon2x }}" class="retainer-item-icon">
+                        </div>
+                        <div class="flex_95 flex retainer-item-details">
+                            <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">
+                                {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                                {{ item.Name }}
+                            </a>
+                            <span class="retainer-item-info">
                                 {{ item.ItemKind.Name }} - {{ item.ItemSearchCategory.Name }}
                             </span>
+                            <span class="retainer-item-updated">
+                                Updated {{ listing.Updated|date }}
+                            </span>
+                        </div>
                     </div>
-                </div>
 
-                {% include 'Product/prices.html.twig' with {
-                    'prices': listing.Prices,
-                } %}
+                    {% include 'Product/prices.html.twig' with {
+                        'prices': listing.Prices,
+                    } %}
 
-                <br><br><br>
-
-            {% endfor %}
+                    <br><br><br>
+                {% endfor %}
+            {% else %}
+            <div class="alert-red">
+                Retainer is not selling items or the retainer has not yet sync'd onto XIVAPI.
+            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

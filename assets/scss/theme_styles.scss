@@ -66,6 +66,7 @@ a {
 
     &:hover, &:focus {
         color: var(--purple-3x);
+        text-decoration: underline;
     }
 }
 
@@ -888,20 +889,12 @@ ul,ol {
 .flex {
     display: flex;
 
-    .flex_5  { flex: 0 1 5% }
-    .flex_10 { flex: 0 1 10% }
-    .flex_15 { flex: 0 1 15% }
-    .flex_20 { flex: 0 1 20% }
-    .flex_25 { flex: 0 1 25% }
-    .flex_30 { flex: 0 1 30% }
-    .flex_33 { flex: 0 1 33% }
-    .flex_40 { flex: 0 1 40% }
-    .flex_50 { flex: 0 1 50% }
-    .flex_60 { flex: 0 1 60% }
-    .flex_70 { flex: 0 1 70% }
-    .flex_80 { flex: 0 1 80% }
-    .flex_90 { flex: 0 1 90% }
-    .flex_100{ flex: 0 1 100% }
+    @for $i from 1 through 20 {
+        .flex_#{$i * 5} {
+            flex: 0 1 $i * 5%;
+        }
+    }
+
 }
 
 //
