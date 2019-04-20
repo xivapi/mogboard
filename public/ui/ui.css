@@ -1333,6 +1333,9 @@ ul, ol {
   position: relative; }
   .site.left-nav-off {
     margin-left: 0; }
+  @media (max-width: 81.24em) {
+    .site {
+      margin-left: 0; } }
 
 aside {
   min-height: 100vh;
@@ -1345,6 +1348,9 @@ aside {
   width: 250px;
   overflow: hidden;
   box-shadow: 0 1px 3px #000; }
+  @media (max-width: 81.24em) {
+    aside {
+      display: none; } }
   aside > div {
     height: 100%; }
   aside hr {

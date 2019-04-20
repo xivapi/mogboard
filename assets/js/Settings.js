@@ -12,7 +12,7 @@ class Settings
 
         this.defaultLanguage      = 'en';
         this.defaultTimezone      = 'Europe/London';
-        this.defaultLeftNav       = 'on';
+        this.defaultLeftNav       = 'off';
         this.defaultHomeWorld     = 'no';
 
         this.storageKeyServer     = 'mogboard_server';

@@ -9,6 +9,11 @@
     &.left-nav-off {
         margin-left: 0;
     }
+
+
+    @include mq($until: wide) {
+        margin-left: 0;
+    }
 }
 
 aside {
@@ -22,6 +27,10 @@ aside {
     width: 250px;
     overflow: hidden;
     box-shadow: 0 1px 3px #000;
+
+    @include mq($until: wide) {
+        display: none;
+    }
 
     > div {
         height: 100%;
