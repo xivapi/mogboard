@@ -160,7 +160,7 @@ table {
   .modal label {
     display: block;
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 500;
     margin-bottom: 8px;
     color: #fff; }
   .modal p {
@@ -184,9 +184,12 @@ table {
   .modal ul li {
     line-height: 24px; }
   .modal .row {
-    padding: 20px; }
+    padding: 20px;
+    text-shadow: none; }
     .modal .row.row_top {
       border-bottom: solid 1px #000; }
+    .modal .row.row-alert {
+      background-color: rgba(75, 0, 20, 0.5); }
   .modal .modal_row {
     padding: 20px;
     border-bottom: solid 1px #000; }

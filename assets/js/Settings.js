@@ -7,56 +7,62 @@ class Settings
 {
     constructor()
     {
-        this.uiModal            = $('.modal_settings');
-        this.uiModalButton      = $('.btn-settings');
+        this.uiModal              = $('.modal_settings');
+        this.uiModalButton        = $('.btn-settings');
 
-        this.defaultLanguage    = 'en';
-        this.defaultTimezone    = 'UTC';
-        this.defaultLeftNav     = 'on';
+        this.defaultLanguage      = 'en';
+        this.defaultTimezone      = 'Europe/London';
+        this.defaultLeftNav       = 'on';
+        this.defaultHomeWorld     = 'no';
 
-        this.storageKeyServer   = 'mogboard_server';
-        this.storageKeyLanguage = 'mogboard_language';
-        this.storageKeyTimezone = 'mogboard_timezone';
-        this.storageKeyLeftNav  = 'mogboard_leftnav';
+        this.storageKeyServer     = 'mogboard_server';
+        this.storageKeyLanguage   = 'mogboard_language';
+        this.storageKeyTimezone   = 'mogboard_timezone';
+        this.storageKeyLeftNav    = 'mogboard_leftnav';
+        this.storageKeyHomeWorld  = 'mogboard_homeworld';
 
-        this.server             = this.getServer();
-        this.language           = this.getLanguage();
-        this.timezone           = this.getTimezone();
-        this.leftnav            = this.getLeftNav();
+        this.server               = this.getServer();
+        this.language             = this.getLanguage();
+        this.timezone             = this.getTimezone();
+        this.leftnav              = this.getLeftNav();
+        this.homeworld            = this.getHomeWorld();
     }
 
     init()
     {
-        let server   = this.getServer(),
-            language = this.getLanguage(),
-            timezone = this.getTimezone(),
-            leftnav  = this.getLeftNav();
+        let server    = this.getServer(),
+            language  = this.getLanguage(),
+            timezone  = this.getTimezone(),
+            leftnav   = this.getLeftNav(),
+            homeworld = this.getHomeWorld();
 
         language = language ? language : this.defaultLanguage;
         timezone = timezone ? timezone : this.defaultTimezone;
         leftnav  = leftnav ? leftnav : this.defaultLeftNav;
-
-        console.log(leftnav);
+        homeworld  = homeworld ? homeworld : this.defaultHomeWorld;
 
         // if not set, ask to set
         if (server === null || server.length === 0) {
             setTimeout(() => {
                 this.uiModalButton.trigger('click');
             }, 500);
-
-            return;
+        } else {
+            this.setServer(server);
         }
 
-        this.setServer(server);
         this.setLanguage(language);
         this.setTimezone(timezone);
         this.setLeftNav(leftnav);
+        this.setHomeWorld(homeworld);
+
+        console.log(homeworld);
 
         // set selected items
         this.uiModal.find('select.servers').val(server);
         this.uiModal.find('select.languages').val(language);
         this.uiModal.find('select.timezones').val(timezone);
         this.uiModal.find('select.leftnav').val(leftnav);
+        this.uiModal.find('select.homeworld').val(homeworld);
     }
 
     watch()
@@ -78,60 +84,88 @@ class Settings
             this.setTimezone($(event.currentTarget).val());
         });
 
-        // timezone select
+        // left-nav select
         this.uiModal.find('.leftnav').on('change', event => {
             this.setLeftNav($(event.currentTarget).val());
         });
 
+        // home world tab select
+        this.uiModal.find('.homeworld').on('change', event => {
+            this.setHomeWorld($(event.currentTarget).val());
+        });
+
+        // click save
         this.uiModal.find('.btn-green').on('click', event => {
             Popup.success('Settings Saved', 'Refreshing site, please wait...');
             location.reload(true);
         })
     }
 
+    getLocalStorageSetting(key, defaultValue)
+    {
+        const value = localStorage.getItem(key);
+
+        if (value) {
+            return value;
+        }
+
+        return defaultValue;
+    }
+
+    setLocalStorageSetting(key, value)
+    {
+        localStorage.setItem(key, value);
+        Cookie.set(key, value, { expires: 365, path: '/' });
+    }
+
     setServer(server)
     {
-        localStorage.setItem(this.storageKeyServer, server);
-        Cookie.set(this.storageKeyServer, server, { expires: 365, path: '/' });
+        this.setLocalStorageSetting(this.storageKeyServer, server);
     }
 
     getServer()
     {
-        return localStorage.getItem(this.storageKeyServer);
+        return this.getLocalStorageSetting(this.storageKeyServer, null);
     }
 
     setLanguage(language)
     {
-        localStorage.setItem(this.storageKeyLanguage, language);
-        Cookie.set(this.storageKeyLanguage, language, { expires: 365, path: '/' });
+        this.setLocalStorageSetting(this.storageKeyLanguage, language);
     }
 
     getLanguage()
     {
-        return localStorage.getItem(this.storageKeyLanguage);
+        return this.getLocalStorageSetting(this.storageKeyLanguage, this.defaultLanguage);
     }
 
     setTimezone(timezone)
     {
-        localStorage.setItem(this.storageKeyTimezone, timezone);
-        Cookie.set(this.storageKeyTimezone, timezone, { expires: 365, path: '/' });
+        this.setLocalStorageSetting(this.storageKeyTimezone, timezone);
     }
 
     getTimezone()
     {
-        return localStorage.getItem(this.storageKeyTimezone);
+        return this.getLocalStorageSetting(this.storageKeyTimezone, this.defaultTimezone);
     }
 
     setLeftNav(leftnav)
     {
-        console.log(leftnav);
-        localStorage.setItem(this.storageKeyLeftNav, leftnav);
-        Cookie.set(this.storageKeyLeftNav, leftnav, { expires: 365, path: '/' });
+        this.setLocalStorageSetting(this.storageKeyLeftNav, leftnav);
     }
 
     getLeftNav()
     {
-        return localStorage.getItem(this.storageKeyLeftNav);
+        return this.getLocalStorageSetting(this.storageKeyLeftNav, this.defaultLeftNav);
+    }
+
+    setHomeWorld(homeworld)
+    {
+        this.setLocalStorageSetting(this.storageKeyHomeWorld, homeworld);
+    }
+
+    getHomeWorld()
+    {
+        return this.getLocalStorageSetting(this.storageKeyHomeWorld, this.defaultHomeWorld);
     }
 }
 

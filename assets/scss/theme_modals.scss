@@ -71,7 +71,7 @@
     label {
         display: block;
         font-size: 18px;
-        font-weight: 300;
+        font-weight: 500;
         margin-bottom: 8px;
         color: #fff;
     }
@@ -103,9 +103,14 @@
 
     .row {
         padding: 20px;
+        text-shadow: none;
 
         &.row_top {
             border-bottom: solid 1px #000;
+        }
+
+        &.row-alert {
+            background-color: rgba(75, 0, 20, 0.5);
         }
     }
 

@@ -31,14 +31,14 @@
 </head>
 <body>
     <div class="site-container">
-        {% if cookie('mogboard_leftnav') == 'on' %}
+        {% if cookie('mogboard_leftnav', 'on') == 'on' %}
         <aside>
             <div data-simplebar>
                 {% include 'nav.html.twig' %}
             </div>
         </aside>
         {% endif %}
-        <div class="site left-nav-{{ cookie('mogboard_leftnav') }}">
+        <div class="site left-nav-{{ cookie('mogboard_leftnav', 'on') }}">
             <header>{% include 'header.html.twig' %}</header>
             <main>{% block body %}{% endblock %}</main>
             <footer>{% include 'footer.html.twig' %}</footer>

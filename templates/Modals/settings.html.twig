@@ -6,9 +6,9 @@
         <strong>Changes will take affect after a page refresh.</strong>
     </div>
 
-    <div class="row row_top">
+    <div class="row row_top {{ cookie('mogboard_server') == '' ? 'row-alert' : '' }}">
         <label for="servers">Server</label>
-        <p>Choose your primary server, this will also set your Data-Center.</p>
+        <p>Choose your primary server, this also sets your DC.</p>
         <div class="form">
             <select id="servers" class="servers">
                 <option disabled selected>- Please Choose a Server -</option>
@@ -50,12 +50,22 @@
         </div>
     </div>
     <div class="row row_top">
-        <label for="timezones">Left Navigation</label>
+        <label for="leftnav">Left Navigation</label>
         <p>Use the stickied left navigation?</p>
         <div class="form">
             <select id="leftnav" class="leftnav">
                 <option value="on">Yes</option>
                 <option value="off">No</option>
+            </select>
+        </div>
+    </div>
+    <div class="row row_top">
+        <label for="homeworld">Default Home World</label>
+        <p>Default to Home-World instead of Cross-World on items.</p>
+        <div class="form">
+            <select id="homeworld" class="homeworld">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
             </select>
         </div>
     </div>
