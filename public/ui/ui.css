@@ -129,6 +129,14 @@ table {
   border: solid 1px #000;
   overflow: hidden;
   display: none; }
+  @media (max-width: 62.49em) {
+    .modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 0;
+      transform: translate(0, 0); } }
   .modal .modal_close_button {
     position: absolute;
     right: 10px;
@@ -601,7 +609,16 @@ header {
   @media (max-width: 62.49em) {
     header {
       display: block;
-      border-bottom: solid 2px var(--default); } }
+      background: #2d2d2d;
+      background: -moz-linear-gradient(top, #2d2d2d 0%, #1c1c1c 100%);
+      background: -webkit-linear-gradient(top, #2d2d2d 0%, #1c1c1c 100%);
+      background: linear-gradient(to bottom, #2d2d2d 0%, #1c1c1c 100%);
+      position: fixed;
+      z-index: 1000;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      box-shadow: 0 0 10px #000; } }
   header > div {
     padding: 30px 30px 20px 30px; }
     @media (max-width: 62.49em) {
@@ -613,18 +630,20 @@ header {
     @media (max-width: 62.49em) {
       header > div:first-of-type {
         flex: none;
-        padding-bottom: 0; } }
+        padding: 5px; } }
     header > div:first-of-type > div {
       flex: 0 1 auto;
       padding-right: 10px; }
-      @media (max-width: 62.49em) {
-        header > div:first-of-type > div:nth-of-type(1) {
-          flex: 0 1 60px; }
-        header > div:first-of-type > div:nth-of-type(2) {
-          flex: 0 1 calc(100% - 60px - 64px);
-          padding-right: 25px; }
-        header > div:first-of-type > div:nth-of-type(3) {
-          flex: 0 1 64px; } }
+      @media (max-width: 46.24em) {
+        header > div:first-of-type > div {
+          padding-right: 0; }
+          header > div:first-of-type > div:nth-of-type(1) {
+            flex: 0 1 45px; }
+          header > div:first-of-type > div:nth-of-type(2) {
+            flex: 0 1 calc(100% - 115px);
+            padding-right: 10px; }
+          header > div:first-of-type > div:nth-of-type(3) {
+            flex: 0 1 60px; } }
     header > div:first-of-type .btn-home {
       color: #fff;
       height: 50px;
@@ -710,14 +729,27 @@ header {
     text-align: right;
     flex-direction: row;
     justify-content: flex-end; }
-    @media (max-width: 62.49em) {
-      header > div:last-of-type {
-        padding: 0 0 10px 0;
-        flex: none;
-        justify-content: center;
-        text-align: center; } }
     header > div:last-of-type > div {
       flex: 0 1 auto; }
+    @media (max-width: 46.24em) {
+      header > div:last-of-type {
+        flex: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--color7);
+        box-shadow: 0 1px 4px #000;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start; }
+        header > div:last-of-type > div, header > div:last-of-type > a {
+          flex: 0 1 50%; }
+          header > div:last-of-type > div:last-of-type, header > div:last-of-type > a:last-of-type {
+            text-align: right; } }
+  @media (max-width: 46.24em) and (max-width: 46.24em) {
+    header > div:last-of-type > div {
+      text-align: left; } }
     header > div:last-of-type a {
       color: #888;
       display: inline-block;
@@ -727,12 +759,18 @@ header {
       transition: 150ms; }
       header > div:last-of-type a:hover {
         color: #fff; }
+      @media (max-width: 46.24em) {
+        header > div:last-of-type a {
+          padding: 5px 0 0 5px; } }
     header > div:last-of-type .username {
       color: var(--color8);
       display: inline-block;
       font-size: 18px;
       font-weight: 400;
       padding: 15px 10px 0 0; }
+      @media (max-width: 46.24em) {
+        header > div:last-of-type .username {
+          display: none; } }
     header > div:last-of-type .img-avatar {
       height: 42px;
       width: 42px;
@@ -750,6 +788,14 @@ header {
       font-size: 17px;
       transition: 100ms;
       margin-top: 3px; }
+      @media (max-width: 46.24em) {
+        header > div:last-of-type .btn-login {
+          height: 30px;
+          line-height: 30px;
+          font-size: 15px;
+          vertical-align: middle;
+          margin: 0;
+          text-align: center !important; } }
       header > div:last-of-type .btn-login:hover {
         background-color: var(--purple); }
     header > div:last-of-type .btn-settings {
@@ -760,10 +806,21 @@ header {
       outline: none;
       cursor: pointer;
       margin: 0 10px; }
+      @media (max-width: 46.24em) {
+        header > div:last-of-type .btn-settings {
+          padding: 0;
+          line-height: 24px;
+          height: 24px;
+          margin-bottom: 4px; } }
       header > div:last-of-type .btn-settings > span {
         font-size: 32px;
         color: #444;
         transition: var(--transition-speed); }
+        @media (max-width: 46.24em) {
+          header > div:last-of-type .btn-settings > span {
+            font-size: 24px;
+            color: #888;
+            line-height: 24px; } }
       header > div:last-of-type .btn-settings:hover > span {
         color: #888; }
 
@@ -772,6 +829,9 @@ main {
   @media (max-width: 62.49em) {
     main {
       padding: 10px; } }
+  @media (max-width: 46.24em) {
+    main {
+      padding: 80px 10px 100px 10px; } }
 
 footer {
   opacity: 0.5;
@@ -780,6 +840,9 @@ footer {
   color: #ccc;
   font-size: 15px;
   line-height: 22px; }
+  @media (max-width: 46.24em) {
+    footer {
+      display: none; } }
   footer em {
     color: var(--blue-3x);
     font-style: normal; }
@@ -1099,10 +1162,10 @@ ul, ol {
     display: block; }
   @media (max-width: 62.49em) {
     .search-results-container {
-      top: 60px;
+      top: 50px;
       left: 0;
       right: 0;
-      padding: 10px; } }
+      padding: 0; } }
 
 .search-results {
   background-color: var(--color5);
@@ -1112,7 +1175,9 @@ ul, ol {
   width: 540px; }
   @media (max-width: 62.49em) {
     .search-results {
-      width: auto; } }
+      width: auto;
+      border-radius: 0;
+      box-shadow: 0 2px 20px 1px #000; } }
   .search-results a {
     display: flex;
     width: 100%;
@@ -1190,13 +1255,17 @@ ul, ol {
   .market-board-container.open,
   .market-category-container.open {
     display: block; }
-  @media (max-width: 62.49em) {
+  @media (max-width: 81.24em) {
     .market-board-container,
     .market-category-container {
-      top: 60px;
+      left: 220px; } }
+  @media (max-width: 46.24em) {
+    .market-board-container,
+    .market-category-container {
+      top: 50px;
       left: 0;
       right: 0;
-      padding: 10px; } }
+      padding: 0; } }
 
 .market-board {
   background-color: var(--color5);
@@ -1207,7 +1276,9 @@ ul, ol {
   padding-bottom: 10px; }
   @media (max-width: 62.49em) {
     .market-board {
-      width: 100%; } }
+      width: 100%;
+      border-radius: 0;
+      box-shadow: 0 2px 20px 1px #000; } }
   .market-board h2 {
     color: var(--highlight);
     font-size: 14px;
@@ -1257,7 +1328,9 @@ ul, ol {
   padding-bottom: 10px; }
   @media (max-width: 62.49em) {
     .market-category {
-      width: auto; } }
+      width: 100%;
+      border-radius: 0;
+      box-shadow: 0 2px 20px 1px #000; } }
   .market-category a {
     display: flex;
     width: 100%;
@@ -1476,7 +1549,7 @@ aside {
 
 .home {
   display: flex;
-  max-width: 2000px;
+  max-width: 1600px;
   width: 100%;
   margin: 0 auto; }
   .home > div:first-of-type {
@@ -1665,23 +1738,42 @@ aside {
 .product .item_top {
   display: flex;
   margin-bottom: 30px; }
+  @media (max-width: 46.24em) {
+    .product .item_top {
+      display: block; } }
 
 .product .item_icon {
   flex: 0 1 120px; }
+  @media (max-width: 46.24em) {
+    .product .item_icon {
+      flex: 0 1 100%;
+      text-align: center;
+      margin-bottom: 20px; } }
   .product .item_icon img {
     width: 120px;
     height: 120px;
     border-radius: 10px;
     box-shadow: 0 1px 3px #000; }
+    @media (max-width: 46.24em) {
+      .product .item_icon img {
+        width: 72px;
+        height: 72px; } }
 
 .product .item_header {
   flex: 0 1 calc(100% - 120px);
   padding-left: 30px;
   position: relative; }
+  @media (max-width: 46.24em) {
+    .product .item_header {
+      flex: 0 1 100%;
+      padding-left: 0; } }
   .product .item_header .box_lists {
     position: absolute;
     right: 0;
     top: 0; }
+    @media (max-width: 46.24em) {
+      .product .item_header .box_lists {
+        display: none; } }
     .product .item_header .box_lists .btn_addto_list,
     .product .item_header .box_lists .btn_addto_fave {
       height: 32px;
@@ -1706,11 +1798,24 @@ aside {
     display: flex;
     flex: 0 1 calc(100% - 128px);
     height: 80px; }
+    @media (max-width: 46.24em) {
+      .product .item_header .item_info {
+        display: block;
+        flex: 0 1 100%; } }
     .product .item_header .item_info h1 {
       font-size: 34px;
       font-weight: 300;
       display: inline-block;
       margin: 15px 20px 15px 0; }
+      @media (max-width: 81.24em) {
+        .product .item_header .item_info h1 {
+          font-size: 24px; } }
+      @media (max-width: 46.24em) {
+        .product .item_header .item_info h1 {
+          margin: 5px;
+          font-size: 24px;
+          display: block;
+          text-align: center; } }
       .product .item_header .item_info h1 span {
         color: var(--highlight);
         display: inline-block;
@@ -1730,15 +1835,41 @@ aside {
         margin-right: 12px; }
     @media (max-width: 81.24em) {
       .product .item_header .item_info .item_info_small {
-        display: none; } }
+        padding-top: 5px;
+        display: none;
+        text-align: center; } }
+
+.product .item_nav_mobile_toggle {
+  display: none;
+  padding: 10px; }
+  .product .item_nav_mobile_toggle button {
+    width: 100%;
+    background-color: var(--purple-2x);
+    border: none;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 5px;
+    padding: 8px 5px;
+    font-size: 16px; }
+  @media (max-width: 46.24em) {
+    .product .item_nav_mobile_toggle {
+      display: block; } }
 
 .product .item_nav {
   background-color: var(--default);
   border-radius: 5px;
   overflow: hidden;
   position: relative; }
+  @media (max-width: 46.24em) {
+    .product .item_nav {
+      display: none; }
+      .product .item_nav.open {
+        display: block; } }
   .product .item_nav .item_nav_servers {
     display: flex; }
+    @media (max-width: 46.24em) {
+      .product .item_nav .item_nav_servers {
+        display: block; } }
   .product .item_nav button {
     background-color: transparent;
     height: 40px;
@@ -1754,6 +1885,13 @@ aside {
     font-weight: 500;
     cursor: pointer;
     text-align: center; }
+    @media (max-width: 46.24em) {
+      .product .item_nav button {
+        display: block;
+        width: 100%;
+        border-bottom: solid 1px #000;
+        border-left: none !important;
+        border-right: none !important; } }
     .product .item_nav button em {
       display: inline-block;
       margin-left: 20px;
@@ -2309,10 +2447,19 @@ aside {
   overflow: hidden;
   background-color: var(--default);
   display: flex; }
+  @media (max-width: 46.24em) {
+    .account {
+      display: block; } }
   .account > div:nth-of-type(1) {
     flex: 0 1 300px;
     background-color: var(--default-2x);
     border-right: solid 1px #000; }
+    @media (max-width: 46.24em) {
+      .account > div:nth-of-type(1) {
+        flex: none;
+        width: 100%;
+        border-right: none;
+        border-bottom: solid 1px #000; } }
     .account > div:nth-of-type(1) a {
       display: block;
       padding: 12px 15px;
@@ -2326,10 +2473,24 @@ aside {
         padding: 12px 46px; }
   .account > div:nth-of-type(2) {
     flex: 0 1 calc(100% - 300px); }
+    @media (max-width: 46.24em) {
+      .account > div:nth-of-type(2) {
+        flex: none;
+        width: 100%; } }
   .account > div {
     padding: 30px; }
+    @media (max-width: 46.24em) {
+      .account > div {
+        padding: 10px; } }
+  @media (max-width: 46.24em) {
+    .account h1 {
+      font-size: 24px; } }
   .account h5 {
     margin-bottom: 30px; }
+    @media (max-width: 46.24em) {
+      .account h5 {
+        margin-bottom: 5px;
+        font-size: 20px; } }
   .account h3 {
     color: var(--color8);
     margin: 0 0 10px 0;

@@ -7,16 +7,31 @@
     .item_top {
         display: flex;
         margin-bottom: 30px;
+
+        @include mq($until: tablet) {
+            display: block
+        }
     }
 
     .item_icon {
         flex: 0 1 120px;
+
+        @include mq($until: tablet) {
+            flex: 0 1 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
         img {
             width: 120px;
             height: 120px;
             border-radius: 10px;
             box-shadow: 0 1px 3px #000;
+
+            @include mq($until: tablet) {
+                width: 72px;
+                height: 72px;
+            }
         }
     }
 
@@ -25,10 +40,19 @@
         padding-left: 30px;
         position: relative;
 
+        @include mq($until: tablet) {
+            flex: 0 1 100%;
+            padding-left: 0;
+        }
+
         .box_lists {
             position: absolute;
             right: 0;
             top: 0;
+
+            @include mq($until: tablet) {
+                display: none;
+            }
 
             .btn_addto_list,
             .btn_addto_fave {
@@ -62,11 +86,27 @@
             flex: 0 1 calc(100% - 128px);
             height: 80px;
 
+            @include mq($until: tablet) {
+                display: block;
+                flex: 0 1 100%;
+            }
+
             h1 {
                 font-size: 34px;
                 font-weight: 300;
                 display: inline-block;
                 margin: 15px 20px 15px 0;
+
+                @include mq($until: wide) {
+                    font-size: 24px;
+                }
+
+                @include mq($until: tablet) {
+                    margin: 5px;
+                    font-size: 24px;
+                    display: block;
+                    text-align: center;
+                }
 
                 span {
                     color: var(--highlight);
@@ -96,9 +136,31 @@
 
             .item_info_small {
                 @include mq($until: wide) {
+                    padding-top: 5px;
                     display: none;
+                    text-align: center;
                 }
             }
+        }
+    }
+
+    .item_nav_mobile_toggle {
+        display: none;
+        padding: 10px;
+
+        button {
+            width: 100%;
+            background-color: var(--purple-2x);
+            border: none;
+            color: #fff;
+            font-weight: 500;
+            border-radius: 5px;
+            padding: 8px 5px;
+            font-size: 16px;
+        }
+
+        @include mq($until: tablet) {
+            display: block;
         }
     }
 
@@ -108,8 +170,20 @@
         overflow: hidden;
         position: relative;
 
+        @include mq($until: tablet) {
+            display: none;
+
+            &.open {
+                display: block;
+            }
+        }
+
         .item_nav_servers {
             display: flex;
+
+            @include mq($until: tablet) {
+                display: block;
+            }
         }
 
         button {
@@ -127,6 +201,14 @@
             font-weight: 500;
             cursor: pointer;
             text-align: center;
+
+            @include mq($until: tablet) {
+                display: block;
+                width: 100%;
+                border-bottom: solid 1px #000;
+                border-left: none !important;
+                border-right: none !important;
+            }
 
             em {
                 display: inline-block;

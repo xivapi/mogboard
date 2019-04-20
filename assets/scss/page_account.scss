@@ -12,10 +12,21 @@
 
     display: flex;
 
+    @include mq($until: tablet) {
+        display: block;
+    }
+
     > div:nth-of-type(1) {
         flex: 0 1 300px;
         background-color: var(--default-2x);
         border-right: solid 1px #000;
+
+        @include mq($until: tablet) {
+            flex: none;
+            width: 100%;
+            border-right: none;
+            border-bottom: solid 1px #000;
+        }
 
         a {
             display: block;
@@ -37,14 +48,34 @@
 
     > div:nth-of-type(2) {
         flex: 0 1 calc(100% - 300px);
+
+        @include mq($until: tablet) {
+            flex: none;
+            width: 100%;
+        }
     }
 
     > div {
         padding: 30px;
+
+        @include mq($until: tablet) {
+            padding: 10px;
+        }
+    }
+
+    h1 {
+        @include mq($until: tablet) {
+            font-size: 24px;
+        }
     }
 
     h5 {
         margin-bottom: 30px;
+
+        @include mq($until: tablet) {
+            margin-bottom: 5px;
+            font-size: 20px;
+        }
     }
 
     h3 {

@@ -370,7 +370,18 @@ header {
 
     @include mq($until: desktop) {
         display: block;
-        border-bottom: solid 2px var(--default);
+
+        background: rgb(45,45,45);
+        background: -moz-linear-gradient(top, rgba(45,45,45,1) 0%, rgba(28,28,28,1) 100%);
+        background: -webkit-linear-gradient(top, rgba(45,45,45,1) 0%,rgba(28,28,28,1) 100%);
+        background: linear-gradient(to bottom, rgba(45,45,45,1) 0%,rgba(28,28,28,1) 100%);
+
+        position: fixed;
+        z-index: 1000;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        box-shadow: 0 0 10px #000;
     }
 
     > div {
@@ -387,26 +398,27 @@ header {
 
         @include mq($until: desktop) {
             flex: none;
-            padding-bottom: 0;
+            padding: 5px;
         }
 
         > div {
             flex: 0 1 auto;
             padding-right: 10px;
 
-            @include mq($until: desktop) {
+            @include mq($until: tablet) {
+                padding-right: 0;
 
                 &:nth-of-type(1) {
-                    flex: 0 1 60px;
+                    flex: 0 1 45px;
                 }
 
                 &:nth-of-type(2) {
-                    flex: 0 1 calc(100% - 60px - 64px);
-                    padding-right: 25px;
+                    flex: 0 1 calc(100% - 115px);
+                    padding-right: 10px;
                 }
 
                 &:nth-of-type(3) {
-                    flex: 0 1 64px;
+                    flex: 0 1 60px;
                 }
             }
         }
@@ -528,15 +540,34 @@ header {
         flex-direction: row;
         justify-content: flex-end;
 
-        @include mq($until: desktop) {
-            padding: 0 0 10px 0;
-            flex: none;
-            justify-content: center;
-            text-align: center;
-        }
-
         > div {
             flex: 0 1 auto;
+        }
+
+        @include mq($until: tablet) {
+            flex: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background-color: var(--color7);
+            box-shadow: 0 1px 4px #000;
+            display: flex;
+
+            flex-direction: row;
+            justify-content: flex-start;
+
+            > div, > a {
+                flex: 0 1 50%;
+
+                &:last-of-type {
+                    text-align: right;
+                }
+            }
+
+            @include mq($until: tablet) {
+                > div {
+                    text-align: left;
+                }
+            }
         }
 
         a {
@@ -550,6 +581,10 @@ header {
             &:hover {
                 color: #fff;
             }
+
+            @include mq($until: tablet) {
+                padding: 5px 0 0 5px;
+            }
         }
 
         .username {
@@ -558,6 +593,10 @@ header {
             font-size: 18px;
             font-weight: 400;
             padding: 15px 10px 0 0;
+
+            @include mq($until: tablet) {
+                display: none;
+            }
         }
 
         .img-avatar {
@@ -580,6 +619,15 @@ header {
             transition: 100ms;
             margin-top: 3px;
 
+            @include mq($until: tablet) {
+                height: 30px;
+                line-height: 30px;
+                font-size: 15px;
+                vertical-align: middle;
+                margin: 0;
+                text-align: center !important;
+            }
+
             &:hover {
                 background-color: var(--purple);
             }
@@ -594,10 +642,23 @@ header {
             cursor: pointer;
             margin: 0 10px;
 
+            @include mq($until: tablet) {
+                padding: 0;
+                line-height: 24px;
+                height: 24px;
+                margin-bottom: 4px;
+            }
+
             > span {
                 font-size: 32px;
                 color: #444;
                 transition: var(--transition-speed);
+
+                @include mq($until: tablet) {
+                    font-size: 24px;
+                    color: #888;
+                    line-height: 24px;
+                }
             }
 
             &:hover > span {
@@ -613,6 +674,10 @@ main {
     @include mq($until: desktop) {
         padding: 10px;
     }
+
+    @include mq($until: tablet) {
+        padding: 80px 10px 100px 10px;
+    }
 }
 
 footer {
@@ -622,6 +687,10 @@ footer {
     color: #ccc;
     font-size: 15px;
     line-height: 22px;
+
+    @include mq($until: tablet) {
+        display: none;
+    }
 
     em {
         color: var(--blue-3x);
@@ -953,10 +1022,10 @@ ul,ol {
     }
 
     @include mq($until: desktop) {
-        top: 60px;
+        top: 50px;
         left: 0;
         right: 0;
-        padding: 10px;
+        padding: 0;
     }
 }
 
@@ -969,6 +1038,8 @@ ul,ol {
 
     @include mq($until: desktop) {
         width: auto;
+        border-radius: 0;
+        box-shadow: 0 2px 20px 1px #000;
     }
 
     a {
@@ -1072,11 +1143,15 @@ ul,ol {
         display: block;
     }
 
-    @include mq($until: desktop) {
-        top: 60px;
+    @include mq($until: wide) {
+        left: 220px;
+    }
+
+    @include mq($until: tablet) {
+        top: 50px;
         left: 0;
         right: 0;
-        padding: 10px;
+        padding: 0;
     }
 }
 
@@ -1090,6 +1165,8 @@ ul,ol {
 
     @include mq($until: desktop) {
         width: 100%;
+        border-radius: 0;
+        box-shadow: 0 2px 20px 1px #000;
     }
 
     h2 {
@@ -1154,7 +1231,9 @@ ul,ol {
     padding-bottom: 10px;
 
     @include mq($until: desktop) {
-        width: auto;
+        width: 100%;
+        border-radius: 0;
+        box-shadow: 0 2px 20px 1px #000;
     }
 
     a {

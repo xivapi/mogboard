@@ -28,6 +28,15 @@
     overflow: hidden;
     display: none;
 
+    @include mq($until: desktop) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 0;
+        transform: translate(0, 0);
+    }
+
     .modal_close_button {
         position: absolute;
         right: 10px;

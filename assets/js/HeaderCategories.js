@@ -17,7 +17,7 @@ class HeaderCategories
     watch()
     {
         this.uiButton.on('click', event => {
-            this.uiView.addClass('open');
+            this.uiView.toggleClass('open');
         });
 
         this.uiView.find('button').on('click', event => {

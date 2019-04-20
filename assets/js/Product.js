@@ -58,6 +58,10 @@ class Product
                 }
             })
         });
+
+        $('.item_nav_mobile_toggle').on('click', event => {
+            $('.item_nav').toggleClass('open');
+        });
     }
 
     /**
