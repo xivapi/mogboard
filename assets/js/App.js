@@ -16,6 +16,7 @@ Settings.init();
 Settings.watch();
 HeaderUser.watch();
 HeaderCategories.watch();
+HeaderCategories.loadCategories();
 Search.watch();
 
 /**
@@ -26,7 +27,6 @@ if (typeof appEnableItemPage !== 'undefined' && appEnableItemPage === 1) {
     ProductAlerts.watch();
     ProductLists.watch();
 }
-
 
 /**
  * Account page

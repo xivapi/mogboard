@@ -66,7 +66,7 @@ a {
 
     &:hover, &:focus {
         color: var(--purple-3x);
-        text-decoration: underline;
+        cursor: pointer;
     }
 }
 
@@ -652,10 +652,18 @@ ul,ol {
 }
 
 //
+// simple sidebar
+//
+.simplebar-track {
+    z-index: 50;
+}
+
+//
 // Custom elements
 //
 .fr { float: right; }
 .tac { text-align: center !important; }
+.tar { text-align: right !important; }
 .ilv {
     font-style: normal;
     display: inline-block;
@@ -694,6 +702,7 @@ ul,ol {
         color: #fff;
     }
 }
+
 .btn {
     height: var(--form-field-height);
     line-height: var(--form-field-height);
@@ -911,6 +920,8 @@ ul,ol {
 
 .modal_settings
 {
+    max-width: 500px;
+
     .modal_settings-form {
         display: flex;
 

@@ -1,0 +1,58 @@
+{% set itemSearchCategories = cache('mog_ItemSearchCategories') %}
+
+<a href="{{ path('home') }}" class="nav-home">
+    <img src="/i/brand/mogboard/mogboard_light.svg">
+</a>
+
+<div class="nav-box">
+    <div class="nav-heading" data-nav="weapons">WEAPONS</div>
+    <div>
+        {% for cat in itemSearchCategories.weapons %}
+            {% if cat.ID in [14,19,27] %}
+            <hr>
+            {% endif %}
+            <button id="{{ cat.ID }}" class="type-weapons">
+                <i class="xiv-{{ cat.ID|xivicon }}"></i>
+                <span>{{ cat.Name }}</span>
+            </button>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="nav-box">
+    <div class="nav-heading" data-nav="armor">ARMOR</div>
+    <div>
+        {% for cat in itemSearchCategories.armor %}
+            <button id="{{ cat.ID }}" class="type-armor">
+                <i class="xiv-{{ cat.ID|xivicon }}"></i>
+                <span>{{ cat.Name }}</span>
+            </button>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="nav-box">
+    <div class="nav-heading" data-nav="items">ITEMS</div>
+    <div>
+        {% for cat in itemSearchCategories.items %}
+            <button id="{{ cat.ID }}" class="type-items">
+                <i class="xiv-{{ cat.ID|xivicon }}"></i>
+                <span>{{ cat.Name }}</span>
+            </button>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="nav-box">
+    <div class="nav-heading" data-nav="housing">HOUSING</div>
+    <div>
+        {% for cat in itemSearchCategories.housing %}
+            <button id="{{ cat.ID }}" class="type-housing">
+                <i class="xiv-{{ cat.ID|xivicon }}"></i>
+                <span>{{ cat.Name }}</span>
+            </button>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="nav-gap"></div>

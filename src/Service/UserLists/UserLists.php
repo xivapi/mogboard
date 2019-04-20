@@ -53,9 +53,14 @@ class UserLists
     /**
      * Handle adding the item to the recently viewed list
      */
-    public function handleRecentlyViewed(int $itemId): UserList
+    public function handleRecentlyViewed(int $itemId): ?UserList
     {
-        $user = $this->users->getUser();
+        $user = $this->users->getUser(false);
+        
+        if ($user == null) {
+            return null;
+        }
+        
         $list = $this->getRecentlyViewed($user);
         $list->addItem($itemId);
         $this->save($list);

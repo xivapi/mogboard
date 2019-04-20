@@ -16,6 +16,21 @@ class Http
     }
 
     /**
+     * Get all the item for all categories for the users language
+     *
+     * @param language int
+     * @param callback function
+     */
+    getItemCategories(language, callback)
+    {
+        const url = '/data/categories_[lang].js'.replace('[lang]', language);
+
+        fetch(url, { mode: 'cors' })
+            .then(response => response.json())
+            .then(callback);
+    }
+
+    /**
      * Get prices for an item
      *
      * @param server

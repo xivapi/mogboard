@@ -25,7 +25,12 @@
 
             {# Compare cheapestPrice #}
             {% if cheapestPrice is defined %}
-                {% set pricePerUnitDiff = ((row.PricePerUnit / cheapestPrice) * 100)|round %}
+                {% set cheapestForQuality = row.IsHQ ? cheapestPrice.HQ : cheapestPrice.NQ %}
+                {% if cheapestForQuality > 0 %}
+                    {% set pricePerUnitDiff = ((row.PricePerUnit / cheapestForQuality) * 100)|round %}
+                {% else %}
+                    {% set pricePerUnitDiff = 100 %}
+                {% endif %}
             {% endif %}
 
             <tr class="{{ cheapestPrice is defined and pricePerUnitDiff < 15 ? 'price-diff-oops' : ''}}">
@@ -38,7 +43,7 @@
                 <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
                 <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
                 {% if cheapestPrice is defined %}
-                    <td class="price-diff {{ pricePerUnitDiff > 150 ? 'price-diff-bad' : (pricePerUnitDiff < 15 ? 'price-diff-oopz' : (pricePerUnitDiff < 100 ? 'price-diff-good' : '')) }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percent difference from the current cheapest per unit price: {{ cheapestPrice|number_format }}">{{ pricePerUnitDiff }}%</td>
+                    <td class="price-diff {{ pricePerUnitDiff > 150 ? 'price-diff-bad' : (pricePerUnitDiff < 15 ? 'price-diff-oopz' : (pricePerUnitDiff < 100 ? 'price-diff-good' : '')) }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percent difference from the current cheapest per unit price: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ cheapestForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
                 {% endif %}
                 <td class="price-buyer">
                     <a href="#" data-tippy-content="{{ row.CharacterID }}">{{ row.CharacterName }}</a>

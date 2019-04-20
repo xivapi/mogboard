@@ -8,6 +8,7 @@ use App\Service\Common\Time;
 use App\Service\Redis\Redis;
 use Carbon\Carbon;
 use Carbon\CarbonTimeZone;
+use Delight\Cookie\Cookie;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -32,6 +33,7 @@ class AppExtension extends AbstractExtension
             new \Twig_SimpleFunction('cache', [$this, 'getCached']),
             new \Twig_SimpleFunction('timezone', [$this, 'getTimezone']),
             new \Twig_SimpleFunction('timezones', [$this, 'getTimezones']),
+            new \Twig_SimpleFunction('cookie', [$this, 'getCookie']),
         ];
     }
     
@@ -83,6 +85,11 @@ class AppExtension extends AbstractExtension
     public function getTimezones()
     {
         return Time::timezones();
+    }
+    
+    public function getCookie($value)
+    {
+        return Cookie::get($value);
     }
     
     /**

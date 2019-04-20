@@ -116,23 +116,18 @@ class ItemController extends AbstractController
         
         // add to recently viewed
         $this->userLists->handleRecentlyViewed($itemId);
-        
-        // work out cheapest per server
-        $cheapest = [];
-        foreach ($market as $server => $m) {
-            $cheapest[$server] = $m->Prices[0]->PricePerUnit;
-        }
+
 
         // response
         $data = [
             'item'      => $item,
             'market'    => $market,
-            'cheapest'  => $cheapest,
             'census'    => $census,
             'recipes'   => $recipes,
             'faved'     => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'     => $user ? $user->getCustomLists() : [],
             'api_stats' => $this->companionStatistics->stats(),
+            'cheapest'  => $this->companionStatistics->cheapest($market),
             'server'    => [
                 'name'       => $server,
                 'dc'         => $dc,

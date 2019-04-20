@@ -1,11 +1,11 @@
 .home {
     display: flex;
-    max-width: 1400px;
+    max-width: 2000px;
     width: 100%;
     margin: 0 auto;
 
     > div:first-of-type {
-        flex: 0 1 1000px;
+        flex: 0 1 calc(100% - 400px);
         padding-right: 20px;
     }
 

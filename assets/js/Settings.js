@@ -12,27 +12,31 @@ class Settings
 
         this.defaultLanguage    = 'en';
         this.defaultTimezone    = 'UTC';
+        this.defaultLeftNav     = 'on';
+
         this.storageKeyServer   = 'mogboard_server';
         this.storageKeyLanguage = 'mogboard_language';
         this.storageKeyTimezone = 'mogboard_timezone';
+        this.storageKeyLeftNav  = 'mogboard_leftnav';
 
         this.server             = this.getServer();
         this.language           = this.getLanguage();
         this.timezone           = this.getTimezone();
+        this.leftnav            = this.getLeftNav();
     }
 
     init()
     {
         let server   = this.getServer(),
             language = this.getLanguage(),
-            timezone = this.getTimezone();
+            timezone = this.getTimezone(),
+            leftnav  = this.getLeftNav();
 
-        language = language ? language : this.defaultTimezone;
+        language = language ? language : this.defaultLanguage;
         timezone = timezone ? timezone : this.defaultTimezone;
+        leftnav  = leftnav ? leftnav : this.defaultLeftNav;
 
-        // set default language, this isn't as precious as server
-        this.setLanguage(language);
-        this.setTimezone(timezone);
+        console.log(leftnav);
 
         // if not set, ask to set
         if (server === null || server.length === 0) {
@@ -46,11 +50,13 @@ class Settings
         this.setServer(server);
         this.setLanguage(language);
         this.setTimezone(timezone);
+        this.setLeftNav(leftnav);
 
         // set selected items
         this.uiModal.find('select.servers').val(server);
         this.uiModal.find('select.languages').val(language);
         this.uiModal.find('select.timezones').val(timezone);
+        this.uiModal.find('select.leftnav').val(leftnav);
     }
 
     watch()
@@ -60,8 +66,6 @@ class Settings
         // server select
         this.uiModal.find('.servers').on('change', event => {
             this.setServer($(event.currentTarget).val());
-            Popup.success('Cookie Set', 'Page reloading, please wait!');
-            location.reload(true);
         });
 
         // language select
@@ -73,6 +77,16 @@ class Settings
         this.uiModal.find('.timezones').on('change', event => {
             this.setTimezone($(event.currentTarget).val());
         });
+
+        // timezone select
+        this.uiModal.find('.leftnav').on('change', event => {
+            this.setLeftNav($(event.currentTarget).val());
+        });
+
+        this.uiModal.find('.btn-green').on('click', event => {
+            Popup.success('Settings Saved', 'Refreshing site, please wait...');
+            location.reload(true);
+        })
     }
 
     setServer(server)
@@ -106,6 +120,18 @@ class Settings
     getTimezone()
     {
         return localStorage.getItem(this.storageKeyTimezone);
+    }
+
+    setLeftNav(leftnav)
+    {
+        console.log(leftnav);
+        localStorage.setItem(this.storageKeyLeftNav, leftnav);
+        Cookie.set(this.storageKeyLeftNav, leftnav, { expires: 365, path: '/' });
+    }
+
+    getLeftNav()
+    {
+        return localStorage.getItem(this.storageKeyLeftNav);
     }
 }
 

@@ -30,15 +30,31 @@
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-    <header>{% include 'header.html.twig' %}</header>
-    <main>{% block body %}{% endblock %}</main>
-    <footer>{% include 'footer.html.twig' %}</footer>
+    <div class="site-container">
+        {% if cookie('mogboard_leftnav') == 'on' %}
+        <aside>
+            <div data-simplebar>
+                {% include 'nav.html.twig' %}
+            </div>
+        </aside>
+        {% endif %}
+        <div class="site left-nav-{{ cookie('mogboard_leftnav') }}">
+            <header>{% include 'header.html.twig' %}</header>
+            <main>{% block body %}{% endblock %}</main>
+            <footer>{% include 'footer.html.twig' %}</footer>
+
+            <div class="market-category-view">
+                <div data-simplebar class="item-category-list2" id="item-category-list2"></div>
+            </div>
+
+            {% include 'Modals/search.html.twig' %}
+            {% include 'Modals/market_board.html.twig' %}
+            {% include 'Modals/market_category.html.twig' %}
+        </div>
+    </div>
 
     {# Modal Modal #}
     {% include 'Modals/settings.html.twig' %}
-    {% include 'Modals/search.html.twig' %}
-    {% include 'Modals/market_board.html.twig' %}
-    {% include 'Modals/market_category.html.twig' %}
     {% include 'Modals/base.html.twig' %}
 
     {# JS #}

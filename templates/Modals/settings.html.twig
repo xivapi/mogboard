@@ -1,6 +1,11 @@
 {# Site Settings #}
 <div class="modal modal_settings">
     <button type="button" class="modal_close_button"><i class="xiv-NavigationClose"></i></button>
+
+    <div class="row row_top tac">
+        <strong>Changes will take affect after a page refresh.</strong>
+    </div>
+
     <div class="row row_top">
         <label for="servers">Server</label>
         <p>Choose your primary server, this will also set your Data-Center.</p>
@@ -44,10 +49,17 @@
             </select>
         </div>
     </div>
-
-    {% if auth.online() %}
-        <div class="row logout">
-            Ready to leave? <a href="{{ path('user_logout') }}">Logout</a>
+    <div class="row row_top">
+        <label for="timezones">Left Navigation</label>
+        <p>Use the stickied left navigation?</p>
+        <div class="form">
+            <select id="leftnav" class="leftnav">
+                <option value="on">Yes</option>
+                <option value="off">No</option>
+            </select>
         </div>
-    {% endif %}
+    </div>
+    <div class="row form tac">
+        <button type="button" class="btn-green">Save Settings</button>
+    </div>
 </div>
