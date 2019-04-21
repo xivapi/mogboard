@@ -38,10 +38,11 @@ class IndexController extends AbstractController
     public function home(Request $request)
     {
         $this->users->setLastUrl($request);
-
+        
         return $this->render('Pages/home.html.twig',[
             'popular_items' => $this->itemPopularity->get(),
             'market_stats'  => $this->companionStatistics->stats(),
+            'server_status' => $this->xivapi->market->online(),
         ]);
     }
     
@@ -51,13 +52,5 @@ class IndexController extends AbstractController
     public function fourOfour()
     {
         return $this->render('Pages/404.html.twig');
-    }
-    
-    /**
-     * @Route("/theme", name="theme")
-     */
-    public function theme()
-    {
-        return $this->render('Theme/theme.html.twig');
     }
 }

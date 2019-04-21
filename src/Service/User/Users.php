@@ -4,13 +4,10 @@ namespace App\Service\User;
 
 use App\Entity\User;
 use App\Entity\UserAlert;
-use App\Entity\UserAlertQueue;
-use App\Repository\UserAlertQueueRepository;
 use App\Repository\UserRepository;
 use App\Service\ThirdParty\Discord\Discord;
 use Delight\Cookie\Cookie;
 use Doctrine\ORM\EntityManagerInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

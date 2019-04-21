@@ -11,6 +11,13 @@
                 </div>
             </div>
 
+            {# Note #}
+            <div class="home-box2">
+                <div class="home-row">
+                    The following servers are not live at this time: {{ server_status.Offline|join(', ') }}.
+                </div>
+            </div>
+
             {% if auth.online() %}
                 {# Retainers #}
                 <div class="home-box2">

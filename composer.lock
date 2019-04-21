@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c1a82e8680893d02269f206b193c676",
+    "content-hash": "936050263ef74b21603462f94c2957ba",
     "packages": [
         {
             "name": "art4/json-api-client",
@@ -5071,16 +5071,16 @@
         },
         {
             "name": "xivapi/xivapi-php",
-            "version": "1.6.6",
+            "version": "1.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xivapi/xivapi-php.git",
-                "reference": "80758c06c4445048d0f40c31847415e1b7715243"
+                "reference": "66bab0f968af57cb809382a8e039e4e244c2119d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xivapi/xivapi-php/zipball/80758c06c4445048d0f40c31847415e1b7715243",
-                "reference": "80758c06c4445048d0f40c31847415e1b7715243",
+                "url": "https://api.github.com/repos/xivapi/xivapi-php/zipball/66bab0f968af57cb809382a8e039e4e244c2119d",
+                "reference": "66bab0f968af57cb809382a8e039e4e244c2119d",
                 "shasum": ""
             },
             "require": {
@@ -5116,7 +5116,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2019-04-19T01:31:05+00:00"
+            "time": "2019-04-21T13:58:46+00:00"
         },
         {
             "name": "zendframework/zend-code",
@@ -5507,16 +5507,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.11.5",
+            "version": "v1.11.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "186ffc80b8f363e04ea3c2ebf49e1263a84b4e39"
+                "reference": "d262c2cace4d9bca99137a84f6fc6ba909a17e02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/186ffc80b8f363e04ea3c2ebf49e1263a84b4e39",
-                "reference": "186ffc80b8f363e04ea3c2ebf49e1263a84b4e39",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/d262c2cace4d9bca99137a84f6fc6ba909a17e02",
+                "reference": "d262c2cace4d9bca99137a84f6fc6ba909a17e02",
                 "shasum": ""
             },
             "require": {
@@ -5569,7 +5569,7 @@
                 "scaffold",
                 "scaffolding"
             ],
-            "time": "2019-03-11T15:55:09+00:00"
+            "time": "2019-04-19T17:26:45+00:00"
         },
         {
             "name": "symfony/panther",
