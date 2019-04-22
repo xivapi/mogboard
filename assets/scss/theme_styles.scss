@@ -274,8 +274,11 @@ form,
     }
 
     table {
-        min-width: 800px;
         width: 100%;
+
+        @include mq($until: tablet) {
+            min-width: 800px;
+        }
 
         thead {
             background-color: var(--table-color);

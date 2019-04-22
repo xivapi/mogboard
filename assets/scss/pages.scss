@@ -47,7 +47,7 @@
     }
 
     .page-short {
-        padding: 0 20%;
+        padding: 0 10%;
 
         @include mq($until: tablet) {
             padding: 0 15px;
