@@ -9,7 +9,7 @@ use Carbon\Carbon;
  */
 class SiteVersion
 {
-    const VERSION = 0;
+    const VERSION = 1;
     
     public static function get()
     {
