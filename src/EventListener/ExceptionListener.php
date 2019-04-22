@@ -3,6 +3,8 @@
 namespace App\EventListener;
 
 use App\Exceptions\GeneralJsonException;
+use App\Service\Redis\Redis;
+use App\Service\ThirdParty\Discord\Discord;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -54,6 +56,14 @@ class ExceptionListener implements EventSubscriberInterface
                 'Date'    => date('Y-m-d H:i:s'),
             ]
         ];
+        
+        if (Redis::Cache()->get("mb_error_{$json->Hash}") == null) {
+            Redis::Cache()->set("mb_error_{$json->Hash}", true);
+            Discord::mog()->sendMessage(
+                '569968196455759907',
+                "```". json_encode($json, JSON_PRETTY_PRINT) ."```"
+            );
+        }
 
         $response = new JsonResponse($json, $json->Debug->Code);
         $response->headers->set('Content-Type','application/json');
