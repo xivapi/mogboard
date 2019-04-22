@@ -55,8 +55,6 @@ class Settings
         this.setLeftNav(leftnav);
         this.setHomeWorld(homeworld);
 
-        console.log(homeworld);
-
         // set selected items
         this.uiModal.find('select.servers').val(server);
         this.uiModal.find('select.languages').val(language);

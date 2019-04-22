@@ -1,4 +1,5 @@
 import Settings from './Settings';
+import Header from './Header';
 import HeaderUser from './HeaderUser';
 import HeaderCategories from './HeaderCategories';
 import Search from './Search';
@@ -15,6 +16,7 @@ import AccountPatreon from './AccountPatreon';
 Settings.init();
 Settings.watch();
 HeaderUser.watch();
+Header.watch();
 HeaderCategories.watch();
 HeaderCategories.loadCategories();
 Search.watch();

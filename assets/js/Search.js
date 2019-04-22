@@ -12,7 +12,7 @@ class Search
         this.uiLazy = null;
 
         this.timeout = null;
-        this.timeoutDelay = 200;
+        this.timeoutDelay = 500;
         this.searching = false;
         this.searchTerm = null;
     }
@@ -32,7 +32,7 @@ class Search
                 return;
             }
 
-            if (this.searching || this.searchTerm === searchTerm || searchTerm.length < 2) {
+            if (this.searching || this.searchTerm == searchTerm || searchTerm.length < 2) {
                 return;
             }
 
@@ -74,6 +74,7 @@ class Search
 
     render(response)
     {
+        window.scrollTo(0,0);
         this.uiInput.removeClass('typing');
         this.uiInput.addClass('complete');
 
@@ -86,13 +87,16 @@ class Search
 
             results.push(
                 `<a href="${url}" class="rarity-${item.Rarity}">
-                    <span><img src="http://xivapi.com/mb/loading.svg" class="lazy" data-src="https://xivapi.com${item.Icon}"></span>
+                    <span class="item-icon"><img src="http://xivapi.com/mb/loading.svg" class="lazy" data-src="https://xivapi.com${item.Icon}"></span>
                     <span class="item-level">${item.LevelItem}</span>
                     ${item.Name}
                     <span class="item-category">${item.ItemSearchCategory.Name}</span>
                 </a>`
             );
         });
+
+        // <button class="btn-filters"><icon class="xiv-MarketFilter"></icon> Filters</button>
+
 
         // render results
         this.uiView.find('.search-results').html(`
@@ -101,7 +105,6 @@ class Search
                     Found ${response.Pagination.Results} / ${response.Pagination.ResultsTotal} for <strong>${this.searchTerm}</strong>
                 </div>
                 <div>
-                    <button class="btn-filters"><icon class="xiv-MarketFilter"></icon> Filters</button>
                 </div>
             </div>
             <div data-simplebar class="item-search-list" id="item-search-list">${results.join('')}</div>

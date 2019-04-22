@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Companion Server Status' %}
+
+{% block body %}
+
+<div class="page">
+    <h1>Server Status</h1>
+
+
+
+    {% for dc, servers in getGameDataCenters() %}
+    <div class="page-block">
+        <h2>{{ dc }}</h2>
+        <div class="flex">
+            {% for server in servers %}
+            {% set status = servers_status[server] %}
+            <div class="flex_20">
+                <div class="server-status-pip {{ status.Online ? 'server-status-online' : 'server-status-offline' }}">
+                    {{ server }}
+                    {% if not status.Online %}<span>OFFLINE</span>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

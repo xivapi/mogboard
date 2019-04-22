@@ -16,18 +16,7 @@ class SearchController extends AbstractController
     {
         $this->gameDataSource = $gameDataSource;
     }
-    
-    /**
-     * @Route("/item/category/list/{categoryId}", name="item_category_list")
-     */
-    public function index($categoryId)
-    {
-        return $this->render('Search/item_category_list.html.twig', [
-            'category'  => $this->gameDataSource->getItemSearchCategories($categoryId),
-            'items'     => $this->gameDataSource->getItemSearchCategoryItems($categoryId),
-        ]);
-    }
-    
+
     /**
      * @Route("/item/category/generate", name="item_category_generate")
      */

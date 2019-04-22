@@ -72,6 +72,11 @@
         .home-row {
             padding: 15px;
             border-bottom: solid 1px #000;
+
+            img {
+                vertical-align: middle;
+                display: inline-table;
+            }
         }
     }
 

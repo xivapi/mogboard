@@ -42,6 +42,7 @@
             <header>{% include 'header.html.twig' %}</header>
             <main>{% block body %}{% endblock %}</main>
             <footer>{% include 'footer.html.twig' %}</footer>
+            <nav class="site-menu">{% include 'menu.html.twig' %}</nav>
 
             <div class="market-category-view">
                 <div data-simplebar class="item-category-list2" id="item-category-list2"></div>
@@ -67,6 +68,7 @@
         let mog = {
             path: "{{ app.request.getPathInfo()|split('/')[1] }}",
             isOnline: {{ auth.isOnline ? 'true' : 'false' }},
+            url_item: "{{ path('item_page', { itemId: '-id-' }) }}",
             urls: {
                 alerts: {
                     create: "{{ path('alerts_create') }}",
@@ -91,10 +93,6 @@
                     confirm: "{{ path('retainers_confirm', { retainer: '-id-' }) }}"
                 }
             },
-
-            // old
-            url_item_category_list: "{{ path('item_category_list', { categoryId: '-id-' }) }}",
-            url_item: "{{ path('item_page', { itemId: '-id-' }) }}",
         };
         // tooltips
         tippy('[data-tippy-content]', {
@@ -102,6 +100,8 @@
         });
         // sortable tables
         $(".table-sortable").stupidtable();
+        // search categories
+        let cats = {{ cache('mog_ItemSearchCategoriesFull')|json_encode|raw }};
     </script>
     <script src="/ui/app.js?v={{ siteVersion().hash }}"></script>
     {% block javascripts %}{% endblock %}

@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+{% set title = 'About' %}
+
+{% block body %}
+
+<div class="page">
+    <div class="mogboard-header">
+        <img src="/i/brand/mogboard/mogboard_light.svg">
+    </div>
+
+    <div class="page-block">
+
+        <br><br>
+
+        <div class="page-short">
+            <h3>What is <strong>mogboard</strong>?</h3>
+            <p>
+                The site allows you to view in-game market for multiple servers at
+                anytime, anywhere. It uses the Companion App's API to provide a near
+                real-time view of the market via auto-updated snapshots.
+            </p>
+        </div>
+
+        <br><br>
+
+        <div class="page-short">
+            <h3>What information can I get?</h3>
+            <p>
+                All market information is available: Prices, Materia, Retainer, Crafters and even Buyers.
+                Everything that you see in-game is available. Additional data-views have been added
+                such as graphs, extended history and cross-world summary is also included.
+            </p>
+        </div>
+
+        <br><br>
+
+        <div class="page-short">
+            <h3>Can I have access to the data?</h3>
+            <p>
+                <strong>Defiantly!</strong>
+                <br><br>
+                Everything you see on mogboard is open for anyone to use, to learn more
+                about how to access the data using a REST API Service, check out the
+                <a href="https://xivapi.com/docs/Market">XIVAPI - Market</a> documentation.
+            </p>
+        </div>
+
+        <br><br>
+
+        <div class="page-short">
+            <h3>Supporting <strong>mogboard.com</strong></h3>
+            <p>
+                If you would like to support mogboard as well as XIVAPI you can do
+                so via the Patreon: <a href="https://www.patreon.com/vekien">patreon.com/vekien</a>
+            </p>
+            <p>
+                Money can be tight, just by using the site and sharing it with your friends
+                will indirectly support the site in more ways than you know. If you like the
+                site, be sure to spread the word :)
+            </p>
+        </div>
+
+        <br><br>
+
+    </div>
+
+    <div class="page-banner">
+        <img src="/i/bg/about.png">
+    </div>
+
+    <div class="page-block">
+
+        <br><br>
+
+        <div class="page-short">
+            <h3>So, how does it actually work? Get Technical.</h3>
+
+            <p>
+                The Companion App that we all love
+                (you can <a href="https://na.finalfantasyxiv.com/companion/">download that here</a>)
+                connects to an API that Square-Enix call "Sight".
+            </p>
+            <p>
+                <strong>"Sight"</strong> allows logged in accounts to connect to the market board
+                and pull prices and history, this is how the Companion App functions.
+            </p>
+            <p>
+                For <strong>mogboard</strong>, there are 66 characters spread across two accounts
+                that are logged into daily and these provide the necessary access to the API. A logged
+                in character is provided a "Authorisation Token" that lasts 24 hours, using this token
+                we can obtain the prices and history for all the items relatively easy and most importantly:
+                automated.
+            </p>
+            <p>
+                One downside to "Sight" is it's quite slow, so XIVAPI has a Companion Service that
+                priorities items in to several different queues and begins to auto-update
+                items behind the scene. <strong>mogboard</strong> is a cached view of the auto-update data.
+            </p>
+            <p>
+                Items are prioritised based on how often they sell, items that sell quicker are pushed
+                to a "faster" queue (aka, one with less items) and the further the average sale
+                time becomes, the slower the update cycle. The max update-time is around 2 days.
+                This system is tweaked daily and runs mostly autonomously.
+            </p>
+
+            <br>
+
+            <p>
+                <strong>Here is a live distribution of the items</strong> (this updates twice a day at 10AM and 10PM UTC)
+            </p>
+            <div class="table-dark">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Queue</th>
+                            <th>Priority</th>
+                            <th>Items</th>
+                            <th>Cycle Time</th>
+                            <th>Cycle Time Real</th>
+                            <th>Diff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for queue in [1,2,3,4,5,6,7] %}
+                        {% set report = attribute(market_stats.Stats.Report, queue) %}
+                        <tr>
+                            <td>{{ report.Name }}</td>
+                            <td>{{ report.Priority }}</td>
+                            <td>{{ report.Items|number_format }}</td>
+                            <td>{{ report.CycleTime }}</td>
+                            <td>{{ report.CycleTimeReal }}</td>
+                            <td class="{{ report.CycleDiffSec|replace({ ',': '' }) < 300 ? 'text-green' : 'text-red' }}">{{ report.CycleDiff }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <br><br>
+        </div>
+    </div>
+
+    <div class="page-block">
+        <br><br>
+
+        <div class="page-short">
+            <h3>I have more questions!</h3>
+            <p>
+                Hop onto <a href="https://discord.gg/MFFVHWC">our discord</a> and you can
+                ask all your questions.
+            </p>
+            <p>
+                You can also pm me: <span class="text-yellow">Vekien</span> if you prefer :)
+            </p>
+        </div>
+
+        <br><br>
+    </div>
+
+</div>
+
+{% endblock %}

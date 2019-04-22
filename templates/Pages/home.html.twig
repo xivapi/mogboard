@@ -6,15 +6,16 @@
             {# News #}
             <div class="home-box2">
                 <div class="home-row">
+                    <img src="/i/game/coin2.png" height="18" style="margin: -6px 5px -3px 0;">
                     <strong>Welcome to Mogboard.com - A FINAL FANTASY XIV: Online Market Board Site.</strong>
-                    <a href="#">Click here to learn all about it!</a>
+                    <a href="{{ path('about') }}">Click here to learn all about it!</a>
                 </div>
             </div>
 
             {# Note #}
             <div class="home-box2">
                 <div class="home-row">
-                    The following servers are not live at this time: {{ server_status.Offline|join(', ') }}.
+                    <img src="/i/game/notice.png" height="18" style="margin: -6px 5px -3px 0;"> The following servers are not live at this time: {{ server_status.Offline|join(', ') }}.
                 </div>
             </div>
 

@@ -1,5 +1,6 @@
 import Http from "./Http";
 import Settings from './Settings';
+import ClickEvent from "./ClickEvent";
 
 class HeaderCategories
 {
@@ -17,10 +18,13 @@ class HeaderCategories
     watch()
     {
         this.uiButton.on('click', event => {
+            window.scrollTo(0,0);
             this.uiView.toggleClass('open');
         });
 
         this.uiView.find('button').on('click', event => {
+            window.scrollTo(0,0);
+
             const id = $(event.currentTarget).attr('id');
             this.openCategory(id);
         });
@@ -122,21 +126,56 @@ class HeaderCategories
         this.uiView.removeClass('open');
         this.uiCategory.addClass('open');
 
-        this.uiCategory.find('.market-category').html('<div class="loading"><img src="/i/svg/loading2.svg"></div>');
+        this.uiCategory.find('.market-category').html('');
 
-        Http.getItemCategoryList(id, response => {
-            this.uiCategory.find('.market-category').html(response);
-            this.viewActive = true;
-            this.setSearchHeight();
+        const category = cats[id];
+        const items    = this.categories[id];
+        const results  = [];
 
-            this.uiLazy = $('.lazy').Lazy({
-                // your configuration goes here
-                scrollDirection: 'vertical',
-                appendScroll: $('.item-category-list'),
-                effect: 'fadeIn',
-                visibleOnly: false,
-                bind: 'event',
-            });
+        items.forEach(item => {
+            const id     = item[0];
+            const name   = item[1];
+            const icon   = 'https://xivapi.com' + item[2];
+            const ilv    = item[3];
+            const rarity = item[4];
+            const url    = mog.url_item.replace('-id-', id);
+
+            results.push(
+                `<a href="${url}" class="rarity-${rarity}">
+                    <span class="item-icon"><img src="http://xivapi.com/mb/loading.svg" class="lazy" data-src="${icon}"></span>
+                    <span class="item-level">${ilv}</span>
+                    ${name}
+                </a>`
+            );
+        });
+
+        // render results
+        this.uiCategory.find('.market-category').html(`
+            <div class="item-category-header">
+                <div>
+                    ${category.Name} - ${items.length} items
+                </div>
+                <div>&nbsp;</div>
+            </div>
+            <div data-simplebar class="item-category-list" id="item-category-list">${results.join('')}</div>
+        `);
+
+        this.viewActive = true;
+
+        this.uiLazy = $('.lazy').Lazy({
+            // your configuration goes here
+            scrollDirection: 'vertical',
+            appendScroll: $('.item-category-list'),
+            effect: 'fadeIn',
+            visibleOnly: false,
+            bind: 'event',
+        });
+
+        this.setSearchHeight();
+
+        const el = new SimpleBar(document.getElementById('item-category-list'));
+        el.getScrollElement().addEventListener('scroll', event => {
+            this.uiLazy.data("plugin_lazy").update();
         });
     }
 

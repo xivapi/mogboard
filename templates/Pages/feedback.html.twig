@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Feedback' %}
+
+{% block body %}
+<div class="page">
+    <h1>Provide your feedback!</h1>
+
+    <div class="page-note">
+        Got a suggestion for the site? Or just want say something!
+    </div>
+
+    {% if feedback_sent %}
+    <br>
+    <div class="page-block">
+        <div class="alert-green">
+            <h5>Feedback Sent</h5>
+            Thank you for taking the time to submit feedback, it will be read by
+            all Mogboard staff and if a reply is required one will be put forth.
+        </div>
+    </div>
+    {% endif %}
+
+    <br>
+
+    <div class="page-block">
+        <div class="page-feedback-block">
+            <h3><strong>Be constructive!</strong></h3>
+            <p>
+                All feedback is read by the mogboard staff. It is important that your feedback is
+                clear and easy to understand should any action be required (updates, bug fixes,
+                feature suggestions). Any negative or rude messages will be disregarded, if you
+                need help with anything it may be quicker to message one of the mogboard
+                members directly through discord.
+            </p>
+            <p>
+                If there is a bug on a specific page, please provide a link to that page. If it's regarding
+                out of date prices, please understand that the system cannot provide 100% real-time prices
+                and that there will be an "Last Updated" time for each server. Check this, if it is above
+                3 days then it is bugged (however we should know about it by then!).
+            </p>
+            {% if auth.isOnline %}
+            <p>
+                Your discord <strong>username</strong> and <strong>email</strong> will be submitted
+                with your feedback. Only MogBoard staff can see this, on discord these are the
+                users with the role "Admin" and "Moderator". If a reply is required you will
+                be contacted via one of these methods:
+            </p>
+            <ul>
+                <li><strong>Username:</strong> {{ auth.user.username }} - <strong>Email:</strong> {{ auth.user.email }}</li>
+            </ul>
+            {% endif %}
+            <br>
+            <h3><strong>Send your feedback</strong></h3>
+            <form method="post" action="{{ path('feedback_send') }}">
+                <div class="form_row">
+                    <textarea id="feedback_message" name="feedback_message" placeholder="Write your message"></textarea>
+                    <small>Max: 1000 characters</small>
+                </div>
+                <div class="form_row">
+                    <button type="submit" class="btn-green btn-feedback-submit">Send Feedback</button>
+                </div>
+            </form>
+            <br><br>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+let $btn = $('.btn-feedback-submit');
+$btn.on('click', function() {
+    setTimeout(function() {
+        $btn.prop('disabled', true)
+    }, 500);
+});
+</script>
+{% endblock %}

@@ -1,33 +1,30 @@
-<header>
-    <div>
-        <div>
-            <a href="{{ path('home') }}" class="btn-home">
-                <img src="/i/mog/mog.png">
-            </a>
-        </div>
-        <div>
-            <input type="text" class="search" placeholder="Search">
-        </div>
-        <div>
-            <nav class="form">
-                <button class="btn-market-board">
-                    <i class="xiv-Market"></i>
-                    <span>Market</span>
-                </button>
-            </nav>
-        </div>
+<div>
+    <div class="header-home">
+        <a href="{{ path('home') }}" class="btn-home">
+            <img src="/i/mog/mog.png">
+        </a>
     </div>
-    <div>
-        {% if auth.online() %}
-        <div>
-            <a href="{{ path('user_account') }}">My Account</a>
-            <span class="username">{{ auth.user.username|title }}</span>
-        </div>
-        {% else %}
-            <a href="{{ path('user_login_discord') }}" class="btn-login">Login via Discord</a>
-        {% endif %}
-        <div>
-            <button class="btn-settings" data-tippy-content="Site Settings"><span class="xiv-app_drawer_setting"></span></button>
-        </div>
+    <div class="header-nav">
+        <input type="text" class="search" placeholder="Search">
+        <button class="btn-market-board">
+            <i class="xiv-Market"></i>
+            <span>Market</span>
+        </button>
+        <button class="btn-menu">
+            <span>Menu</span>
+        </button>
     </div>
-</header>
+</div>
+<div>
+    {% if auth.online() %}
+    <div>
+        <a href="{{ path('user_account') }}">My Account</a>
+        <span class="username">{{ auth.user.username|title }}</span>
+    </div>
+    {% else %}
+        <a href="{{ path('user_login_discord') }}" class="btn-login">Login via Discord</a>
+    {% endif %}
+    <div>
+        <button class="btn-settings" data-tippy-content="Site Settings"><span class="xiv-app_drawer_setting"></span></button>
+    </div>
+</div>

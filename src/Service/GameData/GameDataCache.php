@@ -135,6 +135,7 @@ class GameDataCache
         // as there are only 100 item search categories, we will get them all at once:
         $objects    = Redis::Cache()->getMulti($keys);
         $categories = [];
+        $categoriesFull = [];
     
         foreach ($objects as $category) {
             // ignore empty ones
@@ -155,6 +156,15 @@ class GameDataCache
         
             // copy category over
             Redis::Cache()->set("mog_ItemSearchCategory_{$category->ID}", $category, GameDataCache::CACHE_TIME);
+            
+            $categoriesFull[$category->ID] = [
+                'ID'      => $category->ID,
+                'Icon'    => $category->Icon,
+                'Name_en' => $category->Name_en,
+                'Name_de' => $category->Name_de,
+                'Name_fr' => $category->Name_fr,
+                'Name_ja' => $category->Name_ja,
+            ];
         }
     
         ksort($categories['weapons']);
@@ -168,5 +178,6 @@ class GameDataCache
         $categories['housing']  = array_values($categories['housing']);
     
         Redis::Cache()->set("mog_ItemSearchCategories", $categories, GameDataCache::CACHE_TIME);
+        Redis::Cache()->set("mog_ItemSearchCategoriesFull", $categoriesFull, GameDataCache::CACHE_TIME);
     }
 }

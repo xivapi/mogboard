@@ -1,0 +1,224 @@
+.page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    background-color: var(--dark-blue);
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #000;
+    overflow: hidden;
+
+    h1 {
+        font-size: 30px;
+        font-weight: 200;
+        text-align: center;
+        padding: 20px;
+        background-color: rgba(0,0,0,0.25);
+        color: var(--highlight3x);
+        text-transform: uppercase;
+        border-bottom: solid 1px #000;
+        box-shadow: 0 1px 0 #444;
+    }
+
+    h2 {
+        font-size: 24px;
+        font-weight: 300;
+        text-shadow: none;
+        margin: 0 0 15px 0;
+        color: var(--color6);
+    }
+
+    h3 {
+        font-size: 28px;
+        font-weight: 300;
+        text-shadow: none;
+        margin: 0 0 15px 0;
+        color: var(--purple-3x);
+    }
+
+    p {
+        line-height: 22px;
+    }
+
+    .page-block {
+        padding: 20px;
+        border-bottom: solid 1px #000;
+        box-shadow: 0 1px 0 #444;
+    }
+
+    .page-short {
+        padding: 0 20%;
+
+        @include mq($until: tablet) {
+            padding: 0 15px;
+        }
+    }
+
+    .page-note {
+        text-align: center;
+        opacity: 0.6;
+        padding: 8px;
+    }
+
+    .page-banner {
+        background-color: rgba(0,0,0,0.4);
+        text-align: center;
+        padding: 30px 0;
+
+        border-bottom: solid 1px #000;
+        border-top: solid 1px #000;
+        box-shadow: 0 1px 0 #444;
+
+        img {
+            max-width: 90%;
+        }
+    }
+}
+
+//
+// Server Status
+//
+.server-status-pip {
+    background-color: rgba(0,0,0,0.5);
+    padding: 10px 15px;
+    border-radius: 3px;
+    margin: 5px;
+
+    span {
+        display: inline-block;
+        float: right;
+        font-size: 13px;
+        color: var(--red);
+        text-shadow: none;
+        margin-top: 3px;
+    }
+
+    &.server-status-online {
+        border-left: solid 10px var(--green-3x);
+    }
+
+    &.server-status-offline {
+        border-left: solid 10px var(--red);
+        color: #666;
+    }
+}
+
+//
+// About
+//
+.mogboard-header {
+    padding: 120px 0;
+    text-align: center;
+    border-bottom: solid 1px #000;
+    box-shadow: 0 1px 20px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(255,255,255,0.15);
+
+    position: relative;
+    z-index: 2;
+
+    background-image: url('/i/bg/bg_light_blur.png');
+    background-size: cover;
+
+    img {
+        height: 64px;
+        filter: drop-shadow(0 1px 20px rgba(0, 0, 0, 1));
+    }
+}
+
+//
+// Mog News
+//
+.mogboard-news {
+    padding: 60px 0;
+    text-align: center;
+    border-bottom: solid 1px #000;
+    box-shadow: 0 1px 20px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(255,255,255,0.15);
+
+    position: relative;
+    z-index: 2;
+
+    background-image: url('/i/bg/news.png');
+    background-size: cover;
+
+    h6 {
+        color: #fff;
+        font-size: 52px;
+        font-weight: 800;
+        text-shadow: 0 1px 20px rgba(0, 0, 0, 1);
+    }
+}
+
+.mog-news {
+    padding: 50px;
+
+    h3 {
+        color: var(--highlight);
+        font-weight: 600;
+        margin: 0 0 10px 0;
+    }
+
+    small {
+        text-shadow: none;
+        display: block;
+        margin: 0 0 30px 0;
+        color: var(--color6);
+    }
+
+    .mog-news-avatar {
+        height: 80px;
+        width: 80px;
+        border-radius: 5px;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.8);
+    }
+
+    .mog-news-post {
+        padding-left: 20px;
+    }
+
+    @include mq($until: tablet) {
+        padding: 10px;
+
+        .flex {
+            display: block;
+        }
+
+        .flex_10 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .flex_10,
+        .flex_90 {
+            flex: none;
+        }
+
+        .mog-news-post {
+            padding-left: 0;
+        }
+    }
+
+}
+
+.news-ulz {
+    line-height: 22px;
+
+    li {
+        strong {
+            color: var(--highlight);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        margin-bottom: 20px;
+    }
+}
+
+//
+// Feedback
+//
+.page-feedback-block{
+    padding: 0 50px;
+}
+
+.feedback-rules {
+    padding-right: 30px;
+}
