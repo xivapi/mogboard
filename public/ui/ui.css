@@ -251,6 +251,27 @@ table {
   overflow: hidden;
   text-align: center;
   padding: 30px; }
+  .popup_display .popup_close_button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: transparent;
+    border: none;
+    color: #aaa;
+    font-size: 24px;
+    line-height: 24px;
+    height: 24px;
+    width: 24px;
+    padding: 0;
+    cursor: pointer;
+    outline: none; }
+    .popup_display .popup_close_button:hover {
+      color: #fff; }
+    .popup_display .popup_close_button i {
+      vertical-align: middle;
+      width: 24px;
+      height: 24px;
+      display: inline-block; }
   .popup_display .popup_icon {
     margin-bottom: 20px; }
     .popup_display .popup_icon i {

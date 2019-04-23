@@ -98,7 +98,6 @@ class AccountRetainers
             this.uiItemSearchResponse.html('<p>Checking market prices to ensure this is a safe item to verify with.</p>');
 
             xivapi.getMarketPrices(itemId, server, response => {
-                this.uiItemSearchResponse.html('');
 
                 if (typeof response.Error !== 'undefined') {
                     Popup.error('Error', 'There was an error returning market information, this is a problem with XIVAPI. This is being looked into.');
@@ -112,7 +111,7 @@ class AccountRetainers
                     return;
                 }
 
-                Popup.success('Good!', `You will be asked to place 1x ${market.Item.Name} up for sale at an exact price once you add your retainer.`);
+                this.uiItemSearchResponse.html(`<p class="text-green tac"><strong>${market.Item.Name}</strong> is a good item to confirm with, continue with the form!</p>`);
                 $('.retainer_item_search').val(market.Item.Name);
                 $('.retainer_add').prop('disabled', false);
                 $('#retainer_item').val(itemId);
@@ -154,6 +153,7 @@ class AccountRetainers
                 success: response => {
                     if (response === true) {
                         Popup.success('Retainer Added!', 'Your retainer has been added, the page will refresh in 3 seconds.');
+                        Popup.setForcedOpen(true);
                         setTimeout(() => {
                             location.reload();
                         }, 3000);

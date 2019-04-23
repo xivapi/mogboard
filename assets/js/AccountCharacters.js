@@ -128,6 +128,7 @@ class AccountCharacters
                         success: response => {
                             if (response === true) {
                                 Popup.success('Character Added!', 'Your character has been added, the page will refresh in 3 seconds.');
+                                Popup.setForcedOpen(true);
                                 setTimeout(() => {
                                     location.reload();
                                 }, 3000);

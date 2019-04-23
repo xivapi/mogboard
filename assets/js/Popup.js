@@ -10,6 +10,8 @@ class Popup
 
         };
 
+        this.forceOpen = false;
+
         this.ui = $('.popup');
         this.ui.on('click', event => {
             this.close();
@@ -57,8 +59,23 @@ class Popup
 
     close()
     {
+        if (this.forceOpen) {
+            return;
+        }
+
         this.ui.removeClass('open');
         return this;
+    }
+
+    setForcedOpen(state)
+    {
+        this.forceOpen = state;
+
+        if (state) {
+            this.ui.find('.popup_close_button').hide();
+        } else {
+            this.ui.find('.popup_close_button').show();
+        }
     }
 
     setPopupIcon(type)

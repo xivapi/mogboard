@@ -4,8 +4,6 @@
         <button>Whats an alert <img src="/i/svg/question-circle-light.svg" height="18"></button>
     </div>
 
-
-
     {% if auth.online() %}
         {% if auth.user.alerts|length >= auth.user.alertsMax %}
             <div class="alert-default">You are currently max'd out on alerts and will not be able to create anymore.</div>
