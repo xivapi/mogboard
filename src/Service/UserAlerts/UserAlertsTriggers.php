@@ -91,7 +91,6 @@ class UserAlertsTriggers
             /**
              * Handle the server for the alert,
              */
-            $dc         = GameServers::getDataCenter($alert->getServer());
             $dcServers  = GameServers::getDataCenterServers($alert->getServer());
             $servers    = $alert->isTriggerDataCenter() ? $dcServers : [ $alert->getServer() ];
 

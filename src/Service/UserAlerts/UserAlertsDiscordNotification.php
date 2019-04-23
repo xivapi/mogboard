@@ -11,7 +11,7 @@ class UserAlertsDiscordNotification
 {
     const FOOTER = [
         'text'     => 'mogboard.com',
-        'icon_url' => 'https://beta.mogboard.com/favicon.png',
+        'icon_url' => 'https://mogboard.com/favicon.png',
     ];
     
     const ALERT_AUTHOR = [

@@ -1,9 +1,9 @@
 <div style="padding: 20px;">
-    <img src="https://beta.mogboard.com/i/brand/mogboard/email.png" height="24">
+    <img src="https://mogboard.com/i/brand/mogboard/email.png" height="24">
     <br>
     <p>
         <img src="https://xivapi.com/{{ item.Icon }}" height="32" style="vertical-align: middle;display: inline-table; margin-right: 10px;">
-        <a href="https://beta.mogboard.com/market/{{ item.ID }}" style="font-size: 18px;">{{ item.Name }} -- {{ alert.name }}</a>
+        <a href="https://mogboard.com/market/{{ item.ID }}" style="font-size: 18px;">{{ item.Name }} -- {{ alert.name }}</a>
     </p>
 
     {% for trigger in alert.getTriggerConditionsFormatted %}
@@ -35,7 +35,7 @@
                     <td style="padding: 5px; margin: 0;"><strong>{{ row.PricePerUnit|number_format }}</strong></td>
                     <td style="padding: 5px; margin: 0;">{{ row.Quantity|number_format }}</td>
                     <td style="padding: 5px; margin: 0;"><em>{{ row.PriceTotal|number_format }}</em></td>
-                    <td style="padding: 5px; margin: 0;">{{ row.IsHQ ? '<img src="https://beta.mogboard.com/i/game/hq.png">' : '' }}</td>
+                    <td style="padding: 5px; margin: 0;">{{ row.IsHQ ? '<img src="https://mogboard.com/i/game/hq.png">' : '' }}</td>
                     <td style="padding: 5px; margin: 0;">{{ alert.triggerType == 'Prices' ? row.RetainerName : row.CharacterName }}</td>
                     {% if alert.triggerType == 'History' %}
                         <td style="padding: 5px;">
