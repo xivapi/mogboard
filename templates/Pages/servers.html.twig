@@ -11,7 +11,7 @@
     {% for dc, servers in getGameDataCenters() %}
     <div class="page-block">
         <h2>{{ dc }}</h2>
-        <div class="flex">
+        <div class="flex flex-wrap">
             {% for server in servers %}
             {% set status = servers_status[server] %}
             <div class="flex_20">

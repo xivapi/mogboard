@@ -1005,6 +1005,18 @@ ul,ol {
 .flex {
     display: flex;
 
+    &.flex-wrap {
+        flex-wrap: wrap;
+    }
+
+    &.flex-justify-center {
+        justify-content: center;
+    }
+
+    &.flex-justify-space {
+        justify-content: space-between;
+    }
+
     @for $i from 1 through 20 {
         .flex_#{$i * 5} {
             flex: 0 1 $i * 5%;
