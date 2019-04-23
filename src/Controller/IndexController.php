@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Service\Companion\CompanionStatistics;
 use App\Service\Items\ItemPopularity;
+use App\Service\Redis\Redis;
 use App\Service\ThirdParty\Discord\Discord;
 use App\Service\User\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -84,7 +85,22 @@ class IndexController extends AbstractController
         $message = trim($request->get('feedback_message'));
         $message = substr($message, 0, 1000);
         $user    = $this->users->getUser(false);
+    
+        $request->getSession()->set('feedback_sent', 'no');
         
+        if (strlen($message) == 0) {
+            return $this->redirectToRoute('feedback');
+        }
+        
+        $key   = 'mb_feedback_client_'. md5($request->getClientIp());
+        $count = Redis::Cache()->get($key) ?: 0;
+        $count = $count + 1;
+        
+        if ($count > 10) {
+            return $this->redirectToRoute('feedback');
+        }
+    
+        Redis::Cache()->set($key, $count);
         $request->getSession()->set('feedback_sent', 'yes');
     
         $embed = [

@@ -9,7 +9,7 @@
         Got a suggestion for the site? Or just want say something!
     </div>
 
-    {% if feedback_sent %}
+    {% if feedback_sent == 'yes' %}
     <br>
     <div class="page-block">
         <div class="alert-green">
@@ -18,6 +18,16 @@
             all Mogboard staff and if a reply is required one will be put forth.
         </div>
     </div>
+    {% endif %}
+
+    {% if feedback_sent == 'no' %}
+        <br>
+        <div class="page-block">
+            <div class="alert-red">
+                <h5>Feedback not sent</h5>
+                Could not send feedback, please try again later.
+            </div>
+        </div>
     {% endif %}
 
     <br>
