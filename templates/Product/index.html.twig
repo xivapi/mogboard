@@ -103,8 +103,8 @@
                     <div class="tab-market-tables">
                         <div class="cw-table cw-prices">
                             <h4>PRICES <small>MAX: 50</small></h4>
-                            <span class="cw-small-info" data-tippy-content="ETA: {{ updateInfo.CycleTime }}">
-                                <strong>Updated</strong> &nbsp; {{ marketData.Updated|date }}
+                            <span class="cw-small-info" data-tippy-content="This item on this server ({{ serverName }}) <br> aims to update every: {{ updateInfo.Name }} <br><br> <span class='text-yellow'>ETA</span>: {{ updateInfo.CycleTime }} <br> <span class='text-yellow'>Real ETA</span>: {{ updateInfo.CycleTimeReal }}">
+                                <strong>Updated</strong> {{ marketData.Updated|dateSimple }}
                             </span>
 
                             {# PRICE VS QUANTITY #}
@@ -140,13 +140,6 @@
                             {% else %}
                                 <div>umm, prices missing? huh</div>
                             {% endif %}
-
-                            <div class="cw-prices-footer">
-                                Prices are updated based on the items sale rate.
-                                <br>
-                                The more frequently it sells, the faster it will
-                                be updated on the site.
-                            </div>
                         </div>
                         <div class="cw-table cw-history">
                             <h4>HISTORY <small>MAX: 100</small></h4>
@@ -199,11 +192,18 @@
 <small class="cross_world_foot_note">
     <strong>Market Data Information</strong>
     <p>
-        Item prices that are 10x the average have been removed from all Cross-World views.
+        Prices are updated based on the items sale rate.
     </p>
     <p>
-        Items will update in the backend based on their sale frequency,
-        this is being continuously tweaked and is mostly automated.
+        The more frequently it sells, the faster it will
+        be updated on the site.
+    </p>
+    <p>
+        The Maximum "Current Prices" listing is 50, this is a Limitation of Companion.
+    </p>
+
+    <p>
+        Item prices that are 10x the average have been removed from all Cross-World views.
     </p>
 </small>
 

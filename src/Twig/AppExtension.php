@@ -64,7 +64,7 @@ class AppExtension extends AbstractExtension
         $difference = time() - $unix;
         $carbon     = Carbon::now()->subSeconds($difference)->setTimezone(new CarbonTimeZone(Time::timezone()));
         
-        if ($difference > (60 * 180)) {
+        if ($difference > (60 * 60 * 10)) {
             return $carbon->format('j M, H:i');
         }
         
