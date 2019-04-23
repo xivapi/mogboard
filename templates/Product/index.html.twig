@@ -95,11 +95,13 @@
             {# Server Pages #}
             {% for serverName in server.dc_servers %}
                 {% set marketData = attribute(market, serverName) %}
+
+                {% if marketData.Updated %}
                 {% set pricesCount = marketData.Prices|length %}
                 {% set historyCount = marketData.History|length %}
                 {% set updateInfo = attribute(api_stats.Stats.Report, marketData.UpdatePriority) %}
                 {% set cheapestPrice = cheapest[serverName] %}
-                <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name) ? 'open' : '' }}">
+                    <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name) ? 'open' : '' }}">
                     <div class="tab-market-tables">
                         <div class="cw-table cw-prices">
                             <h4>PRICES <small>MAX: 50</small></h4>
@@ -184,6 +186,22 @@
                         </div>
                     </div>
                 </div>
+                {% else %}
+                    <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name) ? 'open' : '' }}">
+                        <div class="alert-red">
+                            <h1>Sorry, no data!</h1>
+                            <p>
+                                At this time there is no data for this item on {{ serverName }}. This is likely
+                                due to the server only recently having its congested status lifted and
+                                items are being updated behind the scenes.
+                            </p>
+                            <p>
+                                Please check back in a couple of hours.
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+
             {% endfor %}
         </div>
     </div>
