@@ -5,10 +5,26 @@
         <div>
             {# News #}
             <div class="home-box2">
-                <div class="home-row">
-                    <img src="/i/game/coin2.png" height="18" style="margin: -6px 5px -3px 0;">
-                    <strong>Welcome to Mogboard.com - A FINAL FANTASY XIV: Online Market Board Site.</strong>
-                    <a href="{{ path('about') }}">Click here to learn all about it!</a>
+                <div class="home-row flex">
+                    <div class="flex_5 tac">
+                        <img src="/i/game/coin2.png">
+                    </div>
+                    <div class="flex_95">
+                        <strong>Welcome to Mogboard.com - A FINAL FANTASY XIV: Online Market Board Site.</strong><br>
+                        <a href="{{ path('about') }}">Click here to learn all about it!</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-box2">
+                <div class="home-row flex">
+                    <div class="flex_5 tac">
+                        <img src="/i/game/notice.png">
+                    </div>
+                    <div class="flex_95">
+                        The following servers are having companion issues: <strong>Balmung, Gungnir, Bahamut, Chocobo, Mandragora, Shinryu</strong> - This will result in a lack
+                        of item prices/history on the site as well as no auto-updating.
+                    </div>
                 </div>
             </div>
 
@@ -105,9 +121,12 @@
                 </div>
             {% else %}
                 <div class="home-box2">
-                    <div class="home-row">
-                        Login to track items, create alerts and have a personalised home-page feed.
-                        (todo - improve this)
+                    <div class="home-row home-logged-out">
+                        <strong>Become a member!</strong>
+                        <br><br>
+                        Create alerts, make lists, add your retainers and get a personalised home page feed!
+                        <br><br>
+                        <a href="{{ path('user_login_discord') }}" class="btn-login">Login via <strong>Discord</strong></strong></a>
                     </div>
                 </div>
             {% endif %}

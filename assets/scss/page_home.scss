@@ -70,18 +70,49 @@
         overflow: hidden;
 
         .home-row {
-            padding: 15px;
             border-bottom: solid 1px #000;
+            line-height: 26px;
+
+            > div {
+                padding: 15px;
+            }
 
             img {
-                vertical-align: middle;
                 display: inline-table;
+                height: 32px;
             }
         }
     }
 
     .home-box2 {
         background-color: var(--dark-blue2);
+    }
+
+    .home-logged-out {
+        padding: 150px 30%;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 300;
+        line-height: 34px !important;
+
+        background-image: url("/i/bg/homepage.png");
+        background-size: cover;
+        background-position: center;
+        box-shadow: inset 0 0 1px 1px rgba(255,255,255,0.1);
+
+        @include mq($until: desktop) {
+            padding: 30px 15px;
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: rgba(119, 36, 183, 0.86);
+            color: #fff;
+            font-size: 20px;
+            box-shadow: 0 1px 3px #000;
+        }
     }
 
     //
