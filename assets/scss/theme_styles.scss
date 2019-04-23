@@ -788,6 +788,7 @@ ul,ol {
 .text-highlight  { color: var(--highlight) };
 
 .alert-default,
+.alert-dark,
 .alert-red,
 .alert-blue,
 .alert-green,
@@ -804,10 +805,32 @@ ul,ol {
     }
 
     p {
-        font-size: 18px;
-        margin-bottom: 0;
         color: #fff;
     }
+}
+
+.alert-default {
+    background-color: var(--default);
+}
+.alert-red {
+    background-color: var(--red);
+}
+.alert-blue {
+    background-color: var(--blue);
+}
+.alert-green {
+    background-color: var(--green);
+}
+.alert-purple {
+    background-color: var(--purple);
+}
+.alert-dark {
+    background-color: var(--color7);
+}
+.alert-white {
+    background-color: var(--white);
+    color: #333;
+    text-shadow: none;
 }
 
 .btn {
@@ -950,29 +973,6 @@ ul,ol {
         line-height: 28px;
         font-size: 15px;
     }
-}
-
-
-
-.alert-default {
-    background-color: var(--default);
-}
-.alert-red {
-    background-color: var(--red);
-}
-.alert-blue {
-    background-color: var(--blue);
-}
-.alert-green {
-    background-color: var(--green);
-}
-.alert-purple {
-    background-color: var(--purple);
-}
-.alert-white {
-    background-color: var(--white);
-    color: #333;
-    text-shadow: none;
 }
 
 .badge-red,

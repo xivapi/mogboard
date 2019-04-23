@@ -126,7 +126,7 @@
                         <tr>
                             <td>{{ report.Name }}</td>
                             <td>{{ report.Priority }}</td>
-                            <td>{{ report.Items|number_format }}</td>
+                            <td>{{ report.Items }}</td>
                             <td>{{ report.CycleTime }}</td>
                             <td>{{ report.CycleTimeReal }}</td>
                             <td class="{{ report.CycleDiffSec|replace({ ',': '' }) < 300 ? 'text-green' : 'text-red' }}">{{ report.CycleDiff }}</td>

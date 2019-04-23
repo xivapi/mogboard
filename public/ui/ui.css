@@ -935,6 +935,7 @@ ul, ol {
   color: var(--highlight); }
 
 .alert-default,
+.alert-dark,
 .alert-red,
 .alert-blue,
 .alert-green,
@@ -945,6 +946,7 @@ ul, ol {
   margin-bottom: 20px;
   width: 100%; }
   .alert-default h1,
+  .alert-dark h1,
   .alert-red h1,
   .alert-blue h1,
   .alert-green h1,
@@ -953,14 +955,36 @@ ul, ol {
     font-size: 32px;
     font-weight: 400; }
   .alert-default p,
+  .alert-dark p,
   .alert-red p,
   .alert-blue p,
   .alert-green p,
   .alert-purple p,
   .alert-white p {
-    font-size: 18px;
-    margin-bottom: 0;
     color: #fff; }
+
+.alert-default {
+  background-color: var(--default); }
+
+.alert-red {
+  background-color: var(--red); }
+
+.alert-blue {
+  background-color: var(--blue); }
+
+.alert-green {
+  background-color: var(--green); }
+
+.alert-purple {
+  background-color: var(--purple); }
+
+.alert-dark {
+  background-color: var(--color7); }
+
+.alert-white {
+  background-color: var(--white);
+  color: #333;
+  text-shadow: none; }
 
 .btn, form button,
 .form button {
@@ -1073,26 +1097,6 @@ ul, ol {
     height: 28px;
     line-height: 28px;
     font-size: 15px; }
-
-.alert-default {
-  background-color: var(--default); }
-
-.alert-red {
-  background-color: var(--red); }
-
-.alert-blue {
-  background-color: var(--blue); }
-
-.alert-green {
-  background-color: var(--green); }
-
-.alert-purple {
-  background-color: var(--purple); }
-
-.alert-white {
-  background-color: var(--white);
-  color: #333;
-  text-shadow: none; }
 
 .badge-red,
 .badge-blue,
