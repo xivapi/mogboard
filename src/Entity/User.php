@@ -551,7 +551,7 @@ class User
         return $this->ssoDiscordAvatar;
     }
     
-    public function setSsoDiscordAvatar(string $ssoDiscordAvatar)
+    public function setSsoDiscordAvatar(?string $ssoDiscordAvatar = null)
     {
         $this->ssoDiscordAvatar = $ssoDiscordAvatar;
         
