@@ -1,5 +1,5 @@
 .page-list {
-    max-width: 800px;
+    max-width: 1200px;
     width: 100%;
     margin: 0 auto;
 
@@ -13,6 +13,10 @@
     box-shadow: 0 1px 3px #000;
     border-radius: 6px;
     padding: 20px;
+
+    @include mq($until: tablet) {
+        padding: 5px;
+    }
 
     h1 {
         font-size: 36px;
@@ -31,6 +35,10 @@
         list-style: none;
         margin: 10px 0;
 
+        @include mq($until: tablet) {
+            padding: 10px;
+        }
+
         li {
             margin-bottom: 10px;
             height: 36px;
@@ -47,6 +55,10 @@
                 display: inline-block;
                 float: right;
                 opacity: 0.6;
+
+                @include mq($until: tablet) {
+                    display: none;
+                }
             }
 
             img {

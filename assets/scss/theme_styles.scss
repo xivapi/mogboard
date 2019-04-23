@@ -263,6 +263,28 @@ form,
     }
 }
 
+table {
+    width: 100%;
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    td {
+        vertical-align: top;
+    }
+}
+
+.table-blank {
+    @include mq($until: tablet) {
+        overflow: auto;
+        border: solid 1px #000;
+        border-radius: 5px;
+        background-color: rgba(0,0,0,0.25);
+    }
+}
+
 .table,
 .table-dark {
     box-shadow: 0 1px 2px 1px #000;
@@ -982,7 +1004,6 @@ ul,ol {
 
 .flex {
     display: flex;
-    flex-wrap: wrap;
 
     @for $i from 1 through 20 {
         .flex_#{$i * 5} {

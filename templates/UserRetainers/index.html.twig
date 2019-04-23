@@ -19,27 +19,34 @@
             {% if apiRetainer %}
                 {% for listing in apiRetainer.Items %}
                     {% set item = game().item(listing.Item.ID) %}
-                    <div class="flex retainer-item">
-                        <div class="flex_5">
-                            <img src="{{ item.ID|icon2x }}" class="retainer-item-icon">
-                        </div>
-                        <div class="flex_95 flex retainer-item-details">
-                            <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">
-                                {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
-                                {{ item.Name }}
-                            </a>
-                            <span class="retainer-item-info">
-                                {{ item.ItemKind.Name }} - {{ item.ItemSearchCategory.Name }}
-                            </span>
-                            <span class="retainer-item-updated">
-                                Updated {{ listing.Updated|date }}
-                            </span>
-                        </div>
+                    <div class="table-blank">
+                        <table>
+                            <tr>
+                                <td width="2%" rowspan="2" class="retainer-item-icon">
+                                    <img src="{{ item.ID|icon2x }}" >
+                                </td>
+                                <td width="60%" class="retainer-item-details">
+                                    <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">
+                                        {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                                        {{ item.Name }}
+                                    </a>
+                                    <span class="retainer-item-info">
+                                    {{ item.ItemKind.Name }} - {{ item.ItemSearchCategory.Name }}
+                                </span>
+                                    <span class="retainer-item-updated">
+                                    Updated {{ listing.Updated|date }}
+                                </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {% include 'Product/prices.html.twig' with {
+                                        'prices': listing.Prices,
+                                    } %}
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-
-                    {% include 'Product/prices.html.twig' with {
-                        'prices': listing.Prices,
-                    } %}
 
                     <br><br><br>
                 {% endfor %}

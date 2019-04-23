@@ -1,5 +1,5 @@
 .page-retainer {
-    max-width: 800px;
+    max-width: 1200px;
     width: 100%;
     margin: 0 auto;
 
@@ -13,6 +13,10 @@
     box-shadow: 0 1px 3px #000;
     border-radius: 6px;
     padding: 20px;
+
+    @include mq($until: tablet) {
+        padding: 5px;
+    }
 
     h1 {
         font-size: 36px;
@@ -72,6 +76,10 @@
 .page-retainer-store {
     padding: 30px;
 
+    @include mq($until: tablet) {
+        padding: 10px;
+    }
+
     .retainer-item {
         margin-bottom: 10px;
         height: 36px;
@@ -79,7 +87,6 @@
     }
 
     .retainer-item-details {
-        padding-left: 20px;
         position: relative;
 
         a {
@@ -91,18 +98,24 @@
 
     .retainer-item-info {
         color: #888;
+        display: inline-block;
+        margin-right: 15px;
     }
 
     .retainer-item-icon {
-        height: 36px;
-        width: 36px;
-        border-radius: 5px;
-        box-shadow: 0 1px 3px #000;
+        img {
+            height: 72px;
+            width: 72px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px #000;
+        }
+
+        @include mq($until: tablet) {
+            display: none;
+        }
     }
 
     .retainer-item-updated {
-        position: absolute;
-        right: 0;
         font-size: 13px;
     }
 }
