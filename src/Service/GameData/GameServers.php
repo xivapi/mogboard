@@ -88,7 +88,7 @@ class GameServers
             'Atomos',
             'Carbuncle',
             'Garuda',
-            # 'Gungnir',
+            'Gungnir',
             'Kujata',
             'Ramuh',
             'Tonberry',
@@ -97,7 +97,7 @@ class GameServers
         ],
         'Gaia' => [
             'Alexander',
-            # 'Bahamut',
+            'Bahamut',
             'Durandal',
             'Fenrir',
             'Ifrit',
@@ -112,13 +112,13 @@ class GameServers
             'Anima',
             'Asura',
             'Belias',
-            # 'Chocobo',
+            'Chocobo',
             'Hades',
             'Ixion',
-            # 'Mandragora',
+            'Mandragora',
             'Masamune',
             'Pandaemonium',
-            # 'Shinryu',
+            'Shinryu',
             'Titan',
         ],
         
@@ -144,7 +144,7 @@ class GameServers
             'Ultros'
         ],
         'Crystal' => [
-            # 'Balmung',
+            'Balmung',
             'Brynhildr',
             'Coeurl',
             'Diabolos',

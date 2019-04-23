@@ -102,9 +102,6 @@ class ItemController extends AbstractController
         $dcServers  = GameServers::getDataCenterServers($server);
         $market     = $this->companion->getByDataCenter($dc, $itemId);
 
-        // todo - this is temp as there is no balmung data
-        unset($market->Balmung);
-        
         // build census
         $census = Redis::Cache()->get("census_{$dc}_{$itemId}");
         if ($census == null) {
