@@ -13,6 +13,7 @@ class CompanionCensus
 {
     const BUBBLE_MIN_PX = 3;
     const BUBBLE_MAX_PX = [ 6, 12, 20 ];
+    const JUNK_PRICE_FACTOR = 5;
     
     /** @var \stdClass */
     private $census = [];
@@ -421,7 +422,7 @@ class CompanionCensus
         
             // if the price is above X times the previous, it's likely a junk price
             // todo - this will need tweaking and examining if its the right amount
-            if ($remove === false && $price > ($previous * 5)) {
+            if ($remove === false && $price > ($previous * self::JUNK_PRICE_FACTOR)) {
                 $remove = true;
             }
         

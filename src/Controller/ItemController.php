@@ -120,6 +120,7 @@ class ItemController extends AbstractController
             'item'      => $item,
             'market'    => $market,
             'census'    => $census,
+            'junkvalue' => CompanionCensus::JUNK_PRICE_FACTOR,
             'recipes'   => $recipes,
             'faved'     => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'     => $user ? $user->getCustomLists() : [],
