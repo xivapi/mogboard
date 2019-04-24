@@ -203,10 +203,18 @@ class ProductAlerts
             data: JSON.stringify(this.alert),
             contentType: "application/json",
             success: response => {
-                if (response === true) {
-                    Popup.success('Alert Saved', 'Your alert has been saved!');
+                this.loadAlerts();
+
+                const state   = response[0];
+                const message = response[1];
+
+                if (state) {
+                    Popup.success('Alert Saved', message);
                     this.loadAlerts();
+                    return;
                 }
+
+                Popup.success('Alert not created', `Could not create alert, reason: ${message}`);
             },
             error: (a,b,c) => {
                 Popup.error('Error 23', 'Could not create the alert. Ask Vek why!');

@@ -28,15 +28,23 @@ class UserAlertsController extends AbstractController
     public function create(Request $request)
     {
         $users = $this->users->getUser(true);
-        if (count($users->getAlerts()) >= $users->getAlertsMax()) {
-            throw new \Exception('too many alerts!');
+        $totalAlerts = count($users->getAlerts());
+        
+        if ($totalAlerts >= $users->getAlertsMax()) {
+            return $this->json([
+                false,
+                "Could not create alert, you seem to be maxed out!? You can make a max of: {$users->getAlertsMax()} - You currently have: {$totalAlerts}"
+            ]);
         }
-
-        return $this->json(
-            $this->alerts->save(
-                UserAlert::buildFromRequest($request)
-            )
+    
+        $this->alerts->save(
+            UserAlert::buildFromRequest($request)
         );
+
+        return $this->json([
+            true,
+            'Alert has been created!',
+        ]);
     }
 
     /**
