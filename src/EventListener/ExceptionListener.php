@@ -52,7 +52,14 @@ class ExceptionListener implements EventSubscriberInterface
             ]
         ];
         
-        if (Redis::Cache()->get("mb_error_{$json->Hash}") == null) {
+        $ignore = false;
+        
+        // ignore 404 errors
+        if ($json->Debug->Code == '404') {
+            $ignore = true;
+        }
+        
+        if ($ignore === false && Redis::Cache()->get("mb_error_{$json->Hash}") == null) {
             Redis::Cache()->set("mb_error_{$json->Hash}", true);
             Discord::mog()->sendMessage(
                 '569968196455759907',
