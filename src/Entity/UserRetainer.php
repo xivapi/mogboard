@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserRetainer
 {
+    const OWNERSHIP_TIMEOUT = 300;
+    
     /**
      * @var string
      * @ORM\Id
@@ -258,7 +260,7 @@ class UserRetainer
     
     public function isRecent(): bool
     {
-        return $this->updated > time() - 300;
+        return $this->updated > time() - self::OWNERSHIP_TIMEOUT;
     }
     
     public function getAdded(): int
@@ -275,7 +277,7 @@ class UserRetainer
     
     public function nextOwnershipAttempt()
     {
-        return $this->updated + 900;
+        return $this->updated + self::OWNERSHIP_TIMEOUT;
     }
 
     public function getApiRetainerId()
