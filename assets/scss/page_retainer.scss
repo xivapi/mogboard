@@ -131,3 +131,16 @@
         opacity: 1;
     }
 }
+
+.character_remove {
+    color: var(--red);
+    font-weight: bold;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    opacity: 0.5;
+
+    &:hover {
+        opacity: 1;
+    }
+}

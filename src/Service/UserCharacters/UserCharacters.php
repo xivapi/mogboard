@@ -4,6 +4,7 @@ namespace App\Service\UserCharacters;
 
 use App\Entity\UserCharacter;
 use App\Exceptions\GeneralJsonException;
+use App\Exceptions\UnauthorisedRetainerOwnershipException;
 use App\Repository\UserCharacterRepository;
 use App\Service\GameData\GameServers;
 use App\Service\User\Users;
@@ -86,6 +87,20 @@ class UserCharacters
     public function save(UserCharacter $obj)
     {
         $this->em->persist($obj);
+        $this->em->flush();
+        return true;
+    }
+    
+    /**
+     * Delete a character
+     */
+    public function delete(UserCharacter $userCharacter)
+    {
+        if ($userCharacter->getUser() !== $this->users->getUser()) {
+            throw new UnauthorisedRetainerOwnershipException();
+        }
+        
+        $this->em->remove($userCharacter);
         $this->em->flush();
         return true;
     }

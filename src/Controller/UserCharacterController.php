@@ -27,4 +27,13 @@ class UserCharacterController extends AbstractController
             $this->characters->confirm($lodestoneId)
         );
     }
+    
+    /**
+     * @Route("/characters/{character}/delete", name="characters_delete")
+     */
+    public function delete(UserCharacter $character)
+    {
+        $this->characters->delete($character);
+        return $this->redirectToRoute('user_account_characters');
+    }
 }

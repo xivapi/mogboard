@@ -1006,6 +1006,7 @@ ul,ol {
 
 .flex {
     display: flex;
+    position: relative;
 
     &.flex-wrap {
         flex-wrap: wrap;

@@ -1147,7 +1147,8 @@ ul, ol {
   text-shadow: none; }
 
 .flex {
-  display: flex; }
+  display: flex;
+  position: relative; }
   .flex.flex-wrap {
     flex-wrap: wrap; }
   .flex.flex-justify-center {
@@ -3221,5 +3222,15 @@ aside {
   margin: 0 0 0 20px;
   opacity: 0.5; }
   .retainer_remove:hover {
+    opacity: 1; }
+
+.character_remove {
+  color: var(--red);
+  font-weight: bold;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  opacity: 0.5; }
+  .character_remove:hover {
     opacity: 1; }
 
