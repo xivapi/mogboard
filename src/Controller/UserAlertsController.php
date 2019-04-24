@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UserAlert;
+use App\Service\ThirdParty\Discord\Discord;
 use App\Service\User\Users;
 use App\Service\UserAlerts\UserAlerts;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,19 +28,32 @@ class UserAlertsController extends AbstractController
      */
     public function create(Request $request)
     {
-        $users = $this->users->getUser(true);
-        $totalAlerts = count($users->getAlerts());
-        
-        if ($totalAlerts >= $users->getAlertsMax()) {
-            return $this->json([
-                false,
-                "Could not create alert, you seem to be maxed out!? You can make a max of: {$users->getAlertsMax()} - You currently have: {$totalAlerts}"
-            ]);
-        }
+        try {
+            $user = $this->users->getUser(true);
+            $totalAlerts = count($user->getAlerts());
     
-        $this->alerts->save(
-            UserAlert::buildFromRequest($request)
-        );
+            if ($totalAlerts >= $user->getAlertsMax()) {
+                return $this->json([
+                    false,
+                    "Could not create alert, you seem to be maxed out!? You can make a max of: {$user->getAlertsMax()} - You currently have: {$totalAlerts}"
+                ]);
+            }
+    
+            $this->alerts->save(
+                UserAlert::buildFromRequest($request)
+            );
+        } catch (\Exception $ex) {
+            $hash = substr(sha1(microtime(true)), 0, 8);
+            Discord::mog()->sendMessage(
+                '569968196455759907',
+                "``({$hash}) Could not create alert for user: {$user->getUsername()}, reason: {$ex->getMessage()}```"
+            );
+            
+            return [
+                false,
+                "Alert could not be created due to internal error, please inform a site admin with the error code: {$hash}"
+            ];
+        }
 
         return $this->json([
             true,
