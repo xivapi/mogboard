@@ -83,6 +83,11 @@ class UserList
         return $this;
     }
     
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+    
     public function getId(): string
     {
         return $this->id;

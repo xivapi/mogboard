@@ -8,14 +8,21 @@
         <ul>
             {% for itemId in list.items %}
                 {% set item = game().item(itemId) %}
-                <li>
-                    <img src="{{ item.ID|icon2x }}">
-                    {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
-                    <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
-                    <small>
-                        {{ item.ItemKind.Name }} -
-                        {{ item.ItemSearchCategory.Name }}
-                    </small>
+                <li class="flex">
+                    <div class="flex_95">
+                        <img src="{{ item.ID|icon2x }}">
+                        {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                        <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                        <small>
+                            {{ item.ItemKind.Name }} -
+                            {{ item.ItemSearchCategory.Name }}
+                        </small>
+                    </div>
+                    <div class="flex_5 tar">
+                        <a class="page-list-remove" href="{{ path('lists_remove_item', { list: list.id, itemId: item.ID, redirect: true }) }}">
+                            <i class="xiv-NavigationClose"></i>
+                        </a>
+                    </div>
                 </li>
             {% endfor %}
         </ul>

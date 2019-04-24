@@ -3126,6 +3126,25 @@ aside {
         display: inline-table;
         margin-right: 20px; }
 
+.page-list-remove {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 0;
+  padding: 0;
+  border-radius: 50px;
+  background-color: var(--red);
+  text-align: center;
+  color: #fff;
+  opacity: 0.5;
+  transition: 150ms;
+  margin-top: 5px; }
+  .page-list-remove:hover {
+    opacity: 1; }
+  .page-list-remove i {
+    margin: 4px 0 0 0;
+    display: inline-table; }
+
 .page-footer {
   padding: 30px; }
   .page-footer h4 {

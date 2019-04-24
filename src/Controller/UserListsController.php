@@ -115,11 +115,17 @@ class UserListsController extends AbstractController
      */
     public function removeItem(Request $request, UserList $list)
     {
-        return $this->json(
-            $this->lists->removeItem(
-                $list,
-                $request->get('itemId')
-            )
+        $response = $this->lists->removeItem(
+            $list,
+            $request->get('itemId')
         );
+        
+        if ($request->get('redirect')) {
+            return $this->redirectToRoute('lists_view', [
+                'slug' => $list->getSlug()
+            ]);
+        }
+        
+        return $this->json($response);
     }
 }
