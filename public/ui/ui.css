@@ -1781,13 +1781,13 @@ aside {
     font-size: 20px;
     margin: 0 25px 0 0; }
   .page-patron-box .pat-row {
-    padding: 14px 0 0 15px; }
+    padding-bottom: 15px; }
   .page-patron-box .pat-avatar {
     border-radius: 8px;
     box-shadow: 0 1px 3px #000;
     height: 46px; }
   .page-patron-box .pat_info {
-    padding-left: 10px; }
+    padding: 14px 0 0 15px; }
 
 .home {
   display: flex;
