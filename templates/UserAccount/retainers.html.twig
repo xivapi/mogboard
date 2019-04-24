@@ -41,6 +41,11 @@
                             <li>
                                 <h6><a href="{{ path('retainer_store', { slug: retainer.slug }) }}">View Shop</a></h6>
                                 Retainers on MogBoard get their own store which you can personalise!
+                                <br><br>
+                            </li>
+                            <li>
+                                <h6><a href="{{ path('retainers_toggle_privacy', { retainer: retainer.id }) }}">Toggle Privacy</a></h6>
+                                {{ retainer.isHidden ? 'Your retainer pages are currently hidden' : 'Your retainer pages are public' }}
                             </li>
                         </ul>
                     {% else %}

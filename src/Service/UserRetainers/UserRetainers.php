@@ -196,6 +196,20 @@ class UserRetainers
     }
     
     /**
+     * Toggle privacy of a retainer
+     */
+    public function togglePrivacy(UserRetainer $userRetainer)
+    {
+        if ($userRetainer->getUser() !== $this->users->getUser()) {
+            throw new UnauthorisedRetainerOwnershipException();
+        }
+        
+        $userRetainer->setHidden(!$userRetainer->isHidden());
+        $this->save($userRetainer);
+        return true;
+    }
+    
+    /**
      * This will remove retainers which have not been verified for more than 2 hours.
      */
     public function removeLurkingRetainers()

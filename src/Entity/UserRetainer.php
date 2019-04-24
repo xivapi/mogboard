@@ -54,6 +54,11 @@ class UserRetainer
      */
     private $confirmed = false;
     /**
+     * @var boolean
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $hidden = false;
+    /**
      * @var int
      * @ORM\Column(type="integer")
      */
@@ -207,7 +212,19 @@ class UserRetainer
     {
         return $this->confirmItem;
     }
-
+    
+    public function isHidden(): bool
+    {
+        return $this->hidden;
+    }
+    
+    public function setHidden(bool $hidden)
+    {
+        $this->hidden = $hidden;
+        
+        return $this;
+    }
+    
     public function setConfirmItem(int $confirmItem)
     {
         $this->confirmItem = $confirmItem;

@@ -2,6 +2,9 @@
 
 {% block body %}
     <div class="page-retainer">
+        {% if retainer.hidden and (auth.user(false) != retainer.user) %}
+        <div class="alert-dark tac">This retainer is private.</div>
+        {% else %}
         <h1>{{ retainer.name }}</h1>
         <small>
             {% if retainer.confirmed %}
@@ -51,10 +54,11 @@
                     <br><br><br>
                 {% endfor %}
             {% else %}
-            <div class="alert-red">
-                Retainer is not selling items or the retainer has not yet sync'd onto XIVAPI.
-            </div>
+                <div class="alert-red">
+                    Retainer is not selling items or the retainer has not yet sync'd onto XIVAPI.
+                </div>
             {% endif %}
         </div>
+        {% endif %}
     </div>
 {% endblock %}

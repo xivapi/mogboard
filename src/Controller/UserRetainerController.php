@@ -47,6 +47,15 @@ class UserRetainerController extends AbstractController
     }
     
     /**
+     * @Route("/retainers/{retainer}/toggle-privacy", name="retainers_toggle_privacy")
+     */
+    public function togglePrivacy(UserRetainer $retainer)
+    {
+        $this->retainers->togglePrivacy($retainer);
+        return $this->redirectToRoute('user_account_retainers');
+    }
+    
+    /**
      * @Route("/retainers/{retainer}/delete", name="retainers_delete")
      */
     public function delete(UserRetainer $retainer)
@@ -82,7 +91,7 @@ class UserRetainerController extends AbstractController
             $apiRetainer = null;
         }
         
-        if ($apiRetainer === null) {
+        if ($retainer === null && $apiRetainer === null) {
             return $this->redirectToRoute('404');
         }
         
