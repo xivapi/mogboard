@@ -13,10 +13,12 @@ class UserAlertRepository extends ServiceEntityRepository
         parent::__construct($registry, UserAlert::class);
     }
     
-    public function findPatrons(bool $patron)
+    public function findPatrons(bool $patron, int $limit)
     {
         $sql = $this->createQueryBuilder('a');
-        $sql->join('a.user', 'u');
+        $sql->join('a.user', 'u')
+            ->orderBy('lastChecked', 'asc')
+            ->setMaxResults($limit);
 
         if ($patron) {
             $sql->where('u.patron > 0');

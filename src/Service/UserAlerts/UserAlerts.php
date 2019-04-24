@@ -93,7 +93,7 @@ class UserAlerts
      */
     public function getAllByPatronStatus(bool $patron = false)
     {
-        return $this->repository->findPatrons($patron);
+        return $this->repository->findPatrons($patron, 200);
     }
 
     /**

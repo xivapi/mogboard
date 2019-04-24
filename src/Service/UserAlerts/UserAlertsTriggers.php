@@ -67,6 +67,7 @@ class UserAlertsTriggers
         $alerts = $this->userAlerts->getAllByPatronStatus($patrons);
         $total = count($alerts);
         $this->console->writeln("Total: {$total}");
+        $start = microtime(true);
         
         /** @var UserAlert $alert */
         foreach ($alerts as $alert) {
@@ -84,6 +85,11 @@ class UserAlertsTriggers
                 $this->userAlerts->delete($alert, true);
                 continue;
             }
+            
+            // update last checked
+            $alert->setLastChecked(time());
+            $this->em->persist($alert);
+            $this->em->flush();
 
             // get user for the alert
             $user = $alert->getUser();
@@ -264,6 +270,9 @@ class UserAlertsTriggers
         }
 
         $this->console->writeln("Finished.");
+        
+        $duration = round(microtime(true) - $start, 2);
+        $this->console->writeln("Duration: {$duration}");
     }
 
     /**

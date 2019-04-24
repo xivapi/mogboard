@@ -11,7 +11,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @ORM\Table(name="users_alerts")
+ * @ORM\Table(
+ *     name="users_alerts",
+ *     indexes={
+ *          @ORM\Index(name="uniq", columns={"uniq"}),
+ *          @ORM\Index(name="item_id", columns={"item_id"}),
+ *          @ORM\Index(name="last_checked", columns={"last_checked"}),
+ *          @ORM\Index(name="server", columns={"not_found_checks"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\UserAlertRepository")
  */
 class UserAlert
@@ -98,6 +106,11 @@ class UserAlert
      * @ORM\Column(type="integer")
      */
     private $added;
+    /**
+     * @var int
+     * @ORM\Column(type="integer", options={"default": 0})
+     */
+    private $lastChecked = 0;
     /**
      * @var string
      * @ORM\Column(type="string", length=100)
@@ -285,6 +298,18 @@ class UserAlert
     {
         $this->added = $added;
 
+        return $this;
+    }
+    
+    public function getLastChecked(): int
+    {
+        return $this->lastChecked;
+    }
+    
+    public function setLastChecked(int $lastChecked)
+    {
+        $this->lastChecked = $lastChecked;
+        
         return $this;
     }
 
