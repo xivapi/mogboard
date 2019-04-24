@@ -59,6 +59,11 @@ class ExceptionListener implements EventSubscriberInterface
             $ignore = true;
         }
         
+        // ignore local
+        if (stripos($json->Debug->File, 'vagrant') !== false) {
+            $ignore = true;
+        }
+        
         if ($ignore === false && Redis::Cache()->get("mb_error_{$json->Hash}") == null) {
             Redis::Cache()->set("mb_error_{$json->Hash}", true);
             Discord::mog()->sendMessage(
