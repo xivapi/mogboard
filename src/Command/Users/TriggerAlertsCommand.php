@@ -17,6 +17,7 @@ class TriggerAlertsCommand extends Command
         'name' => 'TriggerAlertsCommand',
         'desc' => 'Trigger user alerts',
         'args' => [
+            [ 'offset', InputArgument::OPTIONAL, 'Query offset' ],
             [ 'patrons', InputArgument::OPTIONAL, 'Filter for patron users?' ]
         ]
     ];
@@ -33,6 +34,7 @@ class TriggerAlertsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->alertTriggers->trigger(
+            $input->getArgument('offset'),
             !empty($input->getArgument('patrons'))
         );
     }

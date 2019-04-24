@@ -91,9 +91,9 @@ class UserAlerts
     /**
      * Get all alerts by their patron status
      */
-    public function getAllByPatronStatus(bool $patron = false)
+    public function getAllByPatronStatus(int $offset, bool $patron = false)
     {
-        return $this->repository->findPatrons($patron, 200);
+        return $this->repository->findPatrons($patron, $offset, 100);
     }
 
     /**

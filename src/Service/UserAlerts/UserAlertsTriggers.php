@@ -59,12 +59,12 @@ class UserAlertsTriggers
      * Trigger alerts, intended to be called from commands
      * todo - there is so much shit in here.. it really needs breaking up
      */
-    public function trigger(bool $patrons = false)
+    public function trigger(int $offset, bool $patrons = false)
     {
         $this->console->writeln("Triggering Alerts");
     
         // grab all alerts
-        $alerts = $this->userAlerts->getAllByPatronStatus($patrons);
+        $alerts = $this->userAlerts->getAllByPatronStatus($patrons, $offset);
         $total = count($alerts);
         $this->console->writeln("Total: {$total}");
         $start = microtime(true);
