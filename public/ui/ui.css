@@ -2195,7 +2195,8 @@ aside {
   .product .item_nav .item_nav_custom {
     flex: 0 1 220px;
     justify-content: right;
-    display: flex; }
+    display: flex;
+    flex-direction: row-reverse; }
     .product .item_nav .item_nav_custom button {
       border-left: solid 1px #000;
       border-right: none; }

@@ -13,6 +13,12 @@
             <div>
                 <h3>Create a new alert on server: {{ server.name }}</h3>
                 <form id="alert_form" class="alert_form" method="post" action="{{ url('alerts_create') }}">
+                    <div class="alert-dark">
+                        For discord notifications to work, you must be in a server that uses Ser Aymeric Bot.
+                        <a href="https://discord.gg/MFFVHWC">The XIVAPI/Mogboard</a> discord will work. You
+                        must also ensure your privacy setting for "Allow direct messages from server memebrs"
+                        is turned on.
+                    </div>
                     <div class="alert-form-loading">
                         <img src="/i/svg/loading3.svg" height="64px">
                     </div>
