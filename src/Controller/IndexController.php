@@ -87,6 +87,10 @@ class IndexController extends AbstractController
         $user    = $this->users->getUser(false);
     
         $request->getSession()->set('feedback_sent', 'no');
+    
+        if (strtolower($request->get('ted')) !== 'ffxiv') {
+            return $this->redirectToRoute('feedback');
+        }
         
         if (strlen($message) == 0) {
             return $this->redirectToRoute('feedback');
