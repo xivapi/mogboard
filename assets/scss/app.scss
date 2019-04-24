@@ -57,9 +57,9 @@
 // media query library
 $mq-breakpoints: (
     mobile:  320px,
-    tablet:  740px,
-    desktop: 1000px,
-    wide:    1300px
+    tablet:  640px,
+    desktop: 980px,
+    wide:    980px
 );
 @import 'mq';
 
