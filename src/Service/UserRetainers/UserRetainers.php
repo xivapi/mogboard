@@ -153,7 +153,7 @@ class UserRetainers
             $this->save($retainer);
             return [
                 false,
-                $message
+                'Could not find the item at the correct price on the market, try again soon as companion may be having issues.'
             ];
         }
 
