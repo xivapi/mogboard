@@ -20,16 +20,21 @@ class User
     const PATREON_HEALER     = 3;
     const PATREON_DPS        = 4;
     const PATREON_BENEFIT    = 9;
+    
+    const DEFAULT_MAX           = 3;
+    const DEFAULT_MAX_NOTIFY    = 20;
+    const DEFAULT_TIMEOUT       = (60 * 60);
+    const DEFAULT_EXPIRY        = (60 * 60 * 24 * 3);
 
     /**
      * Alert benefits per patreon
      */
     const ALERT_LIMITS = [
         self::NORMAL_USER => [
-            'MAX'                   => 3,
-            'MAX_NOTIFICATIONS'     => 20,
-            'NOTIFY_TIMEOUT'        => (60 * 60),
-            'EXPIRY_TIMEOUT'        => (60 * 60 * 24 * 3),
+            'MAX'                   => self::DEFAULT_MAX,
+            'MAX_NOTIFICATIONS'     => self::DEFAULT_MAX_NOTIFY,
+            'NOTIFY_TIMEOUT'        => self::DEFAULT_TIMEOUT,
+            'EXPIRY_TIMEOUT'        => self::DEFAULT_EXPIRY,
             'UPDATE_TIMEOUT'        => false,
         ],
         self::PATREON_ADVENTURER => [
@@ -144,12 +149,12 @@ class User
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $alertsMax = 0;
+    private $alertsMax = self::DEFAULT_MAX;
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $alertsMaxNotifications = 0;
+    private $alertsMaxNotifications = self::DEFAULT_MAX_NOTIFY;
     /**
      * @var int
      * @ORM\Column(type="integer")
@@ -159,12 +164,12 @@ class User
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $alertsNotifyTimeout = 0;
+    private $alertsNotifyTimeout = self::DEFAULT_TIMEOUT;
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $alertsExpiry = 0;
+    private $alertsExpiry = self::DEFAULT_EXPIRY;
 
     //
     // -------- DISCORD SSO --------
