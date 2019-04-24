@@ -17,7 +17,7 @@ class UserAlertRepository extends ServiceEntityRepository
     {
         $sql = $this->createQueryBuilder('a');
         $sql->join('a.user', 'u')
-            ->orderBy('lastChecked', 'asc')
+            ->orderBy('a.lastChecked', 'asc')
             ->setMaxResults($limit);
 
         if ($patron) {
