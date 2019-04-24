@@ -59,12 +59,12 @@ class UserAlertsTriggers
      * Trigger alerts, intended to be called from commands
      * todo - there is so much shit in here.. it really needs breaking up
      */
-    public function trigger(int $offset, bool $patrons = false)
+    public function trigger(int $offset, bool $patronQueue = false)
     {
         $this->console->writeln("Triggering Alerts");
-    
+
         // grab all alerts
-        $alerts = $this->userAlerts->getAllByPatronStatus($patrons, $offset, 100);
+        $alerts = $this->userAlerts->getAllByPatronStatus($patronQueue, $offset, 100);
         $total = count($alerts);
         $this->console->writeln("Total: {$total}");
         $start = microtime(true);
@@ -82,7 +82,7 @@ class UserAlertsTriggers
             // check if the alert has expired, if so, delete it
             // todo - enable this at launch
             if ($alert->isExpired()) {
-                $this->userAlerts->delete($alert, true);
+                #$this->userAlerts->delete($alert, true);
                 continue;
             }
             
