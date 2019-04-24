@@ -105,6 +105,15 @@
     }
 }
 
+.pat-perk-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin: -15px -15px 10px -15px;
+    padding: 20px;
+    text-align: center;
+    background-color: #333;
+}
+
 .account-panel {
     background-color: var(--dark-blue2);
     box-shadow: 0 0 3px rgba(200,200,200,0.2);

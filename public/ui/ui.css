@@ -965,7 +965,9 @@ ul, ol {
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 20px;
-  width: 100%; }
+  width: 100%;
+  line-height: 24px;
+  overflow: hidden; }
   .alert-default h1,
   .alert-dark h1,
   .alert-red h1,
@@ -2787,6 +2789,14 @@ aside {
     padding: 0 12px;
     color: #fff;
     cursor: pointer; }
+
+.pat-perk-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin: -15px -15px 10px -15px;
+  padding: 20px;
+  text-align: center;
+  background-color: #333; }
 
 .account-panel {
   background-color: var(--dark-blue2);
