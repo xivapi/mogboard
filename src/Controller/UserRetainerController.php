@@ -68,7 +68,7 @@ class UserRetainerController extends AbstractController
             : $this->retainers->getCompanionApiRetainer($slug);
         
         if ($isStoreSlug && $retainer === null) {
-            throw new NotFoundHttpException('Could not find a retainer for this slug.');
+            return $this->redirectToRoute('404');
         }
         
         /**
@@ -80,6 +80,10 @@ class UserRetainerController extends AbstractController
             );
         } catch (\Exception $ex) {
             $apiRetainer = null;
+        }
+        
+        if ($apiRetainer === null) {
+            return $this->redirectToRoute('404');
         }
         
         // if no retainer, find name from 1st item and make a temp user retainer object
