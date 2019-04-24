@@ -113,6 +113,7 @@ class UserAlertsDiscordNotification
         }
         
         // print trigger conditions
+        /*
         $triggers = [];
         foreach($alert->getTriggerConditionsFormatted() as $trigger) {
             [$field, $op, $value, $operatorShort, $operatorLong] = $trigger;
@@ -125,6 +126,7 @@ class UserAlertsDiscordNotification
             $triggers[] = "- {$field} {$operatorLong} {$value}";
         }
         $triggers = "```". implode("\n", $triggers) ."```";
+        */
         
         // modify footer
         $footer = self::FOOTER;
@@ -134,7 +136,7 @@ class UserAlertsDiscordNotification
         $embed = [
             'author'        => self::ALERT_AUTHOR,
             'title'         => $alert->getName(),
-            'description'   => "The item: **{$item->Name_en}** has triggered ". count($triggeredMarketRows) ." market alerts under the type: {$alert->getTriggerType()}.\n{$triggers}\n \n ",
+            'description'   => "The item: **{$item->Name_en}** has triggered ". count($triggeredMarketRows) ." market alerts under the type: {$alert->getTriggerType()}.\n ",
             'url'           => getenv('SITE_CONFIG_DOMAIN') . "/market/{$item->ID}",
             'color'         => hexdec(self::COLOR_YELLOW),
             'footer'        => $footer,
