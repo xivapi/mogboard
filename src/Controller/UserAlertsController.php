@@ -29,8 +29,8 @@ class UserAlertsController extends AbstractController
     public function create(Request $request)
     {
         try {
-            $user = $this->users->getUser(true);
-            $totalAlerts = count($user->getAlerts());
+            $user        = $this->users->getUser(true);
+            $totalAlerts = $user->totalAlerts();
     
             if ($totalAlerts >= $user->getAlertsMax()) {
                 return $this->json([

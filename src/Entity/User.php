@@ -306,6 +306,11 @@ class User
     {
         return $this->alerts;
     }
+    
+    public function totalAlerts()
+    {
+        return $this->alerts ? count($this->alerts) : 0;
+    }
 
     public function setAlerts($alerts)
     {
