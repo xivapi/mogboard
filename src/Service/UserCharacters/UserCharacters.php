@@ -110,10 +110,16 @@ class UserCharacters
      */
     public function autoupdate()
     {
-        $characters = $this->repository->findLastUpdated(100);
+        $a = microtime(true);
+        $console = new ConsoleOutput();
+        $console->writeln("Getting 500 characters to update");
+        
+        $characters = $this->repository->findLastUpdated(500);
 
         /** @var UserCharacter $character */
         foreach ($characters as $character) {
+            $console->writeln("- {$character->getName()}");
+            
             $data = $this->xivapi->character->get($character->getLodestoneId());
 
             // ensure we don't get stuck on a character
@@ -131,5 +137,8 @@ class UserCharacters
 
             $this->save($character);
         }
+        
+        $b = round(microtime(true) - $a, 3);
+        $console->writeln("Done! {$b}");
     }
 }
