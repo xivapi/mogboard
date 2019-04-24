@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  *          @ORM\Index(name="uniq", columns={"uniq"}),
  *          @ORM\Index(name="item_id", columns={"item_id"}),
  *          @ORM\Index(name="last_checked", columns={"last_checked"}),
- *          @ORM\Index(name="server", columns={"not_found_checks"})
+ *          @ORM\Index(name="server", columns={"server"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserAlertRepository")
