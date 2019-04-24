@@ -123,10 +123,12 @@ class UserAlerts
      */
     public function delete(UserAlert $alert, bool $force = false)
     {
-        $user = $this->users->getUser();
-        
-        if ($force || $alert->getUser() !== $user) {
-            throw new UnauthorisedAlertOwnershipException();
+        if ($force === false) {
+            $user = $this->users->getUser();
+    
+            if ($force || $alert->getUser() !== $user) {
+                throw new UnauthorisedAlertOwnershipException();
+            }
         }
 
         $this->em->remove($alert);

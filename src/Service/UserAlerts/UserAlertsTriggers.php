@@ -93,6 +93,12 @@ class UserAlertsTriggers
 
             // get user for the alert
             $user = $alert->getUser();
+            
+            // if no user, delete alert
+            if ($user === null) {
+                $this->userAlerts->delete($alert, true);
+                continue;
+            }
 
             /**
              * Handle the server for the alert,
