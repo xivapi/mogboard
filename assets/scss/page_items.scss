@@ -8,7 +8,7 @@
         display: flex;
         margin-bottom: 20px;
 
-        @include mq($until: tablet) {
+        @include mq($until: desktop) {
             display: block
         }
     }
@@ -16,7 +16,7 @@
     .item_icon {
         flex: 0 1 120px;
 
-        @include mq($until: tablet) {
+        @include mq($until: desktop) {
             flex: 0 1 100%;
             text-align: center;
             margin-bottom: 20px;
@@ -28,7 +28,7 @@
             border-radius: 10px;
             box-shadow: 0 1px 3px #000;
 
-            @include mq($until: tablet) {
+            @include mq($until: desktop) {
                 width: 72px;
                 height: 72px;
             }
@@ -40,7 +40,7 @@
         padding-left: 30px;
         position: relative;
 
-        @include mq($until: tablet) {
+        @include mq($until: desktop) {
             flex: 0 1 100%;
             padding-left: 0;
         }
@@ -50,7 +50,7 @@
             right: 0;
             top: 0;
 
-            @include mq($until: tablet) {
+            @include mq($until: desktop) {
                 display: none;
             }
 
@@ -86,7 +86,7 @@
             flex: 0 1 calc(100% - 128px);
             height: 80px;
 
-            @include mq($until: tablet) {
+            @include mq($until: desktop) {
                 display: block;
                 flex: 0 1 100%;
             }
@@ -101,7 +101,7 @@
                     font-size: 24px;
                 }
 
-                @include mq($until: tablet) {
+                @include mq($until: desktop) {
                     margin: 5px;
                     font-size: 24px;
                     display: block;
@@ -159,18 +159,19 @@
             font-size: 16px;
         }
 
-        @include mq($until: tablet) {
+        @include mq($until: desktop) {
             display: block;
         }
     }
 
     .item_nav {
+        display: flex;
         background-color: var(--default);
         border-radius: 5px;
         overflow: hidden;
         position: relative;
 
-        @include mq($until: tablet) {
+        @include mq($until: desktop) {
             display: none;
 
             &.open {
@@ -178,19 +179,9 @@
             }
         }
 
-        .item_nav_servers {
-            display: flex;
-
-            @include mq($until: tablet) {
-                display: block;
-            }
-        }
-
         button {
             background-color: transparent;
-            height: 40px;
-            line-height: 40px;
-            padding: 0 15px;
+            padding: 12px 15px;
             font-size: 16px;
             color: #fff;
             border: none;
@@ -202,7 +193,7 @@
             cursor: pointer;
             text-align: center;
 
-            @include mq($until: tablet) {
+            @include mq($until: desktop) {
                 display: block;
                 width: 100%;
                 border-bottom: solid 1px #000;
@@ -240,18 +231,28 @@
             }
         }
 
-        .item_nav_custom {
+        .item_nav_servers {
+            flex: 0 1 calc(100% - 220px);
             display: flex;
-            position: absolute;
-            right: 0;
-            top: 0;
+
+            @include mq($until: desktop) {
+                display: block;
+                flex: none;
+            }
+        }
+
+        .item_nav_custom {
+            flex: 0 1 220px;
+            justify-content: right;
+            display: flex;
 
             button {
                 border-left: solid 1px #000;
                 border-right: none;
             }
 
-            @include mq($until: wide) {
+            @include mq($until: desktop) {
+                flex: none;
                 border-top: solid 1px #000;
                 display: block;
                 position: relative;
