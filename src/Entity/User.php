@@ -21,7 +21,7 @@ class User
     const PATREON_DPS        = 4;
     const PATREON_BENEFIT    = 9;
     
-    const DEFAULT_MAX           = 3;
+    const DEFAULT_MAX           = 5;
     const DEFAULT_MAX_NOTIFY    = 20;
     const DEFAULT_TIMEOUT       = (60 * 60);
     const DEFAULT_EXPIRY        = (60 * 60 * 24 * 3);
