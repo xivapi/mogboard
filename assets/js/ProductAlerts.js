@@ -205,8 +205,12 @@ class ProductAlerts
             success: response => {
                 this.loadAlerts();
 
-                const state   = response[0];
-                const message = response[1];
+                let state   = response[0];
+                let message = response[1];
+
+                if (message.length < 1) {
+                    message = "(No response message)"
+                }
 
                 if (state) {
                     Popup.success('Alert Saved', message);
