@@ -19,9 +19,11 @@
                         </small>
                     </div>
                     <div class="flex_5 tar">
+                        {% if list.user == auth.user %}
                         <a class="page-list-remove" href="{{ path('lists_remove_item', { list: list.id, itemId: item.ID, redirect: true }) }}">
                             <i class="xiv-NavigationClose"></i>
                         </a>
+                        {% endif %}
                     </div>
                 </li>
             {% endfor %}
