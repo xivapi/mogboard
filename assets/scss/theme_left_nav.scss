@@ -28,7 +28,7 @@ aside {
     overflow: hidden;
     box-shadow: 0 1px 3px #000;
 
-    @include mq($until: wide) {
+    @include mq($until: desktop) {
         display: none;
     }
 
