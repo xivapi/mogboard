@@ -111,7 +111,7 @@ class UserAlerts
         $this->em->flush();
         
         if ($sendDiscordMessage && $alert->isNotifiedViaDiscord()) {
-            $this->discord->sendSavedAlertNotification($alert);
+            # $this->discord->sendSavedAlertNotification($alert);
         }
         
         return true;
@@ -135,7 +135,7 @@ class UserAlerts
         $this->em->flush();
 
         if ($alert->isNotifiedViaDiscord()) {
-            $this->discord->sendDeletedAlertNotification($alert);
+            # $this->discord->sendDeletedAlertNotification($alert);
         }
         
         return true;
