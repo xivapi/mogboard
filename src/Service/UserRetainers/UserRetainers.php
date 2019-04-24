@@ -18,7 +18,7 @@ use XIVAPI\XIVAPI;
 class UserRetainers
 {
     // the maximum amount of time an unconfirmed retainer may exist.
-    const MAX_LURK_TIME = (60 * 60 * 2);
+    const MAX_LURK_TIME = (60 * 60 * 24);
     
     /** @var EntityManagerInterface */
     private $em;
@@ -107,12 +107,18 @@ class UserRetainers
      */
     public function confirm(UserRetainer $retainer)
     {
+        $found = false;
+        $message = '';
+
         // enforce the user is online
         $this->users->getUser();
         
         // if the retainer was updated recently, don't do anything
         if ($retainer->isRecent()) {
-            return false;
+            return [
+                $found,
+                'Tried too recently',
+            ];
         }
 
         // confirmation variables
@@ -123,25 +129,32 @@ class UserRetainers
         
         // query market
         $xivapi = new XIVAPI();
-        $market = $xivapi->_private->itemPrices(
-            getenv('XIVAPI_COMPANION_KEY'),
-            $itemId,
-            $server
-        );
-        
-        // find listing
-        $found = false;
-        foreach ($market->entries as $entry) {
-            if ($entry->sellRetainerName == $name && $entry->sellPrice == $itemPrice) {
-                $found = true;
-                break;
+        try {
+            $market = $xivapi->_private->itemPrices(
+                getenv('XIVAPI_COMPANION_KEY'),
+                $itemId,
+                $server
+            );
+    
+            // find listing
+            foreach ($market->entries as $entry) {
+                if ($entry->sellRetainerName == $name && $entry->sellPrice == $itemPrice) {
+                    $found = true;
+                    break;
+                }
             }
+        } catch (\Exception $ex) {
+            $message = 'The companion servers are having problems right now and could not verify. Try again soon';
         }
-        
+
+        // could not verify
         if ($found === false) {
             $retainer->setUpdated(time());
             $this->save($retainer);
-            return false;
+            return [
+                false,
+                $message
+            ];
         }
 
         // confirm ownership and save
@@ -152,7 +165,10 @@ class UserRetainers
             ->setUpdated(time());
 
         $this->save($retainer);
-        return true;
+        
+        return [
+            true, null
+        ];
     }
 
     /**

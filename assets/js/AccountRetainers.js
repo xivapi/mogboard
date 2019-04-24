@@ -34,12 +34,16 @@ class AccountRetainers
             $.ajax({
                 url: mog.urls.retainers.confirm.replace('-id-', id),
                 success: response => {
-                    if (response == false) {
-                        Popup.error('Not yet!', 'Could not find your retainer on the market board for the chosen item. It may be that Companion has not yet synchronised with the game servers. <br><br> Try again in 15 minutes or contact Vekien on discord for help!');
+                    const status = response[0];
+                    const message = response[1];
+
+                    if (status == false) {
+                        Popup.error('Not yet!', message);
                         return;
                     }
 
                     Popup.success('Retainer Confirmed!', 'You are all good to go, the retainer is yours! <br> The site will refresh in 3 seconds.');
+                    Popup.setForcedOpen(true);
                     setTimeout(() => {
                         location.reload();
                     }, 3000);

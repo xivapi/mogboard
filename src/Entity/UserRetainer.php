@@ -241,7 +241,7 @@ class UserRetainer
     
     public function isRecent(): bool
     {
-        return $this->updated > time() - 900;
+        return $this->updated > time() - 300;
     }
     
     public function getAdded(): int

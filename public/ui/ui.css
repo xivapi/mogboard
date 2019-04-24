@@ -1824,13 +1824,20 @@ aside {
     border-radius: 5px;
     margin-bottom: 20px;
     overflow: hidden; }
+    .home .home-box h4,
+    .home .home-box2 h4 {
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--highlight);
+      text-transform: uppercase;
+      margin: 0 0 2px 0; }
     .home .home-box .home-row,
     .home .home-box2 .home-row {
       border-bottom: solid 1px #000;
       line-height: 26px; }
       .home .home-box .home-row > div,
       .home .home-box2 .home-row > div {
-        padding: 10px; }
+        padding: 12px; }
       .home .home-box .home-row img,
       .home .home-box2 .home-row img {
         display: inline-table;
@@ -1922,7 +1929,7 @@ aside {
   .home .home-mog-status .home-mog-queue {
     font-size: 14px;
     background-color: rgba(20, 20, 20, 0.3);
-    padding: 10px; }
+    padding: 5px 10px !important; }
     .home .home-mog-status .home-mog-queue span {
       display: inline-block; }
   .home .home-alert-row {
