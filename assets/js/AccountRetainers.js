@@ -34,8 +34,12 @@ class AccountRetainers
             $.ajax({
                 url: mog.urls.retainers.confirm.replace('-id-', id),
                 success: response => {
-                    const status = response[0];
-                    const message = response[1];
+                    let status = response[0];
+                    let message = response[1];
+
+                    if (message.trim().length < 1) {
+                        message = 'Could not add your retainer, the Companion Servers may be having issues. Please try again soon or contact Vekien on discord';
+                    }
 
                     if (status == false) {
                         Popup.error('Not yet!', message);
