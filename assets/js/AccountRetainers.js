@@ -143,8 +143,8 @@ class AccountRetainers
                 itemId: $('#retainer_item').val().trim(),
             };
 
-            if (retainer.name.length == 0) {
-                Popup.error('Nothing entered?', 'I think you forgot to type something...');
+            if (retainer.name.length < 2) {
+                Popup.error('No name?', 'is your retainer name really below 2 characters?');
                 return;
             }
 
