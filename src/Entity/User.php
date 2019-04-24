@@ -498,6 +498,18 @@ class User
     {
         return $this->characters;
     }
+    
+    public function getMainCharacter()
+    {
+        /** @var UserCharacter $character */
+        foreach ($this->characters as $character) {
+            if ($character->isMain()) {
+                return $character;
+            }
+        }
+        
+        return null;
+    }
 
     public function setCharacters($characters)
     {

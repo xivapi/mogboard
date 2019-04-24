@@ -1770,6 +1770,18 @@ aside {
 .feedback-rules {
   padding-right: 30px; }
 
+.page-patron-box {
+  background-color: var(--color7);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 4px; }
+  .page-patron-box .pat-avatar {
+    border-radius: 8px;
+    box-shadow: 0 1px 3px #000;
+    height: 64px; }
+  .page-patron-box .pat_info {
+    padding-left: 10px; }
+
 .home {
   display: flex;
   max-width: 1600px;

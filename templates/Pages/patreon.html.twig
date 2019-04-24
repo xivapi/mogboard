@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% set title = '404 Not Found' %}
+
+{% set tiers = {
+    1: 'Adventurers',
+    2: 'Tanks',
+    3: 'Healers',
+    4: 'DPS',
+    9: 'Friends with benefits'
+} %}
+
+{% block body %}
+
+    <div class="page">
+        <h1>Patrons!</h1>
+
+        <div class="page-block">
+            <p class="tac">I would like to give a huge thank you to the following people for supporting Mogboard</p>
+
+            {% for tier, patrons in user_patrons %}
+                <h3>{{ tiers[tier] }}</h3>
+
+                <div class="page-patron-box">
+                    {% for user in patrons %}
+                    {% set mainCharacter = user.mainCharacter %}
+                    <div class="flex pat-row">
+                        <div class="flex_10">
+                            <img src="{{ user.avatar }}" class="pat-avatar">
+                        </div>
+                        <div class="flex_90">
+                            <div class="pat_info">
+                                <h5>{{ user.username }}</h5>
+                                <div>
+                                    {% if mainCharacter %}
+                                        {{ mainCharacter.name }} ({{ mainCharacter.server }})
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

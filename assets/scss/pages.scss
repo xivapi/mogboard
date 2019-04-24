@@ -222,3 +222,23 @@
 .feedback-rules {
     padding-right: 30px;
 }
+
+//
+// Patreon
+//
+.page-patron-box {
+    background-color: var(--color7);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+
+    .pat-avatar {
+        border-radius: 8px;
+        box-shadow: 0 1px 3px #000;
+        height: 64px;
+    }
+
+    .pat_info {
+        padding-left: 10px;
+    }
+}

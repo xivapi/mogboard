@@ -65,6 +65,16 @@ class IndexController extends AbstractController
     }
     
     /**
+     * @Route("/patreon", name="patreon")
+     */
+    public function patreon()
+    {
+        return $this->render('Pages/patreon.html.twig', [
+            'user_patrons' => $this->users->getPatrons()
+        ]);
+    }
+    
+    /**
      * @Route("/feedback", name="feedback")
      */
     public function feedback(Request $request)

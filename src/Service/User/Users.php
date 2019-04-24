@@ -259,4 +259,16 @@ class Users
 
         $this->em->flush();
     }
+    
+    public function getPatrons()
+    {
+        return [
+            4 => $this->repository->findBy([ 'patron' => 4 ]),
+            3 => $this->repository->findBy([ 'patron' => 3 ]),
+            2 => $this->repository->findBy([ 'patron' => 2 ]),
+            1 => $this->repository->findBy([ 'patron' => 1 ]),
+
+            9 => $this->repository->findBy([ 'patron' => 9 ]),
+        ];
+    }
 }
