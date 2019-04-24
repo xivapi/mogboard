@@ -32,11 +32,6 @@ class ExceptionListener implements EventSubscriberInterface
             return null;
         }
         
-        // ignore non JSON errors
-        if (get_class($ex) !== GeneralJsonException::class) {
-            return;
-        }
-
         $file = str_ireplace('/home/dalamud/dalamud', '', $ex->getFile());
         $file = str_ireplace('/home/dalamud/dalamud_staging', '', $file);
         $message = $ex->getMessage() ?: '(no-exception-message)';
@@ -63,6 +58,11 @@ class ExceptionListener implements EventSubscriberInterface
                 '569968196455759907',
                 "```". json_encode($json, JSON_PRETTY_PRINT) ."```"
             );
+        }
+    
+        // ignore non JSON errors
+        if (get_class($ex) !== GeneralJsonException::class) {
+            return;
         }
 
         $response = new JsonResponse($json, $json->Debug->Code);
