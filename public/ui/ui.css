@@ -1830,7 +1830,7 @@ aside {
       line-height: 26px; }
       .home .home-box .home-row > div,
       .home .home-box2 .home-row > div {
-        padding: 15px; }
+        padding: 10px; }
       .home .home-box .home-row img,
       .home .home-box2 .home-row img {
         display: inline-table;
@@ -1918,13 +1918,11 @@ aside {
     display: block;
     text-transform: uppercase;
     text-shadow: none;
-    color: var(--color9);
-    margin-bottom: 10px; }
+    color: var(--color9); }
   .home .home-mog-status .home-mog-queue {
     font-size: 14px;
     background-color: rgba(20, 20, 20, 0.3);
-    margin: 0 -15px;
-    padding: 15px; }
+    padding: 10px; }
     .home .home-mog-status .home-mog-queue span {
       display: inline-block; }
   .home .home-alert-row {

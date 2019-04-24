@@ -164,18 +164,12 @@
 
             <h4>Mog Market Status</h4>
             <div class="home-box home-mog-status">
-                <div class="home-row flex">
-                    <div class="flex_50">
-                        <small>Moogles Online</small>
-                        <strong>{{ market_stats.Stats.DatabaseSqlReport.characters_online }}</strong>
-                    </div>
-                    <div class="flex_50">
-                        <small>Market Items</small>
-                        <strong>{{ market_stats.Stats.DatabaseSqlReport.total_entries }}</strong>
+                <div class="home-row tac">
+                    <div class="home-mog-queue">
+                        Market Items &nbsp; <strong>{{ market_stats.Stats.DatabaseSqlReport.total_entries }}</strong>
                     </div>
                 </div>
                 <div class="home-row">
-                    <h5>Auto-Update Status</h5>
                     {% for queue in [1,2,3,4,5,6,7] %}
                         {% set report = attribute(market_stats.Stats.Report, queue) %}
                         <div class="home-mog-queue" data-tippy-content="{{ report.CycleDiffSec < 300 ? 'Items in this queue are updating <br> as fast as expected.' : 'Items in this queue are updating <br> slower than expected' }}">
@@ -195,6 +189,11 @@
                             </div>
                         </div>
                     {% endfor %}
+                </div>
+                <div class="home-row tac">
+                    <div class="home-mog-queue">
+                        Updated &nbsp; <strong>{{ market_stats.Stats.ReportUpdated|dateSimple }}</strong>
+                    </div>
                 </div>
             </div>
 
