@@ -61,7 +61,7 @@ class SearchController extends AbstractController
     
                     $itemsDe[$cat->ID][] = [
                         $item->ID,
-                        $item->Name_en,
+                        $item->Name_de,
                         $item->Icon,
                         $item->LevelItem,
                         $item->Rarity,
@@ -70,7 +70,7 @@ class SearchController extends AbstractController
     
                     $itemsFr[$cat->ID][] = [
                         $item->ID,
-                        $item->Name_en,
+                        $item->Name_fr,
                         $item->Icon,
                         $item->LevelItem,
                         $item->Rarity,
@@ -79,7 +79,7 @@ class SearchController extends AbstractController
     
                     $itemsJa[$cat->ID][] = [
                         $item->ID,
-                        $item->Name_en,
+                        $item->Name_ja,
                         $item->Icon,
                         $item->LevelItem,
                         $item->Rarity,
