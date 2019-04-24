@@ -41,6 +41,7 @@ class ExceptionListener implements EventSubscriberInterface
             'Subject' => 'MOGBOARD Service Error',
             'Message' => $message,
             'Hash'    => sha1($message),
+            'Url'     => $event->getRequest()->getUri(),
             'Debug'   => (Object)[
                 'Env'     => getenv('APP_ENV'),
                 'File'    => "#{$ex->getLine()} {$file}",
