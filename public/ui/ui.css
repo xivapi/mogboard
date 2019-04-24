@@ -1775,10 +1775,17 @@ aside {
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 4px; }
+  .page-patron-box h5 {
+    color: var(--green-3x);
+    display: inline-block;
+    font-size: 20px;
+    margin: 0 25px 0 0; }
+  .page-patron-box .pat-row {
+    padding: 14px 0 0 15px; }
   .page-patron-box .pat-avatar {
     border-radius: 8px;
     box-shadow: 0 1px 3px #000;
-    height: 64px; }
+    height: 46px; }
   .page-patron-box .pat_info {
     padding-left: 10px; }
 

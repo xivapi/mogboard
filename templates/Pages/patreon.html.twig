@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% set title = '404 Not Found' %}
+{% set title = 'Patrons' %}
 
 {% set tiers = {
     1: 'Adventurers',
@@ -24,17 +24,17 @@
                     {% for user in patrons %}
                     {% set mainCharacter = user.mainCharacter %}
                     <div class="flex pat-row">
-                        <div class="flex_10">
+                        <div class="flex_5">
                             <img src="{{ user.avatar }}" class="pat-avatar">
                         </div>
-                        <div class="flex_90">
+                        <div class="flex_95">
                             <div class="pat_info">
                                 <h5>{{ user.username }}</h5>
-                                <div>
+                                <span>
                                     {% if mainCharacter %}
                                         {{ mainCharacter.name }} ({{ mainCharacter.server }})
                                     {% endif %}
-                                </div>
+                                </span>
                             </div>
                         </div>
                     </div>
