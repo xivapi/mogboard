@@ -103,6 +103,11 @@ class ProductLists
         const $button = this.uiCreateForm.find('button[type="submit"]');
         ButtonLoading.start($button);
 
+        if (name.length < 3) {
+            Popup.error('name too short', 'Your list name is a bit too short, please enter in a name to create a list!');
+            return;
+        }
+
         const data = {
             name: name,
             itemId: itemId
