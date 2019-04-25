@@ -54,13 +54,13 @@
                                     <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png">
                                 </a>
                             </p>
-
                         {% endif %}
                         <hr>
                         <h6>Confirm Patreon Status</h6>
-                        {% if app.request.get('status') and app.request.get('status') == 'failed' %}
-                            <div class="alert-red">
-                                Could not confirm patreon status, hop into discord and message @Vekien!
+                        {% if app.request.get('patreon_checked') %}
+                            <div class="alert-green">
+                                Your patreon status returned as: <strong>{{ app.request.get('patreon_checked') }}</strong>
+                                - If this is incorrect, please jump into the Discord and message Vekien.
                             </div>
                         {% endif %}
                         <p>

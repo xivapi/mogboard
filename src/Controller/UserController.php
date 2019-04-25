@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Service\GameData\GameServers;
 use App\Service\User\SignInDiscord;
 use App\Service\User\Users;
@@ -33,12 +34,12 @@ class UserController extends AbstractController
      */
     public function accountConfirmPatreon(Request $request)
     {
-        $status = $this->users->checkPatreonTierForUser(
-            $this->users->getUser()
-        );
+        $user = $this->users->getUser();
+    
+        $this->users->checkPatreonTierForUser($user);
         
         return $this->redirectToRoute('user_account', [
-            'status' => $status ? 'success' : 'failed',
+            'patreon_checked' => User::PATREON_TIERS[$user->getPatreonTier()],
         ]);
     }
     

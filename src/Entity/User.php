@@ -25,6 +25,15 @@ class User
     const DEFAULT_MAX_NOTIFY    = 20;
     const DEFAULT_TIMEOUT       = (60 * 60);
     const DEFAULT_EXPIRY        = (60 * 60 * 24 * 3);
+    
+    const PATREON_TIERS = [
+        self::NORMAL_USER        => 'Normal User',
+        self::PATREON_ADVENTURER => 'Adventurer',
+        self::PATREON_TANK       => 'Tank',
+        self::PATREON_HEALER     => 'Healer',
+        self::PATREON_DPS        => 'DPS',
+        self::PATREON_BENEFIT    => 'Friendly Benefits',
+    ];
 
     /**
      * Alert benefits per patreon

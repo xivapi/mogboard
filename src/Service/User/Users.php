@@ -199,6 +199,9 @@ class Users
         $console->writeln("Finished, duration: {$duration}");
     }
     
+    /**
+     * @param User $user
+     */
     public function checkPatreonTierForUser(User $user)
     {
         try {
