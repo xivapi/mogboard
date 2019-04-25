@@ -176,28 +176,36 @@ class Users
      */
     public function checkPatreonTiersForAllUsers()
     {
+        $console = new ConsoleOutput();
+        $start   = microtime(true);
+        
         /** @var User $user */
         foreach ($this->repository->findAll() as $user) {
+            $console->writeln("Checking: {$user->getSsoDiscordId()} {$user->getUsername()}");
             $this->checkPatreonTierForUser($user);
         }
         
         $this->em->clear();
-        return true;
+    
+        $duration = round(microtime(true) - $start, 50);
+        $console->writeln("Finished, duration: {$duration}");
+
     }
     
     public function checkPatreonTierForUser(User $user)
     {
-        $console = new ConsoleOutput();
-        $console->writeln("User: {$user->getUsername()} {$user->getSsoDiscordId()}");
-        
         try {
-            $tier = Discord::mog()->getUserRole($user->getSsoDiscordId());
+            $response = Discord::mog()->getUserRole($user->getSsoDiscordId());
         } catch (\Exception $ex) {
-            $console->writeln($ex->getMessage());
-            return false;
+            return;
         }
     
-        // check or set default
+        // don't do anything if the response was not a 200
+        if ($response->code != 200) {
+            return;
+        }
+        
+        $tier = $response->data;
         $tier = $tier ?: 0;
     
         // set patreon tier
@@ -220,7 +228,6 @@ class Users
         $this->em->persist($user);
         $this->em->flush();
         usleep(100000);
-        return true;
     }
 
     /**

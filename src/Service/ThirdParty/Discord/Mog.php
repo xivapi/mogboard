@@ -38,11 +38,13 @@ class Mog
      */
     public function sendMessage(int $channel = null, string $content = null, array $embed = null)
     {
-        $this->send(self::METHOD_POST, self::ENDPOINT_NOTIFY, [
+        $response = $this->send(self::METHOD_POST, self::ENDPOINT_NOTIFY, [
             'channel' => $channel,
             'content' => $content,
             'embed' => $embed
         ]);
+        
+        return json_decode($response->getBody());
     }
     
     /**
@@ -54,8 +56,6 @@ class Mog
             'user_id' => $userId,
         ]);
         
-        return json_decode(
-            $response->getBody()
-        );
+        return json_decode($response->getBody());
     }
 }

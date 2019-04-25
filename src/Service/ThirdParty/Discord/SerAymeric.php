@@ -11,7 +11,7 @@ class SerAymeric
 
     private function send(array $json)
     {
-        (new Client())->post(self::ENDPOINT, [
+        return (new Client())->post(self::ENDPOINT, [
             RequestOptions::JSON => $json,
             RequestOptions::QUERY => [
                 'key' => getenv('DISCORD_BOT_USAGE_KEY')
@@ -24,10 +24,12 @@ class SerAymeric
      */
     public function sendMessage(string $userId, string $content = null, array $embed = null)
     {
-        $this->send([
+        $response = $this->send([
             'user_id' => $userId,
             'content' => $content,
             'embed' => $embed,
         ]);
+        
+        return json_decode($response->getBody());
     }
 }
