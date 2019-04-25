@@ -451,18 +451,14 @@ class User
         return $this;
     }
     
+    public function getPatreonTierNumber(): ?int
+    {
+        return $this->patron;
+    }
+    
     public function getPatreonTier(): string
     {
-        $tiers = [
-            'None',
-            self::PATREON_DPS         => 'DPS',
-            self::PATREON_HEALER      => 'Healer',
-            self::PATREON_TANK        => 'Tank',
-            self::PATREON_ADVENTURER  => 'Adventurer',
-            self::PATREON_BENEFIT     => 'Benefit',
-        ];
-        
-        return $tiers[$this->patron] ?? null;
+        return self::PATREON_TIERS[$this->patron] ?? null;
     }
     
     public function getLists()

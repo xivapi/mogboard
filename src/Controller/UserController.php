@@ -39,7 +39,7 @@ class UserController extends AbstractController
         $this->users->checkPatreonTierForUser($user);
         
         return $this->redirectToRoute('user_account', [
-            'patreon_checked' => User::PATREON_TIERS[$user->getPatreonTier()],
+            'patreon_checked' => $user->getPatreonTier(),
         ]);
     }
     

@@ -1011,6 +1011,7 @@ ul, ol {
 
 .btn, form button,
 .form button {
+  display: inline-block;
   height: var(--form-field-height);
   line-height: var(--form-field-height);
   background-color: var(--default);

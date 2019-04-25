@@ -836,6 +836,7 @@ ul,ol {
 }
 
 .btn {
+    display: inline-block;
     height: var(--form-field-height);
     line-height: var(--form-field-height);
     background-color: var(--default);

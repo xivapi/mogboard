@@ -57,14 +57,18 @@
                         {% endif %}
                         <hr>
                         <h6>Confirm Patreon Status</h6>
+                        <p>
+                            Patreon status is checked once every hour as it has a lot of members to go through,
+                            if you can't wait, click the button below!
+                        </p>
                         {% if app.request.get('patreon_checked') %}
                             <div class="alert-green">
                                 Your patreon status returned as: <strong>{{ app.request.get('patreon_checked') }}</strong>
                                 - If this is incorrect, please jump into the Discord and message Vekien.
                             </div>
                         {% endif %}
-                        <p>
-                            <a href="{{ path('user_account_confirm_patreon') }}">Click here to check your status</a>.
+                        <p class="form">
+                            <a href="{{ path('user_account_confirm_patreon') }}" class="btn btn-green">Check my Patreon Status</a>
                         </p>
                     </td>
                 </tr>
