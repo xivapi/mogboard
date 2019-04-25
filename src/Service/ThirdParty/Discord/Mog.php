@@ -24,7 +24,7 @@ class Mog
     
         $config = [
             'base_uri' => self::ENDPOINT,
-            'timeout'  => 5
+            'timeout'  => 2.5
         ];
         
         return (new Client($config))->request($method, $endpoint, [
