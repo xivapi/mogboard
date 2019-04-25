@@ -176,20 +176,21 @@ class Users
      */
     public function checkPatreonTiersForAllUsers()
     {
+        $users   = $this->repository->findAll();
+        $total   = count($users);
         $console = new ConsoleOutput();
         $start   = microtime(true);
         
         /** @var User $user */
-        foreach ($this->repository->findAll() as $user) {
-            $console->writeln("Checking: {$user->getSsoDiscordId()} {$user->getUsername()}");
+        foreach ($users as $i => $user) {
+            $i = ($i + 1);
+            $console->writeln("({$i}/{$total}) Checking: {$user->getSsoDiscordId()} {$user->getUsername()}");
             $this->checkPatreonTierForUser($user);
         }
         
         $this->em->clear();
-    
-        $duration = round(microtime(true) - $start, 50);
+        $duration = round(microtime(true) - $start, 2);
         $console->writeln("Finished, duration: {$duration}");
-
     }
     
     public function checkPatreonTierForUser(User $user)
