@@ -876,6 +876,27 @@
 
 
     }
+
+    .item_update_time {
+        background-color: var(--dark-blue2);
+        border-radius: 5px;
+        box-shadow: 0 1px 2px #000;
+        padding: 10px;
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto 20px auto;
+        font-size: 13px;
+        text-align: center;
+        overflow: hidden;
+
+        span {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 10px;
+            height: 10px;
+            border-right: solid 2px var(--table-color-3x);
+        }
+    }
 }
 
 .list_modal {
