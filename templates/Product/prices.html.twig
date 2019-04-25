@@ -65,7 +65,7 @@
                 <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
                 <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
                 {% if cheapestPrice is defined %}
-                <td class="price-diff {{ pricePerUnitDiff > 150 ? 'price-diff-bad' : '' }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percent difference from the current cheapest per unit price: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ cheapestForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
+                <td class="price-diff {{ pricePerUnitDiff > 150 ? 'price-diff-bad' : '' }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percentage sale price to current cheapest price: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ cheapestForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
                 {% endif %}
                 <td class="price-retainer">
                     <a href="{{ path('retainer_store', { slug: row.RetainerID }) }}" data-tippy-content="{{ row.RetainerID }}">{{ row.RetainerName }}</a>
