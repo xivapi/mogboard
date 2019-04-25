@@ -50,18 +50,18 @@
                                     <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png">
                                 </a>
                             </p>
-                            <br>
-                            <h6>I am a patron!?</h6>
-                            {% if app.request.get('status') and app.request.get('status') == 'failed' %}
-                                <div class="alert-red">
-                                    Could not confirm patreon status, hop into discord and message @Vekien!
-                                </div>
-                            {% endif %}
-                            <p>
-                                The site checks the discord #patreon member list every hour, you can wait it out
-                                or you can <a href="{{ path('user_account_confirm_patreon') }}">Click here to check your status</a>!
-                            </p>
+
                         {% endif %}
+                        <hr>
+                        <h6>Confirm Patreon Status</h6>
+                        {% if app.request.get('status') and app.request.get('status') == 'failed' %}
+                            <div class="alert-red">
+                                Could not confirm patreon status, hop into discord and message @Vekien!
+                            </div>
+                        {% endif %}
+                        <p>
+                            <a href="{{ path('user_account_confirm_patreon') }}">Click here to check your status</a>.
+                        </p>
                     </td>
                 </tr>
                 <tr>
