@@ -186,8 +186,14 @@ class Users
             $i = ($i + 1);
             $console->writeln("({$i}/{$total}) Checking: {$user->getSsoDiscordId()} {$user->getUsername()}");
             $this->checkPatreonTierForUser($user);
+            usleep(100000);
+    
+            if ($i % 50 == 0) {
+                $this->em->flush();
+            }
         }
-        
+    
+        $this->em->flush();
         $this->em->clear();
         $duration = round(microtime(true) - $start, 2);
         $console->writeln("Finished, duration: {$duration}");
@@ -227,8 +233,6 @@ class Users
             ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT']);
     
         $this->em->persist($user);
-        $this->em->flush();
-        usleep(100000);
     }
 
     /**

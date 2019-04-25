@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+git pull
+
+php bin/console cache:clear
+
+bash bin/version
