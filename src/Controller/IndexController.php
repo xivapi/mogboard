@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\Common\Mail;
 use App\Service\Companion\CompanionStatistics;
 use App\Service\Items\ItemPopularity;
 use App\Service\Redis\Redis;
@@ -20,17 +21,21 @@ class IndexController extends AbstractController
     private $companionStatistics;
     /** @var Users */
     private $users;
+    /** @var Mail */
+    private $mail;
     /** @var XIVAPI */
     private $xivapi;
     
     public function __construct(
         ItemPopularity $itemPopularity,
         CompanionStatistics $companionStatistics,
-        Users $users
+        Users $users,
+        Mail $mail
     ) {
         $this->itemPopularity      = $itemPopularity;
         $this->companionStatistics = $companionStatistics;
         $this->users               = $users;
+        $this->mail                = $mail;
         $this->xivapi              = new XIVAPI();
     }
     
@@ -71,6 +76,40 @@ class IndexController extends AbstractController
     {
         return $this->render('Pages/patreon.html.twig', [
             'user_patrons' => $this->users->getPatrons()
+        ]);
+    }
+    
+    /**
+     * @Route("/patreon/refund", name="patreon_refund")
+     */
+    public function patreonRefund()
+    {
+        return $this->render('Pages/patreon_refund.html.twig');
+    }
+    
+    /**
+     * @Route("/patreon/refund/request", name="patreon_refund_process")
+     */
+    public function patreonRefundProcess(Request $request)
+    {
+        $name = trim($request->get('name'));
+        $user = $this->users->getUser();
+        
+        $this->mail->send(
+            'josh@viion.co.uk',
+            'Patreon Refund Request',
+            'Emails/patreon_refund.html.twig',
+            [
+                'name_or_email' => $name,
+                'id' => $user->getSsoDiscordId(),
+                'username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+                'tier' => $user->getPatreonTier()
+            ]
+        );
+    
+        return $this->redirectToRoute('patreon_refund', [
+            'complete' => 1
         ]);
     }
     

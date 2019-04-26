@@ -3,18 +3,6 @@
 {% block body %}
     <div class="home">
         <div>
-            {# News #}
-            <div class="home-box2">
-                <div class="home-row flex">
-                    <div class="flex_5 tac">
-                        <img src="/i/game/coin2.png">
-                    </div>
-                    <div class="flex_95">
-                        <strong>Welcome to Mogboard.com - A FINAL FANTASY XIV: Online Market Board Site.</strong><br>
-                        <a href="{{ path('about') }}">Click here to learn all about it!</a>
-                    </div>
-                </div>
-            </div>
 
             <div class="home-box2" style="border: solid 2px #821b1a">
                 <div class="home-row flex">
@@ -22,30 +10,27 @@
                         <img src="/i/game/status.png">
                     </div>
                     <div class="flex_95">
-                        <strong>Auto-Update in SLOW MODE</strong><br>
-                        Due to server issues on Square-Enix's end with the release of World Visit, the site cannot
-                        update items fast as the Companion API is returning/rejecting queries. To reduce chances
-                        of an account ban, auto-update is heavily slowed. This is being monitored and will
-                        improve as SE solve their server problems.
+                        <strong>Square-Enix Accounts Banned</strong><br>
+                        New site lasted long... <strong>As of the 26th Aproil SE have now banned all my Mogboard Accounts</strong>.
+                        <br><br>
+                        At this time the site will
+                        no longer update. This is my 6th account ban, I've tried many things to reduce the amount of
+                        disruption I cause but their no-tolerance to third-party access is proving
+                        non-negotiable. My last attempt survived 5 weeks, I believe with SE having so many
+                        issues with World-Visit and their servers that everything is under a microscope right now.
+                        It is impossible to not be noticed in order to provide up to date times.
+                        <br><br>
+                        I am going to look into solutions, and try my best to keep this site going for the community.
+                        If you patreon supported me recently, please consider cancelling your Patreon before the end
+                        of the month, you can also request a refund via: <a href="{{ path('patreon_refund_process') }}">Patron Refund Request</a>.
+                        <br><br>
+                        Due to FFXIV having a 8 characters in a 24 hour period creation limit, even starting a new
+                        account now would take time and likely get banned instantly.
                     </div>
                 </div>
             </div>
 
-            <div class="home-box2" style="border: solid 2px #821b1a">
-                <div class="home-row flex">
-                    <div class="flex_5 tac">
-                        <img src="/i/game/status.png">
-                    </div>
-                    <div class="flex_95">
-                        <strong>Japan Servers are OFFLINE</strong><br>
-                        Due to Square-Enix's tolerance to prevent scraping the market board, they have banned
-                        the JP Accounts that Mogboard uses. Until further notice JP Servers will not update
-                        on the website.
-                    </div>
-                </div>
-            </div>
-
-
+            <br><br><hr><br><br>
 
             {% if auth.online() %}
                 {# Retainers #}
@@ -151,14 +136,18 @@
             {% endif %}
         </div>
         <div>
+            {#
             <div class="home-box patreon-discord">
                 <a href="https://discord.gg/MFFVHWC" class="discord" target="_blank">
                     <span><img src="/i/brand/discord/logo_white.png"> DISCORD</span>
                 </a>
+
                 <a href="https://www.patreon.com/vekien" class="patreon" target="_blank">
                     <span><img src="/i/brand/patreon/logo_name.jpg"></span>
                 </a>
+
             </div>
+            #}
 
             <h4>Trending Today</h4>
             <div class="home-box home-trending">

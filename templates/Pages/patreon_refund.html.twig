@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Patreon Refund' %}
+
+{% block body %}
+<div class="page">
+    <h1>Patreon Refund</h1>
+
+    <div class="page-block">
+    {% if auth.online %}
+
+        {% if app.request.get('complete') == 1 %}
+        <div class="alert-green">Request sent successfully, this will be processed ASAP. Thank you.</div>
+        {% endif %}
+
+        {% if auth.user.patreonTierNumber > 0 %}
+        <p>
+            To receive a refund, you can fill in the form below or:
+            Please go to Patreon and send a message through there to request
+            a refund, <strong>I do not take this personally,
+                just say "Refund" and I will do it, no questions.</strong>
+        </p>
+        <p>
+            To request a refund, please fill out the form below. The refund
+            will be issued for any patreon payments during April.
+        </p>
+        <form method="post" action="{{ path('patreon_refund_process') }}">
+            <div class="form_row">
+                <label for="name">Patreon Username OR Email</label>
+                <input type="text" name="name" id="name" placeholder="Username OR Email" style="width: 300px">
+            </div>
+            <div class="form_row">
+                <button type="submit" class="btn-patreon-refund">Request Refund</button>
+            </div>
+        </form>
+        {% else %}
+            <p class="text-red">
+                You do not seem to have a patreon status tied to your account.
+            </p>
+        {% endif %}
+    {% else %}
+        <div class="alert-red">You must be logged in to view this page.</div>
+    {% endif %}
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+let $btn = $('.btn-patreon-refund');
+$btn.on('click', function() {
+    setTimeout(function() {
+        $btn.prop('disabled', true)
+    }, 500);
+});
+</script>
+{% endblock %}
