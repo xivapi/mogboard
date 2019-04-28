@@ -73,6 +73,10 @@ class Language
         
         $data = json_decode(json_encode($data), true);
         
+        if (empty($data)) {
+            return $data;
+        }
+        
         foreach ($data as $i => $value) {
             if (is_array($value)) {
                 $data[$i] = self::handle($value);

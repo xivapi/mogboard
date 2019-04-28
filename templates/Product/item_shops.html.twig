@@ -1,0 +1,50 @@
+<div class="item_details">
+
+    {# MULTI-LANGUAGE#}
+    <div class="item_details_box">
+        <h3>Purchasable from NPC Vendors</h3>
+        <p>As this item can be bought from NPCs for pure Gil, market information is not available.</p>
+
+        <br>
+
+        <h4>
+            <img src="/i/game/coin.png" style="vertical-align:bottom;display:inline-table;margin:0 6px 0 0;">
+            <span class="text-yellow">{{ item.PriceMid|number_format }}</span> Gil
+        </h4>
+
+        <br>
+
+        {% for shop in shops %}
+        <div class="table-dark">
+            <table class="table">
+                <tr>
+                    <td width="40%" class="text-green">{{ shop.NPC_Name }}</td>
+                    <td>{{ shop.Shop_Name }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        X: <span class="text-yellow">{{ shop.Map.Position.X|round(2) }}</span> -
+                        Y: <span class="text-yellow">{{ shop.Map.Position.Y|round(2) }}</span>
+                    </td>
+                    <td>
+                        {{ shop.Map.Map.PlaceNameRegion.Name }},
+                        {{ shop.Map.Map.PlaceName.Name }},
+                        {{ shop.Map.Map.PlaceNameSub.Name }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="tac">
+                        <div class="map">
+                            <img src="{{ shop.Map.Map.MapFilename|icon }}" height="512" class="map-image">
+                            <img src="/i/game/npc.png" style="left:{{ (shop.Map.Pixels.X / 4)-32 }}px;top:{{ (shop.Map.Pixels.Y / 4)-32 }}px;" class="map-npc">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br><br>
+        {% endfor %}
+    </div>
+
+</div>
+

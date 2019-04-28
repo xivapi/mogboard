@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UserAlert;
+use App\Service\Common\Language;
 use App\Service\Companion\CompanionStatistics;
 use App\Service\GameData\GameDataSource;
 use App\Service\Companion\Companion;
@@ -115,7 +116,21 @@ class ItemController extends AbstractController
         $this->userLists->handleRecentlyViewed($itemId);
         
         // get market item entry
+        $conn = $this->em->getConnection();
+        $stmt = $conn->prepare("SELECT * FROM dalamud.companion_market_item_source WHERE item = {$itemId}");
+        $stmt->execute();
         
+        $shops = [];
+        if ($shopData = $stmt->fetch()) {
+            $shopData = json_decode($shopData['data']);
+            $shopData = array_unique($shopData);
+            
+            foreach ($shopData as $shopId) {
+                $shops[] = Language::handle(
+                    Redis::Cache()->get("xiv_GilShopData_{$shopId}")
+                );
+            }
+        }
 
         // response
         $data = [
@@ -128,6 +143,7 @@ class ItemController extends AbstractController
             'lists'     => $user ? $user->getCustomLists() : [],
             'api_stats' => $this->companionStatistics->stats(),
             'cheapest'  => $this->companionStatistics->cheapest($market),
+            'shops'     => $shops,
             'server'    => [
                 'name'       => $server,
                 'dc'         => $dc,
