@@ -113,7 +113,9 @@ class ItemController extends AbstractController
         
         // add to recently viewed
         $this->userLists->handleRecentlyViewed($itemId);
-
+        
+        // get market item entry
+        
 
         // response
         $data = [
