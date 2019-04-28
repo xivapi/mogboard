@@ -1025,8 +1025,8 @@
             height: 20px;
             border-radius: 10px;
             display: inline-table;
-            margin-left: 4px;
-            vertical-align: bottom;
+            vertical-align: middle;
+            margin: -7px 0 -5px 4px;
         }
 
         .materia {
@@ -1034,8 +1034,8 @@
 
             i {
                 display: inline-table;
-                vertical-align: middle;
-                margin-bottom: -2px;
+                vertical-align: top;
+                margin-bottom: -7px;
             }
         }
     }
