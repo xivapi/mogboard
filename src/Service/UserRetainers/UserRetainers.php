@@ -117,7 +117,7 @@ class UserRetainers
         if ($retainer->isRecent()) {
             return [
                 $found,
-                'Tried too recently',
+                'Error D4: Tried too recently',
             ];
         }
 
@@ -137,8 +137,10 @@ class UserRetainers
             );
             
             if ($market->Error) {
+                $retainer->setUpdated(time());
+                $this->save($retainer);
                 return [
-                    false, "Error: {$market->Message}"
+                    false, "Error A1: {$market->Message}"
                 ];
             }
     
@@ -150,7 +152,11 @@ class UserRetainers
                 }
             }
         } catch (\Exception $ex) {
-            $message = 'The companion servers are having problems right now and could not verify. Try again soon';
+            $retainer->setUpdated(time());
+            $this->save($retainer);
+            return [
+                false, "Error B2: {$market->Message}"
+            ];
         }
 
         // could not verify
@@ -159,7 +165,7 @@ class UserRetainers
             $this->save($retainer);
             return [
                 false,
-                'Could not find the item at the correct price on the market, try again soon as companion may be having issues.'
+                'Error C3: Could not find the item at the correct price on the market, try again soon as companion may be having issues.'
             ];
         }
 
