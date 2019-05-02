@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ItemPopularity
 {
+    const REDIS_KEY = 'mogboard_trending_items';
     const MAX_HITS  = 10;
-    const MAX_DELAY = (60 * 60 * 6);
-    
+
     /** @var EntityManagerInterface */
     private $em;
     /** @var PopularItemRepository */
@@ -25,35 +25,39 @@ class ItemPopularity
     }
     
     /**
-     * Get current popular items
-     * @return PopularItem[]
+     * Get current popular items ids
+     * @return array
      */
     public function get()
     {
-        $ids = Redis::Cache()->get('mogboard_trending_items');
+        return Redis::Cache()->get(self::REDIS_KEY);
+    }
 
-        if ($ids == null) {
-            $ids   = [];
-            $items = (array)$this->repository->findBy([], [ 'count' => 'desc' ], 20);
-            
-            /** @var PopularItem $item */
-            foreach ($items as $item) {
-                $ids[] = $item->getItem();
-            }
-            shuffle($ids);
-            
-            Redis::Cache()->set('mogboard_trending_items', $ids, self::MAX_DELAY);
+    /**
+     * Generate a list of the top 20 items.
+     */
+    public function generate()
+    {
+        $ids   = [];
+        $items = (array)$this->repository->findBy([], [ 'count' => 'desc' ], 20);
+
+        /** @var PopularItem $item */
+        foreach ($items as $item) {
+            $ids[] = $item->getItem();
         }
 
-        return $ids;
+        Redis::Cache()->set(self::REDIS_KEY, $ids);
     }
     
     /**
-     * Resets popular items by resetting all the counts back to 0.
-     * This should be done every 12 hours so data can be collected every AM/PM
+     * Generates the current list and then truncates the popularity
+     * table for the next cycle of item hits.
      */
     public function reset()
     {
+        // generate
+        $this->generate();
+
         // truncate db
         $conn = $this->em->getConnection();
         $stmt = $conn->prepare('TRUNCATE TABLE popular_items');
