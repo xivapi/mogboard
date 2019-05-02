@@ -45,8 +45,8 @@ class Random
     /**
      * Returns a human friendly code using just the normal keyspace.
      */
-    public static function randomHumanUniqueCode(int $length): string
+    public static function randomHumanUniqueCode(int $length = 8): string
     {
-        return self::randomSecureString(8, self::KEYSPACE);
+        return self::randomSecureString($length, self::KEYSPACE);
     }
 }
