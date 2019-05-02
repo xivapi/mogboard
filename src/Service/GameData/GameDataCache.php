@@ -177,7 +177,7 @@ class GameDataCache
         $categories['items']    = array_values($categories['items']);
         $categories['housing']  = array_values($categories['housing']);
     
-        Redis::Cache()->set("mog_ItemSearchCategories", $categories, GameDataCache::CACHE_TIME);
-        Redis::Cache()->set("mog_ItemSearchCategoriesFull", $categoriesFull, GameDataCache::CACHE_TIME);
+        Redis::Cache()->set("mog_ItemSearchCategories", $categories, (60 * 60 * 24 * 365));
+        Redis::Cache()->set("mog_ItemSearchCategoriesFull", $categoriesFull, (60 * 60 * 24 * 365));
     }
 }
