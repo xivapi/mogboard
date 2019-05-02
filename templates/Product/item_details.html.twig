@@ -136,25 +136,6 @@
                     <td width="45%">Item Level</td>
                     <td><em>{{ item.LevelItem }}</em></td>
                 </tr>
-                {% if item.BaseParamValue0 > 0 %}
-                    <tr>
-                        <td colspan="2" class="item_attributes">
-                            <small>ATTRIBUTES</small>
-                            {% if item.ItemSpecialBonus.Name %}
-                                <strong>{{ item.ItemSpecialBonus.Name }}</strong>
-                            {% endif %}
-                            {% for i in range(0, 5) %}
-                                {% if item['BaseParamValue' ~ i] > 0 %}
-                                    {% set hq = item['BaseParamValue' ~ i] + item['BaseParamValueSpecial' ~ i] %}
-                                    <div>
-                                        <em>{{ item['BaseParamValue' ~ i] }}</em> <span>{{ hq }}</span>
-                                        {{ item['BaseParam' ~ i].Name }}
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endif %}
                 <tr>
                     <td>Materia Slots</td>
                     <td><em>{{ item.MateriaSlotCount ?: 'None' }}</em></td>
