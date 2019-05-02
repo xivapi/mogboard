@@ -4,33 +4,18 @@
     <div class="home">
         <div>
 
-            <div class="home-box2" style="border: solid 2px #821b1a">
+            <div class="home-box2" style="border: solid 2px #3b8231">
                 <div class="home-row flex">
                     <div class="flex_5 tac">
-                        <img src="/i/game/status.png">
+                        <img src="/i/game/topic.png">
                     </div>
                     <div class="flex_95">
-                        <strong>Square-Enix Accounts Banned</strong><br>
-                        New site lasted long... <strong>As of the 26th April SE have now banned all my Mogboard Accounts</strong>.
-                        <br><br>
-                        At this time the site will
-                        no longer update. This is my 6th account ban, I've tried many things to reduce the amount of
-                        disruption I cause but their no-tolerance to third-party access is proving
-                        non-negotiable. My last attempt survived 5 weeks, I believe with SE having so many
-                        issues with World-Visit and their servers that everything is under a microscope right now.
-                        It is impossible to not be noticed in order to provide up to date times.
-                        <br><br>
-                        I am going to look into solutions, and try my best to keep this site going for the community.
-                        If you patreon supported me recently, please consider cancelling your Patreon before the end
-                        of the month, you can also request a refund via: <a href="{{ path('patreon_refund') }}">Patron Refund Request</a>.
-                        <br><br>
-                        Due to FFXIV having a 8 characters in a 24 hour period creation limit, even starting a new
-                        account now would take time and likely get banned instantly.
+                        <strong>Updates</strong><br>
+                        Some big changes have been made to the site to reduce an account ban.
+                        <a href="{{ path('news') }}">Read more about it here</a>.
                     </div>
                 </div>
             </div>
-
-            <br><br><hr><br><br>
 
             {% if auth.online() %}
                 {# Retainers #}
@@ -130,24 +115,20 @@
                         <br><br>
                         Create alerts, make lists, add your retainers and get a personalised home page feed!
                         <br><br>
-                        <a href="{{ path('user_login_discord') }}" class="btn-login">Login via <strong>Discord</strong></strong></a>
+                        <a href="{{ path('user_login_discord') }}" class="btn-login">Login via <strong>Discord</strong></a>
                     </div>
                 </div>
             {% endif %}
         </div>
         <div>
-            {#
             <div class="home-box patreon-discord">
                 <a href="https://discord.gg/MFFVHWC" class="discord" target="_blank">
                     <span><img src="/i/brand/discord/logo_white.png"> DISCORD</span>
                 </a>
-
                 <a href="https://www.patreon.com/vekien" class="patreon" target="_blank">
                     <span><img src="/i/brand/patreon/logo_name.jpg"></span>
                 </a>
-
             </div>
-            #}
 
             <h4>Trending Today</h4>
             <div class="home-box home-trending">
