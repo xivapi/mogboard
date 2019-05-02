@@ -126,6 +126,10 @@ class UserRetainers
         $itemId    = $retainer->getConfirmItem();
         $itemPrice = $retainer->getConfirmPrice();
         $name      = $retainer->getName();
+    
+        // mark updated regardless of what happens
+        $retainer->setUpdated(time());
+        $this->save($retainer);
         
         // query market
         $xivapi = new XIVAPI();
@@ -137,8 +141,6 @@ class UserRetainers
             );
             
             if ($market->Error) {
-                $retainer->setUpdated(time());
-                $this->save($retainer);
                 return [
                     false, "Error A1: {$market->Message}"
                 ];
@@ -152,17 +154,13 @@ class UserRetainers
                 }
             }
         } catch (\Exception $ex) {
-            $retainer->setUpdated(time());
-            $this->save($retainer);
             return [
-                false, "Error B2: {$market->Message}"
+                false, "Error B2: {$ex->getMessage()}"
             ];
         }
 
         // could not verify
         if ($found === false) {
-            $retainer->setUpdated(time());
-            $this->save($retainer);
             return [
                 false,
                 'Error C3: Could not find the item at the correct price on the market, try again soon as companion may be having issues.'
