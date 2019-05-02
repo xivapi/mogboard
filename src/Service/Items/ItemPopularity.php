@@ -79,7 +79,7 @@ class ItemPopularity
         
         // up users hit counter
         $current = $current ? $current + 1 : 1;
-        Redis::Cache()->set($key, $current, self::MAX_DELAY);
+        Redis::Cache()->set($key, $current, (60 * 60 * 8));
         
         // grab popular item entry
         $entity = $this->repository->findOneBy([ 'item' => $itemId ]) ?: new PopularItem();
