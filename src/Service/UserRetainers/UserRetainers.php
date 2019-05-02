@@ -167,7 +167,7 @@ class UserRetainers
         $this->save($retainer);
         
         return [
-            true, null
+            true, $message
         ];
     }
 
