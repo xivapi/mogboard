@@ -135,6 +135,12 @@ class UserRetainers
                 $itemId,
                 $server
             );
+            
+            if ($market->Error) {
+                return [
+                    false, "Error: {$market->Message}"
+                ];
+            }
     
             // find listing
             foreach ($market->entries as $entry) {
