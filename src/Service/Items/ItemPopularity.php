@@ -54,12 +54,10 @@ class ItemPopularity
      */
     public function reset()
     {
-        /** @var PopularItem $item */
-        foreach ($this->repository->findAll() as $item) {
-            $item->setCount(0)->setUpdated(time());
-            $this->em->persist($item);
-            $this->em->flush();
-        }
+        // truncate db
+        $conn = $this->em->getConnection();
+        $stmt = $conn->prepare('TRUNCATE TABLE popular_items');
+        $stmt->execute();
     }
     
     /**
