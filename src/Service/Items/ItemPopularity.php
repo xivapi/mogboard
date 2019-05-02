@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ItemPopularity
 {
-    const MAX_HITS  = 5;
-    const MAX_DELAY = (60 * 60 * 12);
+    const MAX_HITS  = 10;
+    const MAX_DELAY = (60 * 60 * 6);
     
     /** @var EntityManagerInterface */
     private $em;
@@ -34,7 +34,7 @@ class ItemPopularity
 
         if ($ids == null) {
             $ids   = [];
-            $items = (array)$this->repository->findBy([], [ 'count' => 'desc' ], 10);
+            $items = (array)$this->repository->findBy([], [ 'count' => 'desc' ], 20);
             
             /** @var PopularItem $item */
             foreach ($items as $item) {
