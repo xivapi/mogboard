@@ -108,7 +108,7 @@
                     {% set cheapestPrice = cheapest[serverName] %}
                         <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name) ? 'open' : '' }}">
 
-                            <div class="item_update_time" data-tippy-content="Queue: {{ marketData.UpdatePriority }} - {{ updateInfo.Name }} <br> Current Update Duration: {{ updateInfo.CycleTimeReal }}">
+                            <div class="item_update_time" data-tippy-content="Queue: {{ marketData.UpdatePriority }} - {{ updateInfo.Name ?? 'No Queue' }} <br> Current Update Duration: {{ updateInfo.CycleTimeReal }}">
                                 {% if updateInfo %}
                                     {% set updateEta = (marketData.Updated + updateInfo.CycleTimeSec)|date   %}
                                     Prices on <strong>{{ serverName }}</strong> updated <strong class="text-highlight">{{ marketData.Updated|dateSimple }}</strong>
