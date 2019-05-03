@@ -405,12 +405,8 @@ class CompanionCensus
              */
             foreach ($marketData->Prices as $i => $price) {
                 $maxValue = ($price->IsHQ ? $averagePerHQ : $averagePerNQ) * self::JUNK_PRICE_FACTOR;
-                $maxValueHQ = $averagePerHQ * self::JUNK_PRICE_FACTOR;
 
-                // remove if price is above max, or if it's NQ, it also checks price against max HQ.
                 if ($price->PricePerUnit > $maxValue) {
-                    unset($marketData->Prices[$i]);
-                } else if ($price->IsHQ === false && $price->PricePerUnit > $maxValueHQ) {
                     unset($marketData->Prices[$i]);
                 }
             }
