@@ -14,7 +14,7 @@
 
         <br>
 
-        {% for shop in shops %}
+        {% for shop in shops if shop.NPC_Name is defined %}
         <div class="table-dark">
             <table class="table">
                 <tr>
