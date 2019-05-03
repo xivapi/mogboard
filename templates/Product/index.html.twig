@@ -112,11 +112,10 @@
                                 {% if updateInfo %}
                                     Prices on <strong>{{ serverName }}</strong> updated <strong>{{ marketData.Updated|dateSimple }}</strong>
                                     <span></span>
-                                    Auto-Update Queue: <strong>{{ updateInfo.Name }}</strong>
+                                    Queue: <strong>[{{ marketData.UpdatePriority }} ]{{ updateInfo.Name }}</strong>
                                     -
-                                    ETA Delay: <strong>{{ updateInfo.CycleTimeReal }} hours</strong>
-                                    <span></span>
-                                    <em class="{{ updateInfo.CycleDiff < 0 ? 'text-green' : 'text-red' }}">{{ updateInfo.CycleDiff < 0 ? 'On-Schedule' : 'Auto-Update Having Issues' }}</em>
+                                    ETA: every <strong>{{ updateInfo.CycleTimeReal }} hours</strong>
+                                    <em class="{{ updateInfo.CycleDiffSec < 0 ? 'text-green' : 'text-red' }}">({{ updateInfo.CycleDiffSec < 0 ? 'On-Time' : 'Delayed' }})</em>
                                 {% else %}
                                     This item is currently not updating.
                                 {% endif %}
