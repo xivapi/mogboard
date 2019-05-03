@@ -13,7 +13,7 @@ class CompanionCensus
 {
     const BUBBLE_MIN_PX = 3;
     const BUBBLE_MAX_PX = [ 6, 12, 20 ];
-    const JUNK_PRICE_FACTOR = 5;
+    const JUNK_PRICE_FACTOR = 4;
     
     /** @var \stdClass */
     private $census = [];
@@ -381,58 +381,35 @@ class CompanionCensus
         foreach ($market as $server => $marketData) {
             // add this, will need for later
             $this->census->{$server} = (Object)[];
-    
+
             /**
-             * Calculate average off the first 10 listings.
+             * Calculate averages
              */
-            $pricesHQ = [];
-            $pricesNQ = [];
-    
+            $averagePerHQ = [];
+            $averagePerNQ = [];
             foreach ($marketData->Prices as $i => $price) {
                 if ($price->IsHQ) {
-                    $pricesHQ[$i] = $price->PricePerUnit;
+                    $averagePerHQ[$i] = $price->PricePerUnit;
                 }
     
                 if ($price->IsHQ == false) {
-                    $pricesNQ[$i] = $price->PricePerUnit;
+                    $averagePerNQ[$i] = $price->PricePerUnit;
                 }
             }
-    
-            // remove junk prices based on previous prices
-            $this->removeJunkPricesBasedOnPreviousPrice($marketData, $pricesHQ);
-            $this->removeJunkPricesBasedOnPreviousPrice($marketData, $pricesNQ);
-        }
-    }
-    
-    /**
-     * This will remove junk prices based on previous prices in the market, since
-     * market prices are ordered LOW > HIGH, we can judge based on big jumps
-     * when prices are junk or should not be factored into census data.
-     */
-    private function removeJunkPricesBasedOnPreviousPrice($marketData, $averagePrices)
-    {
-        $previous = null;
-        $remove   = false;
-        foreach ($averagePrices as $i => $price) {
-            // if previous price not set, continue
-            if ($previous === null) {
-                $previous = $price;
-                continue;
+
+            $averagePerHQ = Average::mean($averagePerHQ);
+            $averagePerNQ = Average::mean($averagePerNQ);
+
+            /**
+             * Now go through again and remove if its X above the average
+             */
+            foreach ($marketData->Prices as $i => $price) {
+                $maxValue = ($price->IsHQ ? $averagePerHQ : $averagePerNQ) * self::JUNK_PRICE_FACTOR;
+
+                if ($price->PricePerUnit > $maxValue) {
+                    unset($marketData->Prices[$i]);
+                }
             }
-        
-            // if the price is above X times the previous, it's likely a junk price
-            // todo - this will need tweaking and examining if its the right amount
-            if ($remove === false && $price > ($previous * self::JUNK_PRICE_FACTOR)) {
-                $remove = true;
-            }
-        
-            // start removing
-            if ($remove) {
-                unset($marketData->Prices[$i]);
-                continue;
-            }
-        
-            $previous = $price;
         }
     }
 }
