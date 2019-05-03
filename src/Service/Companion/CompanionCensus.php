@@ -382,6 +382,8 @@ class CompanionCensus
      */
     private function removeJunkPrices($market)
     {
+        $canBeHq = $this->item->CanBeHq;
+        
         foreach ($market as $server => $marketData) {
             // add this, will need for later
             $this->census->{$server} = (Object)[];
@@ -414,7 +416,7 @@ class CompanionCensus
                 // remove if price is above max, or if it's NQ, it also checks price against max HQ.
                 if ($price->PricePerUnit > $maxValue) {
                     unset($marketData->Prices[$i]);
-                } else if ($this->item->CanBeHq && $averagePerHQ > 0 && $price->IsHQ === false && $price->PricePerUnit > $maxValueHQ) {
+                } else if ($canBeHq && $averagePerHQ > 0 && $price->IsHQ === false && $price->PricePerUnit > $maxValueHQ) {
                     unset($marketData->Prices[$i]);
                 }
             }
