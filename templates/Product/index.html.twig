@@ -110,7 +110,7 @@
 
                             <div class="item_update_time">
                                 {% if updateInfo %}
-                                    {% set updateEta = (marketData.Updated + updateInfo.CycleTimeReal)|date   %}
+                                    {% set updateEta = (marketData.Updated + updateInfo.CycleTimeSec)|date   %}
                                     Prices on <strong>{{ serverName }}</strong> updated <strong>{{ marketData.Updated|dateSimple }}</strong>
                                     <span></span>
                                     Queue: <strong>[{{ marketData.UpdatePriority }} ]{{ updateInfo.Name }}</strong>

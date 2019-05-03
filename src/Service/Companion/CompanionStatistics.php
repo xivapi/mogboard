@@ -21,11 +21,11 @@ class CompanionStatistics
     public function stats()
     {
         // get market status
-        $apiStats = Redis::Cache()->get('mogboard_marketstats');
+        $apiStats = Redis::Cache()->get('mogboard_marketstats_v2');
         
         if ($apiStats == null) {
             $apiStats = $this->xivapi->market->stats();
-            Redis::Cache()->set('mogboard_marketstats', $apiStats);
+            Redis::Cache()->set('mogboard_marketstats_v2', $apiStats, (60 * 30));
         }
         
         return $apiStats;
