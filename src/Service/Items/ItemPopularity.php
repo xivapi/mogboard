@@ -46,7 +46,7 @@ class ItemPopularity
             $ids[] = $item->getItem();
         }
 
-        Redis::Cache()->set(self::REDIS_KEY, $ids);
+        Redis::Cache()->set(self::REDIS_KEY, $ids, (60 * 60 * 24 * 5));
     }
     
     /**
