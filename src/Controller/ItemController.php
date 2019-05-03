@@ -132,19 +132,23 @@ class ItemController extends AbstractController
             }
         }
 
+        // get market stats
+        $marketStats = $this->companionStatistics->stats();
+        $marketStats = json_decode(json_encode($marketStats), true);
+
         // response
         $data = [
-            'item'      => $item,
-            'market'    => $market,
-            'census'    => $census,
-            'junkvalue' => CompanionCensus::JUNK_PRICE_FACTOR,
-            'recipes'   => $recipes,
-            'faved'     => $user ? $user->hasFavouriteItem($itemId) : false,
-            'lists'     => $user ? $user->getCustomLists() : [],
-            'api_stats' => $this->companionStatistics->stats(),
-            'cheapest'  => $this->companionStatistics->cheapest($market),
-            'shops'     => $shops,
-            'server'    => [
+            'item'           => $item,
+            'market'         => $market,
+            'marketStats'    => $marketStats,
+            'census'         => $census,
+            'junkvalue'      => CompanionCensus::JUNK_PRICE_FACTOR,
+            'recipes'        => $recipes,
+            'faved'          => $user ? $user->hasFavouriteItem($itemId) : false,
+            'lists'          => $user ? $user->getCustomLists() : [],
+            'cheapest'       => $this->companionStatistics->cheapest($market),
+            'shops'          => $shops,
+            'server'         => [
                 'name'       => $server,
                 'dc'         => $dc,
                 'dc_servers' => $dcServers

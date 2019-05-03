@@ -104,20 +104,22 @@
                     {% if marketData.Updated %}
                     {% set pricesCount = marketData.Prices|length %}
                     {% set historyCount = marketData.History|length %}
-                    {# {% set updateInfo = attribute(api_stats.Stats.Report, marketData.UpdatePriority) %} #}
+                    {% set updateInfo = marketStats.Report[marketData.UpdatePriority] ?? null %}
                     {% set cheapestPrice = cheapest[serverName] %}
                         <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name) ? 'open' : '' }}">
 
                             <div class="item_update_time">
-                                Prices on <strong>{{ serverName }}</strong> updated <strong>{{ marketData.Updated|dateSimple }}</strong>
-                                {#
-                                <span></span>
-                                Auto-Update Queue: <strong>{{ updateInfo.Name }}</strong>
-                                -
-                                ETA Delay: <strong>{{ updateInfo.CycleTimeReal }} hours</strong>
-                                <span></span>
-                                <em class="{{ updateInfo.CycleDiff < 0 ? 'text-green' : 'text-red' }}">{{ updateInfo.CycleDiff < 0 ? 'On-Schedule' : 'Auto-Update Having Issues' }}</em>
-                                #}
+                                {% if updateInfo %}
+                                    Prices on <strong>{{ serverName }}</strong> updated <strong>{{ marketData.Updated|dateSimple }}</strong>
+                                    <span></span>
+                                    Auto-Update Queue: <strong>{{ updateInfo.Name }}</strong>
+                                    -
+                                    ETA Delay: <strong>{{ updateInfo.CycleTimeReal }} hours</strong>
+                                    <span></span>
+                                    <em class="{{ updateInfo.CycleDiff < 0 ? 'text-green' : 'text-red' }}">{{ updateInfo.CycleDiff < 0 ? 'On-Schedule' : 'Auto-Update Having Issues' }}</em>
+                                {% else %}
+                                    This item is currently not updating.
+                                {% endif %}
                             </div>
 
                             <div class="tab-market-tables">
