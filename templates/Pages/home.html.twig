@@ -134,6 +134,7 @@
             <div class="home-box home-trending">
                 {% for itemId in popular_items %}
                     {% set item = game().item(itemId) %}
+                    {% if item.ID is defined %}
                     <div>
                         <div>
                             <a href="{{ path('item_page', { itemId: itemId }) }}">
@@ -148,6 +149,7 @@
                             <small>{{ item.ItemSearchCategory.Name }}</small>
                         </div>
                     </div>
+                    {% endif %}
                 {% endfor %}
             </div>
 
