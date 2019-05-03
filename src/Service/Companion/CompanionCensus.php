@@ -401,8 +401,8 @@ class CompanionCensus
                 }
             }
 
-            $averagePerHQ = Average::mean($averagePerHQ);
-            $averagePerNQ = Average::mean($averagePerNQ);
+            $averagePerHQ = ceil(Average::mean($averagePerHQ));
+            $averagePerNQ = ceil(Average::mean($averagePerNQ));
 
             /**
              * Now go through again and remove if its X above the average
