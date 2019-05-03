@@ -16,6 +16,8 @@ class CompanionCensus
     const JUNK_PRICE_FACTOR = 4;
     
     /** @var \stdClass */
+    private $item;
+    /** @var \stdClass */
     private $census = [];
     /** @var string */
     private $homeServer = null;
@@ -28,9 +30,11 @@ class CompanionCensus
     /**
      * Generate Mark Census!
      */
-    public function generate($market): self
+    public function generate($item, $market): self
     {
         # file_put_contents(__DIR__.'/market.json', json_encode($market, JSON_PRETTY_PRINT));
+        
+        $this->item = $item;
         
         // server users home world
         $this->homeServer = GameServers::getServer();
@@ -410,7 +414,7 @@ class CompanionCensus
                 // remove if price is above max, or if it's NQ, it also checks price against max HQ.
                 if ($price->PricePerUnit > $maxValue) {
                     unset($marketData->Prices[$i]);
-                } else if ($price->IsHQ === false && $price->PricePerUnit > $maxValueHQ) {
+                } else if ($this->item->CanBeHq && $averagePerHQ > 0 && $price->IsHQ === false && $price->PricePerUnit > $maxValueHQ) {
                     unset($marketData->Prices[$i]);
                 }
             }
