@@ -1,14 +1,14 @@
 <script>
-    const nqColor = {
+    var nqColor = {
         bg:   'rgba(200, 200, 200, 0.15)',
         line: 'rgba(200, 200, 200, 1)'
     };
-    const hqColor = {
+    var hqColor = {
         bg:   'rgba(250, 230, 70, 0.15)',
         line: 'rgba(250, 230, 70, 1)'
     };
 
-    const xAxis = {
+    var xAxis = {
         gridLines: {
             display: false
         },
@@ -16,7 +16,7 @@
             display: false
         }
     };
-    const yAxis = {
+    var yAxis = {
         gridLines: {
             color: '#444',
         },
@@ -27,11 +27,11 @@
         }
     };
 
-    const chartScales = {
+    var chartScales = {
         xAxes: [xAxis],
         yAxes: [yAxis]
     };
-    const chartLayout = {
+    var chartLayout = {
         padding: {
             left: 10,
             right: 20,
@@ -39,22 +39,22 @@
             bottom: 10
         }
     };
-    const chartCallbacks = (quantityDataSet, serverList) => {
+    var chartCallbacks = (quantityDataSet, serverList) => {
         return {
             title: (tooltipItem, data) => {
-                const number = '#'+ (tooltipItem[0].index + 1);
+                var number = '#'+ (tooltipItem[0].index + 1);
                 return number +': '+ data.datasets[tooltipItem[0].datasetIndex].label.toUpperCase();
             },
             label: (tooltipItem, data) => {
-                const dataSetIndex = tooltipItem.datasetIndex;
-                const index = tooltipItem.index;
+                var dataSetIndex = tooltipItem.datasetIndex;
+                var index = tooltipItem.index;
 
-                let quantity = quantityDataSet[dataSetIndex][index],
+                var quantity = quantityDataSet[dataSetIndex][index],
                     price = numeral(tooltipItem.yLabel).format('0,0');
 
-                let text = price +' x '+ quantity;
+                var text = price +' x '+ quantity;
 
-                let server = data.datasets[dataSetIndex].data[index].server;
+                var server = data.datasets[dataSetIndex].data[index].server;
 
                 // try get from server list
                 if (serverList && typeof server === 'undefined') {
@@ -68,10 +68,10 @@
                 return text;
             },
             footer: (tooltipItem, data) => {
-                const dataSetIndex = tooltipItem[0].datasetIndex;
-                const index = tooltipItem[0].index;
+                var dataSetIndex = tooltipItem[0].datasetIndex;
+                var index = tooltipItem[0].index;
 
-                let quantity = quantityDataSet[dataSetIndex][index],
+                var quantity = quantityDataSet[dataSetIndex][index],
                     total = numeral(tooltipItem[0].yLabel * quantity).format('0,0');
 
                 return 'Total: '+ total;
@@ -79,7 +79,7 @@
         };
     };
 
-    const renderChart = (
+    var renderChart = (
         id,
         chartType,
         chartLabel,

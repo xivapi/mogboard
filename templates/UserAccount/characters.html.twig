@@ -3,8 +3,8 @@
 {% set accountpage = 'characters' %}
 
 {% block account %}
-<script>let appEnableCharacters = 1;</script>
-<script>let verify_code = '{{ auth.user.getCharacterPassPhrase() }}';</script>
+<script>var appEnableCharacters = 1;</script>
+<script>var verify_code = '{{ auth.user.getCharacterPassPhrase() }}';</script>
 <div class="characters">
     <h1>Characters</h1>
 

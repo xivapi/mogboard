@@ -70,7 +70,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/simplebar/2.6.1/simplebar.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/3.4.1/tippy.all.min.js"></script>
     <script>
-        let mog = {
+        var mog = {
             path: "{{ app.request.getPathInfo()|split('/')[1] }}",
             isOnline: {{ auth.isOnline ? 'true' : 'false' }},
             url_item: "{{ path('item_page', { itemId: '-id-' }) }}",
@@ -109,7 +109,7 @@
         // sortable tables
         $(".table-sortable").stupidtable();
         // search categories
-        let cats = {{ cache('mog_ItemSearchCategoriesFull')|json_encode|raw }};
+        var cats = {{ cache('mog_ItemSearchCategoriesFull')|json_encode|raw }};
     </script>
     <script src="/ui/app.js?v={{ siteVersion().hash }}"></script>
     {% block javascripts %}{% endblock %}

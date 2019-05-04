@@ -48,6 +48,11 @@ class Product
         $('.btn_update').on('click', event => {
             ButtonLoading.start(this.uiUpdate);
 
+            if (typeof itemId == 'undefined') {
+                Popup.error('Error 6D', 'Some how you do not have the item id assigned');
+                return;
+            }
+
             $.ajax({
                 url: mog.urls.items.update.replace('-id-', itemId),
                 success: response => {

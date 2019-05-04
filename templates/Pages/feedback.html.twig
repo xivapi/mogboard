@@ -82,7 +82,7 @@
 
 {% block javascripts %}
 <script>
-let $btn = $('.btn-feedback-submit');
+var $btn = $('.btn-feedback-submit');
 $btn.on('click', function() {
     setTimeout(function() {
         $btn.prop('disabled', true)
