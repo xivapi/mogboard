@@ -51,7 +51,9 @@
             top: 0;
 
             @include mq($until: desktop) {
-                display: none;
+                position: relative;
+                text-align: center;
+                margin-bottom: 15px;
             }
 
             .btn_addto_list,
@@ -89,6 +91,7 @@
             @include mq($until: desktop) {
                 display: block;
                 flex: 0 1 100%;
+                height: auto;
             }
 
             h1 {
