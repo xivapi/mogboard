@@ -1,4 +1,9 @@
 <script>let alert_trigger_operators = {{ alerts.trigger_operators|json_encode|raw }};</script>
+{% if shops %}
+<div class="alert-page">
+    <div class="alert-dark">As this item is purchasable from a Vendor for Gil, Alerts cannot be setup at this time.</div>
+</div>
+{% else %}
 <div class="alert-page">
     <div class="alert_info_button">
         <button>Whats an alert <img src="/i/svg/question-circle-light.svg" height="18"></button>
@@ -145,6 +150,7 @@
         </div>
     {% endif %}
 </div>
+{% endif %}
 
 <div class="modal alert_delete_confirmation_modal">
     <button type="button" class="modal_close_button"><i class="xiv-NavigationClose"></i></button>
