@@ -104,7 +104,7 @@ class ItemController extends AbstractController
         $market     = $this->companion->getByDataCenter($dc, $itemId);
         
         $canUpdate = false;
-        foreach ($market as $server => $marketData) {
+        foreach ($market as $marketData) {
             if (in_array($marketData->UpdatePriority, [1,2,3,4,5])) {
                 $canUpdate = true;
                 break;
