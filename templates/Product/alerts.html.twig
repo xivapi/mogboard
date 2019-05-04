@@ -132,6 +132,30 @@
                         </div>
                     </div>
 
+                    {# DPS tier perk #}
+                    {% if auth.user.patron(4) %}
+                        <div class="form_row">
+                            <label class="text-green"><strong>DPS Perk:</strong> Private Mogboard Alert Watcher</label>
+
+                            <p style="font-size: 13px;">
+                                Should this alert keep your item up to date? If enabled, everytime your alert is checked
+                                it will also check if the item is 10 minutes out of date and request an update
+                                if it is. Please be mindful that the more alerts you enable this on, the slower
+                                the update system will be and that 10 minutes may not be garaunteed.
+                                <strong class="text-red">Please only enable this for items you truely want to monitor accurately.</strong>
+                            </p>
+
+                            <div class="form_columns">
+                                <div class="flex_50">
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="alert_dps_perk">
+                                        <label for="alert_dps_perk">Yes, keep item updated</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
                     {# submit #}
                     <div class="form_footer">
                         <button type="submit" class="btn-green btn_create_alert">Save Alert</button>

@@ -2,35 +2,43 @@
     <table>
         <thead>
         <tr>
-            <th width="48%">Name</th>
-            <th width="48%">Conditions</th>
-            <th width="4%">Actions</th>
+            <th width="90%">Name</th>
+            <th width="10%">Actions</th>
         </tr>
         </thead>
         <tbody>
         {% for alert in alerts %}
             <tr data-name="{{ alert.name }}">
                 <td>
-                    <h5>{{ alert.name }} <small>({{ alert.uniq }})</small></h5>
-                    <div class="alert_info">
-                        <em>({{ alert.server }})</em>
-                        <span>
-                            {{ alert.isTriggerHq ? '<img src="/i/game/hq.png">' : '' }}
-                            {{ alert.isTriggerDataCenter ? '<i class="xiv-CrossWorld"></i>' : '' }}
-                        </span>
-                        <span>
-                            <strong>Notify:</strong> {{ alert.isNotifiedViaEmail ? '[Email]' : '' }} {{ alert.isNotifiedViaDiscord ? '[Discord]' : '' }}
-                        </span>
+                    <h5><strong>{{ alert.name }}</strong> <small>({{ alert.uniq }})</small></h5>
+                    <div class="flex">
+                        <div class="flex_25">
+                            <small>HQ?</small><br>
+                            {{ alert.isTriggerHq ? '<img src="/i/game/hq.png" height="12"> HQ' : 'NQ' }}
+                        </div>
+                        <div class="flex_25">
+                            <small>Cross-World?</small><br>
+                            {{ alert.isTriggerDataCenter ? '<i class="xiv-CrossWorld"></i> Yes' : 'No' }}
+                        </div>
+                        <div class="flex_25">
+                            <small>Notification</small><br>
+                            {{ alert.isNotifiedViaEmail ? '[Email]' : '' }}
+                            {{ alert.isNotifiedViaDiscord ? '[Discord]' : '' }}
+                        </div>
+                        <div class="flex_25">
+                            <small>Sent</small><br>
+                            ({{ alert.triggersSent|number_format }}) {{ alert.triggerLastSent ? alert.triggerLastSent|date : 'Never' }}
+                        </div>
                     </div>
-                    <div class="alert_info">
-                        Sent: ({{ alert.triggersSent|number_format }}) {{ alert.triggerLastSent ? alert.triggerLastSent|date : 'Never' }}
+                    {% if alert.keepUpdated %}
+                    <div style="padding: 5px 0;">
+                        <strong class="text-green">DPS Perk:</strong> Keep item updated
                     </div>
-                </td>
-                <td>
-                    <code class="box">
-                    {% for trigger in alert.getTriggerConditionsFormatted %}
-                        <span>{{ trigger[0] }}</span> <em>{{ trigger[4] }}</em> <strong>{{ trigger[2] is empty ? '0' : trigger[2] }}</strong><br>
-                    {% endfor %}
+                    {% endif %}
+                    <code class="box" style="margin-top: 5px;">
+                        {% for trigger in alert.getTriggerConditionsFormatted %}
+                            <span>{{ trigger[0] }}</span> <em>{{ trigger[4] }}</em> <strong>{{ trigger[2] is empty ? '0' : trigger[2] }}</strong><br>
+                        {% endfor %}
                     </code>
                 </td>
                 <td>

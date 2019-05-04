@@ -116,7 +116,7 @@ class UserAlertsTriggers
             /**
              * DPS patrons get auto-price updating.
              */
-            if ($user->isPatron(User::PATREON_DPS)) {
+            if ($alert->isKeepUpdated() && $user->isPatron(User::PATREON_DPS)) {
                 // Send an update request, XIVAPI handles throttling this.
                 $this->console->writeln('--> Requesting manual update');
                 $this->xivapi->_private->manualItemUpdate(

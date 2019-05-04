@@ -6,8 +6,6 @@
 <div class="page">
     <h1>Server Status</h1>
 
-
-
     {% for dc, servers in getGameDataCenters() %}
     <div class="page-block">
         <h2>{{ dc }}</h2>
@@ -24,6 +22,12 @@
         </div>
     </div>
     {% endfor %}
+
+    <div class="alert-dark tac">
+        At this time, MogBoard does not support JP Servers.
+    </div>
+
+
 </div>
 
 {% endblock %}

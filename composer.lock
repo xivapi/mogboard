@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d467cfcbe4f8fb92e5e109de2632c59",
+    "content-hash": "299860aa1591bc07b70a0df1e668955a",
     "packages": [
         {
             "name": "art4/json-api-client",
@@ -5071,16 +5071,16 @@
         },
         {
             "name": "xivapi/xivapi-php",
-            "version": "1.6.7",
+            "version": "1.6.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xivapi/xivapi-php.git",
-                "reference": "66bab0f968af57cb809382a8e039e4e244c2119d"
+                "reference": "ad82f1adfb9b8eca5456c8aeef530a1e8ffb31e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xivapi/xivapi-php/zipball/66bab0f968af57cb809382a8e039e4e244c2119d",
-                "reference": "66bab0f968af57cb809382a8e039e4e244c2119d",
+                "url": "https://api.github.com/repos/xivapi/xivapi-php/zipball/ad82f1adfb9b8eca5456c8aeef530a1e8ffb31e0",
+                "reference": "ad82f1adfb9b8eca5456c8aeef530a1e8ffb31e0",
                 "shasum": ""
             },
             "require": {
@@ -5116,7 +5116,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2019-04-21T13:58:46+00:00"
+            "time": "2019-05-04T17:58:32+00:00"
         },
         {
             "name": "zendframework/zend-code",

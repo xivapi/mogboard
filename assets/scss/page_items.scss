@@ -57,21 +57,20 @@
             }
 
             .btn_addto_list,
-            .btn_addto_fave {
+            .btn_addto_fave,
+            .btn_update {
                 height: 32px;
                 line-height: 32px;
-                font-size: 14px;
-                padding: 0 12px;
+                font-size: 15px;
+                padding: 0 10px;
                 background-color: var(--default-3x);
-                border-radius: 50px;
+                border-radius: 3px;
 
                 &:hover {
                     background-color: var(--table-color);
                 }
 
                 &.btn_addto_fave {
-                    margin-left: 10px;
-
                     &.on {
                         background-color: var(--red-2x);
                     }
@@ -79,6 +78,15 @@
 
                 i {
                     margin-bottom: -3px;
+                    margin-right: 5px;
+                }
+            }
+
+            .btn_update {
+                background-color: var(--green);
+
+                &:hover {
+                    background-color: var(--green-2x) !important;
                 }
             }
         }

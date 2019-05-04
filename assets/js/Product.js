@@ -6,10 +6,10 @@ class Product
 {
     constructor()
     {
-        this.uiButtons = $('.product .item_nav');
-        this.uiTabs = $('.product .tab');
+        this.uiButtons  = $('.product .item_nav');
+        this.uiTabs     = $('.product .tab');
         this.uiCategory = $('.product .product-search-cat');
-        this.uiRefreshButton = $('.btn_request_update');
+        this.uiUpdate   = $('.btn_update');
     }
 
     watch()
@@ -23,7 +23,6 @@ class Product
             const tab = $(event.currentTarget).attr('data-tab');
             this.switchTabView(event, tab);
         });
-
 
         this.uiCategory.on('click', event => {
             const id = $(event.currentTarget).attr('data-cat');
@@ -41,26 +40,27 @@ class Product
             }
         });
 
-        this.uiRefreshButton.on('click', event => {
-            ButtonLoading.start(this.uiRefreshButton);
-
-            $.ajax({
-                url: mog.url_item_refresh.replace('-id-', itemId),
-                success: response => {
-                    Popup.success('Prioritised!', 'This item has been bumped to the front of the queue. Check back in a minute and the prices/history should have been updated.');
-                    ButtonLoading.disable(this.uiRefreshButton, 'Queued');
-                    this.uiRefreshButton.addClass('btn-green-outline').removeClass('btn-green')
-                },
-                error: (a,b,c) => {
-                    Popup.error('Error 37', 'Could not request item pricing refresh');
-                    console.log('--- ERROR ---');
-                    console.log(a,b,c)
-                }
-            })
-        });
-
         $('.item_nav_mobile_toggle').on('click', event => {
             $('.item_nav').toggleClass('open');
+        });
+
+        // manual update
+        $('.btn_update').on('click', event => {
+            ButtonLoading.start(this.uiUpdate);
+
+            $.ajax({
+                url: mog.urls.items.update.replace('-id-', itemId),
+                success: response => {
+                    Popup.success('Update Status', response.message);
+                },
+                error: (a,b,c) => {
+                    Popup.error('Error 8F', 'Could not update item! Try again later.');
+                    console.log(a,b,c);
+                },
+                complete: () => {
+                    ButtonLoading.finish(this.uiUpdate);
+                }
+            })
         });
     }
 

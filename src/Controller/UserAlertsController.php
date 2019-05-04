@@ -100,6 +100,7 @@ class UserAlertsController extends AbstractController
             'alert_dc'             => $alert->isTriggerDataCenter(),
             'alert_notify_discord' => $alert->isNotifiedViaDiscord(),
             'alert_notify_email'   => $alert->isNotifiedViaEmail(),
+            'alert_dps_perk'       => $alert->isKeepUpdated(),
             'triggers'             => $alert->getTriggerConditionsFormatted(),
         ]);
     }

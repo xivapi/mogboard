@@ -395,9 +395,9 @@ pre, code {
   pre.box, code.box {
     color: #c2c2c2;
     display: block;
-    background-color: #222;
+    background-color: #111;
     padding: 6px 10px;
-    border-radius: 5px;
+    border-radius: 3px;
     margin-bottom: 15px;
     line-height: 20px; }
     pre.box em, code.box em {
@@ -2066,25 +2066,31 @@ aside {
         text-align: center;
         margin-bottom: 15px; } }
     .product .item_header .box_lists .btn_addto_list,
-    .product .item_header .box_lists .btn_addto_fave {
+    .product .item_header .box_lists .btn_addto_fave,
+    .product .item_header .box_lists .btn_update {
       height: 32px;
       line-height: 32px;
-      font-size: 14px;
-      padding: 0 12px;
+      font-size: 15px;
+      padding: 0 10px;
       background-color: var(--default-3x);
-      border-radius: 50px; }
+      border-radius: 3px; }
       .product .item_header .box_lists .btn_addto_list:hover,
-      .product .item_header .box_lists .btn_addto_fave:hover {
+      .product .item_header .box_lists .btn_addto_fave:hover,
+      .product .item_header .box_lists .btn_update:hover {
         background-color: var(--table-color); }
-      .product .item_header .box_lists .btn_addto_list.btn_addto_fave,
-      .product .item_header .box_lists .btn_addto_fave.btn_addto_fave {
-        margin-left: 10px; }
-        .product .item_header .box_lists .btn_addto_list.btn_addto_fave.on,
-        .product .item_header .box_lists .btn_addto_fave.btn_addto_fave.on {
-          background-color: var(--red-2x); }
+      .product .item_header .box_lists .btn_addto_list.btn_addto_fave.on,
+      .product .item_header .box_lists .btn_addto_fave.btn_addto_fave.on,
+      .product .item_header .box_lists .btn_update.btn_addto_fave.on {
+        background-color: var(--red-2x); }
       .product .item_header .box_lists .btn_addto_list i,
-      .product .item_header .box_lists .btn_addto_fave i {
-        margin-bottom: -3px; }
+      .product .item_header .box_lists .btn_addto_fave i,
+      .product .item_header .box_lists .btn_update i {
+        margin-bottom: -3px;
+        margin-right: 5px; }
+    .product .item_header .box_lists .btn_update {
+      background-color: var(--green); }
+      .product .item_header .box_lists .btn_update:hover {
+        background-color: var(--green-2x) !important; }
   .product .item_header .item_info {
     display: flex;
     flex: 0 1 calc(100% - 128px);
@@ -2849,7 +2855,7 @@ aside {
   margin: -15px -15px 10px -15px;
   padding: 20px;
   text-align: center;
-  background-color: #333; }
+  background-color: var(--dark-blue2); }
 
 .account-panel {
   background-color: var(--dark-blue2);

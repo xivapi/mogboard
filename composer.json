@@ -26,7 +26,7 @@
         "wildbit/postmark-php": "^2.6",
         "wohali/oauth2-discord-new": "^1.0",
         "xivapi/companion-php": "^1.2.2",
-        "xivapi/xivapi-php": "1.6.7"
+        "xivapi/xivapi-php": "1.6.9"
     },
     "config": {
         "preferred-install": {

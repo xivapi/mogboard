@@ -189,9 +189,9 @@ class IndexController extends AbstractController
      */
     public function serverStatus()
     {
-        $status = $this->xivapi->market->online();
+        $status  = $this->xivapi->market->online();
         $offline = $status->Offline;
-        $list = [];
+        $list    = [];
         
         foreach ($status->Status as $i => $serverStatus) {
             $list[$serverStatus->Server] = $serverStatus;

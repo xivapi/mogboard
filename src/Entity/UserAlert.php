@@ -182,6 +182,11 @@ class UserAlert
      */
     private $notifiedViaDiscord = false;
     /**
+     * @var boolean
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $keepUpdated = false;
+    /**
      * @ORM\OneToMany(targetEntity="UserAlertEvent", mappedBy="userAlert", cascade={"remove"}, orphanRemoval=true)
      */
     private $events;
@@ -203,14 +208,15 @@ class UserAlert
         $alert = $alert ?: new UserAlert();
  
         $alert
-            ->setItemId($json->alert_item_id ?: $alert->getItemId())
-            ->setName($json->alert_name ?: $alert->getName())
-            ->setTriggerDataCenter($json->alert_dc ?: $alert->isTriggerDataCenter())
-            ->setTriggerType($json->alert_type ?: $alert->getTriggerType())
-            ->setTriggerHq($json->alert_hq ?: $alert->isTriggerHq())
-            ->setTriggerNq($json->alert_nq ?: $alert->isTriggerNq())
-            ->setNotifiedViaDiscord($json->alert_notify_discord ?: $alert->isNotifiedViaDiscord())
-            ->setNotifiedViaEmail($json->alert_notify_email ?: $alert->isNotifiedViaEmail());
+            ->setItemId($json->alert_item_id ?? $alert->getItemId())
+            ->setName($json->alert_name ?? $alert->getName())
+            ->setTriggerDataCenter($json->alert_dc ?? $alert->isTriggerDataCenter())
+            ->setTriggerType($json->alert_type ?? $alert->getTriggerType())
+            ->setTriggerHq($json->alert_hq ?? $alert->isTriggerHq())
+            ->setTriggerNq($json->alert_nq ?? $alert->isTriggerNq())
+            ->setNotifiedViaDiscord($json->alert_notify_discord ?? $alert->isNotifiedViaDiscord())
+            ->setNotifiedViaEmail($json->alert_notify_email ?? $alert->isNotifiedViaEmail())
+            ->setKeepUpdated($json->alert_dps_perk ?? $alert->isKeepUpdated());
         
         // reset trigger conditions
         $alert->setTriggerConditions([]);
@@ -531,5 +537,17 @@ class UserAlert
     public function recentEvent(): UserAlertEvent
     {
         return $this->events->last();
+    }
+    
+    public function isKeepUpdated(): bool
+    {
+        return $this->keepUpdated;
+    }
+    
+    public function setKeepUpdated(bool $keepUpdated)
+    {
+        $this->keepUpdated = $keepUpdated;
+        
+        return $this;
     }
 }

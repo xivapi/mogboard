@@ -176,4 +176,70 @@ class ItemController extends AbstractController
         
         return $this->render('Product/index.html.twig', $data);
     }
+    
+    /**
+     * @Route("/market/{itemId}/update", name="item_update")
+     */
+    public function update(int $itemId)
+    {
+        $user = $this->users->getUser();
+    
+        /**
+         * Check patron status of the user
+         */
+        if ($user->isPatron() == false) {
+            return $this->json([
+                'message' => 'Only patrons at this time can update items manually.'
+            ]);
+        }
+        
+        $itemId = (int)$itemId;
+        $server = GameServers::getServerId(GameServers::getServer());
+        $dc     = GameServers::getDataCenter(GameServers::getServer());
+        
+        $key1 = 'mogboard_'. __METHOD__ . $itemId . $dc;
+        $key2 = 'mogboard_'. __METHOD__ . $user->getId();
+    
+        /**
+         * Check the item hasn't been updated already by someone
+         */
+        if (Redis::Cache()->get($key1)) {
+            return $this->json([
+                'message' => 'Item already updated recently by a MogBoard member!',
+            ]);
+        }
+    
+        Redis::Cache()->set($key1, true);
+    
+        /**
+         * If the user has reached their limit
+         */
+        if (Redis::Cache()->get($key2) > 5) {
+            return $this->json([
+                'message' => 'You have reached the maximum of 5 items updated, try again in 1 hour.',
+            ]);
+        }
+    
+        /**
+         * Cache users update limit
+         */
+        $count = Redis::Cache()->get($key2);
+        $count = $count ? $count + 1 : 1;
+        Redis::Cache()->set($key2, $count);
+    
+        /**
+         * Request update
+         */
+        $xivapi = new XIVAPI(XIVAPI::STAGING);
+        
+        [$ok, $time, $message] = $xivapi->_private->manualItemUpdateForce(
+            getenv('XIVAPI_COMPANION_KEY'),
+            $itemId,
+            $server
+        );
+        
+        return $this->json([
+            'message' => $message
+        ]);
+    }
 }

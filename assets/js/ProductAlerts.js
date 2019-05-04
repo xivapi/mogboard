@@ -169,6 +169,7 @@ class ProductAlerts
         this.alert.alert_dc = this.uiForm.find('#alert_dc').prop('checked');
         this.alert.alert_notify_discord = this.uiForm.find('#alert_notify_discord').prop('checked');
         this.alert.alert_notify_email = this.uiForm.find('#alert_notify_email').prop('checked');
+        this.alert.alert_dps_perk = this.uiForm.find('#alert_dps_perk').prop('checked');
 
         if (this.alert.alert_name.length < 3 || this.alert.alert_name.length > 100) {
             Popup.error('Name Length', 'Please keep your alert name <br> between 4 and 100 characters');
@@ -283,6 +284,7 @@ class ProductAlerts
                 this.uiForm.find('#alert_dc').prop('checked', response.alert_dc);
                 this.uiForm.find('#alert_notify_discord').prop('checked', response.alert_notify_discord);
                 this.uiForm.find('#alert_notify_email').prop('checked', response.alert_notify_email);
+                this.uiForm.find('#alert_dps_perk').prop('checked', response.alert_dps_perk);
 
                 this.alert.alert_name = response.alert_name;
                 this.alert.alert_nq = response.alert_nq;
@@ -290,8 +292,7 @@ class ProductAlerts
                 this.alert.alert_dc = response.alert_dc;
                 this.alert.alert_notify_discord = response.alert_notify_discord;
                 this.alert.alert_notify_email = response.alert_notify_email;
-
-                console.log(response.triggers);
+                this.alert.alert_dps_perk = response.alert_dps_perk;
 
                 // find the id triggers and remove them
                 response.triggers.forEach((trigger, index) => {
@@ -378,6 +379,7 @@ class ProductAlerts
         this.uiForm.find('#alert_dc').prop('checked', false);
         this.uiForm.find('#alert_notify_discord').prop('checked', false);
         this.uiForm.find('#alert_notify_email').prop('checked', false);
+        this.uiForm.find('#alert_dps_perk').prop('checked', false);
 
         this.uiTriggers.html('');
 

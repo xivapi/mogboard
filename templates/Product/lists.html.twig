@@ -1,8 +1,11 @@
 {% if auth.online() %}
 <div class="box_form">
     <div class="box_flex form">
-        <button class="btn_addto_list"><i class="xiv-ScheduleDetails"></i> Add to List</button>
-        <button class="btn_addto_fave {{ faved ? 'on' : '' }}"><i class="icon-heart-o"></i> <span>{{ faved ? 'Faved' : 'Favourite' }}</span></button>
+        <button class="btn_addto_list"><i class="xiv-ScheduleDetails"></i>Lists</button>
+        <button class="btn_addto_fave {{ faved ? 'on' : '' }}"><i class="icon-heart-o"></i><span>{{ faved ? 'Faved' : 'Favourite' }}</span></button>
+        {% if auth.online and auth.user.patron %}
+        <button class="btn_update"><i class="xiv-ViewRefresh"></i>Update</button>
+        {% endif %}
     </div>
 </div>
 {% endif %}
