@@ -196,36 +196,6 @@ class ItemController extends AbstractController
         $itemId = (int)$itemId;
         $server = GameServers::getServerId(GameServers::getServer());
         $dc     = GameServers::getDataCenter(GameServers::getServer());
-        
-        $key1 = 'mogboard_'. __METHOD__ . $itemId . $dc;
-        $key2 = 'mogboard_'. __METHOD__ . $user->getId();
-    
-        /**
-         * Check the item hasn't been updated already by someone
-         */
-        if (Redis::Cache()->get($key1)) {
-            return $this->json([
-                'message' => 'Item already updated recently by a MogBoard member!',
-            ]);
-        }
-    
-        Redis::Cache()->set($key1, true);
-    
-        /**
-         * If the user has reached their limit
-         */
-        if (Redis::Cache()->get($key2) > 5) {
-            return $this->json([
-                'message' => 'You have reached the maximum of 5 items updated, try again in 1 hour.',
-            ]);
-        }
-    
-        /**
-         * Cache users update limit
-         */
-        $count = Redis::Cache()->get($key2);
-        $count = $count ? $count + 1 : 1;
-        Redis::Cache()->set($key2, $count);
     
         /**
          * Request update
@@ -237,6 +207,39 @@ class ItemController extends AbstractController
             $itemId,
             $server
         );
+        
+        // only process if the response was OK (set to update)
+        if ($ok) {
+            $key1 = 'mogboard_'. __METHOD__ . $itemId . $dc;
+            $key2 = 'mogboard_'. __METHOD__ . $user->getId();
+    
+            /**
+             * Check the item hasn't been updated already by someone
+             */
+            if (Redis::Cache()->get($key1)) {
+                return $this->json([
+                    'message' => 'Item already updated recently by a MogBoard member!',
+                ]);
+            }
+    
+            Redis::Cache()->set($key1, true);
+    
+            /**
+             * If the user has reached their limit
+             */
+            if (Redis::Cache()->get($key2) > 5) {
+                return $this->json([
+                    'message' => 'You have reached the maximum of 5 items updated, try again in 1 hour.',
+                ]);
+            }
+    
+            /**
+             * Cache users update limit
+             */
+            $count = Redis::Cache()->get($key2);
+            $count = $count ? $count + 1 : 1;
+            Redis::Cache()->set($key2, $count);
+        }
         
         return $this->json([
             'message' => $message
