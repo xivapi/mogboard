@@ -230,7 +230,7 @@ class ItemController extends AbstractController
         /**
          * Request update
          */
-        $xivapi = new XIVAPI(XIVAPI::STAGING);
+        $xivapi = new XIVAPI();
         
         [$ok, $time, $message] = $xivapi->_private->manualItemUpdateForce(
             getenv('XIVAPI_COMPANION_KEY'),
