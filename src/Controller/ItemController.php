@@ -102,6 +102,14 @@ class ItemController extends AbstractController
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
         $market     = $this->companion->getByDataCenter($dc, $itemId);
+        
+        $canUpdate = false;
+        foreach ($market as $server => $marketData) {
+            if (in_array($marketData->UpdatePriority, [1,2,3,4,5])) {
+                $canUpdate = true;
+                break;
+            }
+        }
 
         // build census
         $census = Redis::Cache()->get("census_{$dc}_{$itemId}");
@@ -141,6 +149,7 @@ class ItemController extends AbstractController
             'item'           => $item,
             'market'         => $market,
             'marketStats'    => $marketStats,
+            'canUpdate'      => $canUpdate,
             'census'         => $census,
             'junkvalue'      => CompanionCensus::JUNK_PRICE_FACTOR,
             'recipes'        => $recipes,
