@@ -29,38 +29,6 @@
         </div>
     </div>
 
-    {# API #}
-    <div class="item_details_box">
-        <h3>XIVAPI</h3>
-        <p>
-            All the information you see on this page can be obtained from XIVAPI
-            using the Market Endpoint. This is an open and accessible API to everyone
-            and you can use it to obtain all sorts of information regarding the FFXIV
-            market place.
-        </p>
-        <p>
-            You can find out more <a href="https://xivapi.com/docs/Market">Market API Documentation</a>.
-        </p>
-        <div class="table">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>API Endpoint</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <a href="https://xivapi.com/market/item/{{ item.ID }}?dc={{ server.dc }}" target="_blank">
-                                /market/item/{{ item.ID }}?dc={{ server.dc }}
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
     {# TEAM CRAFT #}
     <div class="item_details_box">
         <div class="table">
@@ -113,6 +81,38 @@
         <p class="item_details_footnote">
             Do you run a fansite that MogBoard could link to? Get in touch on Discord!
         </p>
+    </div>
+
+    {# API #}
+    <div class="item_details_box">
+        <h3>XIVAPI</h3>
+        <p>
+            All the information you see on this page can be obtained from XIVAPI
+            using the Market Endpoint. This is an open and accessible API to everyone
+            and you can use it to obtain all sorts of information regarding the FFXIV
+            market place.
+        </p>
+        <p>
+            You can find out more <a href="https://xivapi.com/docs/Market">Market API Documentation</a>.
+        </p>
+        <div class="table">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>API Endpoint</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <a href="https://xivapi.com/market/item/{{ item.ID }}?dc={{ server.dc }}" target="_blank">
+                            /market/item/{{ item.ID }}?dc={{ server.dc }}
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     {# BASIC INFO #}
