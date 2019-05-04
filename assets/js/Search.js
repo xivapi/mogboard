@@ -1,4 +1,5 @@
 import XIVAPI from './XIVAPI';
+import ClickEvent from './ClickEvent';
 
 /**
  * todo - this needs some cleaning up
@@ -7,24 +8,26 @@ class Search
 {
     constructor()
     {
-        this.uiInput = $('input.search');
-        this.uiView  = $('.search-results-container');
-        this.uiLazy = null;
-
-        this.timeout = null;
-        this.timeoutDelay = 500;
-        this.searching = false;
+        this.uiInput    = $('input.search');
+        this.uiView     = $('.search-results-container');
+        this.loading    = $('.search-loading');
+        this.uiLazy     = null;
         this.searchTerm = null;
     }
 
     watch()
     {
         this.uiInput.on('keyup', event => {
-            clearTimeout(this.timeout);
-            const searchTerm = $(event.currentTarget).val().trim();
-
+            this.uiView.removeClass('open');
             this.uiInput.removeClass('complete');
-            searchTerm.length === 0 ? this.uiInput.removeClass('typing') : this.uiInput.addClass('typing');
+
+            /**
+             * Check search term
+             */
+            const searchTerm = $(event.currentTarget).val().trim();
+            searchTerm.length === 0
+                ? this.uiInput.removeClass('typing')
+                : this.uiInput.addClass('typing');
 
             if (searchTerm.length === 0) {
                 this.searchTerm = '';
@@ -32,39 +35,36 @@ class Search
                 return;
             }
 
-            if (this.searching || this.searchTerm == searchTerm || searchTerm.length < 2) {
+            if (searchTerm.length < 2) {
                 return;
             }
 
-            // perform search
-            this.timeout = setTimeout(() => {
-                this.searchTerm = $(event.currentTarget).val().trim();
-                this.uiView.addClass('open');
-                this.searching = true;
+            /**
+             * Assign stuff
+             */
 
-                XIVAPI.search(searchTerm, response => {
-                    this.render(response);
-                });
-            }, this.timeoutDelay);
+            this.searchTerm = $(event.currentTarget).val().trim();
+            this.uiView.addClass('open');
+
+            /**
+             * Check for enter button
+             */
+            if (event.keyCode !== 13) {
+                return;
+            }
+
+            /**
+             * Search
+             */
+            this.loading.addClass('on');
+            XIVAPI.search(searchTerm, response => {
+                this.loading.removeClass('on');
+                this.render(response);
+            });
         });
 
-        this.uiInput.on('click', event => {
-            if (this.searchTerm && this.searchTerm.length > 1) {
-                this.uiView.addClass('open');
-            }
-        });
-
-        $(document).mouseup(event => {
-            const view = this.uiView;
-            const input = this.uiInput;
-
-            // if the target of the click isn't the container nor a descendant of the container
-            if (!view.is(event.target) && view.has(event.target).length === 0
-                && !input.is(event.target) && input.has(event.target).length === 0) {
-
-                this.uiView.removeClass('open');
-                this.uiInput.removeClass('complete typing');
-            }
+        ClickEvent.watchForMouseOut(this.uiView, () => {
+            this.uiInput.removeClass('complete typing');
         });
 
         $(window).on('resize', event => {
@@ -78,7 +78,6 @@ class Search
         this.uiInput.removeClass('typing');
         this.uiInput.addClass('complete');
 
-        this.searching = false;
         const results = [];
 
         // prep results

@@ -478,11 +478,24 @@ header {
             background: -webkit-linear-gradient(top, rgb(54, 63, 81) 0%, rgb(50, 60, 71) 100%);
             background: linear-gradient(to bottom, rgb(54, 63, 81) 0%, rgb(50, 60, 71) 100%);
 
+            position: relative;
             border-radius: 4px;
             box-shadow: 0 1px 3px #000;
             overflow: hidden;
             margin: 0 0 0 19px;
             height: 46px;
+
+            .search-loading {
+                position: absolute;
+                right: 205px;
+                top: 10px;
+                height: 25px;
+                display: none;
+
+                &.on {
+                    display: block;
+                }
+            }
 
             input, button {
                 height: 46px;
