@@ -1,11 +1,11 @@
 <script>let alert_trigger_operators = {{ alerts.trigger_operators|json_encode|raw }};</script>
 {% if shops %}
 <div class="alert-dark">
-    <div class="alert-dark">As this item is purchasable from a Vendor for Gil, Alerts cannot be setup at this time.</div>
+    <div class="alert-red">As this item is purchasable from a Vendor for Gil, Alerts cannot be setup at this time.</div>
 </div>
 {% elseif canUpdate == false %}
 <div class="alert-page">
-    <div class="alert-dark">This item does not update on any servers in your DC, an alert cannot be created at this time.</div>
+    <div class="alert-red">This item does not update on any servers in your DC, an alert cannot be created at this time.</div>
 </div>
 {% else %}
 <div class="alert-page">
