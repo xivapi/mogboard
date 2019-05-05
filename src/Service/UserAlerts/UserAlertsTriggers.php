@@ -45,14 +45,14 @@ class UserAlertsTriggers
         Companion $companion,
         GameDataSource $gamedata
     ) {
-        $this->em           = $em;
-        $this->userAlerts   = $userAlerts;
-        $this->discord      = $userAlertsDiscordNotification;
-        $this->email        = $userAlertsEmailNotification;
-        $this->companion    = $companion;
-        $this->gamedata     = $gamedata;
-        $this->console      = new ConsoleOutput();
-        $this->xivapi       = new XIVAPI();
+        $this->em         = $em;
+        $this->userAlerts = $userAlerts;
+        $this->discord    = $userAlertsDiscordNotification;
+        $this->email      = $userAlertsEmailNotification;
+        $this->companion  = $companion;
+        $this->gamedata   = $gamedata;
+        $this->console    = new ConsoleOutput();
+        $this->xivapi     = new XIVAPI();
     }
     
     /**

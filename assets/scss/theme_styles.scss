@@ -807,7 +807,8 @@ ul,ol {
 .alert-blue,
 .alert-green,
 .alert-purple,
-.alert-white {
+.alert-white,
+.alert-light {
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 20px;
@@ -822,6 +823,16 @@ ul,ol {
 
     p {
         color: #fff;
+    }
+
+    h4 {
+        margin-bottom: 5px;
+
+        img {
+            vertical-align: middle;
+            display: inline-table;
+            margin-top: -3px;
+        }
     }
 }
 
@@ -842,6 +853,9 @@ ul,ol {
 }
 .alert-dark {
     background-color: var(--color7);
+}
+.alert-light {
+    background-color: var(--dark-blue2);
 }
 .alert-white {
     background-color: var(--white);

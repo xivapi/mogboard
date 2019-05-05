@@ -971,7 +971,8 @@ ul, ol {
 .alert-blue,
 .alert-green,
 .alert-purple,
-.alert-white {
+.alert-white,
+.alert-light {
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 20px;
@@ -984,7 +985,8 @@ ul, ol {
   .alert-blue h1,
   .alert-green h1,
   .alert-purple h1,
-  .alert-white h1 {
+  .alert-white h1,
+  .alert-light h1 {
     font-size: 32px;
     font-weight: 400; }
   .alert-default p,
@@ -993,8 +995,29 @@ ul, ol {
   .alert-blue p,
   .alert-green p,
   .alert-purple p,
-  .alert-white p {
+  .alert-white p,
+  .alert-light p {
     color: #fff; }
+  .alert-default h4,
+  .alert-dark h4,
+  .alert-red h4,
+  .alert-blue h4,
+  .alert-green h4,
+  .alert-purple h4,
+  .alert-white h4,
+  .alert-light h4 {
+    margin-bottom: 5px; }
+    .alert-default h4 img,
+    .alert-dark h4 img,
+    .alert-red h4 img,
+    .alert-blue h4 img,
+    .alert-green h4 img,
+    .alert-purple h4 img,
+    .alert-white h4 img,
+    .alert-light h4 img {
+      vertical-align: middle;
+      display: inline-table;
+      margin-top: -3px; }
 
 .alert-default {
   background-color: var(--default); }
@@ -1013,6 +1036,9 @@ ul, ol {
 
 .alert-dark {
   background-color: var(--color7); }
+
+.alert-light {
+  background-color: var(--dark-blue2); }
 
 .alert-white {
   background-color: var(--white);
