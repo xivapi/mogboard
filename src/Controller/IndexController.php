@@ -169,7 +169,7 @@ class IndexController extends AbstractController
             ],
         ];
         
-        Discord::mog()->sendMessage('477631558317244427', null, $embed);
+        Discord::mog()->sendMessage('574593645626523669', null, $embed);
         
         return $this->redirectToRoute('feedback');
     }
