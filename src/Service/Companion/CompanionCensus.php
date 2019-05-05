@@ -430,6 +430,10 @@ class CompanionCensus
     {
         foreach ($market as $server => $marketData)
         {
+            if (!isset($marketData->UpdatePriority)) {
+                continue;
+            }
+            
             if (in_array($marketData->UpdatePriority, [1,2,3,4,5]) == false) {
                 $marketData->Prices = [];
                 $marketData->History = [];

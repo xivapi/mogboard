@@ -30,9 +30,11 @@
                         {{ item.Name }}
                     </h1>
                     <div class="item_info_small">
+                        {% if item.ItemSearchCategory.ID is defined %}
                         <span><i class="xiv-{{ item.ItemSearchCategory.ID|xivicon }}"></i></span>
                         <span>{{ item.ItemKind.Name }}</span>
                         <span>{{ item.ItemUICategory.Name }}</span>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -46,6 +48,8 @@
                             <button type="button" data-tab="shops" class="btn-shops open">
                                 <i class="xiv-Gil cw-shops"></i> Shops
                             </button>
+                        {% elseif item.ItemSearchCategory.ID is not defined %}
+                            {# nothing #}
                         {% else %}
                             {# Cross World #}
                             <button type="button" data-tab="summary" class="btn-summary {{ cookie('mogboard_homeworld', 'no') == 'yes' ? '' : 'open' }}">
@@ -69,12 +73,14 @@
 
                     {# Custom Pages #}
                     <div class="item_nav_custom">
+                        {% if item.ItemSearchCategory.ID is defined %}
                         {# Item Details #}
                         <button type="button" data-tab="details" class="btn-details">
                             <i class="xiv-ArmoryChest cw-details"></i> Details
                         </button>
+                        {% endif %}
 
-                        {% if not shops %}
+                        {% if not shops and item.ItemSearchCategory.ID is defined %}
                         {# Alerts #}
                         <button type="button" data-tab="alerts" class="btn-alerts">
                             <i class="xiv-app_drawer_news cw-alerts"></i> Alerts
@@ -90,6 +96,12 @@
             {% if shops %}
                 <div class="tab-page tab-shops open">
                     {% include 'Product/item_shops.html.twig' %}
+                </div>
+            {% elseif item.ItemSearchCategory.ID is not defined %}
+                <div class="tab-page open">
+                    <div class="alert-red">
+                        This item does not sell on the Market Board.
+                    </div>
                 </div>
             {% else %}
                 {# Summary #}
