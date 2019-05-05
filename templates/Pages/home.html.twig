@@ -4,10 +4,10 @@
     <div class="home">
         <div>
 
-            <div class="home-box2" style="border: solid 2px #3b8231">
+            <div class="home-box2">
                 <div class="home-row flex">
                     <div class="flex_5 tac">
-                        <img src="/i/game/topic.png">
+                        <img src="/i/game/updates.png">
                     </div>
                     <div class="flex_95">
                         <strong>Updates</strong><br>
@@ -83,7 +83,7 @@
                                         <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
                                         <small>
                                             {{ item.ItemKind.Name }} -
-                                            {{ item.ItemSearchCategory.Name }}
+                                            {{ item.ItemSearchCategory.ID is defined ? item.ItemSearchCategory.Name : '(Not Sellable)' }}
                                         </small>
                                     </li>
                                 {% endfor %}
