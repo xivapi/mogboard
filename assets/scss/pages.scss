@@ -164,8 +164,8 @@
     }
 
     .mog-news-avatar {
-        height: 80px;
-        width: 80px;
+        height: 100px;
+        width: 100px;
         border-radius: 5px;
         box-shadow: 0 1px 5px rgba(0,0,0,0.8);
     }
@@ -196,6 +196,20 @@
         }
     }
 
+    .mog-news-img {
+        max-width: 800px;
+        border-radius: 5px;
+        margin: 10px 0 15px 0;
+        box-shadow: 0 1px 3px #000;
+    }
+
+    .mog-note {
+        border-left: solid 3px #222;
+        padding-left: 15px;
+        font-size: 13px;
+        margin: 5px 0 15px 0;
+        opacity: 0.5;
+    }
 }
 
 .news-ulz {
