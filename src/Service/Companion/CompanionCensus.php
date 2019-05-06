@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\Companion;
+use App\Constants\CompanionConstants;
 use App\Service\Common\Arrays;
 use App\Service\GameData\GameServers;
 use MathPHP\Statistics\Average;
@@ -434,7 +435,7 @@ class CompanionCensus
                 continue;
             }
             
-            if (in_array($marketData->UpdatePriority, [1,2,3,4,5,9]) == false) {
+            if (in_array($marketData->UpdatePriority, CompanionConstants::QUEUES) == false) {
                 $marketData->Prices = [];
                 $marketData->History = [];
             }
