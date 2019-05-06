@@ -30,7 +30,7 @@ class UserAlertsController extends AbstractController
     {
         try {
             $user        = $this->users->getUser(true);
-            $totalAlerts = $user->totalAlerts();
+            $totalAlerts = count($user->getAlerts());
     
             if ($totalAlerts >= $user->getAlertsMax()) {
                 return $this->json([
