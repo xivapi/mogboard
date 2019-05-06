@@ -109,7 +109,7 @@ class ItemController extends AbstractController
                 continue;
             }
             
-            if (in_array($marketData->UpdatePriority, [1,2,3,4,5])) {
+            if (in_array($marketData->UpdatePriority, [1,2,3,4,5,9])) {
                 $canUpdate = true;
                 break;
             }
