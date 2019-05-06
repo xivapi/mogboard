@@ -209,7 +209,7 @@ class Users
         } catch (\Exception $ex) {
             return;
         }
-    
+        
         // don't do anything if the response was not a 200
         if ($response->code != 200) {
             return;
@@ -227,7 +227,7 @@ class Users
     
         // Get Alert Limits
         $benefits = User::ALERT_LIMITS[$tier];
-    
+        
         // update user
         $user
             ->setAlertsMax($benefits['MAX'])
@@ -236,6 +236,7 @@ class Users
             ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT']);
     
         $this->em->persist($user);
+        $this->em->flush();
     }
 
     /**
