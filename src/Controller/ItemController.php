@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Constants\CompanionConstants;
 use App\Entity\UserAlert;
 use App\Service\Common\Language;
 use App\Service\Companion\CompanionStatistics;
@@ -109,7 +110,7 @@ class ItemController extends AbstractController
                 continue;
             }
             
-            if (in_array($marketData->UpdatePriority, [1,2,3,4,5])) {
+            if (in_array($marketData->UpdatePriority, CompanionConstants::QUEUES)) {
                 $canUpdate = true;
                 break;
             }

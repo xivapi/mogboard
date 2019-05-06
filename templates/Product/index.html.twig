@@ -121,14 +121,14 @@
                         <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name) ? 'open' : '' }}">
 
                             {% if updateInfo %}
-                            <div class="item_update_time" data-tippy-content="Queue: {{ marketData.UpdatePriority }} - {{ updateInfo.Name ?? 'No Queue' }} <br> Current Update Duration: {{ updateInfo.CycleTimeReal ?? 'None' }}">
+                            <div class="item_update_time" data-tippy-content="Queue: {{ marketData.UpdatePriority }} - {{ updateInfo.Name ?? 'No Queue' }} <br> Current Update Duration: {{ marketData.UpdatePriority ? 'Anytime' : (updateInfo.CycleTimeReal ?? 'None') }}">
 
                                     {% set updateEta = (marketData.Updated + updateInfo.CycleTimeSec)|date   %}
                                     Prices on <strong>{{ serverName }}</strong> updated <strong class="text-highlight">{{ marketData.Updated|dateSimple }}</strong>
                                     <span></span>
                                     Update Queue: <strong class="text-blue">{{ updateInfo.Name }}</strong>
                                     -
-                                    ETA: <strong>{{ updateEta }}</strong>
+                                    ETA: <strong>{{ marketData.UpdatePriority == 9 ? 'Anytime' : updateEta }}</strong>
                                     <em class="{{ updateInfo.CycleDiffSec < 0 ? 'text-green' : 'text-red' }}">({{ updateInfo.CycleDiffSec < 0 ? 'On-Time' : 'Delayed' }})</em>
                             </div>
                             {% else %}
