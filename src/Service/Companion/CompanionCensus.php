@@ -434,7 +434,7 @@ class CompanionCensus
                 continue;
             }
             
-            if (in_array($marketData->UpdatePriority, [1,2,3,4,5]) == false) {
+            if (in_array($marketData->UpdatePriority, [1,2,3,4,5,9]) == false) {
                 $marketData->Prices = [];
                 $marketData->History = [];
             }
