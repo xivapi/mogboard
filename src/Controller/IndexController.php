@@ -190,7 +190,6 @@ class IndexController extends AbstractController
     public function serverStatus()
     {
         $status  = $this->xivapi->market->online();
-        $offline = $status->Offline;
         $list    = [];
         
         foreach ($status->Status as $i => $serverStatus) {
@@ -198,8 +197,7 @@ class IndexController extends AbstractController
         }
         
         return $this->render('Pages/servers.html.twig',[
-            'servers_status'  => $list,
-            'servers_offline' => $offline
+            'servers_status'  => $list
         ]);
     }
 }
