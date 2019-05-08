@@ -35,7 +35,7 @@
             {% endfor %}
 
             {# Compare diff against average #}
-            {% if averagePricesHQ is defined %}
+            {% if averagePricesHQ is defined  %}
                 {% set diffForQuality = row.IsHQ ? averagePricesHQ : averagePricesNQ %}
                 {% set pricePerUnitDiff = diffForQuality < 0 ? 0 : (((row.PricePerUnit / diffForQuality) * 100) - 100)|round %}
             {% endif %}
