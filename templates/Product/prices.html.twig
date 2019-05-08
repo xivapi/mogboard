@@ -18,7 +18,7 @@
             <th data-sort="int" width="15%">Price</th>
             <th data-sort="int" width="5%">QTY</th>
             <th data-sort="int" width="15%">Total</th>
-            {% if averageHistoryHQ is defined %}
+            {% if averagePricesHQ is defined %}
             <th data-sort="int" width="2%">%Diff</th>
             {% endif %}
             <th data-sort="string">Retainer</th>
@@ -35,8 +35,8 @@
             {% endfor %}
 
             {# Compare diff against average #}
-            {% if averageHistoryHQ is defined %}
-                {% set diffForQuality = row.IsHQ ? averageHistoryHQ : averageHistoryNQ %}
+            {% if averagePricesHQ is defined %}
+                {% set diffForQuality = row.IsHQ ? averagePricesHQ : averagePricesNQ %}
                 {% set pricePerUnitDiff = diffForQuality < 0 ? 100 : ((row.PricePerUnit / diffForQuality) * 100)|round %}
             {% endif %}
 
@@ -56,7 +56,7 @@
                 <td class="price-current" data-sort-value="{{ row.PricePerUnit }}">{{ row.PricePerUnit|number_format }}</td>
                 <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
                 <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
-                {% if averageHistoryHQ is defined %}
+                {% if averagePricesHQ is defined %}
                 <td class="price-diff {{ pricePerUnitDiff > 150 ? 'price-diff-bad' : '' }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percentage sale price to the <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
                 {% endif %}
                 <td class="price-retainer">
