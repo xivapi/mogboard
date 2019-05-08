@@ -28,10 +28,14 @@ class RedisTracking
         self::PAGE_VIEW,
     ];
     
+    const STRINGS = [
+        self::STARTDATE,
+    ];
+    
     /**
      * Track a stat
      */
-    public static function track(string $constant, $value)
+    public static function track(string $constant, int $value)
     {
         if (Redis::Cache()->get('mb_tracking_STARTDATE') == null) {
             Redis::Cache()->set("mb_tracking_STARTDATE", date('Y-m-d H:i:s'), (60 * 60 * 168));
@@ -56,7 +60,11 @@ class RedisTracking
         $results = [];
         
         foreach (self::TRACKING as $constant) {
-            $results[$constant] = Redis::Cache()->getCount("mb_tracking_{$constant}");
+            if (in_array($constant, self::STRINGS)) {
+                $results[$constant] = Redis::Cache()->get("mb_tracking_{$constant}");
+            } else {
+                $results[$constant] = Redis::Cache()->getCount("mb_tracking_{$constant}");
+            }
         }
         
         return $results;
