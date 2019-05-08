@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\Redis\RedisTracking;
 use App\Service\User\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
@@ -33,8 +34,9 @@ class AdminController extends AbstractController
      */
     public function adminTrackingStats()
     {
-        return $this->json(
-            RedisTracking::get()
+        $report = RedisTracking::get();
+        return new Response(
+            json_encode($report, JSON_PRETTY_PRINT)
         );
     }
     

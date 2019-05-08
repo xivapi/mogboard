@@ -15,8 +15,7 @@
     <script>
     function getStatistics() {
         $.get('/admin/tracking_stats', response => {
-            let str = JSON.stringify(response, null, 2);
-            $('pre').html(str);
+            $('pre').html(response);
         });
     }
 
