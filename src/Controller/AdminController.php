@@ -25,8 +25,6 @@ class AdminController extends AbstractController
         $user = $this->users->getUser();
         $user->mustBeAdmin();
     
-        RedisTracking::increment(RedisTracking::TEST);
-        
         return $this->render('Admin/statistics.html.twig');
     }
     

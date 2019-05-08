@@ -70,11 +70,7 @@ class UserAlertsTriggers
         $this->console->writeln("Total: {$total}");
         $start = microtime(true);
     
-        RedisTracking::reset(RedisTracking::TOTAL_ALERTS);
-        RedisTracking::reset(RedisTracking::TOTAL_ALERTS_DPS);
-        RedisTracking::reset(RedisTracking::TOTAL_ALERTS_TRIGGERED);
-        RedisTracking::reset(RedisTracking::TOTAL_MANUAL_UPDATES);
-        RedisTracking::track(RedisTracking::TOTAL_ALERTS, $total);
+        RedisTracking::track('TOTAL_ALERTS_'. ($patronQueue ? 'NORMAL' : 'PATRON'), $total);
         
         /** @var UserAlert $alert */
         foreach ($alerts as $alert) {
@@ -124,7 +120,7 @@ class UserAlertsTriggers
              * DPS patrons get auto-price updating.
              */
             if ($alert->isKeepUpdated() && $user->isPatron(User::PATREON_DPS)) {
-                RedisTracking::increment(RedisTracking::TOTAL_ALERTS_DPS);
+                RedisTracking::increment('TOTAL_ALERTS_DPS_REQUESTED');
                 
                 // Send an update request, XIVAPI handles throttling this.
                 $this->console->writeln('--> Requesting manual update');
@@ -269,7 +265,7 @@ class UserAlertsTriggers
                 $this->em->persist($event);
                 $this->em->flush();
     
-                RedisTracking::increment(RedisTracking::TOTAL_ALERTS_TRIGGERED);
+                RedisTracking::increment('TOTAL_ALERTS_TRIGGERED_'. ($patronQueue ? 'NORMAL' : 'PATRON'));
 
                 if ($alert->isNotifiedViaDiscord()) {
                     $this->discord->sendAlertTriggerNotification($alert, $this->triggered, $hash);

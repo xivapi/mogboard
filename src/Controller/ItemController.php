@@ -78,7 +78,7 @@ class ItemController extends AbstractController
      */
     public function index(Request $request, int $itemId)
     {
-        RedisTracking::increment(RedisTracking::PAGE_VIEW);
+        RedisTracking::increment('PAGE_VIEW');
         
         $this->users->setLastUrl($request);
 
