@@ -5,7 +5,6 @@
     <h2>Real-time Statistics</h2>
 
     <div>
-        <button id="test">Test</button>
         <button id="reset">Reset</button>
     </div>
 
@@ -30,57 +29,22 @@
     </ul>
 
     <script>
-    let interval = null;
-    let conn = new WebSocket('wss://{{ app.request.getHost() }}:8090');
-    conn.onopen = function(e) {
-        console.log("Connection established!");
-
-        // keep requesting stats
-        interval = setInterval(function() {
-            conn.send('STATS');
-        }, 500);
-    };
-
-    conn.onclose = function(e) {
-        console.log('Connection closed');
-        console.log(e);
-        clearInterval(interval);
-    };
-
-    conn.onerror = function(e) {
-        console.log('Connection closed');
-        console.log(e);
-        clearInterval(interval);
-    };
-
-    conn.onmessage = function(e) {
-        let data = e.data.split('|');
-
-        switch (data[0]) {
-            case 'STATS':
-                renderStats(JSON.parse(data[1]));
-                break;
-        }
-    };
-
-    // -------------------------------------
-
-    $('#test').on('click', function() {
-        conn.send('STATS_TEST');
-    });
-
-    $('#reset').on('click', function() {
-        conn.send('STATS_RESET');
-    });
-
-    // -------------------------------------
-
-    function renderStats(stats) {
-        for(let constant in stats) {
-            let value = stats[constant];
-            $('#mb_' + constant).html(value);
-        }
+    function getStatistics() {
+        $.get('/admin/tracking_stats', response => {
+            for(let constant in response) {
+                let value = response[constant];
+                $('#mb_' + constant).html(value);
+            }
+        });
     }
+
+    $('#reset').on('click', event => {
+        $.get('/admin/tracking_stats_reset');
+    });
+
+    setInterval(function() {
+        getStatistics()
+    }, 1000);
     </script>
 
 {% endblock %}

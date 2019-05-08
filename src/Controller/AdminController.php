@@ -18,7 +18,7 @@ class AdminController extends AbstractController
     }
     
     /**
-     * @Route("/admin", name="admin")
+     * @Route("/admin")
      */
     public function admin()
     {
@@ -28,5 +28,24 @@ class AdminController extends AbstractController
         RedisTracking::increment(RedisTracking::TEST);
         
         return $this->render('Admin/statistics.html.twig');
+    }
+    
+    /**
+     * @Route("/admin/tracking_stats")
+     */
+    public function adminTrackingStats()
+    {
+        return $this->json(
+            RedisTracking::get()
+        );
+    }
+    
+    /**
+     * @Route("/admin/tracking_stats_reset")
+     */
+    public function adminTrackingStatsReset()
+    {
+        RedisTracking::reset();
+        return $this->json(true);
     }
 }
