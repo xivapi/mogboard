@@ -45,10 +45,7 @@ class RedisTracking
      */
     public static function get()
     {
-        $report = Redis::Cache()->get('mb_tracking');
-        ksort($report);
-        
-        return $report;
+        return Redis::Cache()->get('mb_tracking');
     }
     
     /**

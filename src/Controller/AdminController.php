@@ -35,6 +35,9 @@ class AdminController extends AbstractController
     public function adminTrackingStats()
     {
         $report = RedisTracking::get();
+        $report = (Array)$report;
+        ksort($report);
+        
         return new Response(
             json_encode($report, JSON_PRETTY_PRINT)
         );
