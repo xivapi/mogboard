@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 class Popularity
 {
     const REDIS_KEY = 'mogboard_trending_items';
-    const MAX_HITS  = 10;
+    const MAX_HITS  = 2;
 
     /** @var EntityManagerInterface */
     private $em;
@@ -45,6 +45,8 @@ class Popularity
         foreach ($items as $item) {
             $ids[] = $item->getItem();
         }
+
+        shuffle($ids);
 
         Redis::Cache()->set(self::REDIS_KEY, $ids, (60 * 60 * 24 * 5));
     }
