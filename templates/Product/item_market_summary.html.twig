@@ -41,8 +41,8 @@
 </div>
 <br><br>
 
-{% set averagePriceNQ    = census._Global.Prices_Average_PricePerUnit_NQ %}
-{% set averagePriceHQ    = census._Global.Prices_Average_PricePerUnit_HQ %}
+{% set averagePricesNQ   = census._Global.Prices_Average_PricePerUnit_NQ %}
+{% set averagePricesHQ   = census._Global.Prices_Average_PricePerUnit_HQ %}
 {% set averageHistoryNQ  = census._Global.History_Average_PricePerUnit_NQ %}
 {% set averageHistoryHQ  = census._Global.History_Average_PricePerUnit_HQ %}
 
@@ -55,8 +55,8 @@
             {% include 'Product/prices.html.twig' with {
                 'prices': census._Global.PricesHQ|slice(0, 10),
                 'crossWorld': true,
-                'averagePriceNQ': averagePriceNQ,
-                'averagePriceHQ': averagePriceHQ
+                'averagePricesNQ': averagePricesNQ,
+                'averagePricesHQ': averagePricesHQ
             } %}
             <br>
         {% endif %}
@@ -65,8 +65,8 @@
         {% include 'Product/prices.html.twig' with {
             'prices': census._Global.PricesNQ|slice(0, 10),
             'crossWorld': true,
-            'averagePriceNQ': averagePriceNQ,
-            'averagePriceHQ': averagePriceHQ
+            'averagePricesNQ': averagePricesNQ,
+            'averagePricesHQ': averagePricesHQ
         } %}
 
         {% if item.CanBeHq == 0 %}

@@ -118,8 +118,8 @@
                     {% set historyCount      = marketData.History|length %}
                     {% set updateInfo        = marketStats.Report[marketData.UpdatePriority] ?? null %}
                     {% set cheapestPrice     = cheapest[serverName] %}
-                    {% set averagePriceNQ    = attribute(census, serverName).Prices_Average_PricePerUnit_NQ %}
-                    {% set averagePriceHQ    = attribute(census, serverName).Prices_Average_PricePerUnit_HQ %}
+                    {% set averagePricesNQ   = attribute(census, serverName).Prices_Average_PricePerUnit_NQ %}
+                    {% set averagePricesHQ   = attribute(census, serverName).Prices_Average_PricePerUnit_HQ %}
                     {% set averageHistoryNQ  = attribute(census, serverName).History_Average_PricePerUnit_NQ %}
                     {% set averageHistoryHQ  = attribute(census, serverName).History_Average_PricePerUnit_HQ %}
 
@@ -179,8 +179,8 @@
                                             {% include 'Product/prices.html.twig' with {
                                                 'prices': marketData.Prices,
                                                 'cheapestPrice': cheapestPrice,
-                                                'averagePriceNQ': averagePriceNQ,
-                                                'averagePriceHQ': averagePriceHQ
+                                                'averagePricesNQ': averagePricesNQ,
+                                                'averagePricesHQ': averagePricesHQ
                                             } %}
                                         {% else %}
                                             <div>umm, prices missing? huh</div>
