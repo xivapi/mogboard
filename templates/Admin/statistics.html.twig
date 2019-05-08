@@ -31,7 +31,7 @@
 
     <script>
     let interval = null;
-    let conn = new WebSocket('wss://{{ app.request.getHost() }}:8081');
+    let conn = new WebSocket('wss://{{ app.request.getHost() }}:8090');
     conn.onopen = function(e) {
         console.log("Connection established!");
 
