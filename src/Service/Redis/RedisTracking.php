@@ -5,7 +5,6 @@ namespace App\Service\Redis;
 class RedisTracking
 {
     const TEST                       = 'TEST';
-    const STARTDATE                  = 'STARTDATE';
     
     const TOTAL_ALERTS               = 'TOTAL_ALERTS';
     const TOTAL_ALERTS_DPS           = 'TOTAL_ALERTS_DPS';
@@ -18,7 +17,6 @@ class RedisTracking
     
     const TRACKING = [
         self::TEST,
-        self::STARTDATE,
         self::TOTAL_ALERTS,
         self::TOTAL_ALERTS_DPS,
         self::TOTAL_ALERTS_TRIGGERED,
@@ -28,19 +26,11 @@ class RedisTracking
         self::PAGE_VIEW,
     ];
     
-    const STRINGS = [
-        self::STARTDATE,
-    ];
-    
     /**
      * Track a stat
      */
     public static function track(string $constant, int $value)
     {
-        if (Redis::Cache()->getClean('mb_tracking_STARTDATE') == null) {
-            Redis::Cache()->setClean("mb_tracking_STARTDATE", date('Y-m-d H:i:s'), (60 * 60 * 168));
-        }
-        
         Redis::Cache()->setClean("mb_tracking_{$constant}", $value);
     }
     
