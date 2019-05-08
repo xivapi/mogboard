@@ -18,7 +18,7 @@
                 No HQ for sale!
             {% endif %}
         {% else %}
-            <p>Item has no High-Quality variant</p>
+            <p>Item has no High-Quality variant.</p>
         {% endif %}
     </div>
     <div class="cheapest">
@@ -68,10 +68,6 @@
             'averagePricesNQ': averagePricesNQ,
             'averagePricesHQ': averagePricesHQ
         } %}
-
-        {% if item.CanBeHq == 0 %}
-        <small class="no_hq">This item cannot be of High-Quality</small>
-        {% endif %}
     </div>
     <div>
         <h4>Last 10 Sales</h4>
@@ -100,14 +96,17 @@
 {# AVERAGE PRICES AND HISTORY #}
 <div class="cross_world_markets">
     <div>
-        <h4>Avg. Price</h4>
+        <h4>Avg. Price <small>CHEAPEST TOP 20</small></h4>
         <div class="flex census_box">
             <div>
                 <h5>Price Per Unit</h5>
+                <small>CHEAPEST TOP 20</small>
                 <div class="flex avg_prices">
+                    {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
                         <img src="/i/game/hq.png"> {{ census._Global.Prices_Average_PricePerUnit_HQ|number_format }}
                     </div>
+                    {% endif %}
                     <div class="flex_50">
                         {{ census._Global.Prices_Average_PricePerUnit_NQ|number_format }}
                     </div>
@@ -116,10 +115,12 @@
             <div>
                 <h5>Price Total</h5>
                 <div class="flex avg_prices">
+                    {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
                         <img src="/i/game/hq.png"> {{ census._Global.Prices_Average_PriceTotal_HQ|number_format }}
                     </div>
-                    <div class="flex_50">
+                    {% endif %}
+                    <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
                         {{ census._Global.Prices_Average_PriceTotal_NQ|number_format }}
                     </div>
                 </div>
@@ -127,10 +128,12 @@
             <div>
                 <h5>Quantity</h5>
                 <div class="flex avg_prices">
+                    {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
                         <img src="/i/game/hq.png"> {{ census._Global.Prices_Average_Quantity_HQ|number_format }}
                     </div>
-                    <div class="flex_50">
+                    {% endif %}
+                    <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
                         {{ census._Global.Prices_Average_Quantity_NQ|number_format }}
                     </div>
                 </div>
@@ -138,15 +141,17 @@
         </div>
     </div>
     <div>
-        <h4>Avg. Historic Price</h4>
+        <h4>Avg. Historic Price <small>CHEAPEST TOP 20</small></h4>
         <div class="flex census_box">
             <div>
                 <h5>Price Per Unit</h5>
                 <div class="flex avg_prices">
+                    {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
                         <img src="/i/game/hq.png"> {{ census._Global.History_Average_PricePerUnit_HQ|number_format }}
                     </div>
-                    <div class="flex_50">
+                    {% endif %}
+                    <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
                         {{ census._Global.History_Average_PricePerUnit_NQ|number_format }}
                     </div>
                 </div>
@@ -154,10 +159,12 @@
             <div>
                 <h5>Price Total</h5>
                 <div class="flex avg_prices">
+                    {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
                         <img src="/i/game/hq.png"> {{ census._Global.History_Average_PriceTotal_HQ|number_format }}
                     </div>
-                    <div class="flex_50">
+                    {% endif %}
+                    <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
                         {{ census._Global.History_Average_PriceTotal_NQ|number_format }}
                     </div>
                 </div>
@@ -165,10 +172,12 @@
             <div>
                 <h5>Quantity</h5>
                 <div class="flex avg_prices">
+                    {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
                         <img src="/i/game/hq.png"> {{ census._Global.History_Average_Quantity_HQ|number_format }}
                     </div>
-                    <div class="flex_50">
+                    {% endif %}
+                    <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
                         {{ census._Global.History_Average_Quantity_NQ|number_format }}
                     </div>
                 </div>
@@ -188,7 +197,7 @@
 {# PRICE VS QUANTITY #}
 <div class="cross_world_markets">
     <div>
-        <h6>Current - Price Per Unit vs Quantity (Cheapest {{ chartMax }})</h6>
+        <h6>Current - Price Per Unit vs Quantity</h6>
         <div class="cross_world_chart" style="position: relative; height: 350px; width: 100%"><canvas id="Prices_BubbleChart"></canvas></div>
         <script>
             renderChart(
@@ -213,7 +222,7 @@
         </script>
     </div>
     <div>
-        <h6>History - Price Per Unit vs Quantity (Last {{ chartMax }} sales) <small>🠤 Most Recent | Oldest 🠦</small></h6>
+        <h6>History - Price Per Unit vs Quantity</h6>
         <div class="cross_world_chart" style="position: relative; height: 350px; width: 100%"><canvas id="History_BubbleChart"></canvas></div>
         <script>
             renderChart(
@@ -244,7 +253,7 @@
 {# Prices #}
 <div class="cross_world_markets">
     <div>
-        <h6>Current Prices - Price Per Unit (Cheapest {{ chartMax }})</h6>
+        <h6>Current Prices - Price Per Unit</h6>
         <div class="cross_world_chart" style="position: relative; height: 350px; width: 100%"><canvas id="Prices_Chart_PricePerUnit"></canvas></div>
         <script>
             renderChart(
@@ -276,7 +285,7 @@
         </script>
     </div>
     <div>
-        <h6>History - Price Per Unit (Last {{ chartMax }} sales)</h6>
+        <h6>History - Price Per Unit</h6>
         <div class="cross_world_chart" style="position: relative; height: 350px; width: 100%"><canvas id="History_Chart_PricePerUnit"></canvas></div>
         <script>
             renderChart(
