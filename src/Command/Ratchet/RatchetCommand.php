@@ -43,7 +43,7 @@ class RatchetCommand extends Command
         $webServer = new IoServer(
             new HttpServer(
                 new WsServer(
-                    new RachetService()
+                    new RatchetService()
                 )
             ),
             $webSock
