@@ -85,6 +85,11 @@ class RedisCache
         $this->pipeline ? $this->pipeline->set($key, $data, $ttl) : $this->instance->set($key, $data, $ttl);
     }
     
+    public function setClean(string $key, $data, int $ttl = 3600)
+    {
+        $this->pipeline ? $this->pipeline->set($key, $data, $ttl) : $this->instance->set($key, $data, $ttl);
+    }
+    
     public function setMulti(array $data, bool $serialize = false)
     {
         foreach ($data as $i => $d) {
@@ -136,6 +141,11 @@ class RedisCache
     }
     
     public function getCount(string $key)
+    {
+        return $this->getClean($key);
+    }
+    
+    public function getClean(string $key)
     {
         return $this->pipeline ? $this->pipeline->get($key) : $this->instance->get($key);
     }

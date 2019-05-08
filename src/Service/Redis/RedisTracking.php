@@ -37,11 +37,11 @@ class RedisTracking
      */
     public static function track(string $constant, int $value)
     {
-        if (Redis::Cache()->get('mb_tracking_STARTDATE') == null) {
-            Redis::Cache()->set("mb_tracking_STARTDATE", date('Y-m-d H:i:s'), (60 * 60 * 168));
+        if (Redis::Cache()->getClean('mb_tracking_STARTDATE') == null) {
+            Redis::Cache()->setClean("mb_tracking_STARTDATE", date('Y-m-d H:i:s'), (60 * 60 * 168));
         }
         
-        Redis::Cache()->set("mb_tracking_{$constant}", $value);
+        Redis::Cache()->setClean("mb_tracking_{$constant}", $value);
     }
     
     /**
@@ -60,11 +60,7 @@ class RedisTracking
         $results = [];
         
         foreach (self::TRACKING as $constant) {
-            if (in_array($constant, self::STRINGS)) {
-                $results[$constant] = Redis::Cache()->get("mb_tracking_{$constant}");
-            } else {
-                $results[$constant] = Redis::Cache()->getCount("mb_tracking_{$constant}");
-            }
+            $results[$constant] = Redis::Cache()->getClean("mb_tracking_{$constant}");
         }
         
         return $results;
