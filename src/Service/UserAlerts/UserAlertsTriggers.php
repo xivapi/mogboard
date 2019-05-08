@@ -9,6 +9,7 @@ use App\Service\Companion\Companion;
 use App\Service\GameData\GameDataSource;
 use App\Service\GameData\GameServers;
 use App\Service\Redis\Redis;
+use App\Service\Redis\RedisTracking;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use XIVAPI\XIVAPI;
@@ -68,6 +69,12 @@ class UserAlertsTriggers
         $total = count($alerts);
         $this->console->writeln("Total: {$total}");
         $start = microtime(true);
+    
+        RedisTracking::reset(RedisTracking::TOTAL_ALERTS);
+        RedisTracking::reset(RedisTracking::TOTAL_ALERTS_DPS);
+        RedisTracking::reset(RedisTracking::TOTAL_ALERTS_TRIGGERED);
+        RedisTracking::reset(RedisTracking::TOTAL_MANUAL_UPDATES);
+        RedisTracking::track(RedisTracking::TOTAL_ALERTS, $total);
         
         /** @var UserAlert $alert */
         foreach ($alerts as $alert) {
@@ -117,6 +124,8 @@ class UserAlertsTriggers
              * DPS patrons get auto-price updating.
              */
             if ($alert->isKeepUpdated() && $user->isPatron(User::PATREON_DPS)) {
+                RedisTracking::increment(RedisTracking::TOTAL_ALERTS_DPS);
+                
                 // Send an update request, XIVAPI handles throttling this.
                 $this->console->writeln('--> Requesting manual update');
                 $this->xivapi->_private->manualItemUpdate(
@@ -259,6 +268,8 @@ class UserAlertsTriggers
                 $this->em->persist($alert);
                 $this->em->persist($event);
                 $this->em->flush();
+    
+                RedisTracking::increment(RedisTracking::TOTAL_ALERTS_TRIGGERED);
 
                 if ($alert->isNotifiedViaDiscord()) {
                     $this->discord->sendAlertTriggerNotification($alert, $this->triggered, $hash);

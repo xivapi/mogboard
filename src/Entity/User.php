@@ -115,6 +115,11 @@ class User
      */
     private $email;
     /**
+     * @var bool
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $admin = false;
+    /**
      * Either provided by SSO provider or default
      *
      *  DISCORD: https://cdn.discordapp.com/avatars/<USER ID>/<AVATAR ID>.png?size=256
@@ -284,6 +289,25 @@ class User
     public function setEmail(string $email)
     {
         $this->email = $email;
+        
+        return $this;
+    }
+    
+    public function isAdmin(): bool
+    {
+        return $this->admin;
+    }
+    
+    public function mustBeAdmin()
+    {
+        if ($this->admin == false) {
+            throw new \Exception('Unauthorised');
+        }
+    }
+    
+    public function setAdmin(bool $admin)
+    {
+        $this->admin = $admin;
         
         return $this;
     }

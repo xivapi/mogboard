@@ -13,6 +13,7 @@ use App\Service\GameData\GameServers;
 use App\Service\Items\Popularity;
 use App\Service\Items\Views;
 use App\Service\Redis\Redis;
+use App\Service\Redis\RedisTracking;
 use App\Service\User\Users;
 use App\Service\UserAlerts\UserAlerts;
 use App\Service\UserLists\UserLists;
@@ -77,6 +78,8 @@ class ItemController extends AbstractController
      */
     public function index(Request $request, int $itemId)
     {
+        RedisTracking::increment(RedisTracking::PAGE_VIEW);
+        
         $this->users->setLastUrl($request);
 
         $user = $this->users->getUser(false);

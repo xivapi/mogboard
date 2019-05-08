@@ -1,0 +1,86 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block body %}
+
+    <h2>Real-time Statistics</h2>
+
+    <div>
+        <button id="test">Test</button>
+        <button id="reset">Reset</button>
+    </div>
+
+    <br><br>
+
+    <p>
+        <strong>Test: <span id="mb_TEST"></span></strong>
+    </p>
+
+    <p>
+        <strong>STARTDATE: <span id="mb_STARTDATE"></span></strong>
+    </p>
+
+    <ul>
+        <li>TOTAL_ALERTS = <span id="mb_TOTAL_ALERTS"></span></li>
+        <li>TOTAL_ALERTS_DPS = <span id="mb_TOTAL_ALERTS_DPS"></span></li>
+        <li>TOTAL_ALERTS_TRIGGERED = <span id="mb_TOTAL_ALERTS_TRIGGERED"></span></li>
+        <li>TOTAL_MANUAL_UPDATES = <span id="mb_TOTAL_MANUAL_UPDATES"></span></li>
+        <li>TOTAL_MANUAL_UPDATES_FORCE = <span id="mb_TOTAL_MANUAL_UPDATES_FORCE"></span></li>
+        <li>ITEM_UPDATED = <span id="mb_ITEM_UPDATED"></span></li>
+        <li>PAGE_VIEW = <span id="mb_PAGE_VIEW"></span></li>
+    </ul>
+
+    <script>
+    let interval = null;
+    let conn = new WebSocket('ws://mogboard.local:8080');
+    conn.onopen = function(e) {
+        console.log("Connection established!");
+
+        // keep requesting stats
+        interval = setInterval(function() {
+            conn.send('STATS');
+        }, 500);
+    };
+
+    conn.onclose = function(e) {
+        console.log('Connection closed');
+        console.log(e);
+        clearInterval(interval);
+    };
+
+    conn.onerror = function(e) {
+        console.log('Connection closed');
+        console.log(e);
+        clearInterval(interval);
+    };
+
+    conn.onmessage = function(e) {
+        let data = e.data.split('|');
+
+        switch (data[0]) {
+            case 'STATS':
+                renderStats(JSON.parse(data[1]));
+                break;
+        }
+    };
+
+    // -------------------------------------
+
+    $('#test').on('click', function() {
+        conn.send('STATS_TEST');
+    });
+
+    $('#reset').on('click', function() {
+        conn.send('STATS_RESET');
+    });
+
+    // -------------------------------------
+
+    function renderStats(stats) {
+        for(let constant in stats) {
+            let value = stats[constant];
+            $('#mb_' + constant).html(value);
+        }
+    }
+    </script>
+
+{% endblock %}
