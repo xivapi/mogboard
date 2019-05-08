@@ -106,7 +106,7 @@
                         <img src="/i/game/hq.png"> {{ census._Global.Prices_Average_PricePerUnit_HQ|number_format }}
                     </div>
                     {% endif %}
-                    <div class="flex_50">
+                    <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
                         {{ census._Global.Prices_Average_PricePerUnit_NQ|number_format }}
                     </div>
                 </div>
