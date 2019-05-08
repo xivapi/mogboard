@@ -71,7 +71,7 @@ class Popularity
      */
     public function hit(Request $request, int $itemId)
     {
-        $key     = "item_hit_". sha1($request->getClientIp());
+        $key     = "item_hit_". $itemId . sha1($request->getClientIp());
         $current = Redis::Cache()->get($key);
         
         // ignore if we've hit the limit
