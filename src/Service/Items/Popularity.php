@@ -2,26 +2,26 @@
 
 namespace App\Service\Items;
 
-use App\Entity\PopularItem;
-use App\Repository\PopularItemRepository;
+use App\Entity\ItemPopularity;
+use App\Repository\ItemPopularityRepository;
 use App\Service\Redis\Redis;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class ItemPopularity
+class Popularity
 {
     const REDIS_KEY = 'mogboard_trending_items';
     const MAX_HITS  = 10;
 
     /** @var EntityManagerInterface */
     private $em;
-    /** @var PopularItemRepository */
+    /** @var ItemPopularityRepository */
     private $repository;
     
     public function __construct(EntityManagerInterface $em)
     {
         $this->em         = $em;
-        $this->repository = $em->getRepository(PopularItem::class);
+        $this->repository = $em->getRepository(ItemPopularity::class);
     }
     
     /**
@@ -41,7 +41,7 @@ class ItemPopularity
         $ids   = [];
         $items = (array)$this->repository->findBy([], [ 'count' => 'desc' ], 20);
 
-        /** @var PopularItem $item */
+        /** @var ItemPopularity $item */
         foreach ($items as $item) {
             $ids[] = $item->getItem();
         }
@@ -60,7 +60,7 @@ class ItemPopularity
 
         // truncate db
         $conn = $this->em->getConnection();
-        $stmt = $conn->prepare('TRUNCATE TABLE popular_items');
+        $stmt = $conn->prepare('TRUNCATE TABLE items_popularity');
         $stmt->execute();
     }
     
@@ -82,7 +82,7 @@ class ItemPopularity
         Redis::Cache()->set($key, $current, (60 * 60 * 8));
         
         // grab popular item entry
-        $entity = $this->repository->findOneBy([ 'item' => $itemId ]) ?: new PopularItem();
+        $entity = $this->repository->findOneBy([ 'item' => $itemId ]) ?: new ItemPopularity();
         
         $entity
             ->setItem($itemId)

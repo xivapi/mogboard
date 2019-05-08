@@ -6,10 +6,10 @@ use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="popular_items")
- * @ORM\Entity(repositoryClass="App\Repository\PopularItemRepository")
+ * @ORM\Table(name="item_views")
+ * @ORM\Entity(repositoryClass="App\Repository\ItemViewsRepository")
  */
-class PopularItem
+class ItemViews
 {
     /**
      * @var string
@@ -26,7 +26,7 @@ class PopularItem
      * @var int
      * @ORM\Column(type="integer")
      */
-    private $updated;
+    private $lastview;
     /**
      * @var int
      * @ORM\Column(type="integer", length=11, unique=true)
@@ -36,91 +36,88 @@ class PopularItem
      * @var int
      * @ORM\Column(type="integer", length=32)
      */
-    private $count;
+    private $count = 0;
     /**
      * @var int
      * @ORM\Column(type="integer", length=32)
      */
-    private $rank;
+    private $previousQueue = 0;
     
     public function __construct()
     {
         $this->id     = Uuid::uuid4();
         $this->added  = time();
-        
-        $this->count = 0;
-        $this->rank = 0;
     }
-    
+
     public function getId(): string
     {
         return $this->id;
     }
-    
+
     public function setId(string $id)
     {
         $this->id = $id;
-        
+
         return $this;
     }
-    
+
     public function getAdded(): int
     {
         return $this->added;
     }
-    
+
     public function setAdded(int $added)
     {
         $this->added = $added;
-        
+
         return $this;
     }
-    
-    public function getUpdated(): int
+
+    public function getLastview(): int
     {
-        return $this->updated;
+        return $this->lastview;
     }
-    
-    public function setUpdated(int $updated)
+
+    public function setLastview(int $lastview)
     {
-        $this->updated = $updated;
-        
+        $this->lastview = $lastview;
+
         return $this;
     }
-    
+
     public function getItem(): int
     {
         return $this->item;
     }
-    
+
     public function setItem(int $item)
     {
         $this->item = $item;
-        
+
         return $this;
     }
-    
+
     public function getCount(): int
     {
         return $this->count;
     }
-    
+
     public function setCount(int $count)
     {
         $this->count = $count;
-        
+
         return $this;
     }
-    
-    public function getRank(): int
+
+    public function getPreviousQueue(): int
     {
-        return $this->rank;
+        return $this->previousQueue;
     }
-    
-    public function setRank(int $rank)
+
+    public function setPreviousQueue(int $previousQueue)
     {
-        $this->rank = $rank;
-        
+        $this->previousQueue = $previousQueue;
+
         return $this;
     }
 }

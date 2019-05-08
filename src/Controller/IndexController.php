@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Service\Common\Mail;
 use App\Service\Companion\CompanionStatistics;
-use App\Service\Items\ItemPopularity;
+use App\Service\Items\Popularity;
 use App\Service\Redis\Redis;
 use App\Service\ThirdParty\Discord\Discord;
 use App\Service\User\Users;
@@ -15,7 +15,7 @@ use XIVAPI\XIVAPI;
 
 class IndexController extends AbstractController
 {
-    /** @var ItemPopularity */
+    /** @var Popularity */
     private $itemPopularity;
     /** @var CompanionStatistics */
     private $companionStatistics;
@@ -27,7 +27,7 @@ class IndexController extends AbstractController
     private $xivapi;
     
     public function __construct(
-        ItemPopularity $itemPopularity,
+        Popularity $itemPopularity,
         CompanionStatistics $companionStatistics,
         Users $users,
         Mail $mail
