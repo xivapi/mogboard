@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Service\GameData\GameServers;
 use App\Service\User\SignInDiscord;
 use App\Service\User\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -107,11 +105,15 @@ class UserController extends AbstractController
             return $this->redirectToRoute('home');
         }
         
-        $this->users->setSsoProvider(new SignInDiscord($request))->authenticate();
+        try {
+            $this->users->setSsoProvider(new SignInDiscord($request))->authenticate();
 
-        // redirect to their previous url if one exists
-        $lastUrl = $this->users->getLastUrl($request);
-        return $lastUrl ? $this->redirect($lastUrl) : $this->redirectToRoute('home');
+            // redirect to their previous url if one exists
+            $lastUrl = $this->users->getLastUrl($request);
+            return $lastUrl ? $this->redirect($lastUrl) : $this->redirectToRoute('home');
+        } catch (\Exception $ex) {
+            return $this->redirectToRoute('user_login_failed');
+        }
     }
     
     /**
@@ -121,5 +123,13 @@ class UserController extends AbstractController
     {
         $this->users->logout();
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/users/login/failed", name="user_login_failed)
+     */
+    public function loginFailed()
+    {
+        return $this->render('UserAccount/login_failed.html.twig');
     }
 }
