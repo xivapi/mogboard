@@ -57,7 +57,7 @@
                 <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
                 <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
                 {% if averageHistoryHQ is defined %}
-                <td class="price-diff {{ pricePerUnitDiff > 150 ? 'price-diff-bad' : '' }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percentage sale price to the average price per unit: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
+                <td class="price-diff {{ pricePerUnitDiff > 150 ? 'price-diff-bad' : '' }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percentage sale price to the <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
                 {% endif %}
                 <td class="price-retainer">
                     <a href="{{ path('retainer_store', { slug: row.RetainerID }) }}" data-tippy-content="{{ row.RetainerID }}">{{ row.RetainerName }}</a>
