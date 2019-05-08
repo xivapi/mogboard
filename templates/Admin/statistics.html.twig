@@ -31,7 +31,7 @@
 
     <script>
     let interval = null;
-    let conn = new WebSocket('ws://mogboard.local:8080');
+    let conn = new WebSocket('ws://{{ app.request.getHost() }}:8080');
     conn.onopen = function(e) {
         console.log("Connection established!");
 
