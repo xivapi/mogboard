@@ -70,7 +70,7 @@ class UserAlertsTriggers
         $this->console->writeln("Total: {$total}");
         $start = microtime(true);
     
-        RedisTracking::track('TOTAL_ALERTS_'. ($patronQueue ? 'NORMAL' : 'PATRON'), $total);
+        RedisTracking::increment('TOTAL_ALERTS_'. ($patronQueue ? 'NORMAL' : 'PATRON'));
         
         /** @var UserAlert $alert */
         foreach ($alerts as $alert) {

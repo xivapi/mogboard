@@ -22,7 +22,21 @@ class RedisTracking
     {
         $tracking = Redis::Cache()->get('mb_tracking') ?: (Object)[];
         $tracking->{$constant} = isset($tracking->{$constant}) ? $tracking->{$constant} + 1 : 1;
+        
+        Redis::Cache()->set("mb_tracking", $tracking, 3600 * 24);
+    }
     
+    /**
+     * Append a stat
+     */
+    public static function append(string $constant, $value)
+    {
+        $constant = $constant . '_LIST';
+        $tracking = Redis::Cache()->get('mb_tracking') ?: (Object)[];
+        
+        $tracking->{$constant} = isset($tracking->{$constant}) ? $tracking->{$constant} : [];
+        $tracking->{$constant}[] = $value;
+        
         Redis::Cache()->set("mb_tracking", $tracking, 3600 * 24);
     }
     
