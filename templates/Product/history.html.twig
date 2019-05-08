@@ -35,7 +35,7 @@
                 <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
                 <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
                 {% if averageHistoryHQ is defined %}
-                    <td class="price-diff {{ pricePerUnitDiff > 150 ? 'price-diff-bad' : (pricePerUnitDiff < 15 ? 'price-diff-oopz' : (pricePerUnitDiff < 100 ? 'price-diff-good' : '')) }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percentage sale price to the <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
+                    <td class="price-diff {{ pricePerUnitDiff > 130 ? 'price-diff-bad' : (pricePerUnitDiff < 15 ? 'price-diff-oopz' : (pricePerUnitDiff < 100 ? 'price-diff-good' : '')) }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percentage sale price to the <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
                 {% endif %}
                 <td class="price-buyer">
                     <a href="#" data-tippy-content="{{ row.CharacterID }}">{{ row.CharacterName }}</a>
