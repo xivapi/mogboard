@@ -41,6 +41,11 @@
 </div>
 <br><br>
 
+{% set averagePriceNQ    = census._Global.Prices_Average_PricePerUnit_NQ %}
+{% set averagePriceHQ    = census._Global.Prices_Average_PricePerUnit_HQ %}
+{% set averageHistoryNQ  = census._Global.History_Average_PricePerUnit_NQ %}
+{% set averageHistoryHQ  = census._Global.History_Average_PricePerUnit_HQ %}
+
 {# CROSS WORLD MARKET BOARD #}
 <div class="cross_world_markets">
     <div>
@@ -49,7 +54,9 @@
             <h6><img src="/i/game/hq.png"> High-Quality</h6>
             {% include 'Product/prices.html.twig' with {
                 'prices': census._Global.PricesHQ|slice(0, 10),
-                'crossWorld': true
+                'crossWorld': true,
+                'averagePriceNQ': averagePriceNQ,
+                'averagePriceHQ': averagePriceHQ
             } %}
             <br>
         {% endif %}
@@ -57,7 +64,9 @@
         <h6>Normal Quality</h6>
         {% include 'Product/prices.html.twig' with {
             'prices': census._Global.PricesNQ|slice(0, 10),
-            'crossWorld': true
+            'crossWorld': true,
+            'averagePriceNQ': averagePriceNQ,
+            'averagePriceHQ': averagePriceHQ
         } %}
 
         {% if item.CanBeHq == 0 %}
@@ -70,7 +79,9 @@
             <h6><img src="/i/game/hq.png"> High-Quality</h6>
             {% include 'Product/history.html.twig' with {
                 'history': census._Global.HistoryHQ|slice(0, 10),
-                'crossWorld': true
+                'crossWorld': true,
+                'averageHistoryNQ': averageHistoryNQ,
+                'averageHistoryHQ': averageHistoryHQ
             } %}
             <br>
         {% endif %}
@@ -78,7 +89,9 @@
         <h6>Normal Quality</h6>
         {% include 'Product/history.html.twig' with {
             'history': census._Global.HistoryNQ|slice(0, 10),
-            'crossWorld': true
+            'crossWorld': true,
+            'averageHistoryNQ': averageHistoryNQ,
+            'averageHistoryHQ': averageHistoryHQ
         } %}
     </div>
 </div>
