@@ -23,16 +23,23 @@ class RatchetCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln("Running ratchet client...");
-    
-        $server = IoServer::factory(
-            new HttpServer(
-                new WsServer(
-                    new RatchetService()
-                )
-            ),
-            8080
+        
+        $app = new HttpServer(
+            new WsServer(
+                new RatchetService()
+            )
         );
     
-        $server->run();
+        $loop = \React\EventLoop\Factory::create();
+    
+        $secure_websockets = new \React\Socket\Server('0.0.0.0:8081', $loop);
+        $secure_websockets = new \React\Socket\SecureServer($secure_websockets, $loop, [
+            'local_cert'  => '/etc/letsencrypt/live/mogboard.com/fullchain.pem;',
+            'local_pk'    => '/etc/letsencrypt/live/mogboard.com/privkey.pem',
+            'verify_peer' => false
+        ]);
+        
+        $secure_websockets_server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
+        $secure_websockets_server->run();
     }
 }
