@@ -22,7 +22,7 @@
             {# Compare diff against average #}
             {% if averageHistoryHQ is defined %}
                 {% set diffForQuality = row.IsHQ ? averageHistoryHQ : averageHistoryNQ %}
-                {% set pricePerUnitDiff = diffForQuality < 0 ? 100 : ((row.PricePerUnit / diffForQuality) * 100)|round %}
+                {% set pricePerUnitDiff = diffForQuality < 0 ? 100 : (((row.PricePerUnit / diffForQuality) * 100) - 100)|round %}
             {% endif %}
 
             <tr class="{{ averageHistoryHQ is defined and pricePerUnitDiff < 15 ? 'price-diff-oops' : ''}}">
@@ -35,7 +35,7 @@
                 <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
                 <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
                 {% if averageHistoryHQ is defined %}
-                    <td class="price-diff {{ pricePerUnitDiff > 130 ? 'price-diff-bad' : (pricePerUnitDiff < 15 ? 'price-diff-oopz' : (pricePerUnitDiff < 100 ? 'price-diff-good' : '')) }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percentage sale price to the <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
+                    <td class="price-diff {{ pricePerUnitDiff > 50 ? 'price-diff-bad' : (pricePerUnitDiff < 100 ? 'price-diff-oopz' : (pricePerUnitDiff < 10 ? 'price-diff-good' : '')) }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="This listing sold for {{ pricePerUnitDiff }}% {{ pricePerUnitDiff > 0 ? 'more' : 'less' }} than the <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff > 0 ? '+' : '-' }}{{ pricePerUnitDiff }}%</td>
                 {% endif %}
                 <td class="price-buyer">
                     <a href="#" data-tippy-content="{{ row.CharacterID }}">{{ row.CharacterName }}</a>

@@ -57,7 +57,7 @@
                 <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
                 <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
                 {% if averagePricesHQ is defined %}
-                <td class="price-diff {{ pricePerUnitDiff > 50 ? 'price-diff-bad' : (pricePerUnitDiff < 10 ? 'price-diff-good' : '') }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="This listing is {{ pricePerUnitDiff }} {{ pricePerUnitDiff > 0 ? 'more' : 'less' }} than the <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff > 0 ? '+' : '-' }}{{ pricePerUnitDiff }}%</td>
+                <td class="price-diff {{ pricePerUnitDiff > 50 ? 'price-diff-bad' : (pricePerUnitDiff < 10 ? 'price-diff-good' : '') }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="This listing is {{ pricePerUnitDiff }}% {{ pricePerUnitDiff > 0 ? 'more' : 'less' }} than the <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff > 0 ? '+' : '-' }}{{ pricePerUnitDiff }}%</td>
                 {% endif %}
                 <td class="price-retainer">
                     <a href="{{ path('retainer_store', { slug: row.RetainerID }) }}" data-tippy-content="{{ row.RetainerID }}">{{ row.RetainerName }}</a>
