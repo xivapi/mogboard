@@ -121,8 +121,8 @@ class UserAlertsTriggers
              */
             $dpsRecent = Redis::Cache()->get("mb_dps_sent_already_{$alert->getId()}");
             if ($dpsRecent == null && $alert->isKeepUpdated() && $user->isPatron(User::PATREON_DPS)) {
-                // dont send anymore requests for this alert for another 5 minutes
-                Redis::Cache()->set("mb_dps_sent_already_{$alert->getId()}", true, (60 * 15));
+                // dont send anymore requests for this alert for another 3 minutes
+                Redis::Cache()->set("mb_dps_sent_already_{$alert->getId()}", true, (60 * 3));
                 
                 // track
                 RedisTracking::increment('TOTAL_ALERTS_DPS_REQUESTED');
