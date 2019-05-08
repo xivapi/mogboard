@@ -36,11 +36,6 @@ class ItemViews
      * @var int
      * @ORM\Column(type="integer", length=32)
      */
-    private $count = 0;
-    /**
-     * @var int
-     * @ORM\Column(type="integer", length=32)
-     */
     private $previousQueue = 0;
     
     public function __construct()
@@ -93,18 +88,6 @@ class ItemViews
     public function setItem(int $item)
     {
         $this->item = $item;
-
-        return $this;
-    }
-
-    public function getCount(): int
-    {
-        return $this->count;
-    }
-
-    public function setCount(int $count)
-    {
-        $this->count = $count;
 
         return $this;
     }

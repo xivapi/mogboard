@@ -40,8 +40,7 @@ class Views
 
         $entity
             ->setItem($itemId)
-            ->setLastview(time())
-            ->setCount($entity->getCount() + 1);
+            ->setLastview(time());
         
         $this->em->persist($entity);
         $this->em->flush();
