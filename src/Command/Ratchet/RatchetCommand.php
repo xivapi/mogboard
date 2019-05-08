@@ -34,9 +34,10 @@ class RatchetCommand extends Command
     
         $secure_websockets = new \React\Socket\Server('0.0.0.0:8081', $loop);
         $secure_websockets = new \React\Socket\SecureServer($secure_websockets, $loop, [
-            'local_cert'  => '/etc/letsencrypt/live/mogboard.com/fullchain.pem;',
+            'local_cert'  => '/etc/letsencrypt/live/mogboard.com/cert.pem',
             'local_pk'    => '/etc/letsencrypt/live/mogboard.com/privkey.pem',
-            'verify_peer' => false
+            'verify_peer' => false,
+            'allow_self_signed' => true
         ]);
         
         $secure_websockets_server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
