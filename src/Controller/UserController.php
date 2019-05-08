@@ -126,7 +126,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/login/failed", name="user_login_failed)
+     * @Route("/users/login/failed", name="user_login_failed")
      */
     public function loginFailed()
     {
