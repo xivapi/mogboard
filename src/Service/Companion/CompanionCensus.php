@@ -124,11 +124,11 @@ class CompanionCensus
         asort($historyHQ);
         asort($historyNQ);
 
-        array_splice($pricesHQ, 10);
-        array_splice($pricesNQ, 10);
-        array_splice($historyHQ, 10);
-        array_splice($historyNQ, 10);
-    
+        array_splice($pricesHQ, 20);
+        array_splice($pricesNQ, 20);
+        array_splice($historyHQ, 20);
+        array_splice($historyNQ, 20);
+
         $this->census->{$server}->{"Prices_Average_{$field}_HQ"}  = round(Average::mean($pricesHQ));
         $this->census->{$server}->{"Prices_Average_{$field}_NQ"}  = round(Average::mean($pricesNQ));
         $this->census->{$server}->{"History_Average_{$field}_HQ"} = round(Average::mean($historyHQ));
