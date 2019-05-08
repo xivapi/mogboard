@@ -9,6 +9,6 @@ class CSRFInvalidationException extends \Exception
     
     public function __construct()
     {
-        parent::__construct(self::CODE, self::MESSAGE);
+        parent::__construct(self::MESSAGE, self::CODE);
     }
 }
