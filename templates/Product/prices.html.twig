@@ -9,20 +9,24 @@
     <table class="table-sortable">
         <thead>
         <tr>
-            <th data-sort="int" width="2%" class="tac">#</th>
-            {% if crossWorld is defined %}
-            <th data-sort="string" width="10%">Server</th>
+            {% if prices %}
+                <th data-sort="int" width="2%" class="tac">#</th>
+                {% if crossWorld is defined %}
+                <th data-sort="string" width="10%">Server</th>
+                {% endif %}
+                <th data-sort="int" width="2%">HQ</th>
+                <th data-sort="int" width="8%">Mat</th>
+                <th data-sort="int" width="15%">Price</th>
+                <th data-sort="int" width="5%">QTY</th>
+                <th data-sort="int" width="15%">Total</th>
+                {% if averagePricesHQ is defined %}
+                <th data-sort="int" width="2%">%Diff</th>
+                {% endif %}
+                <th data-sort="string">Retainer</th>
+                <th data-sort="string">Creator</th>
+            {% else %}
+                <th>No Listings</th>
             {% endif %}
-            <th data-sort="int" width="2%">HQ</th>
-            <th data-sort="int" width="8%">Mat</th>
-            <th data-sort="int" width="15%">Price</th>
-            <th data-sort="int" width="5%">QTY</th>
-            <th data-sort="int" width="15%">Total</th>
-            {% if averagePricesHQ is defined %}
-            <th data-sort="int" width="2%">%Diff</th>
-            {% endif %}
-            <th data-sort="string">Retainer</th>
-            <th data-sort="string">Creator</th>
         </tr>
         </thead>
         <tbody>
@@ -71,7 +75,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">None for sale.</td>
+                <td>There are no listings for this item, check back later!</td>
             </tr>
         {% endfor %}
         </tbody>
