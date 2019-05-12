@@ -7,8 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 require dirname(__DIR__).'/config/bootstrap.php';
 
 // Maintenance Check
-require_once __DIR__.'/../src/Common/Maintenance/MaintenanceCheck.php';
-$maintenance = new \App\Common\Maintenance\MaintenanceCheck();
+$maintenance = new \App\Common\Maintenance\Maintenance();
 $maintenance->check();
 
 if ($_SERVER['APP_DEBUG']) {
