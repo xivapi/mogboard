@@ -65,7 +65,7 @@ class UserAlertsTriggers
         $this->console->writeln("Triggering Alerts");
 
         // grab all alerts
-        $alerts = $this->userAlerts->getAllByPatronStatus($patronQueue, $offset, 300);
+        $alerts = $this->userAlerts->getAllByPatronStatus($patronQueue, $offset, 250);
         $total = count($alerts);
         $this->console->writeln("Total: {$total}");
         $start = microtime(true);
