@@ -2,6 +2,7 @@
 
 namespace App\Service\UserAlerts;
 
+use App\Common\Constants\PatreonConstants;
 use App\Common\Entity\UserAlert;
 use App\Common\Entity\UserAlertEvent;
 use App\Common\Game\GameServers;
@@ -119,7 +120,7 @@ class UserAlertsTriggers
              * DPS patrons get auto-price updating.
              */
             $dpsRecent = Redis::Cache()->get("mb_dps_sent_already_{$alert->getId()}");
-            if ($dpsRecent == null && $alert->isKeepUpdated() && $user->isPatron(User::PATREON_DPS)) {
+            if ($dpsRecent == null && $alert->isKeepUpdated() && $user->isPatron(PatreonConstants::PATREON_DPS)) {
                 // dont send anymore requests for this alert for another 3 minutes
                 Redis::Cache()->set("mb_dps_sent_already_{$alert->getId()}", true, (60 * 3));
                 
