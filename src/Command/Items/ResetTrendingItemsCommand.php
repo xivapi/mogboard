@@ -3,7 +3,7 @@
 namespace App\Command\Items;
 
 use App\Command\CommandConfigureTrait;
-use App\Service\Items\ItemPopularity;
+use App\Service\Items\Popularity;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,10 +17,10 @@ class ResetTrendingItemsCommand extends Command
         'desc' => 'Resets the top trending items so new ones can be assigned',
     ];
     
-    /** @var ItemPopularity */
+    /** @var Popularity */
     private $itemPopularity;
     
-    public function __construct(ItemPopularity $itemPopularity, ?string $name = null)
+    public function __construct(Popularity $itemPopularity, ?string $name = null)
     {
         $this->itemPopularity = $itemPopularity;
         

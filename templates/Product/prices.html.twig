@@ -9,20 +9,24 @@
     <table class="table-sortable">
         <thead>
         <tr>
-            <th data-sort="int" width="2%" class="tac">#</th>
-            {% if crossWorld is defined %}
-            <th data-sort="string" width="10%">Server</th>
+            {% if prices %}
+                <th data-sort="int" width="2%" class="tac">#</th>
+                {% if crossWorld is defined %}
+                <th data-sort="string" width="10%">Server</th>
+                {% endif %}
+                <th data-sort="int" width="2%">HQ</th>
+                <th data-sort="int" width="8%">Mat</th>
+                <th data-sort="int" width="15%">Price</th>
+                <th data-sort="int" width="5%">QTY</th>
+                <th data-sort="int" width="15%">Total</th>
+                {% if averagePricesHQ is defined %}
+                <th data-sort="int" width="2%">%Diff</th>
+                {% endif %}
+                <th data-sort="string">Retainer</th>
+                <th data-sort="string">Creator</th>
+            {% else %}
+                <th>No Listings</th>
             {% endif %}
-            <th data-sort="int" width="2%">HQ</th>
-            <th data-sort="int" width="8%">Mat</th>
-            <th data-sort="int" width="15%">Price</th>
-            <th data-sort="int" width="5%">QTY</th>
-            <th data-sort="int" width="15%">Total</th>
-            {% if cheapestPrice is defined or crossWorld is defined %}
-            <th data-sort="int" width="2%">%Diff</th>
-            {% endif %}
-            <th data-sort="string">Retainer</th>
-            <th data-sort="string">Creator</th>
         </tr>
         </thead>
         <tbody>
@@ -34,21 +38,13 @@
                 {% set materialist = materialist|merge([ item.Name ]) %}
             {% endfor %}
 
-            {% if cheapest is defined and crossWorld is defined %}
-            {% set cheapestPrice = cheapest[row._Server] %}
-        {% endif %}
-
-            {# Compare cheapestPrice #}
-            {% if cheapestPrice is defined %}
-                {% set cheapestForQuality = row.IsHQ ? cheapestPrice.HQ : cheapestPrice.NQ %}
-                {% if cheapestForQuality > 0 %}
-                    {% set pricePerUnitDiff = ((row.PricePerUnit / cheapestForQuality) * 100)|round %}
-                {% else %}
-                    {% set pricePerUnitDiff = 100 %}
-                {% endif %}
+            {# Compare diff against average #}
+            {% if averagePricesHQ is defined  %}
+                {% set diffForQuality = row.IsHQ ? averagePricesHQ : averagePricesNQ %}
+                {% set pricePerUnitDiff = diffForQuality <= 0 ? 0 : (((row.PricePerUnit / diffForQuality) * 100) - 100)|round %}
             {% endif %}
 
-            <tr>
+            <tr class="{{ averageHistoryHQ is defined and pricePerUnitDiff < -100 ? 'price-diff-oops' : ''}}">
                 <td class="price-num tac" data-tippy-content="{{ row.ID }}">{{ loop.index }}</td>
                 {% if crossWorld is defined %}
                 <td class="price-server" data-sort-value="{{ row._Server }}"><strong>{{ row._Server }}</strong></td>
@@ -64,8 +60,8 @@
                 <td class="price-current" data-sort-value="{{ row.PricePerUnit }}">{{ row.PricePerUnit|number_format }}</td>
                 <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
                 <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
-                {% if cheapestPrice is defined %}
-                <td class="price-diff {{ pricePerUnitDiff > 150 ? 'price-diff-bad' : '' }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percentage sale price to current cheapest price: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ cheapestForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
+                {% if averagePricesHQ is defined %}
+                <td class="price-diff {{ pricePerUnitDiff >= 20 ? 'price-diff-bad' : (pricePerUnitDiff < -10 ? 'price-diff-good' : '') }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="This listing is {{ pricePerUnitDiff }}% {{ pricePerUnitDiff > 0 ? 'more' : 'less' }} than the current <br> <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff > 0 ? '+' : '' }}{{ pricePerUnitDiff == 0 ? '-' : pricePerUnitDiff ~ '%' }}</td>
                 {% endif %}
                 <td class="price-retainer">
                     <a href="{{ path('retainer_store', { slug: row.RetainerID }) }}" data-tippy-content="{{ row.RetainerID }}">{{ row.RetainerName }}</a>
@@ -79,7 +75,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">None for sale.</td>
+                <td>There are no listings for this item, check back later!</td>
             </tr>
         {% endfor %}
         </tbody>

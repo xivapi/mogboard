@@ -2,38 +2,34 @@
     <table class="table-sortable">
         <thead>
         <tr>
-            <th data-sort="int" width="2%" class="tac">#</th>
-            {% if crossWorld is defined %}
-            <th data-sort="string" width="10%">Server</th>
+            {% if history %}
+                <th data-sort="int" width="2%" class="tac">#</th>
+                {% if crossWorld is defined %}
+                <th data-sort="string" width="10%">Server</th>
+                {% endif %}
+                <th data-sort="int" width="2%">HQ</th>
+                <th data-sort="int" width="15%">Price</th>
+                <th data-sort="int" width="5%">QTY</th>
+                <th data-sort="int" width="18%">Total</th>
+                {% if averagePricesHQ is defined %}
+                    <th data-sort="int" width="2%">%Diff</th>
+                {% endif %}
+                <th data-sort="string">Buyer</th>
+                <th data-sort="int" width="20%">Date</th>
+            {% else %}
+                <th>Really rare!?</th>
             {% endif %}
-            <th data-sort="int" width="2%">HQ</th>
-            <th data-sort="int" width="15%">Price</th>
-            <th data-sort="int" width="5%">QTY</th>
-            <th data-sort="int" width="18%">Total</th>
-            {% if cheapestPrice is defined or crossWorld is defined %}
-                <th data-sort="int" width="2%">%Diff</th>
-            {% endif %}
-            <th data-sort="string">Buyer</th>
-            <th data-sort="int" width="20%">Date</th>
         </tr>
         </thead>
         <tbody>
         {% for row in history %}
-            {% if cheapest is defined and crossWorld is defined %}
-                {% set cheapestPrice = cheapest[row._Server] %}
+            {# Compare diff against average #}
+            {% if averagePricesHQ is defined %}
+                {% set diffForQuality = row.IsHQ ? averagePricesHQ : averagePricesNQ %}
+                {% set pricePerUnitDiff = diffForQuality <= 0 ? 0 : (((row.PricePerUnit / diffForQuality) * 100) - 100)|round %}
             {% endif %}
 
-            {# Compare cheapestPrice #}
-            {% if cheapestPrice is defined %}
-                {% set cheapestForQuality = row.IsHQ ? cheapestPrice.HQ : cheapestPrice.NQ %}
-                {% if cheapestForQuality > 0 %}
-                    {% set pricePerUnitDiff = ((row.PricePerUnit / cheapestForQuality) * 100)|round %}
-                {% else %}
-                    {% set pricePerUnitDiff = 100 %}
-                {% endif %}
-            {% endif %}
-
-            <tr class="{{ cheapestPrice is defined and pricePerUnitDiff < 15 ? 'price-diff-oops' : ''}}">
+            <tr class="{{ averagePricesHQ is defined and pricePerUnitDiff < -100 ? 'price-diff-oops' : ''}}">
                 <td class="price-num tac" data-tippy-content="{{ row.ID }}">{{ loop.index }}</td>
                 {% if crossWorld is defined %}
                 <td class="price-server" data-sort-value="{{ row._Server }}"><strong>{{ row._Server }}</strong></td>
@@ -42,8 +38,8 @@
                 <td class="price-current" data-sort-value="{{ row.PricePerUnit }}">{{ row.PricePerUnit|number_format }}</td>
                 <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
                 <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
-                {% if cheapestPrice is defined %}
-                    <td class="price-diff {{ pricePerUnitDiff > 150 ? 'price-diff-bad' : (pricePerUnitDiff < 15 ? 'price-diff-oopz' : (pricePerUnitDiff < 100 ? 'price-diff-good' : '')) }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="Percentage sale price to current cheapest price: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ cheapestForQuality|number_format }}">{{ pricePerUnitDiff }}%</td>
+                {% if averagePricesHQ is defined %}
+                    <td class="price-diff {{ pricePerUnitDiff >= 20 ? 'price-diff-bad' : (pricePerUnitDiff < -100 ? 'price-diff-oopz' : (pricePerUnitDiff < -10 ? 'price-diff-good' : '')) }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="This listing sold for {{ pricePerUnitDiff }}% {{ pricePerUnitDiff > 0 ? 'more' : 'less' }} than the current <br> <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff > 0 ? '+' : '' }}{{ pricePerUnitDiff == 0 ? '-' : pricePerUnitDiff ~ '%' }}</td>
                 {% endif %}
                 <td class="price-buyer">
                     <a href="#" data-tippy-content="{{ row.CharacterID }}">{{ row.CharacterName }}</a>
@@ -52,7 +48,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">No History. This item is either rare or new.</td>
+                <td>There is currently no recorded history for this item on mogboard.</td>
             </tr>
         {% endfor %}
         </tbody>

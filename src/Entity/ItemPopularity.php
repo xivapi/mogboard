@@ -6,10 +6,10 @@ use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="popular_items")
- * @ORM\Entity(repositoryClass="App\Repository\PopularItemRepository")
+ * @ORM\Table(name="items_popularity")
+ * @ORM\Entity(repositoryClass="App\Repository\ItemPopularityRepository")
  */
-class PopularItem
+class ItemPopularity
 {
     /**
      * @var string

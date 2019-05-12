@@ -1,0 +1,31 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block body %}
+
+    <h2>Real-time Statistics</h2>
+
+    <div>
+        <button id="reset">Reset</button>
+    </div>
+
+    <br><br>
+
+    <code><pre></pre></code>
+
+    <script>
+    function getStatistics() {
+        $.get('/admin/tracking_stats', response => {
+            $('pre').html(response);
+        });
+    }
+
+    $('#reset').on('click', event => {
+        $.get('/admin/tracking_stats_reset');
+    });
+
+    setInterval(function() {
+        getStatistics()
+    }, 1000);
+    </script>
+
+{% endblock %}

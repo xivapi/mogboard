@@ -14,7 +14,7 @@ use XIVAPI\XIVAPI;
 
 class IndexController extends AbstractController
 {
-    /** @var ItemPopularity */
+    /** @var Popularity */
     private $itemPopularity;
     /** @var CompanionStatistics */
     private $companionStatistics;
@@ -26,7 +26,7 @@ class IndexController extends AbstractController
     private $xivapi;
     
     public function __construct(
-        ItemPopularity $itemPopularity,
+        Popularity $itemPopularity,
         CompanionStatistics $companionStatistics,
         Users $users,
         Mail $mail
@@ -189,7 +189,6 @@ class IndexController extends AbstractController
     public function serverStatus()
     {
         $status  = $this->xivapi->market->online();
-        $offline = $status->Offline;
         $list    = [];
         
         foreach ($status->Status as $i => $serverStatus) {
@@ -197,8 +196,7 @@ class IndexController extends AbstractController
         }
         
         return $this->render('Pages/servers.html.twig',[
-            'servers_status'  => $list,
-            'servers_offline' => $offline
+            'servers_status'  => $list
         ]);
     }
 }

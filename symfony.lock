@@ -2,6 +2,9 @@
     "art4/json-api-client": {
         "version": "0.9.1"
     },
+    "cboden/ratchet": {
+        "version": "v0.4.1"
+    },
     "delight-im/cookie": {
         "version": "v3.1.2"
     },
@@ -87,6 +90,12 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "elasticsearch/elasticsearch": {
+        "version": "v6.7.0"
+    },
+    "evenement/evenement": {
+        "version": "v3.0.1"
+    },
     "facebook/webdriver": {
         "version": "1.6.0"
     },
@@ -98,6 +107,12 @@
     },
     "guzzlehttp/psr7": {
         "version": "1.5.2"
+    },
+    "guzzlehttp/ringphp": {
+        "version": "1.1.1"
+    },
+    "guzzlehttp/streams": {
+        "version": "3.0.0"
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
@@ -119,6 +134,9 @@
     },
     "patreon/patreon": {
         "version": "0.3.1"
+    },
+    "php-amqplib/php-amqplib": {
+        "version": "v2.9.2"
     },
     "phpseclib/phpseclib": {
         "version": "2.0.14"
@@ -144,8 +162,32 @@
     "ramsey/uuid": {
         "version": "3.8.0"
     },
+    "ratchet/rfc6455": {
+        "version": "v0.2.5"
+    },
     "rct567/dom-query": {
         "version": "v0.6.2"
+    },
+    "react/cache": {
+        "version": "v0.5.0"
+    },
+    "react/dns": {
+        "version": "v0.4.17"
+    },
+    "react/event-loop": {
+        "version": "v1.1.0"
+    },
+    "react/promise": {
+        "version": "v2.7.1"
+    },
+    "react/promise-timer": {
+        "version": "v1.5.1"
+    },
+    "react/socket": {
+        "version": "v1.2.0"
+    },
+    "react/stream": {
+        "version": "v1.1.0"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

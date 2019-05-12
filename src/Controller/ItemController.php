@@ -39,10 +39,12 @@ class ItemController extends AbstractController
     private $users;
     /** @var UserAlerts */
     private $userAlerts;
-    /** @var userLists */
+    /** @var UserLists */
     private $userLists;
-    /** @var ItemPopularity */
+    /** @var Popularity */
     private $itemPopularity;
+    /** @var Views */
+    private $itemViews;
     /** @var XIVAPI */
     private $xivapi;
     
@@ -55,7 +57,8 @@ class ItemController extends AbstractController
         Users $users,
         UserAlerts $userAlerts,
         UserLists $userLists,
-        ItemPopularity $itemPopularity
+        Popularity $itemPopularity,
+        Views $itemViews
     ) {
         $this->em                  = $em;
         $this->gameDataSource      = $gameDataSource;
@@ -66,6 +69,7 @@ class ItemController extends AbstractController
         $this->userAlerts          = $userAlerts;
         $this->userLists           = $userLists;
         $this->itemPopularity      = $itemPopularity;
+        $this->itemViews           = $itemViews;
         $this->xivapi              = new XIVAPI();
     }
     
@@ -74,6 +78,8 @@ class ItemController extends AbstractController
      */
     public function index(Request $request, int $itemId)
     {
+        RedisTracking::increment('PAGE_VIEW');
+        
         $this->users->setLastUrl($request);
 
         $user = $this->users->getUser(false);
@@ -86,7 +92,8 @@ class ItemController extends AbstractController
         }
         
         $this->itemPopularity->hit($request, $itemId);
-        
+        $this->itemViews->hit($request, $itemId);
+
         // if it has recipes, grab those
         $recipes = [];
         if (isset($item['GameContentLinks']['Recipe']['ItemResult'])) {

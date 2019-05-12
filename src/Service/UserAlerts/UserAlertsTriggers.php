@@ -68,6 +68,8 @@ class UserAlertsTriggers
         $total = count($alerts);
         $this->console->writeln("Total: {$total}");
         $start = microtime(true);
+    
+        RedisTracking::increment('TOTAL_ALERTS_'. ($patronQueue ? 'NORMAL' : 'PATRON'));
         
         /** @var UserAlert $alert */
         foreach ($alerts as $alert) {
@@ -80,7 +82,7 @@ class UserAlertsTriggers
             }
 
             // check if the alert has expired, if so, delete it
-            // todo - enable this at launch
+            // todo - this should just make alerts inactive
             if ($alert->isExpired()) {
                 #$this->userAlerts->delete($alert, true);
                 continue;
@@ -138,6 +140,12 @@ class UserAlertsTriggers
             foreach ($market as $server => $data) {
                 if ($this->atMaxTriggers()) {
                     break;
+                }
+
+                // if this record is older than a day, ignore
+                $oneday = time() - (60 * 60 * 24);
+                if ($data->Updated < $oneday) {
+                    continue;
                 }
 
                 /**
@@ -243,6 +251,8 @@ class UserAlertsTriggers
                 $this->em->persist($alert);
                 $this->em->persist($event);
                 $this->em->flush();
+    
+                RedisTracking::increment('TOTAL_ALERTS_TRIGGERED_'. ($patronQueue ? 'NORMAL' : 'PATRON'));
 
                 if ($alert->isNotifiedViaDiscord()) {
                     $this->discord->sendAlertTriggerNotification($alert, $this->triggered, $hash);
@@ -291,8 +301,8 @@ class UserAlertsTriggers
             return [true, $hash];
         }
 
-        // prevent sending same notification within an hour
-        Redis::Cache()->set($hashKey, true, (60 * 60));
+        // cache the hash for 48 hrs so it doesn't send same one.
+        Redis::Cache()->set($hashKey, true, (60 * 60 * 48));
         return [false, $hash];
     }
     
