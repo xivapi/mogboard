@@ -2,10 +2,12 @@
 
 namespace App\Exceptions;
 
+use App\Common\Exceptions\ExceptionTrait;
+
 class GeneralJsonException extends \Exception
 {
-    public function __construct(string $message)
-    {
-        parent::__construct($message, 200);
-    }
+    use ExceptionTrait;
+    
+    const CODE    = 200;
+    const MESSAGE = 'General Json Exception';
 }

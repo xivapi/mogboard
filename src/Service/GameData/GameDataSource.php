@@ -2,8 +2,8 @@
 
 namespace App\Service\GameData;
 
-use App\Service\Common\Language;
-use App\Service\Redis\Redis;
+use App\Common\Service\Redis\Redis;
+use App\Common\Utils\Language;
 
 class GameDataSource
 {

@@ -2,14 +2,13 @@
 
 namespace App\Service\UserRetainers;
 
-use App\Entity\UserRetainer;
+use App\Common\Entity\UserRetainer;
+use App\Common\Game\GameServers;
+use App\Common\Repository\UserRetainerRepository;
+use App\Common\User\Users;
 use App\Exceptions\GeneralJsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
-use App\Repository\UserRetainerRepository;
 use App\Service\Companion\Companion;
-use App\Service\GameData\GameServers;
-use App\Service\ThirdParty\Discord\Discord;
-use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Request;

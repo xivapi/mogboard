@@ -28,17 +28,15 @@
             <thead>
                 <tr>
                     <th>Max Alerts</th>
-                    <th>Daily Notifications</th>
-                    <th>Notify Delay</th>
                     <th>Alert Expiry Time</th>
+                    <th>Alert Item Update</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>{{ auth.user.alerts|length }} / {{ auth.user.alertsMax }}</td>
-                    <td>{{ auth.user.alertsNotificationCount }} / {{ auth.user.alertsMaxNotifications }}</td>
-                    <td>{{ auth.user.alertsNotifyTimeout ? auth.user.alertsNotifyTimeout / 60 ~ ' min' : '-' }}</td>
                     <td>{{ auth.user.alertsExpiry / 60 / 60 / 24 }} days</td>
+                    <td>{{ auth.user.alertsUpdate ? 'Yes' : 'No'}}</td>
                 </tr>
             </tbody>
         </table>

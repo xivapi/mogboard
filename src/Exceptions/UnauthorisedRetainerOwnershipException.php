@@ -2,13 +2,12 @@
 
 namespace App\Exceptions;
 
+use App\Common\Exceptions\ExceptionTrait;
+
 class UnauthorisedRetainerOwnershipException extends \Exception
 {
+    use ExceptionTrait;
+    
     const CODE    = 400;
     const MESSAGE = 'User does not own retainer.';
-
-    public function __construct()
-    {
-        parent::__construct(self::CODE, self::MESSAGE);
-    }
 }

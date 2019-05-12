@@ -2,9 +2,9 @@
 
 namespace App\EventListener;
 
-use App\Service\Common\Environment;
-use App\Service\Common\Language;
-use App\Service\User\Users;
+use App\Common\User\Users;
+use App\Common\Utils\Environment;
+use App\Common\Utils\Language;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 

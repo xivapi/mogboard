@@ -58,10 +58,6 @@
                         {% endif %}
                         <hr>
                         <h6>Confirm Patreon Status</h6>
-                        <p>
-                            Patreon status is checked once every hour as it has a lot of members to go through,
-                            if you can't wait, click the button below!
-                        </p>
                         {% if app.request.get('patreon_checked') %}
                             <div class="alert-green">
                                 Your patreon status returned as: <strong>{{ app.request.get('patreon_checked') }}</strong>
@@ -69,13 +65,13 @@
                             </div>
                         {% endif %}
                         <p class="form">
-                            <a href="{{ path('user_account_confirm_patreon') }}" class="btn btn-green">Check my Patreon Status</a>
+                            <button class="btn btn-green check_patreon_status">Check my Patreon Status</button>
                         </p>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" class="tar">
-                        Ready to leave? <a href="{{ path('user_logout') }}" class="text-red">Logout</a>
+                        Ready to leave? <a href="{{ path('account_logout') }}" class="text-red">Logout</a>
                     </td>
                 </tr>
             </tbody>
@@ -98,11 +94,11 @@
 
         <p>
             Becoming a patron supports <strong>two FFXIV sites that I work on:</strong>
-        <ul>
-            <li class="text-green">Mogboard.com</li>
-            <li class="text-green">XIVAPI.com</li>
-        </ul>
         </p>
+        <div class="flex">
+            <div class="flex_50 text-yellow">Mogboard.com</div>
+            <div class="flex_50 text-blue">XIVAPI.com</div>
+        </div>
 
         <p>
             <strong>

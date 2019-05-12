@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Service\Companion;
+
+use App\Common\Game\GameServers;
+use App\Common\Utils\Arrays;
 use App\Constants\CompanionConstants;
-use App\Service\Common\Arrays;
-use App\Service\GameData\GameServers;
 use MathPHP\Statistics\Average;
 
 /**

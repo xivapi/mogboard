@@ -2,9 +2,9 @@
 
 namespace App\Service\UserAlerts;
 
-use App\Entity\UserAlert;
-use App\Service\Redis\Redis;
-use App\Service\ThirdParty\Discord\Discord;
+use App\Common\Entity\UserAlert;
+use App\Common\Service\Redis\Redis;
+use App\Common\ServicesThirdParty\Discord\Discord;
 use Carbon\Carbon;
 
 class UserAlertsDiscordNotification

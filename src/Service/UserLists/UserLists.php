@@ -2,12 +2,12 @@
 
 namespace App\Service\UserLists;
 
-use App\Entity\User;
-use App\Entity\UserList;
+use App\Common\Entity\User;
+use App\Common\Entity\UserList;
+use App\Common\Repository\UserListRepository;
+use App\Common\User\Users;
 use App\Exceptions\UnauthorisedListOwnershipException;
-use App\Repository\UserListRepository;
 use App\Service\Companion\Companion;
-use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 

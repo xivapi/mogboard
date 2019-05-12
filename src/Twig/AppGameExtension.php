@@ -2,8 +2,8 @@
 
 namespace App\Twig;
 
+use App\Common\Game\GameServers;
 use App\Service\GameData\GameDataSource;
-use App\Service\GameData\GameServers;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;

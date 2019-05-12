@@ -26,11 +26,11 @@ class AccountPatreon
                 url: mog.urls.account.check_patreon,
                 success: response => {
                     if (response.ok) {
-                        Popup.success('Patreon Confirmed!', 'Your support is much appreciated. All your existing alerts have been updated, refresh the site to see the changes :) - Thank you');
+                        Popup.success('Patreon Confirmed!', 'Your support is much appreciated. Refresh the site to see the changes :) - Thank you');
                         return;
                     }
 
-                    Popup.error('There was a problem (code: 22)', 'Please jump on discord and message Vekien with the error code to sort this out! Thank you');
+                    Popup.error('There was a problem (code: 22)', 'Could not detect Patreon status, please make sure you are in the XIVAPI Admin and have accepted your Discord Reward on Patreon, if you have problems, message Vekien on Discord.');
                 },
                 error: (a,b,c) => {
                     Popup.error('There was a problem (code: 47)', 'Please jump on discord and message Vekien with the error code to sort this out! Thank you');

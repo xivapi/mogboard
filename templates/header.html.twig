@@ -23,7 +23,7 @@
         <span class="username">{{ auth.user.username|title }}</span>
     </div>
     {% else %}
-        <a href="{{ path('user_login_discord') }}" class="btn-login">Login via Discord</a>
+        <a href="{{ path('account_login_discord') }}" class="btn-login">Login via Discord</a>
     {% endif %}
     <div>
         <button class="btn-settings" data-tippy-content="Site Settings"><span class="xiv-app_drawer_setting"></span></button>
