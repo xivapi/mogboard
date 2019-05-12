@@ -2,10 +2,10 @@
 
 namespace App\Service\UserAlerts;
 
-use App\Entity\UserAlert;
-use App\Service\Common\Mail;
+use App\Common\Entity\UserAlert;
+use App\Common\Utils\Mail;
 use App\Service\GameData\GameDataSource;
-use App\Service\Redis\Redis;
+use App\Common\Service\Redis\Redis;
 
 class UserAlertsEmailNotification
 {

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\UserList;
+use App\Common\Entity\UserList;
 use App\Service\UserLists\UserLists;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

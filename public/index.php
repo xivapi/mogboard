@@ -6,6 +6,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 require dirname(__DIR__).'/config/bootstrap.php';
 
+// Maintenance Check
+$maintenance = new \App\Common\Maintenance\Maintenance();
+$maintenance->check();
+
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 

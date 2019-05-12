@@ -2,13 +2,12 @@
 
 namespace App\Exceptions;
 
+use App\Common\Exceptions\ExceptionTrait;
+
 class UnauthorisedListOwnershipException extends \Exception
 {
+    use ExceptionTrait;
+    
     const CODE    = 400;
     const MESSAGE = 'User does not own list.';
-
-    public function __construct()
-    {
-        parent::__construct(self::CODE, self::MESSAGE);
-    }
 }

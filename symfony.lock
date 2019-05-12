@@ -90,6 +90,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "elasticsearch/elasticsearch": {
+        "version": "v6.7.0"
+    },
     "evenement/evenement": {
         "version": "v3.0.1"
     },
@@ -104,6 +107,12 @@
     },
     "guzzlehttp/psr7": {
         "version": "1.5.2"
+    },
+    "guzzlehttp/ringphp": {
+        "version": "1.1.1"
+    },
+    "guzzlehttp/streams": {
+        "version": "3.0.0"
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
@@ -125,6 +134,9 @@
     },
     "patreon/patreon": {
         "version": "0.3.1"
+    },
+    "php-amqplib/php-amqplib": {
+        "version": "v2.9.2"
     },
     "phpseclib/phpseclib": {
         "version": "2.0.14"
@@ -439,6 +451,9 @@
     },
     "wohali/oauth2-discord-new": {
         "version": "v1.0.0"
+    },
+    "xivapi/common-php": {
+        "version": "dev-master"
     },
     "xivapi/companion-php": {
         "version": "0.1.8"

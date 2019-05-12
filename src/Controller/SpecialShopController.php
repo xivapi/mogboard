@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+use App\Common\Game\GameServers;
 use App\Service\Companion\Companion;
-use App\Service\GameData\GameServers;
-use App\Service\Redis\Redis;
+use App\Common\Service\Redis\Redis;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

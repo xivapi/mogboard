@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use App\Service\Common\Mail;
+use App\Common\User\Users;
+use App\Common\Utils\Mail;
 use App\Service\Companion\CompanionStatistics;
 use App\Service\Items\Popularity;
-use App\Service\Redis\Redis;
-use App\Service\ThirdParty\Discord\Discord;
-use App\Service\User\Users;
+use App\Common\Service\Redis\Redis;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

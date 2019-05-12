@@ -2,8 +2,8 @@
 
 namespace App\Service\GameData;
 
-use App\Service\Redis\Redis;
-use App\Service\Common\Arrays;
+use App\Common\Service\Redis\Redis;
+use App\Common\Utils\Arrays;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**

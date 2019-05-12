@@ -2,15 +2,13 @@
 
 namespace App\Service\UserAlerts;
 
-use App\Entity\User;
-use App\Entity\UserAlert;
-use App\Exceptions\UnauthorisedAlertOwnershipException;
-use App\Repository\UserAlertRepository;
-use App\Service\Common\Mog;
+use App\Common\Entity\UserAlert;
+use App\Common\Game\GameServers;
+use App\Common\Repository\UserAlertRepository;
+use App\Common\User\Users;
 use App\Service\Companion\Companion;
 use App\Service\GameData\GameDataSource;
-use App\Service\GameData\GameServers;
-use App\Service\User\Users;
+use App\Exceptions\UnauthorisedAlertOwnershipException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use XIVAPI\XIVAPI;

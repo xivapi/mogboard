@@ -2,13 +2,12 @@
 
 namespace App\Exceptions;
 
+use App\Common\Exceptions\ExceptionTrait;
+
 class InvalidAlertCreationException extends \Exception
 {
+    use ExceptionTrait;
+    
     const CODE    = 400;
     const MESSAGE = 'Invalid alert creation data.';
-    
-    public function __construct()
-    {
-        parent::__construct(self::CODE, self::MESSAGE);
-    }
 }

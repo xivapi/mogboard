@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Service\GameData\GameDataSource;
-use App\Service\Redis\Redis;
+use App\Common\Service\Redis\Redis;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 

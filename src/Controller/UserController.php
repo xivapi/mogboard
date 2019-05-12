@@ -2,14 +2,16 @@
 
 namespace App\Controller;
 
-use App\Service\User\SignInDiscord;
-use App\Service\User\Users;
+use App\Common\Controller\UserTraitController;
+use App\Common\User\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
+    use UserTraitController;
+    
     /** @var Users */
     private $users;
     
@@ -30,14 +32,13 @@ class UserController extends AbstractController
     /**
      * @Route("/account/confirm-patreon", name="user_account_confirm_patreon")
      */
-    public function accountConfirmPatreon(Request $request)
+    public function accountConfirmPatreon()
     {
         $user = $this->users->getUser();
-    
         $this->users->checkPatreonTierForUser($user);
         
-        return $this->redirectToRoute('user_account', [
-            'patreon_checked' => $user->getPatreonTier(),
+        return $this->json([
+            'ok' => $user->getPatreonTierNumber() > 0
         ]);
     }
     
@@ -86,50 +87,5 @@ class UserController extends AbstractController
         return $this->render('UserAccount/reports.html.twig');
     }
     
-    /**
-     * @Route("/users/login/discord", name="user_login_discord")
-     */
-    public function loginDiscord(Request $request)
-    {
-        return $this->redirect(
-            $this->users->setSsoProvider(new SignInDiscord($request))->login()
-        );
-    }
     
-    /**
-     * @Route("/users/login/discord/success", name="user_login_discord_success")
-     */
-    public function loginDiscordResponse(Request $request)
-    {
-        if ($request->get('error') == 'access_denied') {
-            return $this->redirectToRoute('home');
-        }
-        
-        try {
-            $this->users->setSsoProvider(new SignInDiscord($request))->authenticate();
-
-            // redirect to their previous url if one exists
-            $lastUrl = $this->users->getLastUrl($request);
-            return $lastUrl ? $this->redirect($lastUrl) : $this->redirectToRoute('home');
-        } catch (\Exception $ex) {
-            return $this->redirectToRoute('user_login_failed');
-        }
-    }
-    
-    /**
-     * @Route("/users/logout", name="user_logout")
-     */
-    public function logout()
-    {
-        $this->users->logout();
-        return $this->redirectToRoute('home');
-    }
-
-    /**
-     * @Route("/users/login/failed", name="user_login_failed")
-     */
-    public function loginFailed()
-    {
-        return $this->render('UserAccount/login_failed.html.twig');
-    }
 }

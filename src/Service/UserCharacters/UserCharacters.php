@@ -2,12 +2,11 @@
 
 namespace App\Service\UserCharacters;
 
-use App\Entity\UserCharacter;
+use App\Common\Entity\UserCharacter;
+use App\Common\Repository\UserCharacterRepository;
+use App\Common\User\Users;
 use App\Exceptions\GeneralJsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
-use App\Repository\UserCharacterRepository;
-use App\Service\GameData\GameServers;
-use App\Service\User\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Request;

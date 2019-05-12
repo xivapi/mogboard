@@ -2,26 +2,26 @@
 
 namespace App\Service\Items;
 
-use App\Common\Entity\ItemPopularity;
-use App\Common\Repository\ItemPopularityRepository;
-use App\Common\Service\Redis\Redis;
+use App\Entity\PopularItem;
+use App\Repository\PopularItemRepository;
+use App\Service\Redis\Redis;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class Popularity
+class ItemPopularity
 {
     const REDIS_KEY = 'mogboard_trending_items';
-    const MAX_HITS  = 2;
+    const MAX_HITS  = 10;
 
     /** @var EntityManagerInterface */
     private $em;
-    /** @var ItemPopularityRepository */
+    /** @var PopularItemRepository */
     private $repository;
     
     public function __construct(EntityManagerInterface $em)
     {
         $this->em         = $em;
-        $this->repository = $em->getRepository(ItemPopularity::class);
+        $this->repository = $em->getRepository(PopularItem::class);
     }
     
     /**
@@ -41,12 +41,10 @@ class Popularity
         $ids   = [];
         $items = (array)$this->repository->findBy([], [ 'count' => 'desc' ], 20);
 
-        /** @var ItemPopularity $item */
+        /** @var PopularItem $item */
         foreach ($items as $item) {
             $ids[] = $item->getItem();
         }
-
-        shuffle($ids);
 
         Redis::Cache()->set(self::REDIS_KEY, $ids, (60 * 60 * 24 * 5));
     }
@@ -62,7 +60,7 @@ class Popularity
 
         // truncate db
         $conn = $this->em->getConnection();
-        $stmt = $conn->prepare('TRUNCATE TABLE items_popularity');
+        $stmt = $conn->prepare('TRUNCATE TABLE popular_items');
         $stmt->execute();
     }
     
@@ -71,7 +69,7 @@ class Popularity
      */
     public function hit(Request $request, int $itemId)
     {
-        $key     = "item_hit_". $itemId . sha1($request->getClientIp());
+        $key     = "item_hit_". sha1($request->getClientIp());
         $current = Redis::Cache()->get($key);
         
         // ignore if we've hit the limit
@@ -81,10 +79,10 @@ class Popularity
         
         // up users hit counter
         $current = $current ? $current + 1 : 1;
-        Redis::Cache()->set($key, $current);
+        Redis::Cache()->set($key, $current, (60 * 60 * 8));
         
         // grab popular item entry
-        $entity = $this->repository->findOneBy([ 'item' => $itemId ]) ?: new ItemPopularity();
+        $entity = $this->repository->findOneBy([ 'item' => $itemId ]) ?: new PopularItem();
         
         $entity
             ->setItem($itemId)

@@ -2,14 +2,13 @@
 
 namespace App\Service\UserAlerts;
 
-use App\Entity\User;
-use App\Entity\UserAlert;
-use App\Entity\UserAlertEvent;
+use App\Common\Entity\UserAlert;
+use App\Common\Entity\UserAlertEvent;
+use App\Common\Game\GameServers;
+use App\Common\Service\Redis\RedisTracking;
 use App\Service\Companion\Companion;
 use App\Service\GameData\GameDataSource;
-use App\Service\GameData\GameServers;
-use App\Service\Redis\Redis;
-use App\Service\Redis\RedisTracking;
+use App\Common\Service\Redis\Redis;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use XIVAPI\XIVAPI;
@@ -136,26 +135,6 @@ class UserAlertsTriggers
                 );
             }
 
-            /**
-             * Handle alert delay - if the notification delay is greater than the current time, we skip
-             */
-            $alertNotificationDelay = ($alert->getTriggerLastSent() + $user->getAlertsNotifyTimeout());
-            if ($alertNotificationDelay > time()) {
-                $this->console->writeln('--> Skipping: Alert is on notification cool-down.');
-                unset($market);
-                continue;
-            }
-
-            /**
-             * Handle max alert notifications.
-             * If the user has hit the daily limit, we skip.
-             */
-            if ($user->isAtMaxNotifications()) {
-                $this->console->writeln('--> Skipping: User has reached maximum alerts.');
-                unset($market);
-                continue;
-            }
-            
             // loop through data and find a match for this trigger
             $this->console->writeln("--> Checking Triggers: ({$alert->getTriggerType()})");
             foreach ($market as $server => $data) {
@@ -259,8 +238,6 @@ class UserAlertsTriggers
                     continue;
                 }
 
-                $user->incrementNotificationCount();
-
                 $alert
                     ->incrementTriggersSent()
                     ->setTriggerLastSent(time());
@@ -271,7 +248,6 @@ class UserAlertsTriggers
                     ->setUserAlert($alert)
                     ->setData($this->triggered);
 
-                $this->em->persist($user);
                 $this->em->persist($alert);
                 $this->em->persist($event);
                 $this->em->flush();

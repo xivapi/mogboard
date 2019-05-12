@@ -2,9 +2,9 @@
 
 namespace App\Service\Items;
 
-use App\Entity\ItemViews;
-use App\Repository\ItemPopularityRepository;
-use App\Service\Redis\Redis;
+use App\Common\Entity\ItemViews;
+use App\Common\Repository\ItemPopularityRepository;
+use App\Common\Service\Redis\Redis;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 

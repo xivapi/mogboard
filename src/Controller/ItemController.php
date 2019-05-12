@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
+use App\Common\Entity\UserAlert;
+use App\Common\Game\GameServers;
+use App\Common\Service\Redis\RedisTracking;
+use App\Common\User\Users;
+use App\Common\Utils\Language;
 use App\Constants\CompanionConstants;
-use App\Entity\UserAlert;
-use App\Service\Common\Language;
 use App\Service\Companion\CompanionStatistics;
 use App\Service\GameData\GameDataSource;
 use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
-use App\Service\GameData\GameServers;
 use App\Service\Items\Popularity;
 use App\Service\Items\Views;
-use App\Service\Redis\Redis;
-use App\Service\Redis\RedisTracking;
-use App\Service\User\Users;
+use App\Common\Service\Redis\Redis;
 use App\Service\UserAlerts\UserAlerts;
 use App\Service\UserLists\UserLists;
 use Doctrine\ORM\EntityManagerInterface;
@@ -139,7 +139,7 @@ class ItemController extends AbstractController
         
         // get market item entry
         $conn = $this->em->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM dalamud.companion_market_item_source WHERE item = {$itemId}");
+        $stmt = $conn->prepare("SELECT * FROM companion_market_item_source WHERE item = {$itemId}");
         $stmt->execute();
         
         $shops = [];

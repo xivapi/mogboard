@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\UserAlert;
-use App\Service\ThirdParty\Discord\Discord;
-use App\Service\User\Users;
+use App\Common\Entity\UserAlert;
+use App\Common\ServicesThirdParty\Discord\Discord;
+use App\Common\User\Users;
 use App\Service\UserAlerts\UserAlerts;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +30,7 @@ class UserAlertsController extends AbstractController
     {
         try {
             $user        = $this->users->getUser(true);
-            $totalAlerts = $user->totalAlerts();
+            $totalAlerts = count($user->getAlerts());
     
             if ($totalAlerts >= $user->getAlertsMax()) {
                 return $this->json([

@@ -75,6 +75,9 @@
             isOnline: {{ auth.isOnline ? 'true' : 'false' }},
             url_item: "{{ path('item_page', { itemId: '-id-' }) }}",
             urls: {
+                account: {
+                    check_patreon: "{{ path('user_account_confirm_patreon') }}"
+                },
                 alerts: {
                     create: "{{ path('alerts_create') }}",
                     update: "{{ path('alerts_update', { alert: '-id-' }) }}",
