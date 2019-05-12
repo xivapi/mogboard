@@ -63,7 +63,7 @@ class UserAlerts
     public function getAllForCurrentUser()
     {
         return $this->repository->findBy([
-            'user' => $this->users->getUser(),
+            'user' => $this->users->getUser(true),
         ]);
     }
     
@@ -73,7 +73,7 @@ class UserAlerts
     public function getAllForItemForCurrentUser($itemId)
     {
         return $this->repository->findBy([
-            'user'   => $this->users->getUser(),
+            'user'   => $this->users->getUser(true),
             'itemId' => $itemId,
         ]);
     }
@@ -99,7 +99,7 @@ class UserAlerts
      */
     public function save(UserAlert $alert, bool $sendDiscordMessage = true)
     {
-        $user = $this->users->getUser();
+        $user = $this->users->getUser(true);
         
         $alert
             ->setServer(GameServers::getServer())

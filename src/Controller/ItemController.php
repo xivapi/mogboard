@@ -196,7 +196,7 @@ class ItemController extends AbstractController
      */
     public function update(int $itemId)
     {
-        $user = $this->users->getUser();
+        $user = $this->users->getUser(true);
     
         /**
          * Check patron status of the user

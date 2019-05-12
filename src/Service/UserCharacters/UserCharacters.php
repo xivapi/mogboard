@@ -50,7 +50,7 @@ class UserCharacters
      */
     public function confirm(int $lodestoneId)
     {
-        $user = $this->users->getUser();
+        $user = $this->users->getUser(true);
 
         // run character verification
         $verification = $this->xivapi->character->verify($lodestoneId);
@@ -95,7 +95,7 @@ class UserCharacters
      */
     public function delete(UserCharacter $userCharacter)
     {
-        if ($userCharacter->getUser() !== $this->users->getUser()) {
+        if ($userCharacter->getUser() !== $this->users->getUser(true)) {
             throw new UnauthorisedRetainerOwnershipException();
         }
         

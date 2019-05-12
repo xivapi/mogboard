@@ -23,7 +23,7 @@ class AdminController extends AbstractController
      */
     public function admin()
     {
-        $user = $this->users->getUser();
+        $user = $this->users->getUser(true);
         $user->mustBeAdmin();
     
         return $this->render('Admin/statistics.html.twig');

@@ -41,7 +41,7 @@ class UserLists
      */
     public function handleFavourite(int $itemId): UserList
     {
-        $user = $this->users->getUser();
+        $user = $this->users->getUser(true);
         $list = $this->getFavourites($user);
 
         // either add or remove the item
@@ -134,7 +134,7 @@ class UserLists
      */
     public function addItem(UserList $userList, int $itemId): UserList
     {
-        if ($userList->getUser() !== $this->users->getUser()) {
+        if ($userList->getUser() !== $this->users->getUser(true)) {
             throw new UnauthorisedListOwnershipException();
         }
 
@@ -152,7 +152,7 @@ class UserLists
      */
     public function removeItem(UserList $userList, int $itemId): UserList
     {
-        if ($userList->getUser() !== $this->users->getUser()) {
+        if ($userList->getUser() !== $this->users->getUser(true)) {
             throw new UnauthorisedListOwnershipException();
         }
 
@@ -172,7 +172,7 @@ class UserLists
     {
         $list = new UserList();
         $list
-            ->setUser($this->users->getUser())
+            ->setUser($this->users->getUser(true))
             ->setName(trim($name))
             ->setItems([ $itemId ])
             ->setSlug();
@@ -186,7 +186,7 @@ class UserLists
      */
     public function rename(UserList $userList, string $name): UserList
     {
-        if ($userList->getUser() !== $this->users->getUser()) {
+        if ($userList->getUser() !== $this->users->getUser(true)) {
             throw new UnauthorisedListOwnershipException();
         }
 
@@ -209,7 +209,7 @@ class UserLists
      */
     public function delete(UserList $list): void
     {
-        if ($list->getUser() !== $this->users->getUser()) {
+        if ($list->getUser() !== $this->users->getUser(true)) {
             throw new UnauthorisedListOwnershipException();
         }
 

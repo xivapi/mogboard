@@ -34,7 +34,7 @@ class UserController extends AbstractController
      */
     public function accountConfirmPatreon()
     {
-        $user = $this->users->getUser();
+        $user = $this->users->getUser(true);
         $this->users->checkPatreonTierForUser($user);
         
         return $this->json([

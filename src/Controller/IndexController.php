@@ -92,7 +92,7 @@ class IndexController extends AbstractController
     public function patreonRefundProcess(Request $request)
     {
         $name = trim($request->get('name'));
-        $user = $this->users->getUser();
+        $user = $this->users->getUser(true);
         
         $this->mail->send(
             'josh@viion.co.uk',

@@ -93,7 +93,7 @@ class UserRetainers
         }
 
         $retainer = (new UserRetainer())
-            ->setUser($this->users->getUser())
+            ->setUser($this->users->getUser(true))
             ->setName($name)
             ->setServer($server)
             ->setUniq($unique)
@@ -114,7 +114,7 @@ class UserRetainers
         $message = '';
 
         // enforce the user is online
-        $this->users->getUser();
+        $this->users->getUser(true);
         
         // if the retainer was updated recently, don't do anything
         if ($retainer->isRecent()) {
@@ -199,7 +199,7 @@ class UserRetainers
      */
     public function delete(UserRetainer $userRetainer)
     {
-        if ($userRetainer->getUser() !== $this->users->getUser()) {
+        if ($userRetainer->getUser() !== $this->users->getUser(true)) {
             throw new UnauthorisedRetainerOwnershipException();
         }
         
@@ -213,7 +213,7 @@ class UserRetainers
      */
     public function togglePrivacy(UserRetainer $userRetainer)
     {
-        if ($userRetainer->getUser() !== $this->users->getUser()) {
+        if ($userRetainer->getUser() !== $this->users->getUser(true)) {
             throw new UnauthorisedRetainerOwnershipException();
         }
         
