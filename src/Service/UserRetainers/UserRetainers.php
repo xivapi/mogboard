@@ -81,6 +81,10 @@ class UserRetainers
         $name   = trim($request->get('name'));
         $server = ucwords(trim($request->get('server')));
         $itemId = (int)trim($request->get('itemId'));
+    
+        if (in_array(GameServers::getServerId($server), GameServers::MARKET_OFFLINE)) {
+            throw new GeneralJsonException('Server currently not supported.');
+        }
         
         $unique = UserRetainer::unique($name, $server);
 
