@@ -1077,7 +1077,7 @@ ul,ol {
     position: absolute;
     transform: translate(-50%, 0);
 
-    @include mq($until: tablet) {
+    @include mq($until: desktop) {
         top: 0;
         left: 0;
         right: 0;
