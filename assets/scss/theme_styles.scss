@@ -1077,6 +1077,15 @@ ul,ol {
     position: absolute;
     transform: translate(-50%, 0);
 
+    @include mq($until: tablet) {
+        top: 50px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 500;
+        display: block;
+    }
+
     .modal_settings-form {
         display: flex;
 
