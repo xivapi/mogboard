@@ -2,6 +2,7 @@
 
 namespace App\Service\UserRetainers;
 
+use App\Common\Entity\Maintenance;
 use App\Common\Entity\UserRetainer;
 use App\Common\Game\GameServers;
 use App\Common\Repository\UserRetainerRepository;
@@ -110,6 +111,18 @@ class UserRetainers
      */
     public function confirm(UserRetainer $retainer)
     {
+        /**
+         * Check maintenance status
+         * @var Maintenance $maintenance
+         */
+        $maintenance = $this->em->getRepository(Maintenance::class)->findOneBy(['id' => 1 ]);
+        if ($maintenance && $maintenance->isCompanionMaintenance()) {
+            return [
+                false,
+                'Companion is down for maintenance or the mogboard accounts are offline, retainer verification is not available at this time. Please try again later.'
+            ];
+        }
+
         $found = false;
         $message = '';
 

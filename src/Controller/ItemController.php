@@ -199,7 +199,6 @@ class ItemController extends AbstractController
     {
         /**
          * Check maintenance status
-         *
          * @var Maintenance $maintenance
          */
         $maintenance = $this->em->getRepository(Maintenance::class)->findOneBy(['id' => 1 ]);
