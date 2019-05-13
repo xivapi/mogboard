@@ -4,6 +4,21 @@
     <div class="home">
         <div>
 
+            {% if maintenance.isCompanionMaintenance %}
+                <div class="home-box2">
+                    <div class="home-row flex">
+                        <div class="flex_5 tac">
+                            <img src="/i/game/offline.png">
+                        </div>
+                        <div class="flex_95">
+                            <strong>Companion is down for maintenance</strong><br>
+                            Auto-Updating + Manual Updating has been paused. Prices / History will not update
+                            while Companion is down for maintenance. ETA: {{ maintenance.companionMaintenance|dateRelative }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="home-box2">
                 <div class="home-row flex">
                     <div class="flex_5 tac">

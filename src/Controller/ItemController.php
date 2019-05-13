@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Common\Entity\Maintenance;
 use App\Common\Entity\UserAlert;
 use App\Common\Game\GameServers;
 use App\Common\Service\Redis\RedisTracking;
@@ -196,6 +197,18 @@ class ItemController extends AbstractController
      */
     public function update(int $itemId)
     {
+        /**
+         * Check maintenance status
+         *
+         * @var Maintenance $maintenance
+         */
+        $maintenance = $this->em->getRepository(Maintenance::class)->findOneBy(['id' => 1 ]);
+        if ($maintenance && $maintenance->isCompanionMaintenance()) {
+            return $this->json([
+                'message' => 'Companion is down for maintenance or the mogboard accounts are offline, manual update is not available at this time. Please try again later.'
+            ]);
+        }
+
         $user = $this->users->getUser(true);
     
         /**
