@@ -1070,7 +1070,12 @@ ul,ol {
 
 .modal_settings
 {
-    max-width: 500px;
+    max-width: 600px;
+
+    // handled differently due to small screens
+    top: 10px;
+    position: absolute;
+    transform: translate(-50%, 0);
 
     .modal_settings-form {
         display: flex;
