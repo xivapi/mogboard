@@ -11,9 +11,13 @@ class Settings
         this.uiModalButton        = $('.btn-settings');
 
         this.defaultLanguage      = 'en';
-        this.defaultTimezone      = 'Europe/London';
+        this.defaultTimezone      = Intl.DateTimeFormat().resolvedOptions().timeZone;
         this.defaultLeftNav       = 'off';
         this.defaultHomeWorld     = 'no';
+
+        if (this.defaultTimezone === 'undefined') {
+            this.defaultTimezone = 'Europe/London';
+        }
 
         this.storageKeyServer     = 'mogboard_server';
         this.storageKeyLanguage   = 'mogboard_language';
