@@ -30,7 +30,7 @@
         "wohali/oauth2-discord-new": "^1.0",
         "xivapi/common-php": "dev-master",
         "xivapi/companion-php": "^1.2.2",
-        "xivapi/xivapi-php": "1.6.9"
+        "xivapi/xivapi-php": "1.6.10"
     },
     "config": {
         "preferred-install": {

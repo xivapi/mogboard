@@ -7,6 +7,7 @@ use App\Common\User\Users;
 use App\Service\UserRetainers\UserRetainers;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserRetainerController extends AbstractController
@@ -58,7 +59,7 @@ class UserRetainerController extends AbstractController
     }
     
     /**
-     * @Route("/retainers/{retainerId}", name="retainer_store")
+     * @Route("/retainers/{retainerId}/shop", name="retainer_shop")
      */
     public function store(Request $request, string $retainerId)
     {
@@ -69,10 +70,16 @@ class UserRetainerController extends AbstractController
         if ($user === null) {
             return $this->redirectToRoute('user_account');
         }
+        
+        $store = $this->retainers->getStore($retainerId);
+        
+        if ($store == null) {
+            return $this->redirectToRoute('404');
+        }
 
         // get the retainer store for this user
         return $this->render('UserRetainers/store.html.twig', [
-            'retainer_store' => $this->retainers->getStore($retainerId),
+            'store' => $store,
         ]);
     }
 }

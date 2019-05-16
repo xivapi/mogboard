@@ -17,9 +17,9 @@
         The Companion App does not provide a unique-id for your retainer, instead MogBoard creates one based
         on the retainers name and server. <strong>If you rename your retainer or move server it will be
         like you obtained a brand new retainer</strong>. This means it will not be linked to your account
-        and you will have to re-verify. You will also have to make it private again if you had it enabled.
+        and you will have to re-verify. You will also loose all tracked item sales/current prices.
         <br><br>
-        Please also note, at this time you cannot add/verify Retainers on the Japan Data-Center servers.
+        Please note, at this time you cannot add/verify Retainers on the Japan Data-Center servers.
     </div>
 
     <div class="alert-dark">
@@ -50,14 +50,9 @@
                         <br><br>
                         <ul>
                             <li>
-                                <h6><a href="{{ path('retainer_store', { slug: retainer.slug }) }}">View Shop</a></h6>
+                                <h6><a href="{{ path('retainer_shop', { retainerId: retainer.id }) }}">View Retainer Shop</a></h6>
                                 Retainers on MogBoard get their own store which you can personalise!
                                 <br><br>
-                            </li>
-                            <li>
-                                <h6><a href="{{ path('retainers_toggle_privacy', { retainer: retainer.id }) }}">Toggle Privacy</a></h6>
-                                {{ retainer.isHidden ? 'Your retainer pages are currently hidden' : 'Your retainer pages are public' }}
-                            </li>
                         </ul>
                     {% else %}
                     {% set item = game().item(retainer.confirmItem) %}

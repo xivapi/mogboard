@@ -47,7 +47,7 @@
                                 {{ retainer.name }}
                             </div>
                             <div>
-                                <a href="{{ path('retainer_store', { slug: retainer.slug }) }}">View Store</a>
+                                <a href="{{ path('retainer_shop', { retainerId: retainer.id }) }}">View Retainer Shop</a>
                             </div>
                         </div>
                     {% else %}

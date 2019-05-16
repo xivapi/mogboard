@@ -2,23 +2,12 @@
 
 {% block body %}
     <div class="page-retainer">
-
-        <h1>{{ retainer.name }}</h1>
-        <small>
-            {% if retainer.confirmed %}
-                {{ retainer.server }}
-
-                {# Status #}
-                {% if retainer.confirmed %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> Verified</span>{% endif %}
-                {% if retainer.apiRetainerId %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> XIVAPI Linked</span>{% endif %}
-            {% else %}
-                Retainer not linked to any account.
-            {% endif %}
-        </small>
+        <h1>{{ store.retainer.name }}</h1>
+        <small>{{ store.retainer.server }}</small>
 
         <div class="page-retainer-store">
-            {% if apiRetainer %}
-                {% for listing in apiRetainer.Items %}
+            {% if store.items %}
+                {% for listing in store.items %}
                     {% set item = game().item(listing.Item.ID) %}
                     <div class="table-blank">
                         <table>
@@ -57,6 +46,5 @@
                 </div>
             {% endif %}
         </div>
-
     </div>
 {% endblock %}

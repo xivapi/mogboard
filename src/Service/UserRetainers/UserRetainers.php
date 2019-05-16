@@ -285,7 +285,6 @@ class UserRetainers
 
     /**
      * Get the retainer store!
-     * todo - move this into its own service
      */
     public function getStore(string $retainerId)
     {
@@ -293,20 +292,20 @@ class UserRetainers
         $retainer = $this->get($retainerId);
 
         if ($retainer === null) {
-            return false;
+            return null;
         }
 
         // verify the user owns this retainer
         if ($retainer->getUser() !== $this->users->getUser(true)) {
-            return false;
+            return null;
         }
 
         // todo - move this to private endpoints
-        $items = (new XIVAPI())->market->retainer($retainer->getApiRetainerId());
-
+        $items = (new XIVAPI(XIVAPI::DEV))->_private->retainerItems(getenv('XIVAPI_COMPANION_KEY'), $retainer->getApiRetainerId());
+        
         return [
             'retainer' => $retainer,
-            'items'    => $items,
+            'items'    => $items->Items,
         ];
     }
 }
