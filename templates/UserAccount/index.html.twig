@@ -18,7 +18,16 @@
             </div>
         </div>
     {% else %}
-        {# todo - do #}
-        <p>plz login</p>
+        <div class="alert-light" style="padding: 50px;">
+            <div class="tac">
+                <h2>Oops!</h2>
+                <p>
+                    You must be logged in to view this area.
+                </p>
+                <p>
+                    You can <a href="{{ path('account_login_discord') }}">login via Discord</a> to get that juicy access! Maybe!
+                </p>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

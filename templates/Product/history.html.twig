@@ -41,9 +41,7 @@
                 {% if averagePricesHQ is defined %}
                     <td class="price-diff {{ pricePerUnitDiff >= 20 ? 'price-diff-bad' : (pricePerUnitDiff < -100 ? 'price-diff-oopz' : (pricePerUnitDiff < -10 ? 'price-diff-good' : '')) }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="This listing sold for {{ pricePerUnitDiff }}% {{ pricePerUnitDiff > 0 ? 'more' : 'less' }} than the current <br> <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff > 0 ? '+' : '' }}{{ pricePerUnitDiff == 0 ? '-' : pricePerUnitDiff ~ '%' }}</td>
                 {% endif %}
-                <td class="price-buyer">
-                    <a href="#" data-tippy-content="{{ row.CharacterID }}">{{ row.CharacterName }}</a>
-                </td>
+                <td class="price-buyer">{{ row.CharacterName }}</td>
                 <td class="price-date" data-sort-value="{{ row.PurchaseDate }}">{{ row.PurchaseDate|dateSimple }}</td>
             </tr>
         {% else %}

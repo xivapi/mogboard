@@ -2,9 +2,7 @@
 
 {% block body %}
     <div class="page-retainer">
-        {% if retainer.hidden and (auth.user(false) != retainer.user) %}
-        <div class="alert-dark tac">This retainer is private.</div>
-        {% else %}
+
         <h1>{{ retainer.name }}</h1>
         <small>
             {% if retainer.confirmed %}
@@ -44,7 +42,7 @@
                             <tr>
                                 <td>
                                     {% include 'Product/prices.html.twig' with {
-                                        'prices': listing.Prices,
+                                    'prices': listing.Prices,
                                     } %}
                                 </td>
                             </tr>
@@ -59,6 +57,6 @@
                 </div>
             {% endif %}
         </div>
-        {% endif %}
+
     </div>
 {% endblock %}

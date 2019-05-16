@@ -25,7 +25,6 @@ class UserController extends AbstractController
      */
     public function account(Request $request)
     {
-        $this->users->setLastUrl($request);
         return $this->render('UserAccount/account.html.twig');
     }
     

@@ -7,6 +7,7 @@ use App\Common\Entity\UserRetainer;
 use App\Common\Game\GameServers;
 use App\Common\Repository\UserRetainerRepository;
 use App\Common\User\Users;
+use App\Entity\CompanionRetainer;
 use App\Exceptions\GeneralJsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
 use App\Service\Companion\Companion;
@@ -44,38 +45,32 @@ class UserRetainers
     }
 
     /**
-     * Get a retainer
+     * Get a retainer, the logged in user MUST be the owner.
      */
-    public function get(string $unique, bool $confirmed = false)
+    public function get(string $retainerId)
     {
+        $user = $this->users->getUser(true);
+
         return $this->repository->findOneBy([
-            'uniq'    => $unique,
-            'confirmed' => $confirmed,
-        ]);
-    }
-    
-    /**
-     * Get a retainer via its slug
-     */
-    public function getSlugRetainer(string $slug)
-    {
-        return $this->repository->findOneBy([
-            'slug' => $slug,
-        ]);
-    }
-    
-    /**
-     * Get a retainer via its apiRetainerId
-     */
-    public function getCompanionApiRetainer(string $apiRetainerId)
-    {
-        return $this->repository->findOneBy([
-            'apiRetainerId' => $apiRetainerId,
+            'id'        => $retainerId,
+            'user'      => $user,
+            'confirmed' => true,
         ]);
     }
 
     /**
-     * Add a new character to the site
+     * Get a retainer
+     */
+    public function getViaUniqueRef(string $unique, bool $confirmed = false)
+    {
+        return $this->repository->findOneBy([
+            'uniq'      => $unique,
+            'confirmed' => $confirmed,
+        ]);
+    }
+
+    /**
+     * Add a new user retainer to the site
      */
     public function add(Request $request)
     {
@@ -89,7 +84,7 @@ class UserRetainers
         
         $unique = UserRetainer::unique($name, $server);
 
-        if ($this->get($unique, true)) {
+        if ($this->getViaUniqueRef($unique, true)) {
             throw new GeneralJsonException('Retainer already exists and is confirmed.');
         }
 
@@ -220,26 +215,15 @@ class UserRetainers
         $this->em->flush();
         return true;
     }
-    
+
     /**
-     * Toggle privacy of a retainer
-     */
-    public function togglePrivacy(UserRetainer $userRetainer)
-    {
-        if ($userRetainer->getUser() !== $this->users->getUser(true)) {
-            throw new UnauthorisedRetainerOwnershipException();
-        }
-        
-        $userRetainer->setHidden(!$userRetainer->isHidden());
-        $this->save($userRetainer);
-        return true;
-    }
-    
-    /**
-     * This will remove retainers which have not been verified for more than 2 hours.
+     * This will remove retainers which have not been verified for more than 24 hours.
      */
     public function removeLurkingRetainers()
     {
+        $console = new ConsoleOutput();
+        $console->writeln("Removing lurking retainers.");
+
         $retainers = $this->repository->findBy([ 'confirmed' => false ], [ 'added' => 'asc' ]);
         $deadline  = time() - self::MAX_LURK_TIME;
         
@@ -250,6 +234,8 @@ class UserRetainers
                 $this->em->flush();
             }
         }
+
+        $console->writeln("Complete");
     }
     
     /**
@@ -293,5 +279,34 @@ class UserRetainers
             $this->em->persist($retainer);
             $this->em->flush();
         }
+
+        $console->writeln("Complete");
+    }
+
+    /**
+     * Get the retainer store!
+     * todo - move this into its own service
+     */
+    public function getStore(string $retainerId)
+    {
+        /** @var UserRetainer $retainer */
+        $retainer = $this->get($retainerId);
+
+        if ($retainer === null) {
+            return false;
+        }
+
+        // verify the user owns this retainer
+        if ($retainer->getUser() !== $this->users->getUser(true)) {
+            return false;
+        }
+
+        // todo - move this to private endpoints
+        $items = (new XIVAPI())->market->retainer($retainer->getApiRetainerId());
+
+        return [
+            'retainer' => $retainer,
+            'items'    => $items,
+        ];
     }
 }

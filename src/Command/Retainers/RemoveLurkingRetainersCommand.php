@@ -29,6 +29,5 @@ class RemoveLurkingRetainersCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->userRetainers->removeLurkingRetainers();
-        $output->writeln('Done');
     }
 }
