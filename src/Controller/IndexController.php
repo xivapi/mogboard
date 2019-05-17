@@ -70,6 +70,7 @@ class IndexController extends AbstractController
     }
     
     /**
+     * @Route("/news}", name="news_index")
      * @Route("/news/{slug}", name="news")
      */
     public function news(string $slug)
@@ -79,6 +80,8 @@ class IndexController extends AbstractController
             'retainer-characters-privacy-changes'           => '2019_05_19_retainer_characters.html.twig'
         ];
 
+        $slug = $slug ?: end($templates);
+        
         return $this->render('News/'. $templates[$slug]);
     }
     

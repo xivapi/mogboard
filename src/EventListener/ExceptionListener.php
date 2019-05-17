@@ -91,7 +91,7 @@ class ExceptionListener implements EventSubscriberInterface
             Redis::Cache()->set(__METHOD__ . $error->hash, true);
             Discord::mog()->sendMessage(
                 DiscordConstants::ROOM_ERRORS,
-                "```". json_encode($error, JSON_PRETTY_PRINT) ."```"
+                "```json\n". json_encode($error, JSON_PRETTY_PRINT) ."\n```"
             );
         }
 

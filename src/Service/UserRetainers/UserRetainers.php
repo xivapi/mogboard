@@ -8,7 +8,6 @@ use App\Common\Game\GameServers;
 use App\Common\Repository\UserRetainerRepository;
 use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
-use App\Entity\CompanionRetainer;
 use App\Exceptions\GeneralJsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
 use App\Service\Companion\Companion;
