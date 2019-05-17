@@ -141,4 +141,26 @@ class UserCharacters
         $b = round(microtime(true) - $a, 3);
         $console->writeln("Done! {$b}");
     }
+
+    /**
+     * Get a characters history
+     */
+    public function getHistory(UserCharacter $userCharacter)
+    {
+        $key = __METHOD__ . $userCharacter->getId();
+
+        // check cache
+        if ($data = Redis::cache()->get($key)) {
+            return $data;
+        }
+
+        // get retainer items
+        $data = (new XIVAPI())->_private->characterHistory(
+            getenv('XIVAPI_COMPANION_KEY'),
+            $userCharacter->getLodestoneId()
+        );
+
+        Redis::cache()->set($key, $data);
+        return $data;
+    }
 }

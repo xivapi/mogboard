@@ -6,6 +6,7 @@ use App\Common\Entity\Maintenance;
 use App\Common\Entity\UserRetainer;
 use App\Common\Game\GameServers;
 use App\Common\Repository\UserRetainerRepository;
+use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
 use App\Entity\CompanionRetainer;
 use App\Exceptions\GeneralJsonException;
@@ -286,26 +287,22 @@ class UserRetainers
     /**
      * Get the retainer store!
      */
-    public function getStore(string $retainerId)
+    public function getStore(UserRetainer $retainer)
     {
-        /** @var UserRetainer $retainer */
-        $retainer = $this->get($retainerId);
+        $key = __METHOD__ . $retainer->getId();
 
-        if ($retainer === null) {
-            return null;
+        // check cache
+        if ($data = Redis::cache()->get($key)) {
+            return $data;
         }
 
-        // verify the user owns this retainer
-        if ($retainer->getUser() !== $this->users->getUser(true)) {
-            return null;
-        }
+        // get retainer items
+        $data = (new XIVAPI())->_private->retainerItems(
+            getenv('XIVAPI_COMPANION_KEY'),
+            $retainer->getApiRetainerId()
+        );
 
-        // todo - move this to private endpoints
-        $items = (new XIVAPI(XIVAPI::DEV))->_private->retainerItems(getenv('XIVAPI_COMPANION_KEY'), $retainer->getApiRetainerId());
-        
-        return [
-            'retainer' => $retainer,
-            'items'    => $items->Items,
-        ];
+        Redis::cache()->set($key, $data);
+        return $data;
     }
 }

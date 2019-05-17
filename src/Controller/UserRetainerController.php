@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Common\Entity\UserRetainer;
+use App\Common\Exceptions\BasicException;
 use App\Common\User\Users;
 use App\Service\UserRetainers\UserRetainers;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -59,27 +60,29 @@ class UserRetainerController extends AbstractController
     }
     
     /**
-     * @Route("/retainers/{retainerId}/shop", name="retainer_shop")
+     * @Route("/retainers/{retainer}/shop", name="retainer_shop")
      */
-    public function store(Request $request, string $retainerId)
+    public function store(Request $request, UserRetainer $retainer)
     {
-        $user = $this->users->getUser();
+        $user = $this->users->getUser(true);
         $this->users->setLastUrl($request);
 
-        // you must be online to view stores
-        if ($user === null) {
-            return $this->redirectToRoute('user_account');
+        // verify the user owns this retainer
+        if ($retainer->getUser() !== $user) {
+            throw new BasicException('Sorry, you do not own this retainer and will not be able to view its shop.');
         }
-        
-        $store = $this->retainers->getStore($retainerId);
-        
-        if ($store == null) {
+
+        $items = $this->retainers->getStore($retainer);
+        $items = $items->Items;
+
+        if ($items == null) {
             return $this->redirectToRoute('404');
         }
 
         // get the retainer store for this user
         return $this->render('UserRetainers/store.html.twig', [
-            'store' => $store,
+            'retainer' => $retainer,
+            'store'    => $items,
         ]);
     }
 }

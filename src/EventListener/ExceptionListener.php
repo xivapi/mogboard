@@ -3,16 +3,18 @@
 namespace App\EventListener;
 
 use App\Common\Constants\DiscordConstants;
+use App\Common\Exceptions\BasicException;
 use App\Common\Service\Redis\Redis;
 use App\Common\ServicesThirdParty\Discord\Discord;
 use App\Common\Utils\Environment;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment as TwigEnvironment;
 
-class ExceptionListener extends EventSubscriberInterface
+class ExceptionListener implements EventSubscriberInterface
 {
     /** @var TwigEnvironment */
     private $twig;
@@ -39,8 +41,29 @@ class ExceptionListener extends EventSubscriberInterface
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        $ex = $event->getException();
+        /**
+         * If we're in dev mode, show the full error
+         */
+        if (getenv('APP_ENV') == 'dev') {
+            return null;
+        }
 
+        /**
+         * Make sure it isn't an image or some kind of file
+         */
+        $pi = pathinfo(
+            $event->getRequest()->getPathInfo()
+        );
+
+        if (isset($pi['extension']) && strlen($pi['extension'] > 2)) {
+            $event->setResponse(new Response("File not found, sorry. Try harder.", 404));
+            return null;
+        }
+
+        /**
+         * Handle error info
+         */
+        $ex    = $event->getException();
         $error = (Object)[
             'message'       => $ex->getMessage() ?: '(no-exception-message)',
             'code'          => $ex->getCode() ?: 200,
@@ -57,9 +80,14 @@ class ExceptionListener extends EventSubscriberInterface
         ];
 
         /**
-         * Send error to discord
+         * Send error to discord if not sent within the hour AND the exception is not a valid one.
          */
-        if (Redis::Cache()->get(__METHOD__ . $error->hash) == null) {
+        $validExceptions = [
+            BasicException::class,
+            NotFoundHttpException::class
+        ];
+
+        if (Redis::Cache()->get(__METHOD__ . $error->hash) == null && !in_array($error->ex_class, $validExceptions)) {
             Redis::Cache()->set(__METHOD__ . $error->hash, true);
             Discord::mog()->sendMessage(
                 DiscordConstants::ROOM_ERRORS,

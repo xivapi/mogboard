@@ -37,6 +37,9 @@
                         {{ character.server }}
                         - Updated: {{ character.updated|date }}
                     </p>
+                    <p>
+                        <a href="{{ path('character_history', { character: character.id }) }}">View Purchase History</a>
+                    </p>
                 </div>
             </div>
         {% else %}
