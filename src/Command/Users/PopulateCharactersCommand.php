@@ -28,6 +28,6 @@ class PopulateCharactersCommand extends Command
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->characters->autoupdate();
+        $this->characters->autoUpdateCharacterDetails();
     }
 }

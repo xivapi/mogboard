@@ -4,6 +4,7 @@ namespace App\Service\UserCharacters;
 
 use App\Common\Entity\UserCharacter;
 use App\Common\Repository\UserCharacterRepository;
+use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
 use App\Exceptions\GeneralJsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
@@ -107,7 +108,7 @@ class UserCharacters
     /**
      * Auto-update information on characters, eg: Name, Server and Avatar
      */
-    public function autoupdate()
+    public function autoUpdateCharacterDetails()
     {
         $a = microtime(true);
         $console = new ConsoleOutput();
