@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Common\ServicesThirdParty\Discord\Discord;
 use App\Common\User\Users;
 use App\Common\Utils\Mail;
 use App\Service\Companion\CompanionStatistics;
