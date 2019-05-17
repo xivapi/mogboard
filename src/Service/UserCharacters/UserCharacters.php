@@ -163,4 +163,22 @@ class UserCharacters
         Redis::cache()->set($key, $data);
         return $data;
     }
+
+    public function getCharacter(UserCharacter $userCharacter)
+    {
+        $key = __METHOD__ . $userCharacter->getId();
+
+        // check cache
+        if ($data = Redis::cache()->get($key)) {
+            return $data;
+        }
+
+        // get retainer items
+        $data = (new XIVAPI())->character->get(
+            $userCharacter->getLodestoneId(), [ 'AC', 'FR', 'FC', 'FCM' ], true
+        );
+
+        Redis::cache()->set($key, $data);
+        return $data;
+    }
 }

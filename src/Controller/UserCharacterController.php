@@ -60,7 +60,8 @@ class UserCharacterController extends AbstractController
 
         $this->users->setLastUrl($request);
 
-        $history = $this->characters->getHistory($character);
+        $history   = $this->characters->getHistory($character);
+        $profile   = $this->characters->getCharacter($character);
 
         if ($history == null) {
             return $this->redirectToRoute('404');
@@ -69,6 +70,7 @@ class UserCharacterController extends AbstractController
         // get the retainer store for this user
         return $this->render('UserCharacter/history.html.twig', [
             'character' => $character,
+            'profile'   => $profile,
             'history'   => $history,
         ]);
     }
