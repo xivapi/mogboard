@@ -60,6 +60,14 @@ class IndexController extends AbstractController
     {
         return $this->render('Pages/404.html.twig');
     }
+
+    /**
+     * @Route("/error", name="error")
+     */
+    public function error()
+    {
+        throw new \Exception("This is a test error");
+    }
     
     /**
      * @Route("/news", name="news")
