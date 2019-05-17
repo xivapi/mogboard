@@ -56,18 +56,15 @@ class UserListsController extends AbstractController
     }
     
     /**
-     * @Route("/list/{slug}", name="lists_view")
+     * @Route("/list/{list}", name="lists_view")
      */
-    public function view(string $slug)
+    public function view(UserList $list)
     {
-        $list = $this->lists->getSlugList($slug);
-        
-        if ($list === null) {
-            throw new NotFoundHttpException('Could not find item list for the requested url.');
-        }
-        
+        $market = $this->lists->getListMarketData($list);
+
         return $this->render('UserLists/index.html.twig', [
-            'list' => $list
+            'list'   => $list,
+            'market' => $market,
         ]);
     }
 
@@ -122,7 +119,7 @@ class UserListsController extends AbstractController
         
         if ($request->get('redirect')) {
             return $this->redirectToRoute('lists_view', [
-                'slug' => $list->getSlug()
+                'list' => $list->getId()
             ]);
         }
         

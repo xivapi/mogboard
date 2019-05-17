@@ -94,7 +94,6 @@ class UserRetainers
             ->setName($name)
             ->setServer($server)
             ->setUniq($unique)
-            ->setSlug()
             ->setConfirmItem($itemId)
             ->setConfirmPrice(mt_rand(1000000, 15000000));
 

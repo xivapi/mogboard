@@ -86,8 +86,7 @@ class UserLists
             ->setName('Favourites')
             ->setCustomType(UserList::CUSTOM_FAVOURITES)
             ->setCustom(true)
-            ->setUser($user)
-            ->setSlug();
+            ->setUser($user);
         
         return $list;
     }
@@ -111,22 +110,9 @@ class UserLists
             ->setName('Recently Viewed')
             ->setCustomType(UserList::CUSTOM_RECENTLY_VIEWED)
             ->setCustom(true)
-            ->setUser($user)
-            ->setSlug();
+            ->setUser($user);
     
         return $list;
-    }
-    
-    /**
-     * Get a list via its slug
-     */
-    public function getSlugList($slug)
-    {
-        $filters = [
-            'slug' => $slug
-        ];
-        
-        return $this->repository->findOneBy($filters);
     }
 
     /**
@@ -174,8 +160,7 @@ class UserLists
         $list
             ->setUser($this->users->getUser(true))
             ->setName(trim($name))
-            ->setItems([ $itemId ])
-            ->setSlug();
+            ->setItems([ $itemId ]);
 
         $this->save($list);
         return $list;
@@ -215,5 +200,13 @@ class UserLists
 
         $this->em->remove($list);
         $this->em->flush();
+    }
+
+    /**
+     * Get market data for a list
+     */
+    public function getListMarketData(UserList $list)
+    {
+
     }
 }

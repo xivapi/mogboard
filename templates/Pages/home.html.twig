@@ -95,7 +95,7 @@
                     <h2>Item Lists</h2>
                     {% for list in auth.user.lists %}
                         <div class="home-itemlist">
-                            <h3>Items: {{ list.items|length }} - <a href="{{ path('lists_view', { slug: list.slug }) }}">{{ list.name }}</a></h3>
+                            <h3>Items: {{ list.items|length }} - <a href="{{ path('lists_view', { list: list.id }) }}">{{ list.name }}</a></h3>
                             <ul>
                                 {% for itemId in list.items %}
                                     {% set item = game().item(itemId) %}
