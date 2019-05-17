@@ -34,8 +34,6 @@ class CompanionCensus
      */
     public function generate($item, $market): self
     {
-        # file_put_contents(__DIR__.'/market.json', json_encode($market, JSON_PRETTY_PRINT));
-        
         $this->item = $item;
         
         // server users home world
@@ -80,9 +78,7 @@ class CompanionCensus
         $this->buildChartBubble('_Global', $this->census->_Global);
         $this->calculateAverageSaleDuration('_Global', $this->census->_Global);
         $this->calculateNumericStatistics('_Global', $this->census->_Global);
-        
-        # file_put_contents(__DIR__.'/market_census.json', json_encode($this->census, JSON_PRETTY_PRINT));
-        
+
         return $this;
     }
     
