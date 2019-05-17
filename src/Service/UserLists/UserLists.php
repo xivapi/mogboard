@@ -207,6 +207,6 @@ class UserLists
      */
     public function getListMarketData(UserList $list)
     {
-
+        $this->companion->getByServersForItems();
     }
 }

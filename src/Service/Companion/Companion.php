@@ -28,4 +28,9 @@ class Companion
     {
         return $this->xivapi->market->item($itemId, [], $dataCenter);
     }
+
+    public function getByServersForItems(array $items, array $servers)
+    {
+        //return $this->xivapi->market->
+    }
 }
