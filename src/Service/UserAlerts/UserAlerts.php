@@ -97,7 +97,7 @@ class UserAlerts
     /**
      * Save a new or existing alert
      */
-    public function save(UserAlert $alert, bool $sendDiscordMessage = true)
+    public function save(UserAlert $alert)
     {
         $user = $this->users->getUser(true);
         
@@ -107,11 +107,7 @@ class UserAlerts
 
         $this->em->persist($alert);
         $this->em->flush();
-        
-        if ($sendDiscordMessage && $alert->isNotifiedViaDiscord()) {
-            # $this->discord->sendSavedAlertNotification($alert);
-        }
-        
+
         return true;
     }
 
@@ -132,10 +128,6 @@ class UserAlerts
         $this->em->remove($alert);
         $this->em->flush();
 
-        if ($alert->isNotifiedViaDiscord()) {
-            # $this->discord->sendDeletedAlertNotification($alert);
-        }
-        
         return true;
     }
 }

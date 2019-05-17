@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 class Popularity
 {
     const REDIS_KEY = 'mogboard_trending_items';
-    const MAX_HITS  = 2;
+    const MAX_HITS  = 3;
 
     /** @var EntityManagerInterface */
     private $em;
