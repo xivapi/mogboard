@@ -20,22 +20,24 @@
                 </div>
             {% endif %}
 
-            {#
             <div class="home-box2">
                 <div class="home-row flex">
                     <div class="flex_5 tac">
                         <img src="/i/game/updates.png">
                     </div>
                     <div class="flex_95">
-                        <strong>Auto-Update going well + Manual Update for Patrons</strong><br>
-                        Items are updating on schedule really well, in addition some changes have been
-                        made to improve the "Last Updated" time. In addition patrons can now manually request an update.
-                        This will be pushed out to members in a future update.
-                        <a href="{{ path('news') }}">Read more about it here</a>.
+                        <div>
+                            <strong>Sunday 19th May, 2019 - Retainer, Character page changes + Privacy Changes</strong>
+                        </div>
+
+                        This weekend brings new additions to the Retainer pages, as well as a brand new page: Character Purchase History. Here you can
+                        view everything you've bought since Mogboards inception. There have also been changes to list pages to bring in market information.
+                        Along with these changes, both Retainer pages and Character pages are now private.
+
+                        <a href="{{ path('news', { slug: 'retainer-characters-privacy-changes'}) }}">Read more about it here</a>.
                     </div>
                 </div>
             </div>
-            #}
 
             {% if auth.online() %}
                 {# Retainers #}
@@ -47,7 +49,7 @@
                                 {{ retainer.name }}
                             </div>
                             <div>
-                                <a href="{{ path('retainer_shop', { retainerId: retainer.id }) }}">View Retainer Shop</a>
+                                <a href="{{ path('retainer_shop', { retainer: retainer.id }) }}">View Retainer Shop</a>
                             </div>
                         </div>
                     {% else %}

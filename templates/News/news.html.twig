@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="page">
+        <div class="mogboard-news">
+            <h6>mog news</h6>
+        </div>
+        <div class="mog-news">
+            <div class="flex">
+                <div class="flex_10">
+                    <img src="/i/bg/me.png" class="mog-news-avatar">
+                </div>
+                <div class="flex_90 mog-news-post">
+                    {% block news %}{% endblock %}
+                    <p>
+                        - Thank you, <em>Premium Virtue (Phoenix)</em>
+                    </p>
+                </div>
+            </div>
+            <br><br>
+        </div>
+    </div>
+{% endblock %}
