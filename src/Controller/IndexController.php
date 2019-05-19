@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Common\ServicesThirdParty\Discord\Discord;
 use App\Common\User\Users;
 use App\Common\Utils\Mail;
+use App\Service\Companion\CompanionMarketActivity;
 use App\Service\Companion\CompanionStatistics;
 use App\Service\Items\Popularity;
 use App\Common\Service\Redis\Redis;
@@ -19,24 +20,25 @@ class IndexController extends AbstractController
     private $itemPopularity;
     /** @var CompanionStatistics */
     private $companionStatistics;
+    /** @var CompanionMarketActivity */
+    private $companionMarketActivity;
     /** @var Users */
     private $users;
     /** @var Mail */
     private $mail;
-    /** @var XIVAPI */
-    private $xivapi;
     
     public function __construct(
         Popularity $itemPopularity,
         CompanionStatistics $companionStatistics,
+        CompanionMarketActivity $companionMarketActivity,
         Users $users,
         Mail $mail
     ) {
-        $this->itemPopularity      = $itemPopularity;
-        $this->companionStatistics = $companionStatistics;
-        $this->users               = $users;
-        $this->mail                = $mail;
-        $this->xivapi              = new XIVAPI();
+        $this->itemPopularity           = $itemPopularity;
+        $this->companionStatistics      = $companionStatistics;
+        $this->companionMarketActivity  = $companionMarketActivity;
+        $this->users                    = $users;
+        $this->mail                     = $mail;
     }
     
     /**
@@ -46,10 +48,12 @@ class IndexController extends AbstractController
     {
         $this->users->setLastUrl($request);
         
-        return $this->render('Pages/home.html.twig',[
+        // grab the users market feed
+        $marketFeed = $this->companionMarketActivity->getFeed($this->users->getUser());
+        
+        return $this->render('Home/home.html.twig',[
+            'market_feed'   => $marketFeed,
             'popular_items' => $this->itemPopularity->get(),
-            'market_stats'  => $this->companionStatistics->stats(),
-            'server_status' => $this->xivapi->market->online(),
         ]);
     }
     
@@ -205,7 +209,8 @@ class IndexController extends AbstractController
      */
     public function serverStatus()
     {
-        $status  = $this->xivapi->market->online();
+        $xivapi  = new XIVAPI();
+        $status  = $xivapi->market->online();
         $list    = [];
         
         foreach ($status->Status as $i => $serverStatus) {

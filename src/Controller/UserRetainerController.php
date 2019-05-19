@@ -79,10 +79,13 @@ class UserRetainerController extends AbstractController
             return $this->redirectToRoute('404');
         }
 
+        $marketStats = $this->retainers->getMarketData($items);
+
         // get the retainer store for this user
         return $this->render('UserRetainers/store.html.twig', [
-            'retainer' => $retainer,
-            'store'    => $items,
+            'retainer'     => $retainer,
+            'store'        => $items,
+            'market_stats' => $marketStats,
         ]);
     }
 }

@@ -1,335 +1,372 @@
 .home {
     display: flex;
-    max-width: 1600px;
     width: 100%;
     margin: 0 auto;
 
-    > div:first-of-type {
-        flex: 0 1 calc(100% - 400px);
-        padding-right: 20px;
-    }
+    > div:nth-of-type(1) {
+        width: 300px;
 
-    > div:last-of-type {
-        flex: 0 1 400px;
-    }
+        h3 {
+            font-size: 20px;
 
-    @include mq($until: desktop) {
-        display: block;
-
-        > div:first-of-type,
-        > div:last-of-type {
-            flex: none;
-            width: auto;
-            margin: 0 10px;
-            padding: 0;
-        }
-    }
-
-    h2 {
-        font-weight: 500;
-        font-size: 17px;
-        padding: 15px;
-        text-transform: uppercase;
-        text-shadow: none;
-        background-color: var(--dark-blue);
-        margin: 0;
-    }
-
-    h3 {
-        font-weight: 500;
-        font-size: 18px;
-        text-shadow: none;
-        color: var(--color10);
-        margin: 0;
-    }
-
-    h4 {
-        font-weight: 500;
-        font-size: 20px;
-        text-transform: uppercase;
-        text-shadow: none;
-        color: #888;
-    }
-
-    h5 {
-        font-size: 16px;
-        font-weight: 500;
-        text-transform: uppercase;
-        text-shadow: none;
-        color: var(--blue-3x);
-        letter-spacing: 2px;
-        text-align: center;
-    }
-
-    .home-box,
-    .home-box2 {
-        background-color: var(--dark-blue);
-        box-shadow: 0 1px 3px #000;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        overflow: hidden;
-
-        h4 {
-            font-size: 22px;
-            font-weight: 300;
-            color: var(--highlight);
-            text-transform: uppercase;
-            margin: 0 0 2px 0;
+            img {
+                height: 16px;
+                display: inline-table;
+                vertical-align: middle;
+                margin: -3px 7px 0 0;
+            }
         }
 
-        .home-row {
+        p {
+            line-height: 22px;
+            text-align: justify;
+        }
+
+        strong {
+            text-align: left;
+            display: block;
+            margin: 0 0 10px 0;
+        }
+
+        div {
+            background-color: var(--color5);
+            box-shadow: 0 1px 3px #000;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        button, a {
+            background-color: transparent;
+            border: none;
             border-bottom: solid 1px #000;
-            line-height: 26px;
+            font-size: 15px;
+            padding: 10px;
+            text-align: left;
+            display: block;
+            width: 100%;
+            outline: none;
+            cursor: pointer;
+            color: #fff;
 
-            > div {
-                padding: 12px;
+            &:hover {
+                background-color: var(--default-2x);
             }
 
             img {
                 display: inline-table;
-                height: 32px;
+                height: 18px;
+                border-radius: 40px;
+                vertical-align: middle;
+                margin: -3px 5px 0 0;;
             }
         }
     }
 
-    .home-box2 {
-        background-color: var(--dark-blue2);
-    }
+    > div:nth-of-type(2) {
+        width: calc(100% - 300px - 360px);
+        padding: 0 20px;
 
-    .home-logged-out {
-        padding: 150px 30%;
-        text-align: center;
-        font-size: 24px;
-        font-weight: 300;
-        line-height: 34px !important;
+        .home-tab {
+            display: none;
 
-        background-image: url("/i/bg/homepage.png");
-        background-size: cover;
-        background-position: center;
-        box-shadow: inset 0 0 1px 1px rgba(255,255,255,0.1);
-
-        @include mq($until: desktop) {
-            padding: 30px 15px;
-        }
-
-        a {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 5px;
-            background-color: rgba(119, 36, 183, 0.86);
-            color: #fff;
-            font-size: 20px;
-            box-shadow: 0 1px 3px #000;
+            &.open {
+                display: block;
+            }
         }
     }
 
-    //
-    // Patreon
-    // Discord
-    //
-    .patreon-discord {
-        display: flex;
-        overflow: hidden;
+    > div:nth-of-type(3) {
+        width: 360px;
 
-        a {
-            flex: 0 1 50%;
-            display: inline-block;
-            height: 60px;
-            line-height: 60px;
+        h4 {
             text-align: center;
-            position: relative;
-
-            > span {
-                transition: 150ms cubic-bezier(0.4, 0, 1, 1);
-                display: inline-block;
-                position: relative;
-            }
-
-            &:hover > span {
-                transform: scale(1.4);
-            }
-
-            &.patreon {
-                background-color: #f86754;
-                border-left: solid 2px #000;
-
-                img {
-                    vertical-align: middle;
-                    height: 60px;
-                }
-            }
-
-            &.discord {
-                background-color: #7289DA;
-                font-weight: bold;
-                text-shadow: none;
-                color: #fff;
-
-                img {
-                    vertical-align: middle;
-                    height: 30px;
-                }
-            }
-        }
-    }
-
-    //
-    // Trending
-    //
-    .home-trending {
-        > div {
-            display: flex;
-            border-bottom: solid 1px #000;
-
-            > div:first-of-type {
-                flex: 0 1 50px;
-                border-right: solid 1px #000;
-                overflow: hidden;
-                position: relative;
-                width: 50px;
-                height: 50px;
-
-                img {
-                    position: absolute;
-                    width: 55px;
-                    height: 55px;
-                    top: 50%; left: 50%;
-                    transform: translate(-50%, -50%);
-                }
-            }
-
-            > div:last-of-type {
-                flex: 0 1 calc(100% - 50px);
-                padding-left: 10px;
-
-                > div {
-                    margin-top: 8px;
-                }
-
-                small {
-                    font-size: 12px;
-                }
-            }
-        }
-    }
-
-    //
-    // Mog Market Stats
-    //
-    .home-mog-status {
-        small {
-            font-size: 12px;
-            font-weight: 500;
-            display: block;
+            font-weight: 400;
+            font-size: 18px;
+            letter-spacing: 1px;
             text-transform: uppercase;
             text-shadow: none;
-            color: var(--color9);
+            color: #666;
+        }
+    }
+}
+
+.home-feed {
+    h4 {
+        font-size: 14px;
+    }
+
+    h5 {
+        font-size: 18px;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    h6 {
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: #666;
+        margin: 0 0 10px 0;
+    }
+
+    .hf-row {
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        background-color: #222;
+        padding: 15px;
+
+        &.hf-row-LIST_PRICES {
+            border-left: solid 5px var(--blue);
         }
 
-        .home-mog-queue {
-            font-size: 14px;
-            background-color: rgba(20,20,20,0.3);
-            padding: 5px 10px !important;
+        &.hf-row-ALERT_EVENT {
+            border-left: solid 5px var(--green-3x);
+        }
 
-            span {
-                display: inline-block;
+        img {
+            vertical-align: middle;
+            margin: -3px 0 0 0;
+        }
+
+        .text-gray {
+            font-size: 14px;
+        }
+    }
+}
+
+.home-logged-out {
+    border-radius: 5px;
+    padding: 150px 30%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 34px !important;
+
+    background-image: url("/i/bg/homepage.png");
+    background-size: cover;
+    background-position: center;
+    box-shadow: inset 0 0 1px 1px rgba(255,255,255,0.1);
+
+    @include mq($until: desktop) {
+        padding: 30px 15px;
+    }
+
+    a {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: rgba(119, 36, 183, 0.86);
+        color: #fff;
+        font-size: 20px;
+        box-shadow: 0 1px 3px #000;
+    }
+}
+
+.home-box,
+.home-box2 {
+    background-color: var(--dark-blue);
+    box-shadow: 0 1px 3px #000;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    overflow: hidden;
+
+    h3 {
+        font-size: 20px;
+        font-weight: 400;
+    }
+
+    h4 {
+        font-size: 22px;
+        font-weight: 300;
+        color: var(--highlight);
+        text-transform: uppercase;
+        margin: 0 0 2px 0;
+    }
+
+    .home-row {
+        border-bottom: solid 1px #000;
+        line-height: 26px;
+
+        > div {
+            padding: 12px;
+        }
+
+        img {
+            display: inline-table;
+            height: 32px;
+        }
+    }
+}
+
+.home-box2 {
+    background-color: #222;
+    border-left: solid 5px #444;
+    padding: 20px;
+}
+
+.patreon-discord {
+    display: flex;
+    overflow: hidden;
+
+    a {
+        flex: 0 1 50%;
+        display: inline-block;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        position: relative;
+
+        > span {
+            transition: 150ms cubic-bezier(0.4, 0, 1, 1);
+            display: inline-block;
+            position: relative;
+        }
+
+        &:hover > span {
+            transform: scale(1.4);
+        }
+
+        &.patreon {
+            background-color: #f86754;
+            border-left: solid 2px #000;
+            overflow: hidden;
+
+            img {
+                vertical-align: middle;
+                height: 60px;
+            }
+        }
+
+        &.discord {
+            background-color: #7289DA;
+            font-weight: bold;
+            text-shadow: none;
+            overflow: hidden;
+            color: #fff;
+
+            img {
+                vertical-align: middle;
+                height: 30px;
             }
         }
     }
+}
 
-    //
-    // Home Alerts
-    //
-    .home-alert-row {
-        padding: 15px;
-        border-bottom: solid 1px #000;
-        display: flex;
+.home-alert-row {
+    padding: 15px;
+    border-bottom: solid 1px #000;
+    display: flex;
 
+    > div:first-of-type {
+        flex: 0 1 64px;
+    }
+
+    > div:last-of-type {
+        flex: 0 1 calc(100% - 64px);
+        padding-left: 15px;
+    }
+
+    .item_icon {
+        height: 64px;
+        width: 64px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px #000;
+    }
+
+    .home-alert-item-info {
         > div:first-of-type {
-            flex: 0 1 64px;
+            font-size: 20px;
+
+            small {
+                display: block;
+                margin: 5px 0 0 0;
+                color: #888;
+                font-size: 14px;
+            }
         }
 
         > div:last-of-type {
-            flex: 0 1 calc(100% - 64px);
-            padding-left: 15px;
+            h4 {
+                font-size: 14px;
+                margin: 0 0 15px 0;
+            }
         }
 
-        .item_icon {
-            height: 64px;
-            width: 64px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px #000;
-        }
-
-        .home-alert-item-info {
-            > div:first-of-type {
-                font-size: 20px;
-                margin-bottom: 10px;
-            }
-
-            > div:last-of-type {
-                > strong {
-                    display: block;
-                    font-size: 12px;
-                    font-weight: 500;
-                    text-shadow: none;
-                    color: var(--color6);
-                    margin-bottom: 8px;
-                }
-
-                .home-alert-watcher {
-                    padding: 6px 10px;
-                    font-size: 14px;
-                }
-            }
+        .home-alert-watcher {
+            margin: 0 0 15px 0;
         }
     }
+}
 
-    //
-    // Home Item Lists
-    //
-    .home-itemlist {
-        padding: 15px;
+//
+// Home Item Lists
+//
+.home-itemlist {
+    padding: 15px;
 
-        ul {
-            margin: 10px 0 0 0;
-            list-style: none;
+    ul {
+        padding: 0;
+        margin: 10px 0 0 0;
+        list-style: none;
 
-            li {
-                img {
-                    height: 32px;
-                    vertical-align: middle;
-                    border-radius: 3px;
-                    display: inline-table;
-                    margin: 0 10px 0 0;
-                }
+        li {
+            img {
+                height: 32px;
+                vertical-align: middle;
+                border-radius: 3px;
+                display: inline-table;
+                margin: 0 10px 0 0;
+            }
 
-                small {
-                    display: inline-block;
-                    margin-left: 10px;
-                    font-size: 13px;
-                    text-shadow: none;
-                    color: var(--search-complete);
-                }
+            small {
+                display: inline-block;
+                margin-left: 10px;
+                font-size: 13px;
+                text-shadow: none;
+                color: var(--search-complete);
             }
         }
     }
+}
 
-    //
-    // Retainers
-    //
-    .home-retainer-none {
-        padding: 10px;
-        text-align: center;
-        color: #aaa;
-    }
-    .home-retainer {
-        padding: 15px;
-        border-bottom: solid 1px #000;
+//
+// Trending
+//
+.home-trending {
+    > div {
         display: flex;
+        border-bottom: solid 1px #000;
 
         > div:first-of-type {
-            flex: 0 1 30%;
+            flex: 0 1 50px;
+            border-right: solid 1px #000;
+            overflow: hidden;
+            position: relative;
+            width: 50px;
+            height: 50px;
+
+            img {
+                position: absolute;
+                width: 55px;
+                height: 55px;
+                top: 50%; left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        > div:last-of-type {
+            flex: 0 1 calc(100% - 50px);
+            padding-left: 10px;
+
+            > div {
+                margin-top: 8px;
+            }
+
+            small {
+                font-size: 12px;
+            }
         }
     }
 }

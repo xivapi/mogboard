@@ -22,15 +22,19 @@
         <form method="post" class="modal_form create_list_form">
             {# Name #}
             <p>Option 1) Create a new list:</p>
-            <div>
-                <input name="list_name" id="list_name" type="text" placeholder="Name" class="full">
-            </div>
+            {% if auth.user.lists|length < 12 %}
+                <div>
+                    <input name="list_name" id="list_name" type="text" placeholder="Name" class="full">
+                </div>
+            {% else %}
+                <p>You have reached the maximum of 12 lists. You cannot create anymore.</p>
+            {% endif %}
 
             <br>
 
             {# Lists #}
             <p>Option 2) Use an existing list:</p>
-            <div data-simplebar class="user_lists">
+            <div class="user_lists">
                 <div class="user_lists_loading">Loading your item lists</div>
             </div>
 

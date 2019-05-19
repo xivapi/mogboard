@@ -1,9 +1,9 @@
 // Rarity colors from the game
-.rarity-1 { color: #eee; }
-.rarity-2 { color: #89ffbc; }
-.rarity-3 { color: #3dafff; }
-.rarity-4 { color: #f44bff; }
-.rarity-7 { color: #ff7e85; }
+.rarity-1 { color: #eee !important; &:hover { color: #d6d6d6; } }
+.rarity-2 { color: #89ffbc !important; &:hover { color: #6bd599; } }
+.rarity-3 { color: #3dafff !important; &:hover { color: #3389cb; } }
+.rarity-4 { color: #f44bff !important; &:hover { color: #c53fce; } }
+.rarity-7 { color: #ff7e85 !important; &:hover { color: #c46262; } }
 
 //
 // Primary elements
@@ -840,7 +840,7 @@ ul,ol {
     background-color: var(--default);
 }
 .alert-red {
-    background-color: var(--red);
+    background-color: var(--red-2x);
 }
 .alert-blue {
     background-color: var(--blue);
@@ -1402,5 +1402,38 @@ ul,ol {
                 margin: 6px 0 0 0;
             }
         }
+    }
+}
+
+.error-page {
+    width: 100%;
+    max-width: 800px;
+    margin: 25px auto;
+
+    background-color: var(--color5);
+    box-shadow: 0 1px 3px #000;
+    border-bottom: solid 5px #7a7502;
+    border-radius: 5px;
+    padding: 60px 20px;
+    text-align: center;
+
+    p {
+        font-size: 18px;
+    }
+
+    h2 {
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    img {
+        margin-bottom: 25px;
+        height: 160px;
+    }
+
+    small {
+        margin-top: 20px;
+        font-size: 12px;
+        opacity: 0.5;
     }
 }

@@ -30,7 +30,7 @@ class Popularity
      */
     public function get()
     {
-        return Redis::Cache()->get(self::REDIS_KEY);
+        return Redis::Cache()->get(self::REDIS_KEY) ?: [1675,3,24635,24003,9347,24819,];
     }
 
     /**

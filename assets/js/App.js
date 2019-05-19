@@ -1,4 +1,5 @@
 import Settings from './Settings';
+import Home from './Home';
 import Header from './Header';
 import HeaderUser from './HeaderUser';
 import HeaderCategories from './HeaderCategories';
@@ -20,6 +21,7 @@ Header.watch();
 HeaderCategories.watch();
 HeaderCategories.loadCategories();
 Search.watch();
+Home.watch();
 
 /**
  * Item Pages

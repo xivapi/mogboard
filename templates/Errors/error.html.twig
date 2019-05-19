@@ -2,18 +2,16 @@
 {% set title = 'Something went wrong' %}
 
 {% block body %}
-    <div class="alert-light" style="padding: 50px;">
-        <div class="tac">
-            <h2>Something went wrong!</h2>
-            <p>
-                Error: {{ error.code }} - {{ error.message }}
-            </p>
-            <p>
-                A moogle has been made aware of this problem and will be looking into it for you!
-            </p>
-            <p>
-                <small>hash: {{ error.hash }}</small>
-            </p>
-        </div>
+    <div class="error-page">
+        <img src="/i/game/patch_titan.png">
+        <h2>Something went wrong!</h2>
+        <p>{{ error.code }} - {{ error.message }}</p>
+
+        {% if made_aware %}
+            <p>A moogle has been made aware of this problem and will be looking into it for you!</p>
+        {% else %}
+            <p>If you continue to run into this issue, please jump on the discord for help!</p>
+        {% endif %}
+        <small>{{ error.hash }}</small>
     </div>
 {% endblock %}

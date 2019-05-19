@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="home">
+        <div class="home-nav">
+            {% if auth.online %}
+            <div>
+                <button type="button" data-tab="market_activity">
+                    <img src="/i/game/hammer.png"> Market Activity
+                </button>
+            </div>
+            <h3><img src="/i/svg/bells-light.svg"> Alerts</h3>
+            <div>
+                {% for itemId, alerts in auth.user.alertsPerItem %}
+                    {% set item = game().item(itemId) %}
+                    <button type="button" data-tab="alerts_{{ itemId }}" class="rarity-{{ item.Rarity }}">
+                        <img src="{{ item.Icon|icon }}"> {{ item.Name }}
+                    </button>
+                {% else %}
+                    <span class="text-gray">You have no alerts setup.</span>
+                {% endfor %}
+            </div>
+            <h3><img src="/i/svg/th-list-light.svg"> Lists</h3>
+            <div>
+                {% for list in auth.user.lists %}
+                    <button type="button" data-tab="lists_{{ list.id }}">
+                        {{ list.name }}
+                    </button>
+                {% else %}
+                    <span class="text-gray">You have no lists.</span>
+                {% endfor %}
+            </div>
+            <h3><img src="/i/svg/person-dolly-light.svg"> Retainers</h3>
+            <div>
+                {% for retainer in auth.user.retainers %}
+                    <a href="{{ path('retainer_shop', { retainer: retainer.id }) }}">
+                        {{ retainer.name }}
+                    </a>
+                {% else %}
+                    <span class="text-gray">You have no retainers.</span>
+                {% endfor %}
+            </div>
+
+            {% else %}
+                <section class="tac">
+                    <strong>Logged-out</strong>
+                    <p class="text-gray">
+                        Lists, Alerts, Market activity and retainer links will show here
+                        when you are logged into the site.
+                    </p>
+                </section>
+
+            {% endif %}
+        </div>
+        <div>
+            {% if auth.online %}
+                <div class="home-tab open" id="market_activity">
+                    {# Market Feed #}
+                    {% include 'Home/feed.html.twig' %}
+                </div>
+
+                {# Alerts #}
+                {% for itemId, alerts in auth.user.alertsPerItem %}
+                    <div class="home-tab" id="alerts_{{ itemId }}">
+                        {% include 'Home/alert.html.twig' %}
+                    </div>
+                {% endfor %}
+
+                {# Lists #}
+                {% for list in auth.user.lists %}
+                    <div class="home-tab" id="lists_{{ list.id }}">
+                        {% include 'Home/list.html.twig' %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="home-logged-out">
+                    <div>
+                        <img src="/i/brand/mogboard/mogboard_light.svg" height="42">
+                    </div>
+                    <br>
+                    <strong>Become a member!</strong>
+                    <br>
+                    Create alerts, make lists, add your retainers and get a personalised home page feed!
+                    <br><br>
+                    <a href="{{ path('account_login_discord') }}" class="btn-login">Login via <strong>Discord</strong></a>
+                </div>
+            {% endif %}
+        </div>
+        <div>
+            <div class="home-box patreon-discord">
+                <a href="https://discord.gg/MFFVHWC" class="discord" target="_blank">
+                    <span><img src="/i/brand/discord/logo_white.png"> DISCORD</span>
+                </a>
+                <a href="https://www.patreon.com/vekien" class="patreon" target="_blank">
+                    <span><img src="/i/brand/patreon/logo_name.jpg"></span>
+                </a>
+            </div>
+            <h4>Trending Today</h4>
+            <div class="home-box home-trending">
+                {% for itemId in popular_items %}
+                    {% set item = game().item(itemId) %}
+                    {% if item.ID is defined %}
+                        <div>
+                            <div>
+                                <a href="{{ path('item_page', { itemId: itemId }) }}">
+                                    <img src="{{ item.ID|icon2x }}">
+                                </a>
+                            </div>
+                            <div>
+                                <div>
+                                    {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                                    <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                                </div>
+                                <small>{{ item.ItemSearchCategory.Name ?? '(Cannot be sold)' }}</small>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -840,12 +840,9 @@
     }
 
     .user_lists {
-        border: solid 1px #000;
-        background-color: #111;
-        border-radius: 5px;
-        overflow: hidden;
-        max-height: 400px;
+        padding: 10px;
         display: block;
+        overflow: hidden;
 
         .user_no_lists {
             padding: 10px;
@@ -861,19 +858,21 @@
         }
 
         .user_list_existing_button {
+            background-color: var(--default);
             display: block;
             width: 100%;
-            border-radius: 0;
+            border-radius: 30px;
             text-align: left;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 3px #000;
 
             &.user_list_inlist {
-                opacity: 0.6;
+                background-color: var(--blue-2x);
             }
 
             span {
                 float: right;
                 display: inline-block;
-                color: var(--red);
                 font-size: 12px;
                 font-weight: bold;
             }

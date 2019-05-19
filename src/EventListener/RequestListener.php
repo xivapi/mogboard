@@ -37,6 +37,9 @@ class RequestListener
         // register language based on domain
         Language::register($request);
 
+        // set last online
+        $this->users->setLastOnline();
+        
         // refresh alert expiry dates
         $this->users->refreshUsersAlerts();
     }

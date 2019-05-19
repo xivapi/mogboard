@@ -1,0 +1,18 @@
+{# Item Level #}
+{% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+
+{# Name with Link and correct rarity color #}
+<a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+
+{# Class job category if it has one #}
+{% if item.ClassJobCategory.Name is defined %}
+<span>
+    {{ item.ClassJobCategory.Name }}
+</span>
+{% endif %}
+
+{# Kind and Search category #}
+<span>
+    {{ item.ItemKind.Name }} -
+    {{ item.ItemSearchCategory.Name }}
+</span>

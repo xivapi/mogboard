@@ -1,32 +1,78 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="page-list">
-        <h1>{{ list.name }}</h1>
-        <small>Items: {{ list.items|length }} - by: {{ list.user.username }}</small>
+    <div class="pl">
+        <small>LIST</small>
+        <h1>
+            {{ list.name }}
+            <span>{{ list.items|length }} / {{ max_items }} items</span>
+        </h1>
 
-        <ul>
-            {% for itemId in list.items %}
-                {% set item = game().item(itemId) %}
-                <li class="flex">
-                    <div class="flex_95">
-                        <img src="{{ item.ID|icon2x }}">
-                        {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
-                        <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
-                        <small>
-                            {{ item.ItemKind.Name }} -
-                            {{ item.ItemSearchCategory.Name }}
-                        </small>
-                    </div>
-                    <div class="flex_5 tar">
+        {% for itemId in list.items %}
+            {% set item = game().item(itemId) %}
+
+            {% if market_stats %}
+                {% set stats = attribute(market_stats, itemId) %}
+
+                <div class="pl_i">
+                <div>
+                    <img src="{{ item.ID|icon2x }}">
+                </div>
+                <div>
+                    {# Item info #}
+                    <h2>
+                        {# item info #}
+                        {% include 'Common/basic_item_header.html.twig' with { item: item } %}
+
+                        {# Delete Icon if viewer is owner #}
                         {% if auth.online and list.user == auth.user %}
-                        <a class="page-list-remove" href="{{ path('lists_remove_item', { list: list.id, itemId: item.ID, redirect: true }) }}">
+                        <a class="pl_remove" data-tippy-content="Remove item from list" href="{{ path('lists_remove_item', { list: list.id, itemId: item.ID, redirect: true }) }}">
                             <i class="xiv-NavigationClose"></i>
                         </a>
                         {% endif %}
+                    </h2>
+
+                    {% if stats %}
+                    {# Market #}
+                    <div class="flex">
+                        {# top 5 cheapest #}
+                        <div class="flex_50 pl_mt_p">
+                            <div class="pl-mt">
+                                <h3>Top 5 cheapest - Total for sale: {{ stats.TotalForSale }}</h3>
+                                <div>
+                                    {% include 'Product/prices.html.twig' with {
+                                        'prices': stats.Top5CheapestServers,
+                                        'crossWorld': 1,
+                                    } %}
+                                </div>
+                            </div>
+                        </div>
+                        {# top 5 sale sales#}
+                        <div class="flex_50 pl_mt_h">
+                            <div class="pl-mt">
+                                <h3>Last 5 sales</h3>
+                                <div>
+                                    {% include 'Product/history.html.twig' with {
+                                        'history': stats.Top5HistorySales,
+                                        'crossWorld': 1,
+                                    } %}
+                                </div>
+                                <small>
+                                    <span data-tippy-content="As prices on different servers update at different times, this update time is a rough average of when these prices were update.">
+                                        Updated roughly: {{ stats.RoughUpdateTime|date }}
+                                    </span>
+                                </small>
+                            </div>
+                        </div>
                     </div>
-                </li>
-            {% endfor %}
-        </ul>
+                    {% else %}
+                        <div class="alert-light">Market info could not be fetched for: {{ item.Name }} at this time.</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+                <div class="alert-light">Market info could not be fetched for: {{ item.Name }} at this time.</div>
+            {% endif %}
+        {% endfor %}
     </div>
 {% endblock %}

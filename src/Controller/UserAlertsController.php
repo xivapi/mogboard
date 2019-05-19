@@ -67,8 +67,7 @@ class UserAlertsController extends AbstractController
     public function update(Request $request, UserAlert $alert)
     {
         $this->alerts->save(
-            UserAlert::buildFromRequest($request, $alert),
-            false
+            UserAlert::buildFromRequest($request, $alert)
         );
         
         return $this->json([

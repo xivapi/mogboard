@@ -1,0 +1,51 @@
+{% set item = game().item(itemId) %}
+
+<div class="home-box2 home-alert-row">
+    <div>
+        <a href="{{ path('item_page', { itemId: itemId }) }}">
+            <img src="{{ item.ID|icon2x }}" class="item_icon">
+        </a>
+    </div>
+    <div>
+        <div class="home-alert-item-info">
+            <div>
+                {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                <small>
+                    {{ item.ItemKind.Name }} -
+                    {{ item.ItemSearchCategory.ID is defined ? item.ItemSearchCategory.Name : '(Not Sellable)' }}
+                </small>
+            </div>
+            <div>
+                {% for alert in alerts %}
+                    <hr>
+                    <div class="home-alert-watcher">
+                        <h3>Watcher: {{ alert.Name }}</h3>
+                        <div class="alert-dark">
+                            <code>
+                                {% for trigger in alert.getTriggerConditionsFormatted %}
+                                    <div>
+                                        <em class="text-blue">{{ trigger[0] }}</em>
+                                        <em class="text-yellow">{{ trigger[4] }}</em>
+                                        <em class="text-green">{{ trigger[2] }}</em>
+                                    </div>
+                                {% endfor %}
+                            </code>
+                        </div>
+                    </div>
+                    <div class="home-alert-watcher">
+                        {% if alert.recentEvent %}
+                            <p class="text-gray">Last Triggered Event</p>
+                            {% include 'Product/prices.html.twig' with {
+                                'prices': alert.recentEvent,
+                                'crossWorld': 1,
+                            } %}
+                        {% else %}
+                        <p class="text-red">This alert has no triggered events.</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

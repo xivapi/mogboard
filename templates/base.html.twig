@@ -46,13 +46,15 @@
         {% endif %}
         <div class="site left-nav-{{ cookie('mogboard_leftnav', 'off') }}">
             <header>{% include 'header.html.twig' %}</header>
-            <main>{% block body %}{% endblock %}</main>
-            <footer>{% include 'footer.html.twig' %}</footer>
             <nav class="site-menu">{% include 'menu.html.twig' %}</nav>
-
             <div class="market-category-view">
                 <div data-simplebar class="item-category-list2" id="item-category-list2"></div>
             </div>
+
+            <main>{% block body %}{% endblock %}</main>
+
+            <footer>{% include 'footer.html.twig' %}</footer>
+
 
             {% include 'Modals/search.html.twig' %}
             {% include 'Modals/market_board.html.twig' %}

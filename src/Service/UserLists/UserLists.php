@@ -2,13 +2,18 @@
 
 namespace App\Service\UserLists;
 
+use App\Common\Constants\UserConstants;
 use App\Common\Entity\User;
 use App\Common\Entity\UserList;
+use App\Common\Game\GameServers;
 use App\Common\Repository\UserListRepository;
+use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
+use App\Common\Utils\Arrays;
 use App\Exceptions\UnauthorisedListOwnershipException;
 use App\Service\Companion\Companion;
 use Doctrine\ORM\EntityManagerInterface;
+use MathPHP\Statistics\Average;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class UserLists
@@ -156,9 +161,15 @@ class UserLists
      */
     public function create(string $name, int $itemId): UserList
     {
+        $user = $this->users->getUser(true);
+        
+        if (count($user->getLists()) > UserConstants::MAX_LISTS) {
+            return null;
+        }
+        
         $list = new UserList();
         $list
-            ->setUser($this->users->getUser(true))
+            ->setUser($user)
             ->setName(trim($name))
             ->setItems([ $itemId ]);
 
@@ -185,6 +196,7 @@ class UserLists
      */
     public function save(UserList $list): void
     {
+        $list->setUpdated(time());
         $this->em->persist($list);
         $this->em->flush();
     }
@@ -205,8 +217,67 @@ class UserLists
     /**
      * Get market data for a list
      */
-    public function getListMarketData(UserList $list)
+    public function getMarketData(UserList $list)
     {
-        $this->companion->getByServersForItems();
+        $key = __METHOD__ . $list->getId();
+    
+        // check cache
+        if ($data = Redis::cache()->get($key)) {
+            //return $data;
+        }
+        
+        $items   = $list->getItems();
+        $server  = GameServers::getServer();
+        $dc      = GameServers::getDataCenter($server);
+        $market  = $this->companion->getItemsOnDataCenter($items, $dc);
+        
+        $serverMarketStats = [];
+        $lastUpdatedTimes  = [];
+        
+        // go through all items and find some info about each one
+        foreach ($items as $i => $itemId) {
+            $itemMarket = $market[$i] ?? null;
+            
+            if ($itemMarket == null) {
+                $serverMarketStats[$itemId] = null;
+                continue;
+            }
+    
+            $lastUpdatedTimes[$itemId]  = [];
+            $serverMarketStats[$itemId] = [
+                'TotalForSale' => 0,
+                'Top5CheapestServers' => [],
+                'Top5HistorySales'    => [],
+            ];
+            
+            /**
+             * Find the cheapest server and prices
+             */
+            foreach ($itemMarket as $server => $serverMarket) {
+                foreach ($serverMarket->Prices as $price) {
+                    $price->_Server = $server;
+                    $serverMarketStats[$itemId]['Top5CheapestServers'][] = (array)$price;
+                    $serverMarketStats[$itemId]['TotalForSale']++;
+                }
+    
+                foreach ($serverMarket->History as $history) {
+                    $history->_Server = $server;
+                    $serverMarketStats[$itemId]['Top5HistorySales'][] = (array)$history;
+                }
+    
+                $lastUpdatedTimes[$itemId][] = $serverMarket->Updated;
+            }
+            
+            Arrays::sortBySubKey($serverMarketStats[$itemId]['Top5CheapestServers'], 'PricePerUnit', true);
+            Arrays::sortBySubKey($serverMarketStats[$itemId]['Top5HistorySales'], 'PurchaseDate');
+    
+            array_splice($serverMarketStats[$itemId]['Top5CheapestServers'], 5);
+            array_splice($serverMarketStats[$itemId]['Top5HistorySales'], 5);
+    
+            $serverMarketStats[$itemId]['RoughUpdateTime'] = round(Average::mean($lastUpdatedTimes[$itemId]));
+        }
+    
+        Redis::cache()->set($key, $serverMarketStats, 900);
+        return $serverMarketStats;
     }
 }

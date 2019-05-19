@@ -87,8 +87,10 @@ class ExceptionListener implements EventSubscriberInterface
             NotFoundHttpException::class
         ];
 
+        $madeAware = false;
         if (Redis::Cache()->get(__METHOD__ . $error->hash) == null && !in_array($error->ex_class, $validExceptions)) {
             Redis::Cache()->set(__METHOD__ . $error->hash, true);
+            $madeAware = true;
             Discord::mog()->sendMessage(
                 DiscordConstants::ROOM_ERRORS,
                 "```json\n". json_encode($error, JSON_PRETTY_PRINT) ."\n```"
@@ -98,7 +100,7 @@ class ExceptionListener implements EventSubscriberInterface
         /**
          * Render error to the user
          */
-        $html = $this->twig->render('Errors/error.html.twig', [ 'error' => $error ]);
+        $html = $this->twig->render('Errors/error.html.twig', [ 'error' => $error, 'made_aware' => $madeAware ]);
         $response = new Response($html, $error->code);
         $event->setResponse($response);
     }

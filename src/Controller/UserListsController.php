@@ -60,11 +60,12 @@ class UserListsController extends AbstractController
      */
     public function view(UserList $list)
     {
-        $market = $this->lists->getListMarketData($list);
+        $marketStats = $this->lists->getMarketData($list);
 
         return $this->render('UserLists/index.html.twig', [
-            'list'   => $list,
-            'market' => $market,
+            'list'         => $list,
+            'max_items'    => UserList::MAX_ITEMS,
+            'market_stats' => $marketStats,
         ]);
     }
 

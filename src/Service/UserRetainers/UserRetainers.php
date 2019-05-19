@@ -4,14 +4,18 @@ namespace App\Service\UserRetainers;
 
 use App\Common\Entity\Maintenance;
 use App\Common\Entity\UserRetainer;
+use App\Common\Exceptions\BasicException;
 use App\Common\Game\GameServers;
 use App\Common\Repository\UserRetainerRepository;
 use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
+use App\Common\Utils\Arrays;
 use App\Exceptions\GeneralJsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
 use App\Service\Companion\Companion;
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\Exception\ClientException;
+use MathPHP\Statistics\Average;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Request;
 use XIVAPI\XIVAPI;
@@ -294,13 +298,82 @@ class UserRetainers
             return $data;
         }
 
-        // get retainer items
-        $data = (new XIVAPI())->_private->retainerItems(
-            getenv('XIVAPI_COMPANION_KEY'),
-            $retainer->getApiRetainerId()
-        );
+        try {
+            // get retainer items
+            $data = (new XIVAPI(XIVAPI::DEV))->_private->retainerItems(
+                getenv('XIVAPI_COMPANION_KEY'),
+                $retainer->getApiRetainerId()
+            );
+        } catch (ClientException $ex) {
+            $error = json_decode($ex->getResponse()->getBody()->getContents());
+            throw new BasicException(
+                "{$error->Subject} -- {$error->Message} -- {$error->Note}"
+            );
+        }
 
-        Redis::cache()->set($key, $data);
+        Redis::cache()->set($key, $data, 900);
         return $data;
+    }
+    
+    /**
+     * Get market data for a retainer
+     */
+    public function getMarketData($items)
+    {
+        // grab just the item ids
+        $itemIds = [];
+        foreach ($items as $item) {
+            $itemIds[] = $item->Item->ID;
+        }
+        
+        // we only care about unique items
+        $itemIds = array_unique($itemIds);
+        $server  = GameServers::getServer();
+        $dc      = GameServers::getDataCenter($server);
+        $market  = $this->companion->getItemsOnDataCenter($itemIds, $dc);
+    
+        $serverMarketStats = [];
+        $lastUpdatedTimes  = [];
+        
+        // go through all items and find some info about each one
+        foreach ($itemIds as $i => $itemId) {
+            $itemMarket = $market[$i];
+    
+            $lastUpdatedTimes[$itemId]  = [];
+            $serverMarketStats[$itemId] = [
+                'TotalForSale'        => 0,
+                'RoughUpdateTime'     => 0,
+                'Top5CheapestServers' => [],
+                'Top5HistorySales'    => [],
+            ];
+        
+            /**
+             * Find the cheapest server and prices
+             */
+            foreach ($itemMarket as $server => $serverMarket) {
+                foreach ($serverMarket->Prices as $price) {
+                    $price->_Server = $server;
+                    $serverMarketStats[$itemId]['Top5CheapestServers'][] = (array)$price;
+                    $serverMarketStats[$itemId]['TotalForSale']++;
+                }
+            
+                foreach ($serverMarket->History as $history) {
+                    $history->_Server = $server;
+                    $serverMarketStats[$itemId]['Top5HistorySales'][] = (array)$history;
+                }
+    
+                $lastUpdatedTimes[$itemId][] = $serverMarket->Updated;
+            }
+        
+            Arrays::sortBySubKey($serverMarketStats[$itemId]['Top5CheapestServers'], 'PricePerUnit', true);
+            Arrays::sortBySubKey($serverMarketStats[$itemId]['Top5HistorySales'], 'PurchaseDate');
+        
+            array_splice($serverMarketStats[$itemId]['Top5CheapestServers'], 5);
+            array_splice($serverMarketStats[$itemId]['Top5HistorySales'], 5);
+    
+            $serverMarketStats[$itemId]['RoughUpdateTime'] = round(Average::mean($lastUpdatedTimes[$itemId]));
+        }
+        
+        return $serverMarketStats;
     }
 }

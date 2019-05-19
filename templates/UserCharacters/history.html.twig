@@ -1,12 +1,76 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="page-retainer">
-        <h1>{{ character.name }}</h1>
-        <small>{{ character.server }}</small>
+    <div class="pl">
+        <small>CHARACTER</small>
+        <h1>
+            {{ character.name }}
+            <span>{{ character.server }}</span>
+        </h1>
 
-        <div class="page-retainer-store">
-            Stuff
+        <div class="pc_i">
+            <div>
+                <span class="pc_port">
+                    <img src="{{ profile.Character.Portrait }}">
+                </span>
+            </div>
+            <div>
+                <div class="alert-dark">
+                    Due to how the in-game Market Boards work, there is no way to know which server a "Purchase" is from... So only sales for your home server is shown below.
+                </div>
+                <div class="pc_stats">
+                    <div class="flex">
+                        <div class="flex_50 pc_stat">
+                            <h6>TOTAL GIL SPENT</h6>
+                            <img src="/i/game/coin.png" height="32">
+                            <span>{{ history_stats.totalGilSpent|number_format }}</span>
+                        </div>
+
+                        <div class="flex_50 pc_stat">
+                            <h6>Busy Month: {{ history_stats.mostBusyMonth.date }}</h6>
+                            <img src="/i/game/coin.png" height="32">
+                            <span>{{ history_stats.mostBusyMonth.gil|number_format }}</span>
+                        </div>
+                    </div>
+                    <div class="flex pc_stats2">
+                        {% for i in [0,1,2,3,4] %}
+                        <div class="flex_20 pc_stat2">
+                            {% set item1 = game().item(history_stats.mostBoughtItem[i].itemId) %}
+
+                            <img src="{{ item1.Icon|icon }}">
+                            <div>
+                                {{ history_stats.mostBoughtItem[i].qty|number_format }} x
+                                <span class="text-highlight">{{ history_stats.mostBoughtItem[i].gil|number_format }}</span> Gil
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <br>
+
+                <h2>Recent Purchase History</h2>
+
+                {% if history %}
+                    {% include 'Product/history.html.twig' with {
+                        'history': history.History,
+                        'is_owner': 1,
+                        'crossWorld': 1,
+                        'has_item': 1,
+                    } %}
+
+                    <small>
+                        <span data-tippy-content="As a lot of items are updating slow or not at all, not all your purchases will be listed.">
+                            History starts from April 2019 and can only show what is being recorded on
+                            Mogboard and may have some items missing. This list is not "real-time" and will update
+                            as and when the items you buy are updated on the site.
+                        </span>
+                    </small>
+                {% else %}
+                    <p class="text-red">Sorry, at this time we cannot find any history for your character.</p>
+                {% endif %}
+
+            </div>
         </div>
     </div>
 {% endblock %}

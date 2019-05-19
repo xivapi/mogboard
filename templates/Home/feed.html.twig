@@ -1,0 +1,59 @@
+<div class="home-feed">
+{% for entry in market_feed %}
+
+    <div class="hf-row hf-row-{{ entry.type }}">
+
+        {% if entry.type == 'LIST_PRICES' %}
+            {% set lastSale = entry.data.lastSale %}
+            {% set cheapest = entry.data.cheapest %}
+
+            <div class="flex">
+                <div class="flex_40">
+                    <h6>{{ entry.timestamp|date }} - Server Price Update</h6>
+                    <h5>
+                        List: <a href="{{ path('lists_view', { list: entry.data.list.id }) }}">{{ entry.data.list.name }}</a>
+                    </h5>
+                </div>
+                <div class="flex_30">
+                    <h6>{{ entry.data.server }} Cheapest</h6>
+                    <div>
+                        {{ cheapest.IsHQ ? '<img src="/i/game/hq.png">' : '' }}
+                        {{ cheapest.Quantity|number_format }} x
+                        <span class="text-highlight">{{ cheapest.PricePerUnit|number_format }}</span>
+                        <span class="text-gray">({{ cheapest.PriceTotal|number_format }})</span>
+                    </div>
+                </div>
+                <div class="flex_30">
+                    <h6>{{ entry.data.server }} Last Sold</h6>
+                    {{ lastSale.IsHQ ? '<img src="/i/game/hq.png">' : '' }}
+                    {{ lastSale.Quantity|number_format }} x
+                    <span class="text-highlight">{{ lastSale.PricePerUnit|number_format }}</span>
+                    <span class="text-gray">({{ lastSale.PriceTotal|number_format }})</span>
+                </div>
+            </div>
+
+        {% elseif entry.type == 'ALERT_EVENT' %}
+            {% set item = game().item(entry.data.alert.itemId) %}
+            {% set marketTable = entry.data.market %}
+            {% set marketAlert = entry.data.alert %}
+            <h6>{{ entry.timestamp|date }} - Alert Triggered</h6>
+            <h5>
+                Alert: <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                - {{ marketAlert.name }}
+            </h5>
+
+            <br>
+
+            <h6>MARKET AT THE TIME OF ALERT TRIGGER</h6>
+
+            {% include 'Product/prices.html.twig' with {
+                'prices': marketTable,
+                'crossWorld': 1,
+            } %}
+
+        {% endif %}
+    </div>
+
+
+{% endfor %}
+</div>

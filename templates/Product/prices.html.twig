@@ -64,10 +64,20 @@
                 <td class="price-diff {{ pricePerUnitDiff >= 20 ? 'price-diff-bad' : (pricePerUnitDiff < -10 ? 'price-diff-good' : '') }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="This listing is {{ pricePerUnitDiff }}% {{ pricePerUnitDiff > 0 ? 'more' : 'less' }} than the current <br> <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff > 0 ? '+' : '' }}{{ pricePerUnitDiff == 0 ? '-' : pricePerUnitDiff ~ '%' }}</td>
                 {% endif %}
                 <td class="price-retainer">
-                    {{ row.RetainerName }}
+                    {% if env('APP_ENV') == 'dev' %}
+                        Retainer
+                    {% else %}
+                        {{ row.RetainerName }}
+                    {% endif %}
                     <img src="{{ cityflags[row.TownID]|icon }}" class="price-city-flag">
                 </td>
-                <td class="price-creator">{{ row.CreatorSignatureID ? row.CreatorSignatureName : '' }}</td>
+                <td class="price-creator">
+                    {% if env('APP_ENV') == 'dev' %}
+                        Crafty Adventurer
+                    {% else %}
+                        {{ row.CreatorSignatureID ? row.CreatorSignatureName : '' }}
+                    {% endif %}
+                </td>
             </tr>
         {% else %}
             <tr>

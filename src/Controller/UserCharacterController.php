@@ -47,6 +47,8 @@ class UserCharacterController extends AbstractController
      */
     public function history(Request $request, UserCharacter $character)
     {
+        throw new \Exception("This page has been temporarily disabled.");
+        
         $user = $this->users->getUser(true);
 
         // verify the user owns this character
@@ -59,19 +61,22 @@ class UserCharacterController extends AbstractController
         }
 
         $this->users->setLastUrl($request);
-
-        $history   = $this->characters->getHistory($character);
+    
         $profile   = $this->characters->getCharacter($character);
+        $history   = $this->characters->getHistory($character);
 
-        if ($history == null) {
+        if ($profile->Info->Character->State != 2) {
             return $this->redirectToRoute('404');
         }
+        
+        $historyStats = $this->characters->getHistoryStats($history);
 
         // get the retainer store for this user
-        return $this->render('UserCharacter/history.html.twig', [
-            'character' => $character,
-            'profile'   => $profile,
-            'history'   => $history,
+        return $this->render('UserCharacters/history.html.twig', [
+            'character'     => $character,
+            'profile'       => $profile,
+            'history'       => $history,
+            'history_stats' => $historyStats,
         ]);
     }
 }

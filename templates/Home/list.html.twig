@@ -1,0 +1,21 @@
+<div class="home-box2 home-itemlist">
+    <h3><a href="{{ path('lists_view', { list: list.id }) }}">{{ list.name }}</a></h3>
+    <p>Click on the list title to view market information for this list.</p>
+    <br>
+
+    <h6>{{ list.items|length }} items in this list</h6>
+    <ul>
+        {% for itemId in list.items %}
+            {% set item = game().item(itemId) %}
+            <li>
+                <img src="{{ item.ID|icon2x }}">
+                {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                <small>
+                    {{ item.ItemKind.Name }} -
+                    {{ item.ItemSearchCategory.ID is defined ? item.ItemSearchCategory.Name : '(Not Sellable)' }}
+                </small>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
