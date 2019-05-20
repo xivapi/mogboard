@@ -51,7 +51,7 @@
             {% set item = game().item(entry.data.alert.itemId) %}
             {% set marketTable = entry.data.market %}
             {% set marketAlert = entry.data.alert %}
-            <h6>{{ entry.timestamp|date }} - Alert Triggered</h6>
+            <h6>{{ entry.timestamp|date }} - {{ marketAlert.type }} Alert Triggered</h6>
             <h5>
                 Alert: <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
                 - {{ marketAlert.name }}
