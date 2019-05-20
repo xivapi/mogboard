@@ -125,6 +125,10 @@
         text-transform: uppercase;
         color: #666;
         margin: 0 0 10px 0;
+
+        @include mq($until: desktop) {
+            margin-bottom: 3px;
+        }
     }
 
     .hf-row {
@@ -137,34 +141,43 @@
         &.hf-row-LIST_PRICES {
             border-left: solid 5px var(--blue);
 
-            .hf-icon {
-                border-radius: 5px;
-                box-shadow: 0 1px 3px #000;
-                height: 42px;
-            }
+            .hf-list-prices {
+                display: flex;
 
-            .flex .flex_35 {
-                padding-left: 12px;
-            }
-
-            @include mq($until: desktop) {
-                .flex {
+                @include mq($until: desktop) {
                     display: block;
+                }
 
-                    h6 {
-                        margin-bottom: 3px;
-                    }
+                > div:nth-of-type(1) {
+                    flex: 0 1 60px;
 
-                    > div {
-                        margin-bottom: 10px;
-                    }
-
-                    .flex_5 {
+                    @include mq($until: desktop) {
                         display: none;
                     }
 
-                    .flex_35 {
+                    img {
+                        border-radius: 5px;
+                        box-shadow: 0 1px 3px #000;
+                        height: 60px;
+                    }
+                }
+
+                > div:nth-of-type(2) {
+                    flex: 0 1 calc(40% - 60px);
+                    padding-left: 15px;
+
+                    @include mq($until: desktop) {
+                        flex: 0 1 100%;
                         padding-left: 0;
+                        margin-bottom: 20px;
+                    }
+                }
+
+                > div:nth-of-type(3) {
+                    flex: 0 1 calc(60%);
+
+                    @include mq($until: desktop) {
+                        flex: 0 1 100%;
                     }
                 }
             }
@@ -172,6 +185,39 @@
 
         &.hf-row-ALERT_EVENT {
             border-left: solid 5px var(--green-3x);
+
+            .hf-alert {
+                display: flex;
+
+                @include mq($until: desktop) {
+                    display: block;
+                }
+
+                > div:nth-of-type(1) {
+                    flex: 0 1 60px;
+
+                    @include mq($until: desktop) {
+                        display: none;
+                    }
+
+                    img {
+                        border-radius: 5px;
+                        box-shadow: 0 1px 3px #000;
+                        height: 60px;
+                    }
+                }
+
+                > div:nth-of-type(2) {
+                    flex: 0 1 calc(100% - 60px);
+                    padding-left: 15px;
+
+                    @include mq($until: desktop) {
+                        flex: 0 1 100%;
+                        padding-left: 0;
+                        margin-bottom: 20px;
+                    }
+                }
+            }
         }
 
         img {
