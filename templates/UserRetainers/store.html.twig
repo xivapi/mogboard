@@ -8,7 +8,7 @@
             <span>{{ retainer.server }}</span>
         </h1>
 
-        {% if store %}
+        {% if store and market_stats %}
             {% for listing in store %}
                 {% set item = game().item(listing.Item.ID) %}
                 {% set stats = market_stats[listing.Item.ID] %}

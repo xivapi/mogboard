@@ -62,7 +62,7 @@ class IndexController extends AbstractController
      */
     public function fourOfour()
     {
-        return $this->render('Pages/404.html.twig');
+        return $this->render('Errors/404.html.twig');
     }
 
     /**

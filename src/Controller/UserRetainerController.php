@@ -74,13 +74,17 @@ class UserRetainerController extends AbstractController
         }
 
         $items = $this->retainers->getStore($retainer);
-        $items = $items->Items;
 
         if ($items == null) {
             return $this->redirectToRoute('404');
         }
 
-        $marketStats = $this->retainers->getMarketData($items);
+        $items = $items->Items;
+        $marketStats = null;
+
+        if ($items) {
+            $marketStats = $this->retainers->getMarketData($items);
+        }
 
         // get the retainer store for this user
         return $this->render('UserRetainers/store.html.twig', [
