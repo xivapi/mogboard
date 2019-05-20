@@ -116,7 +116,7 @@
     h5 {
         font-size: 18px;
         font-weight: 400;
-        margin: 0;
+        margin: 0 0 5px 0;
     }
 
     h6 {
@@ -154,6 +154,10 @@
         }
 
         .text-gray {
+            font-size: 14px;
+        }
+
+        .hf-list-name {
             font-size: 14px;
         }
     }
