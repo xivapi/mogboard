@@ -78,7 +78,7 @@ class UserCharacters
             ->setUpdated(time())
             ->setUser($user)
             ->setConfirmed(true)
-            ->setMain(!empty($user->getCharacters()));
+            ->setMain(empty($user->getCharacters()));
         
         $this->save($character);
         return true;
