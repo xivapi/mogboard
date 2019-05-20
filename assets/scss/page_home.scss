@@ -4,7 +4,7 @@
     margin: 0 auto;
 
     > div:nth-of-type(1) {
-        width: 300px;
+        width: 240px;
 
         h3 {
             font-size: 20px;
@@ -64,7 +64,7 @@
     }
 
     > div:nth-of-type(2) {
-        width: calc(100% - 300px - 360px);
+        width: calc(100% - 240px - 360px);
         padding: 0 20px;
 
         .home-tab {
@@ -260,18 +260,18 @@
     display: flex;
 
     > div:first-of-type {
-        flex: 0 1 64px;
+        flex: 0 1 46px;
     }
 
     > div:last-of-type {
-        flex: 0 1 calc(100% - 64px);
+        flex: 0 1 calc(100% - 46px);
         padding-left: 15px;
     }
 
     .item_icon {
-        height: 64px;
-        width: 64px;
-        border-radius: 8px;
+        height: 46px;
+        width: 46px;
+        border-radius: 5px;
         box-shadow: 0 1px 3px #000;
     }
 

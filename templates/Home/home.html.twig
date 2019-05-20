@@ -14,7 +14,7 @@
                 {% for itemId, alerts in auth.user.alertsPerItem %}
                     {% set item = game().item(itemId) %}
                     <button type="button" data-tab="alerts_{{ itemId }}" class="rarity-{{ item.Rarity }}">
-                        <img src="{{ item.Icon|icon }}"> {{ item.Name }}
+                        {{ item.Name }}
                     </button>
                 {% else %}
                     <span class="text-gray">You have no alerts setup.</span>
