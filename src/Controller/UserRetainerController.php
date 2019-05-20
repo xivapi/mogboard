@@ -9,6 +9,7 @@ use App\Service\UserRetainers\UserRetainers;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserRetainerController extends AbstractController
@@ -69,7 +70,7 @@ class UserRetainerController extends AbstractController
 
         // verify the user owns this retainer
         if ($retainer->getUser() !== $user) {
-            throw new BasicException('Sorry, you do not own this retainer and will not be able to view its shop.');
+            throw new UnauthorizedHttpException('Denied', 'Sorry, you do not own this retainer and will not be able to view its shop.');
         }
 
         $items = $this->retainers->getStore($retainer);
