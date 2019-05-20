@@ -156,7 +156,6 @@ class CompanionMarketActivity
     {
         /** @var  $lists */
         $lists = $this->user->getLists();
-        $totalLists = count($lists);
 
         // if no lists
         if (empty($lists)) {
@@ -173,6 +172,11 @@ class CompanionMarketActivity
         
         /** @var UserList $list */
         foreach ($lists as $list) {
+            // ignore "recently viewed" for now as it takes forever
+            if (in_array($list->getCustomType(), [ UserList::CUSTOM_RECENTLY_VIEWED ])) {
+                continue;
+            }
+
             $itemIds = array_merge($itemIds, $list->getItems());
             
             foreach ($list->getItems() as $id) {
