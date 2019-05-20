@@ -59,7 +59,7 @@ class CompanionMarketActivity
             $id   = $user['id'];
             $name = $user['username'];
 
-            $section->writeln("{$i} / {$usersTotal} - {$id}  {$name}");
+            $section->overwrite("{$i} / {$usersTotal} - {$id}  {$name}");
 
             $feed = [];
             $checkGeneratedRecent = "mb_user_home_feed_recent_{$id}";
@@ -69,10 +69,10 @@ class CompanionMarketActivity
                 continue;
             }
 
-            $section->writeln("{$i} / {$usersTotal} - {$id}  {$name}  -- Building recent alert events");
+            $section->overwrite("{$i} / {$usersTotal} - {$id}  {$name}  -- Building recent alert events");
             $feed = $this->addRecentAlerts($id, $feed);
 
-            $section->writeln("{$i} / {$usersTotal} - {$id}  {$name}  -- Building recent price lists");
+            $section->overwrite("{$i} / {$usersTotal} - {$id}  {$name}  -- Building recent price lists");
             $feed = $this->addRecentPriceUpdates($id, $feed);
 
             /**
