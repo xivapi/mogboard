@@ -11,6 +11,7 @@ use App\Common\Game\GameServers;
 use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
 use App\Common\Utils\Arrays;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use XIVAPI\XIVAPI;
@@ -19,19 +20,13 @@ class CompanionMarketActivity
 {
     const TYPE_ALERT_EVENT = 'ALERT_EVENT';
     const TYPE_LIST_PRICES = 'LIST_PRICES';
-    
-    /** @var User */
-    private $user;
-    /** @var array */
-    private $feed = [];
-    /** @var ConsoleSectionOutput */
-    private $console1;
-    /** @var ConsoleSectionOutput */
-    private $console2;
-    
-    public function __construct(Users $users)
+
+    /** @var EntityManagerInterface */
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->users = $users;
+        $this->em = $em;
     }
     
     public function getFeed(?User $user = null)
@@ -42,124 +37,134 @@ class CompanionMarketActivity
     public function buildUserMarketFeeds()
     {
         $start = time();
-        
-        $this->console1 = new ConsoleOutput();
-        $this->console2 = new ConsoleOutput();
-        $this->console1 = $this->console1->section();
-        $this->console2 = $this->console2->section();
 
-        $this->console1->writeln('Building market feeds for users');
+        $console = new ConsoleOutput();
+        $console->writeln("Building market feeds for users ...");
+        $section = $console->section();
 
-        $users = $this->users->getRepository()->findAll();
-        
-        // if they haven't been online in a week, stop generating their feed
-        $timeout = time() - (60 * 60 * 24 * 7);
-        $total = count($users);
-        
-        /** @var User $user */
+        /**
+         * Grab all users who have been online in past 7 days or are new
+         */
+        $deadline = time() - (60 * 60 * 24 * 7);
+        $stmt = $this->em->getConnection()->prepare(
+            "SELECT id, username FROM users WHERE (last_online > {$deadline} OR last_online = 0)"
+        );
+        $stmt->execute();
+
+        $users      = $stmt->fetchAll();
+        $usersTotal = count($users);
+        $console->writeln("Total Users: ". number_format($usersTotal));
+
         foreach ($users as $i => $user) {
-            $i = ($i + 1);
+            $id   = $user['id'];
+            $name = $user['username'];
 
-            Redis::cache()->delete("user_home_feed_{$user->getId()}");
-            continue;
+            $section->writeln("{$i} / {$usersTotal} - {$id}  {$name}");
 
-            $key = "user_home_feed_{$user->getId()}_recent";
+            $feed = [];
+            $checkGeneratedRecent = "mb_user_home_feed_recent_{$id}";
+            $cacheGeneratedFeed   = "mb_user_home_feed_generated_{$id}";
 
-            if (Redis::cache()->get($key)) {
-                $this->console1->overwrite("User: {$user->getUsername()} skipping as build recently....");
-                //continue;
+            if (Redis::cache()->get($checkGeneratedRecent)) {
+                continue;
             }
 
-            if ($user->getLastOnline() != 0 && $user->getLastOnline() < $timeout) {
-                $this->console1->overwrite("User: {$user->getUsername()} as not been online for a week, skipping ...");
-                //continue;
-            }
-            
-            $this->console1->overwrite("{$i} / {$total} - Building feed for: {$user->getUsername()}");
-            $this->build($user);
+            $section->writeln("{$i} / {$usersTotal} - {$id}  {$name}  -- Building recent alert events");
+            $feed = $this->addRecentAlerts($id, $feed);
 
-            Redis::cache()->set($key, true, 1800);
+            $section->writeln("{$i} / {$usersTotal} - {$id}  {$name}  -- Building recent price lists");
+            $feed = $this->addRecentPriceUpdates($id, $feed)
+
+            /**
+             * Order by timestamp and slice the top 30 results.
+             */
+            Arrays::sortBySubKey($feed, 'timestamp');
+            array_splice($feed, 0, 30);
+
+            // cache for the user
+            Redis::cache()->set($cacheGeneratedFeed, $feed, RedisConstants::TIME_7_DAYS);
         }
 
+        /**
+         * Report duration
+         */
         $duration = time() - $start;
-        $this->console1->writeln("Complete");
-        $this->console1->writeln("Took: ". $duration / 60 . " minutes");
+        $console->writeln("Complete");
+        $console->writeln("Took: ". $duration / 60 . " minutes");
     }
-    
-    private function build(User $user)
-    {
-        $this->user = $user;
-        
-        $this->addRecentAlerts();
-        $this->addRecentPriceUpdates();
-        
-        Arrays::sortBySubKey($this->feed, 'timestamp');
-        
-        // cache feed
-        Redis::cache()->set("user_home_feed_{$user->getId()}", $this->feed, RedisConstants::TIME_7_DAYS);
-    }
-    
+
     /**
      * Add any recent alert triggers
      */
-    private function addRecentAlerts()
+    private function addRecentAlerts(string $userId, array $feed)
     {
-        /** @var UserAlert[] $alerts */
-        $alerts = $this->user->getAlerts();
+        // we only care about events in the past 2 days
+        $deadline = time() - (60 * 60 * 24 * 2);
+
+        /**
+         * Get all the alert events for this user
+         */
+        $stmt = $this->em->getConnection()->prepare(
+            "SELECT event_id, added, `data` FROM users WHERE added > {$deadline} AND user_id = '{$userId}'"
+        );
+        $stmt->execute();
+
+        $alertEvents = $stmt->fetchAll();
         
-        // if no alerts, skip
-        if (empty($alerts)) {
-            return;
+        // if no events, skip
+        if (empty($alertEvents)) {
+            return $feed;
         }
 
-        foreach ($alerts as $alert) {
-            /** @var UserAlertEvent[] $events */
-            $events = $alert->getEvents();
-    
-            // if no events, skip
-            if (empty($events)) {
-                return;
+        // grab the alert for each event
+        foreach ($alertEvents as $event) {
+            $eventId    = $event['event_id'];
+            $added      = $event['added'];
+            $marketData = json_decode($event['data']);
+
+            // grab alert
+            $alert = $this->em->getRepository(UserAlert::class)->find($eventId);
+
+            /**
+             * Build a mini market table
+             */
+            $marketTable = [];
+            foreach ($marketData as $row) {
+                $prices          = $row[1];
+                $prices->_Server = $row[0];
+                $marketTable[]   = $prices;
             }
-            
-            foreach ($events as $event) {
-                /**
-                 * Build a mini market table
-                 */
-                $marketTable = [];
-                foreach ($event->getData() as $row) {
-                    $prices = $row[1];
-                    $prices->_Server = $row[0];
-                    $marketTable[] = $prices;
-                }
-                
-                $this->feed[] = [
-                    'timestamp'  => $event->getAdded(),
-                    'type'       => self::TYPE_ALERT_EVENT,
-                    'data'       => [
-                        'market' => $marketTable,
-                        'alert'  => [
-                            'itemId'      => $alert->getItemId(),
-                            'lastChecked' => $alert->getLastChecked(),
-                            'name'        => $alert->getName(),
-                            'triggers'    => $alert->getTriggerConditionsFormatted(),
-                            'dc'          => $alert->isTriggerDataCenter(),
-                            'hq'          => $alert->isTriggerHq(),
-                            'dps_perk'    => $alert->isKeepUpdated(),
-                        ],
+
+            $feed[] = [
+                'timestamp'  => $added,
+                'type'       => self::TYPE_ALERT_EVENT,
+                'data'       => [
+                    'market' => $marketTable,
+                    'alert'  => [
+                        'itemId'      => $alert->getItemId(),
+                        'lastChecked' => $alert->getLastChecked(),
+                        'name'        => $alert->getName(),
+                        'triggers'    => $alert->getTriggerConditionsFormatted(),
+                        'dc'          => $alert->isTriggerDataCenter(),
+                        'hq'          => $alert->isTriggerHq(),
+                        'dps_perk'    => $alert->isKeepUpdated(),
                     ],
-                ];
-            }
+                ],
+            ];
         }
+
+        unset($alertEvents);
+
+        return $feed;
     }
     
     /**
      * Add recent price updates
      */
-    private function addRecentPriceUpdates()
+    private function addRecentPriceUpdates(string $userId, array $feed)
     {
         // disable this for now because i have no way to get a users server at the moment.
-
-        return;
+        return $feed;
 
         /** @var  $lists */
         $lists = $this->user->getLists();
