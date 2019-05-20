@@ -54,10 +54,6 @@ class CompanionMarketActivity
                 continue;
             }
             
-            if ($user->getUsername() != 'Vekien') {
-                continue;
-            }
-            
             $console->overwrite("Building feed for: {$user->getUsername()}");
             $this->build($user);
         }
