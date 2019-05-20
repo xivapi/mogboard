@@ -156,7 +156,6 @@ class CompanionMarketActivity
         }
 
         unset($alertEvents);
-
         return $feed;
     }
     
@@ -165,15 +164,37 @@ class CompanionMarketActivity
      */
     private function addRecentPriceUpdates(string $userId, array $feed)
     {
-        // disable this for now because i have no way to get a users server at the moment.
-        return $feed;
+        /**
+         * The user MUST have a verified main character, this is how I get the server...
+         */
+        $stmt = $this->em->getConnection()->prepare(
+            "SELECT server FROM users_characters WHERE user_id = '{$userId}' AND main = 1 LIMIT 1"
+        );
 
-        /** @var  $lists */
-        $lists = $this->user->getLists();
+        $stmt->execute();
+        $character = $stmt->fetch();
 
-        // if no lists
+        // if no character, skip
+        if (empty($character)) {
+            return $feed;
+        }
+
+        // Get users DC
+        $dc = GameServers::getDataCenter($character['server']);
+
+        /**
+         * Get lists
+         */
+        $stmt = $this->em->getConnection()->prepare(
+            "SELECT id, `name`, items FROM users_lists WHERE custom = 0 AND user_id = '{$userId}' ORDER BY added DESC"
+        );
+        $stmt->execute();
+
+        $lists = $stmt->fetchAll();
+
+        // if no lists, SKIP!
         if (empty($lists)) {
-            return;
+            return $feed;
         }
         
         /**
@@ -184,27 +205,27 @@ class CompanionMarketActivity
         $itemIds = [];
         $itemIdsToLists = [];
         
-        /** @var UserList $list */
         foreach ($lists as $list) {
-            // ignore "recently viewed" for now as it takes forever
-            if (in_array($list->getCustomType(), [ UserList::CUSTOM_RECENTLY_VIEWED ])) {
-                continue;
-            }
-
-            $itemIds = array_merge($itemIds, $list->getItems());
+            $listItems = unserialize($list['items']);
+            $itemIds   = array_merge($itemIds, $listItems);
             
-            foreach ($list->getItems() as $id) {
-                $itemIdsToLists[$id] = $list;
+            foreach ($listItems as $id) {
+                $itemIdsToLists[$id] = [
+                    'id'   => $list['id'],
+                    'name' => $list['name']
+                ];
             }
         }
         
         $itemIds = array_unique($itemIds);
         arsort($itemIds);
 
+        // some how still no items? SKIP!!
         if (empty($itemIds)) {
-            return;
+            return $feed;
         }
 
+        // reduce to a maximum of 200 items...
         array_splice($itemIds, 200);
 
         /**
@@ -215,10 +236,7 @@ class CompanionMarketActivity
             'max_history' => 1,
             'max_prices'  => 1,
         ]);
-        
-        $server = GameServers::getServer();
-        $dc     = GameServers::getDataCenter($server);
-        
+
         // only record 15 entries, otherwise it gets spammy
         $countPerList = [];
         $countMax = 5;
@@ -228,7 +246,7 @@ class CompanionMarketActivity
             /**
              * Check cache first
              */
-            $key = "user_home_feed_{$this->user->getId()}_". md5(implode('-', $itemIdsChunked));
+            $key = "mb_user_home_feed_xivapi_items_{$userId}_". md5(implode('-', $itemIdsChunked));
             if (!$market = Redis::cache()->get($key)) {
                 $market = $xivapi->market->items($itemIdsChunked, [], $dc);
                 Redis::cache()->set($key, $market, 300);
@@ -239,34 +257,34 @@ class CompanionMarketActivity
              */
             foreach ($market as $i => $itemMarket) {
                 $itemId = $itemIdsChunked[$i];
-                $list = $itemIdsToLists[$itemId];
+                $list   = $itemIdsToLists[$itemId];
+                $listId = $list['id'];
                 
                 foreach ($itemMarket as $server => $serverMarket) {
                     $lastSale = $serverMarket->History[0] ?? null;
                     $cheapest = $serverMarket->Prices[0] ?? null;
     
-                    $countPerList[$list->getId()] = isset($countPerList[$list->getId()])
-                        ? $countPerList[$list->getId()] + 1
-                        : 1;
+                    $countPerList[$listId] = isset($countPerList[$listId]) ? $countPerList[$listId] + 1 : 1;
     
-                    if ($countPerList[$list->getId()] > $countMax) break;
+                    if ($countPerList[$listId] > $countMax) {
+                        break;
+                    };
                     
-                    $this->feed[] = [
+                    $feed[] = [
                         'timestamp' => $serverMarket->Updated,
                         'type' => self::TYPE_LIST_PRICES,
                         'data' => [
-                            'server'    => $server,
-                            'itemId'    => $itemId,
-                            'lastSale'  => $lastSale,
-                            'cheapest'  => $cheapest,
-                            'list' => [
-                                'id' => $list->getId(),
-                                'name' => $list->getName()
-                            ]
+                            'server'   => $server,
+                            'itemId'   => $itemId,
+                            'lastSale' => $lastSale,
+                            'cheapest' => $cheapest,
+                            'list'     => $list
                         ],
                     ];
                 }
             }
         }
+
+        return $feed;
     }
 }
