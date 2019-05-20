@@ -12,6 +12,7 @@ use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
 use App\Common\Utils\Arrays;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use XIVAPI\XIVAPI;
 
 class CompanionMarketActivity
@@ -23,9 +24,9 @@ class CompanionMarketActivity
     private $user;
     /** @var array */
     private $feed = [];
-    /** @var ConsoleOutput */
+    /** @var ConsoleSectionOutput */
     private $console1;
-    /** @var ConsoleOutput */
+    /** @var ConsoleSectionOutput */
     private $console2;
     
     public function __construct(Users $users)
@@ -44,10 +45,11 @@ class CompanionMarketActivity
         
         $this->console1 = new ConsoleOutput();
         $this->console2 = new ConsoleOutput();
-        $this->console1->writeln('Building market feeds for users');
         $this->console1 = $this->console1->section();
         $this->console2 = $this->console2->section();
-        
+
+        $this->console1->writeln('Building market feeds for users');
+
         $users = $this->users->getRepository()->findAll();
         
         // if they haven't been online in a week, stop generating their feed
@@ -156,7 +158,8 @@ class CompanionMarketActivity
     {
         /** @var  $lists */
         $lists = $this->user->getLists();
-        
+        $totalLists = count($lists);
+
         // if no lists
         if (empty($lists)) {
             return;
@@ -189,7 +192,7 @@ class CompanionMarketActivity
         array_splice($itemIds, 200);
         $total = count($itemIds);
 
-        $this->console2->overwrite("Getting {$total} items ...");
+        $this->console2->overwrite("Getting {$total} items for: {$totalLists} lists ...");
     
         /**
          * Only fetch the last sale price + the current cheapest for each server
