@@ -12,6 +12,6 @@
         {% else %}
             <p>If you continue to run into this issue, please jump on the discord for help!</p>
         {% endif %}
-        <small>Debug: {{ error.ex_class }} - {{ error.req_method }} - {{ error.hash }}</small>
+        <small>{{ error.ex_class }}<br>{{ error.req_action }}<br>{{ error.hash }}<br>{{ error.req_path }}</small>
     </div>
 {% endblock %}
