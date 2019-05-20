@@ -46,21 +46,32 @@ class CompanionMarketActivity
         
         // if they haven't been online in a week, stop generating their feed
         $timeout = time() - (60 * 60 * 24 * 7);
+        $total = count($users);
         
         /** @var User $user */
-        foreach ($users as $user) {
+        foreach ($users as $i => $user) {
+            $i = ($i + 1);
+
+            $key = "user_home_feed_{$user->getId()}_recent";
+
+            if (Redis::cache()->get($key)) {
+                $console->overwrite("User: {$user->getUsername()} skipping as build recently....");
+                continue;
+            }
+
             if ($user->getLastOnline() != 0 && $user->getLastOnline() < $timeout) {
                 $console->overwrite("User: {$user->getUsername()} as not been online for a week, skipping ...");
                 continue;
             }
             
-            $console->overwrite("Building feed for: {$user->getUsername()}");
+            $console->overwrite("{$i} / {$total} - Building feed for: {$user->getUsername()}");
             $this->build($user);
+
+            Redis::cache()->set($key, true, 1800);
         }
-        
-        $console->writeln("Complete");
-        
+
         $duration = time() - $start;
+        $console->writeln("Complete");
         $console->writeln("Took: ". $duration / 60 . " minutes");
     }
     
