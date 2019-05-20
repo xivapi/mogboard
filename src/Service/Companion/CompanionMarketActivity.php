@@ -73,7 +73,7 @@ class CompanionMarketActivity
             $feed = $this->addRecentAlerts($id, $feed);
 
             $section->writeln("{$i} / {$usersTotal} - {$id}  {$name}  -- Building recent price lists");
-            $feed = $this->addRecentPriceUpdates($id, $feed)
+            $feed = $this->addRecentPriceUpdates($id, $feed);
 
             /**
              * Order by timestamp and slice the top 30 results.
