@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Common\Entity\UserList;
+use App\Common\Service\Redis\Redis;
 use App\Service\UserLists\UserLists;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

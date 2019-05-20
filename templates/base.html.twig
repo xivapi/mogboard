@@ -1,4 +1,5 @@
 {% set title = title is defined ? title ~ ' - MogBoard' : 'MogBoard' %}
+{% set description = description is defined ? description ~ ' - MogBoard' : 'Final Fantasy XIV Online: Market Boards. Find Prices, track Item History and create Price Alerts. Anywhere, anytime.' %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,9 +18,9 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mogboard.com">
     <meta property="og:title" content="{{ title }}">
-    <meta property="og:description" content="{{ title }} - Final Fantasy XIV Online: Market Boards. Find Prices, track Item History and create Price Alerts. Anywhere, anytime.">
+    <meta property="og:description" content="{{ description }}">
     <meta property="og:image" content="http://mogboard.com/mog_square.png">
-    <meta name="description" content="{{ title }} - Final Fantasy XIV Online: Market Boards. Find Prices, track Item History and create Price Alerts. Anywhere, anytime.">
+    <meta name="description" content="{{ description }}">
     <meta name="keywords" content="FFXIV,Market,Boards,Database">
     <meta name="author" content="Vekien">
     <meta name="google-site-verification" content="lYmV3T5sDcKUybfvz8CyOZwS6GQPI4l5sM0Fu4qopVA">
