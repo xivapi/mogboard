@@ -74,17 +74,17 @@ class IndexController extends AbstractController
     }
     
     /**
-     * @Route("/news}", name="news_index")
+     * @Route("/news", name="news_index")
      * @Route("/news/{slug}", name="news")
      */
-    public function news(string $slug)
+    public function news(?string $slug = null)
     {
         $templates = [
             'manual-updating'                               => '2019_05_05_manual_update.html.twig',
             'retainer-characters-privacy-changes'           => '2019_05_19_retainer_characters.html.twig'
         ];
 
-        $slug = $slug ?: end($templates);
+        $slug = $slug ?: 'manual-updating';
         
         return $this->render('News/'. $templates[$slug]);
     }
