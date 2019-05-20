@@ -44,41 +44,42 @@
                     {% if retainer.apiRetainerId %}<span class="ret_verified"><i class="xiv-ChatReadOk"></i> XIVAPI Linked</span>{% endif %}
 
                     <a href="{{ path('retainers_delete', { retainer: retainer.id }) }}" class="retainer_remove">REMOVE</a>
-                    <small class="fr">Updated: {{ retainer.updated|date }}</small>
 
-                    {% if retainer.confirmed %}
-                        <br><br>
+                    <div>
+                        <p>Updated: {{ retainer.updated|date }}</p>
+
+                        {% if retainer.confirmed %}
                         <ul>
-                            <li>
-                                <h6><a href="{{ path('retainer_shop', { retainer: retainer.id }) }}">View Retainer Shop</a></h6>
-                                Retainers on MogBoard get their own store which you can personalise!
-                                <br><br>
+                            <li><a href="{{ path('retainer_shop', { retainer: retainer.id }) }}">View Retainer Shop</a></li>
                         </ul>
-                    {% else %}
-                    {% set item = game().item(retainer.confirmItem) %}
-                    <div class="retainer_verify">
-                        <strong class="text-highlight">VERIFICATION</strong>
-                        <p class="retainer_instructions">
-                            Place 1x <span class="text-green">{{ item.Name }}</span>
-                            for:
-                            <input type="text" class="retainer-gilcheck" value="{{ retainer.confirmPrice }}" readonly>
-                            <span class="text-highlight">Gil</span>
-                        </p>
-                        <p>
-                            Once your item is on the market board, please allow 5 minutes for the Game Servers
-                            to synchronise with the Companion API. You can attempt to confirm ownership every
-                            5 minutes. Retainers cannot be confirmed during in-game maintenance.
-                        </p>
-                        <br>
-
-                        {% if retainer.isRecent %}
-                        <div class="alert-blue">
-                            You can confirm ownership in: {{ retainer.nextOwnershipAttempt|date }}
-                        </div>
-                        {% else %}
-                            <button class="retainer_confirm" data-id="{{ retainer.id }}">Confirm Ownership</button>
                         {% endif %}
                     </div>
+
+                    {% if not retainer.confirmed %}
+                        {% set item = game().item(retainer.confirmItem) %}
+                        <div class="retainer_verify">
+                            <strong class="text-highlight">VERIFICATION</strong>
+                            <p class="retainer_instructions">
+                                Place 1x <span class="text-green">{{ item.Name }}</span>
+                                for:
+                                <input type="text" class="retainer-gilcheck" value="{{ retainer.confirmPrice }}" readonly>
+                                <span class="text-highlight">Gil</span>
+                            </p>
+                            <p>
+                                Once your item is on the market board, please allow 5 minutes for the Game Servers
+                                to synchronise with the Companion API. You can attempt to confirm ownership every
+                                5 minutes. Retainers cannot be confirmed during in-game maintenance.
+                            </p>
+                            <br>
+
+                            {% if retainer.isRecent %}
+                            <div class="alert-blue">
+                                You can confirm ownership in: {{ retainer.nextOwnershipAttempt|date }}
+                            </div>
+                            {% else %}
+                                <button class="retainer_confirm" data-id="{{ retainer.id }}">Confirm Ownership</button>
+                            {% endif %}
+                        </div>
                     {% endif %}
                 </div>
             </div>
