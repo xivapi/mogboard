@@ -23,6 +23,10 @@ class CompanionMarketActivity
     private $user;
     /** @var array */
     private $feed = [];
+    /** @var ConsoleOutput */
+    private $console1;
+    /** @var ConsoleOutput */
+    private $console2;
     
     public function __construct(Users $users)
     {
@@ -38,9 +42,11 @@ class CompanionMarketActivity
     {
         $start = time();
         
-        $console = new ConsoleOutput();
-        $console->writeln('Building market feeds for users');
-        $console = $console->section();
+        $this->console1 = new ConsoleOutput();
+        $this->console2 = new ConsoleOutput();
+        $this->console1->writeln('Building market feeds for users');
+        $this->console1 = $this->console1->section();
+        $this->console2 = $this->console2->section();
         
         $users = $this->users->getRepository()->findAll();
         
@@ -55,24 +61,24 @@ class CompanionMarketActivity
             $key = "user_home_feed_{$user->getId()}_recent";
 
             if (Redis::cache()->get($key)) {
-                $console->overwrite("User: {$user->getUsername()} skipping as build recently....");
+                $this->console1->overwrite("User: {$user->getUsername()} skipping as build recently....");
                 continue;
             }
 
             if ($user->getLastOnline() != 0 && $user->getLastOnline() < $timeout) {
-                $console->overwrite("User: {$user->getUsername()} as not been online for a week, skipping ...");
+                $this->console1->overwrite("User: {$user->getUsername()} as not been online for a week, skipping ...");
                 continue;
             }
             
-            $console->overwrite("{$i} / {$total} - Building feed for: {$user->getUsername()}");
+            $this->console1->overwrite("{$i} / {$total} - Building feed for: {$user->getUsername()}");
             $this->build($user);
 
             Redis::cache()->set($key, true, 1800);
         }
 
         $duration = time() - $start;
-        $console->writeln("Complete");
-        $console->writeln("Took: ". $duration / 60 . " minutes");
+        $this->console1->writeln("Complete");
+        $this->console1->writeln("Took: ". $duration / 60 . " minutes");
     }
     
     private function build(User $user)
@@ -100,6 +106,8 @@ class CompanionMarketActivity
         if (empty($alerts)) {
             return;
         }
+
+        $this->console2->overwrite("Building alert data.");
         
         foreach ($alerts as $alert) {
             /** @var UserAlertEvent[] $events */
@@ -173,6 +181,15 @@ class CompanionMarketActivity
         
         $itemIds = array_unique($itemIds);
         arsort($itemIds);
+
+        if (empty($itemIds)) {
+            return;
+        }
+
+        array_splice($itemIds, 200);
+        $total = count($itemIds);
+
+        $this->console2->overwrite("Getting {$total} items ...");
     
         /**
          * Only fetch the last sale price + the current cheapest for each server
