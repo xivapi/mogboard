@@ -32,7 +32,7 @@
                 </div>
                 <div class="flex_90 character_info">
                     <a href="{{ path('characters_delete', { character: character.id }) }}" class="character_remove">REMOVE</a>
-                    <h4 class="char_name">{{ character.name }}</h4>
+                    <h4 class="char_name">{{ character.main ? '[MAIN]' : '' }} {{ character.name }}</h4>
                     <p>
                         {{ character.server }}
                         - Updated: {{ character.updated|date }}
