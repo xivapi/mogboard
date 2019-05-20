@@ -3,8 +3,16 @@
     width: 100%;
     margin: 0 auto;
 
+    @include mq($until: desktop) {
+        display: block;
+    }
+
     > div:nth-of-type(1) {
-        width: 240px;
+        flex: 0 1 240px;
+
+        @include mq($until: desktop) {
+            flex: 0 1 100%;
+        }
 
         h3 {
             font-size: 20px;
@@ -64,8 +72,13 @@
     }
 
     > div:nth-of-type(2) {
-        width: calc(100% - 240px - 360px);
+        flex: 0 1 calc(100% - 240px - 360px);
         padding: 0 20px;
+
+        @include mq($until: desktop) {
+            flex: 0 1 100%;
+            padding: 0;
+        }
 
         .home-tab {
             display: none;
@@ -77,7 +90,11 @@
     }
 
     > div:nth-of-type(3) {
-        width: 360px;
+        flex: 0 1 360px;
+
+        @include mq($until: desktop) {
+            flex: 0 1 100%;
+        }
 
         h4 {
             text-align: center;
