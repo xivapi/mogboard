@@ -38,6 +38,9 @@
                         - Updated: {{ character.updated|date }}
                     </p>
                     <p>
+                        <a href="{{ path('character_main', { character: character.id }) }}">Set character as MAIN.</a>
+                    </p>
+                    <p>
                         {# <a href="{{ path('character_history', { character: character.id }) }}">View Purchase History</a> #}
                     </p>
                 </div>

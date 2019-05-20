@@ -85,6 +85,26 @@ class UserCharacters
     }
 
     /**
+     * @param UserCharacter $userCharacter
+     */
+    public function main(UserCharacter $userCharacter)
+    {
+        $user = $this->users->getUser(true);
+
+        /** @var UserCharacter $character */
+        foreach ($user->getCharacters() as $character) {
+            $character->setMain(false);
+            $this->em->persist($character);
+            $this->em->flush();
+        }
+
+        // set new character as main
+        $userCharacter->setMain(true);
+        $this->em->persist($userCharacter);
+        $this->em->flush();
+    }
+
+    /**
      * Save a new or existing alert
      */
     public function save(UserCharacter $obj)
@@ -218,13 +238,13 @@ class UserCharacters
         arsort($bestMonth);
         $bestMonth = [
             'date' => array_keys($bestMonth)[0],
-            'gil'  => reset($bestMonth)
+            'gil'  => reset($bestMonth),
         ];
         
         $data = [
             'totalGilSpent'   => $totalGilSpent,
             'mostBusyMonth'   => $bestMonth,
-            'mostBoughtItem'  => $mostItemsBought
+            'mostBoughtItem'  => $mostItemsBought,
         ];
         
         return $data;
