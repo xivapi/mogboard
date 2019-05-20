@@ -59,12 +59,17 @@
 
             <br>
 
-            <h6>MARKET AT THE TIME OF ALERT TRIGGER</h6>
-
-            {% include 'Product/prices.html.twig' with {
-                'prices': marketTable,
-                'crossWorld': 1,
-            } %}
+            {% if marketAlert.type == 'Prices' %}
+                {% include 'Product/prices.html.twig' with {
+                    'prices': marketTable,
+                    'crossWorld': 1,
+                } %}
+            {% else %}
+                {% include 'Product/history.html.twig' with {
+                    'history': marketTable,
+                    'crossWorld': 1,
+                } %}
+            {% endif %}
 
         {% endif %}
     </div>

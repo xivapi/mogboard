@@ -85,7 +85,7 @@ class CompanionMarketActivity
             array_splice($feed, 30);
 
             // cache for the user, the time on this is random so not all feeds are generated same time
-            Redis::cache()->set($checkGeneratedRecent, $feed, mt_rand(500, 1800));
+            Redis::cache()->set($checkGeneratedRecent, $feed, mt_rand(60, 900));
             Redis::cache()->set($cacheGeneratedFeed, $feed, RedisConstants::TIME_7_DAYS);
         }
 
@@ -125,6 +125,7 @@ class CompanionMarketActivity
             $marketData = json_decode($event['data']);
 
             // grab alert
+            /** @var UserAlert $alert */
             $alert = $this->em->getRepository(UserAlert::class)->find($eventId);
 
             /**
@@ -150,6 +151,7 @@ class CompanionMarketActivity
                         'dc'          => $alert->isTriggerDataCenter(),
                         'hq'          => $alert->isTriggerHq(),
                         'dps_perk'    => $alert->isKeepUpdated(),
+                        'type'        => $alert->getTriggerType(),
                     ],
                 ],
             ];
@@ -249,7 +251,7 @@ class CompanionMarketActivity
             $key = "mb_user_home_feed_xivapi_items_{$userId}_". md5(implode('-', $itemIdsChunked));
             if (!$market = Redis::cache()->get($key)) {
                 $market = $xivapi->market->items($itemIdsChunked, [], $dc);
-                Redis::cache()->set($key, $market, 300);
+                Redis::cache()->set($key, $market, 60);
             }
     
             /**
