@@ -67,6 +67,7 @@ class ExceptionListener implements EventSubscriberInterface
          */
         $ex    = $event->getException();
         $error = (Object)[
+            'site'          => 'MOGBOARD',
             'message'       => $ex->getMessage() ?: '(no-exception-message)',
             'code'          => $ex->getCode() ?: 200,
             'ex_class'      => get_class($ex),
