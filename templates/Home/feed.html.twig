@@ -4,15 +4,22 @@
     <div class="hf-row hf-row-{{ entry.type }}">
 
         {% if entry.type == 'LIST_PRICES' %}
+            {% set item = game().item(entry.data.itemId) %}
             {% set lastSale = entry.data.lastSale %}
             {% set cheapest = entry.data.cheapest %}
 
             <div class="flex">
-                <div class="flex_40">
+                <div class="flex_5">
+                    <img src="{{ item.Icon|icon }}" class="hf-icon">
+                </div>
+                <div class="flex_35" style="padding-left: 10px;">
                     <h6>{{ entry.timestamp|date }} - Server Price Update</h6>
                     <h5>
-                        List: <a href="{{ path('lists_view', { list: entry.data.list.id }) }}">{{ entry.data.list.name }}</a>
+                        <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
                     </h5>
+                    <div>
+                        List: <a href="{{ path('lists_view', { list: entry.data.list.id }) }}">{{ entry.data.list.name }}</a>
+                    </div>
                 </div>
                 <div class="flex_30">
                     <h6>{{ entry.data.server }} Cheapest</h6>

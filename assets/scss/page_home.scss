@@ -136,6 +136,12 @@
 
         &.hf-row-LIST_PRICES {
             border-left: solid 5px var(--blue);
+
+            .hf-icon {
+                border-radius: 5px;
+                box-shadow: 0 1px 3px #000;
+                height: 42px;
+            }
         }
 
         &.hf-row-ALERT_EVENT {
