@@ -16,19 +16,27 @@
                 </div>
                 <div class="flex_30">
                     <h6>{{ entry.data.server }} Cheapest</h6>
+                    {% if cheapest %}
                     <div>
                         {{ cheapest.IsHQ ? '<img src="/i/game/hq.png">' : '' }}
                         {{ cheapest.Quantity|number_format }} x
                         <span class="text-highlight">{{ cheapest.PricePerUnit|number_format }}</span>
                         <span class="text-gray">({{ cheapest.PriceTotal|number_format }})</span>
                     </div>
+                    {% else %}
+                    <div>None</div>
+                    {% endif %}
                 </div>
                 <div class="flex_30">
                     <h6>{{ entry.data.server }} Last Sold</h6>
+                    {% if lastSale %}
                     {{ lastSale.IsHQ ? '<img src="/i/game/hq.png">' : '' }}
                     {{ lastSale.Quantity|number_format }} x
                     <span class="text-highlight">{{ lastSale.PricePerUnit|number_format }}</span>
                     <span class="text-gray">({{ lastSale.PriceTotal|number_format }})</span>
+                    {% else %}
+                    <div>None</div>
+                    {% endif %}
                 </div>
             </div>
 
