@@ -159,7 +159,7 @@ class UserCharacters
     
         try {
             // get retainer items
-            $data = (new XIVAPI(XIVAPI::DEV))->_private->characterHistory(
+            $data = (new XIVAPI())->_private->characterHistory(
                 getenv('XIVAPI_COMPANION_KEY'),
                 $userCharacter->getLodestoneId()
             );
@@ -244,7 +244,7 @@ class UserCharacters
     
         try {
             // get retainer items
-            $data = (new XIVAPI(XIVAPI::PROD))->character->get(
+            $data = (new XIVAPI())->character->get(
                 $userCharacter->getLodestoneId(), [ 'AC', 'FR', 'FC', 'FCM' ], true
             );
         } catch (ClientException $ex) {

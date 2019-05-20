@@ -300,7 +300,7 @@ class UserRetainers
 
         try {
             // get retainer items
-            $data = (new XIVAPI(XIVAPI::DEV))->_private->retainerItems(
+            $data = (new XIVAPI())->_private->retainerItems(
                 getenv('XIVAPI_COMPANION_KEY'),
                 $retainer->getApiRetainerId()
             );
