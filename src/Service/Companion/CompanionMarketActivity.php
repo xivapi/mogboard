@@ -82,7 +82,7 @@ class CompanionMarketActivity
              * Order by timestamp and slice the top 30 results.
              */
             Arrays::sortBySubKey($feed, 'timestamp');
-            $feed = array_splice($feed, 0, 30);
+            array_splice($feed, 30);
 
             // cache for the user
             //Redis::cache()->set($checkGeneratedRecent, $feed, 900);
