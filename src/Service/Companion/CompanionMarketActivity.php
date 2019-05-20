@@ -61,6 +61,10 @@ class CompanionMarketActivity
         foreach ($users as $i => $user) {
             $id   = $user['id'];
             $name = $user['username'];
+            
+            if (getenv('APP_ENV') === 'dev' && $name != 'Vekien') {
+                continue;
+            }
 
             $section->overwrite("{$i} / {$usersTotal} - {$id}  {$name}");
 
@@ -68,7 +72,7 @@ class CompanionMarketActivity
             $checkGeneratedRecent = "mb_user_home_feed_recent_{$id}";
             $cacheGeneratedFeed   = "mb_user_home_feed_generated_{$id}";
 
-            if (Redis::cache()->get($checkGeneratedRecent)) {
+            if (false && Redis::cache()->get($checkGeneratedRecent)) {
                 continue;
             }
 
@@ -172,7 +176,7 @@ class CompanionMarketActivity
         $stmt = $this->em->getConnection()->prepare(
             "SELECT server FROM users_characters WHERE user_id = '{$userId}' AND main = 1 LIMIT 1"
         );
-
+    
         $stmt->execute();
         $character = $stmt->fetch();
 

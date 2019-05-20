@@ -226,6 +226,54 @@
     }
 }
 
+.news-img {
+    width: 100%;
+    height: 500px;
+    margin: 10px auto;
+    display: inline-block;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: solid 1px #000;
+    box-shadow: 0 0 3px #555;
+    background-color: #000;
+
+    img {
+        transition: 150ms;
+        max-width: 100%;
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%) scale(1.02);
+    }
+
+    &:hover {
+        img {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+    }
+}
+
+.news-note {
+    background-color: rgba(0,0,0,0.8);
+    padding: 15px;
+    border-radius: 5px;
+    opacity: 0.6;
+
+    * {
+        font-size: 14px;
+    }
+
+    h4 {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    ul, ol {
+        margin-bottom: 0;
+    }
+}
+
+
 //
 // Feedback
 //

@@ -50,6 +50,7 @@ class IndexController extends AbstractController
         
         // grab the users market feed
         $marketFeed = $this->companionMarketActivity->getFeed($this->users->getUser());
+        $marketFeed = json_decode(json_encode($marketFeed), true);
         
         return $this->render('Home/home.html.twig',[
             'market_feed'   => $marketFeed,
@@ -80,11 +81,11 @@ class IndexController extends AbstractController
     public function news(?string $slug = null)
     {
         $templates = [
-            'manual-updating'                               => '2019_05_05_manual_update.html.twig',
-            'retainer-characters-privacy-changes'           => '2019_05_19_retainer_characters.html.twig'
+            'manual-updating'                               => '2019_05_05.html.twig',
+            'homepage-retainer-lists-and-privacy-changes'   => '2019_05_20.html.twig'
         ];
 
-        $slug = $slug ?: 'manual-updating';
+        $slug = $slug ?: 'homepage-retainer-lists-and-privacy-changes';
         
         return $this->render('News/'. $templates[$slug]);
     }
