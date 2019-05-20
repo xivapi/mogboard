@@ -142,6 +142,32 @@
                 box-shadow: 0 1px 3px #000;
                 height: 42px;
             }
+
+            .flex .flex_35 {
+                padding-left: 12px;
+            }
+
+            @include mq($until: desktop) {
+                .flex {
+                    display: block;
+
+                    h6 {
+                        margin-bottom: 3px;
+                    }
+
+                    > div {
+                        margin-bottom: 10px;
+                    }
+
+                    .flex_5 {
+                        display: none;
+                    }
+
+                    .flex_35 {
+                        padding-left: 0;
+                    }
+                }
+            }
         }
 
         &.hf-row-ALERT_EVENT {

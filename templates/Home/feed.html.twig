@@ -12,7 +12,7 @@
                 <div class="flex_5">
                     <img src="{{ item.Icon|icon }}" class="hf-icon">
                 </div>
-                <div class="flex_35" style="padding-left: 10px;">
+                <div class="flex_35">
                     <h6>{{ entry.timestamp|date }} - Server Price Update</h6>
                     <h5>
                         <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
