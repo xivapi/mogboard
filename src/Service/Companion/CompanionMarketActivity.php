@@ -84,8 +84,8 @@ class CompanionMarketActivity
             Arrays::sortBySubKey($feed, 'timestamp');
             array_splice($feed, 30);
 
-            // cache for the user
-            //Redis::cache()->set($checkGeneratedRecent, $feed, 900);
+            // cache for the user, the time on this is random so not all feeds are generated same time
+            Redis::cache()->set($checkGeneratedRecent, $feed, mt_rand(500, 1800));
             Redis::cache()->set($cacheGeneratedFeed, $feed, RedisConstants::TIME_7_DAYS);
         }
 
@@ -225,8 +225,8 @@ class CompanionMarketActivity
             return $feed;
         }
 
-        // reduce to a maximum of 200 items...
-        array_splice($itemIds, 200);
+        // reduce to a maximum of 300 items...
+        array_splice($itemIds, 300);
 
         /**
          * Only fetch the last sale price + the current cheapest for each server
