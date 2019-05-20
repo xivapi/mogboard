@@ -31,9 +31,12 @@ class CompanionMarketActivity
     
     public function getFeed(?User $user = null)
     {
-        return $user ? Redis::cache()->get("user_home_feed_{$user->getId()}") : null;
+        return $user ? Redis::cache()->get("mb_user_home_feed_generated_{$user->getId()}") : null;
     }
-    
+
+    /**
+     * Build the market feeds for all the users.
+     */
     public function buildUserMarketFeeds()
     {
         $start = time();
