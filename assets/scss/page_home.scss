@@ -278,11 +278,20 @@
 
     > div:first-of-type {
         flex: 0 1 46px;
+
+        @include mq($until: desktop) {
+            display: none;
+        }
     }
 
     > div:last-of-type {
         flex: 0 1 calc(100% - 46px);
         padding-left: 15px;
+
+        @include mq($until: desktop) {
+            flex: 0 1 100%;
+            padding-left: 0;
+        }
     }
 
     .item_icon {
