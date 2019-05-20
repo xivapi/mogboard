@@ -298,6 +298,10 @@ class UserRetainers
             return $data;
         }
 
+        if (empty($retainer->getApiRetainerId())) {
+            throw new BasicException("Your retainer has not yet been synced on XIVAPI. This can be caused by the retainer never selling anything or is new to the site. Try again soon or contact a Mogboard staff member");
+        }
+
         try {
             // get retainer items
             $data = (new XIVAPI())->_private->retainerItems(
