@@ -85,6 +85,7 @@ class CompanionMarketActivity
             array_splice($feed, 0, 30);
 
             // cache for the user
+            //Redis::cache()->set($checkGeneratedRecent, $feed, 900);
             Redis::cache()->set($cacheGeneratedFeed, $feed, RedisConstants::TIME_7_DAYS);
         }
 
@@ -101,14 +102,12 @@ class CompanionMarketActivity
      */
     private function addRecentAlerts(string $userId, array $feed)
     {
-        // we only care about events in the past 2 days
-        $deadline = time() - (60 * 60 * 24 * 2);
-
         /**
          * Get all the alert events for this user
          */
+        $deadline = time() - (60 * 60 * 24 * 7);
         $stmt = $this->em->getConnection()->prepare(
-            "SELECT event_id, added, `data` FROM users_alerts_events WHERE added > {$deadline} AND user_id = '{$userId}'"
+            "SELECT event_id, added, `data` FROM users_alerts_events WHERE added > {$deadline} AND user_id = '{$userId}' ORDER BY added DESC"
         );
         $stmt->execute();
 
