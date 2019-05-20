@@ -154,10 +154,12 @@ class UserRetainers
                 $server
             );
             
-            if ($market->Error) {
-                return [
-                    false, "Error A1: {$market->Message}"
-                ];
+            if (isset($market->Error)) {
+                throw new BasicException("XIVAPI Error 42: ". $market->Message);
+            }
+            
+            if (!isset($market->entries)) {
+                throw new BasicException("XIVAPI Error 88: Market entry data was empty");
             }
     
             // find listing
