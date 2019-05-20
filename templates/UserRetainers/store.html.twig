@@ -68,15 +68,20 @@
                 </div>
             {% endfor %}
         {% else %}
-            <div class="alert-red">
-                <h2>No items found</h2>
-                Mogboard could not find any items being sold by this retainer. This could either be:
-                the retainer has not fully sync'd up with XIVAPI or the items that the retainer
-                is selling have not yet been updated. In some small cases, it could be that
-                the Companion App is out of date (it takes anywhere from 5 to 15 minutes for new
-                sales to appear on the Companion App).
-                <br><br>
-                Please try again soon or contact a member of the XIVAPI/Mogboard staff on Discord for support.
+            <h2>No Items found</h2>
+            <div class="alert-light">
+                Your retainer does not seem to be selling anything at this time!
+            </div>
+
+            <br><br>
+
+            <div class="alert-light">
+                <p>Expecting stuff? One of these could be why:</p>
+                <ol>
+                    <li>The items you are selling have not been recently updated.</li>
+                    <li>Companion is down for maintenance (Check lodestone)</li>
+                    <li>XIVAPI may not have sync'd your retainer just yet.</li>
+                </ol>
             </div>
         {% endif %}
     </div>
