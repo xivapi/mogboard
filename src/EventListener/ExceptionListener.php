@@ -7,7 +7,9 @@ use App\Common\Exceptions\BasicException;
 use App\Common\Service\Redis\Redis;
 use App\Common\ServicesThirdParty\Discord\Discord;
 use App\Common\Utils\Environment;
+use App\Exceptions\GeneralJsonException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -95,6 +97,24 @@ class ExceptionListener implements EventSubscriberInterface
                 DiscordConstants::ROOM_ERRORS,
                 "```json\n". json_encode($error, JSON_PRETTY_PRINT) ."\n```"
             );
+        }
+
+        /**
+         * If it's a json exception
+         */
+        if ($error->ex_class === GeneralJsonException::class) {
+            $error = [
+                'Error' => true,
+                'Message' => $ex->getMessage(),
+                'Hash' => sha1($ex->getMessage() . $ex->getFile()),
+            ];
+
+            $response = new JsonResponse($error, $error->code);
+            $response->headers->set('Content-Type','application/json');
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Headers', '*');
+            $event->setResponse($response);
+            return;
         }
 
         /**
