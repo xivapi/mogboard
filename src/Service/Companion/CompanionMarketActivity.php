@@ -60,6 +60,9 @@ class CompanionMarketActivity
         foreach ($users as $i => $user) {
             $i = ($i + 1);
 
+            Redis::cache()->delete("user_home_feed_{$user->getId()}");
+            continue;
+
             $key = "user_home_feed_{$user->getId()}_recent";
 
             if (Redis::cache()->get($key)) {
