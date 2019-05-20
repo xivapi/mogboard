@@ -104,9 +104,10 @@ class ExceptionListener implements EventSubscriberInterface
          */
         if ($error->ex_class === GeneralJsonException::class) {
             $response = new JsonResponse([
-                'Error' => true,
-                'Message' => $ex->getMessage(),
-                'Hash' => sha1($ex->getMessage() . $ex->getFile()),
+                'Error'    => true,
+                'Message'  => $ex->getMessage(),
+                'Hash'     => sha1($ex->getMessage() . $ex->getFile()),
+                'ExClass'  => get_class($ex),
             ], $error->code);
             $response->headers->set('Content-Type','application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');

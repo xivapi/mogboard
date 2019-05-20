@@ -69,7 +69,7 @@ class UserRetainerController extends AbstractController
         $this->users->setLastUrl($request);
 
         // verify the user owns this retainer
-        if ($retainer->getUser() !== $user) {
+        if ($retainer->getUser() !== $user && !$user->isAdmin()) {
             throw new UnauthorizedHttpException('Denied', 'Sorry, you do not own this retainer and will not be able to view its shop.');
         }
 
