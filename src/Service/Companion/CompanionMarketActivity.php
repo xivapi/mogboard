@@ -109,8 +109,6 @@ class CompanionMarketActivity
             return;
         }
 
-        $this->console2->overwrite("Building alert data.");
-        
         foreach ($alerts as $alert) {
             /** @var UserAlertEvent[] $events */
             $events = $alert->getEvents();
@@ -190,10 +188,7 @@ class CompanionMarketActivity
         }
 
         array_splice($itemIds, 200);
-        $total = count($itemIds);
 
-        $this->console2->overwrite("Getting {$total} items for: {$totalLists} lists ...");
-    
         /**
          * Only fetch the last sale price + the current cheapest for each server
          */
