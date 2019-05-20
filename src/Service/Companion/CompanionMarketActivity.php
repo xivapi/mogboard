@@ -105,7 +105,7 @@ class CompanionMarketActivity
          * Get all the alert events for this user
          */
         $stmt = $this->em->getConnection()->prepare(
-            "SELECT event_id, added, `data` FROM users WHERE added > {$deadline} AND user_id = '{$userId}'"
+            "SELECT event_id, added, `data` FROM users_alerts_events WHERE added > {$deadline} AND user_id = '{$userId}'"
         );
         $stmt->execute();
 
