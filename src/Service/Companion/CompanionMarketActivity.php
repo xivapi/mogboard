@@ -64,12 +64,12 @@ class CompanionMarketActivity
 
             if (Redis::cache()->get($key)) {
                 $this->console1->overwrite("User: {$user->getUsername()} skipping as build recently....");
-                continue;
+                //continue;
             }
 
             if ($user->getLastOnline() != 0 && $user->getLastOnline() < $timeout) {
                 $this->console1->overwrite("User: {$user->getUsername()} as not been online for a week, skipping ...");
-                continue;
+                //continue;
             }
             
             $this->console1->overwrite("{$i} / {$total} - Building feed for: {$user->getUsername()}");
@@ -154,6 +154,10 @@ class CompanionMarketActivity
      */
     private function addRecentPriceUpdates()
     {
+        // disable this for now because i have no way to get a users server at the moment.
+
+        return;
+
         /** @var  $lists */
         $lists = $this->user->getLists();
 
