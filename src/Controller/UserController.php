@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Common\Controller\UserTraitController;
+use App\Common\Exceptions\BasicException;
 use App\Common\User\Users;
+use App\Service\UserCharacters\UserCharacters;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,10 +16,13 @@ class UserController extends AbstractController
     
     /** @var Users */
     private $users;
+    /** @var UserCharacters */
+    private $userCharacters;
     
-    public function __construct(Users $users)
+    public function __construct(Users $users, UserCharacters $userCharacters)
     {
         $this->users = $users;
+        $this->userCharacters = $userCharacters;
     }
     
     /**
@@ -48,6 +53,27 @@ class UserController extends AbstractController
     {
         $this->users->setLastUrl($request);
         return $this->render('UserAccount/characters.html.twig');
+    }
+
+    /**
+     * @Route("/account/patreon", name="user_account_patreon")
+     */
+    public function accountPatreon(Request $request)
+    {
+        $user = $this->users->getUser(true);
+
+        if ($user->isPatron() == false) {
+            throw new BasicException("Sorry, you are not a patreon member and cannot view this page.");
+        }
+
+        $character = $this->userCharacters->getCharacter(
+            $user->getMainCharacter()
+        );
+
+        $this->users->setLastUrl($request);
+        return $this->render('UserAccount/patreon.html.twig', [
+            'character' => $character,
+        ]);
     }
     
     /**
