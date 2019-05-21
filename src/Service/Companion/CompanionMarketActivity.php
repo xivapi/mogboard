@@ -61,10 +61,6 @@ class CompanionMarketActivity
         foreach ($users as $i => $user) {
             $id   = $user['id'];
             $name = $user['username'];
-            
-            if (getenv('APP_ENV') === 'dev' && $name != 'Vekien') {
-                continue;
-            }
 
             $section->overwrite("{$i} / {$usersTotal} - {$id}  {$name}");
 
@@ -72,7 +68,7 @@ class CompanionMarketActivity
             $checkGeneratedRecent = "mb_user_home_feed_recent_{$id}";
             $cacheGeneratedFeed   = "mb_user_home_feed_generated_{$id}";
 
-            if (false && Redis::cache()->get($checkGeneratedRecent)) {
+            if (Redis::cache()->get($checkGeneratedRecent)) {
                 continue;
             }
 
@@ -86,10 +82,10 @@ class CompanionMarketActivity
              * Order by timestamp and slice the top 30 results.
              */
             Arrays::sortBySubKey($feed, 'timestamp');
-            array_splice($feed, 30);
+            array_splice($feed, 50);
 
             // cache for the user, the time on this is random so not all feeds are generated same time
-            Redis::cache()->set($checkGeneratedRecent, $feed, mt_rand(60, 900));
+            Redis::cache()->set($checkGeneratedRecent, $feed, mt_rand(60, 570));
             Redis::cache()->set($cacheGeneratedFeed, $feed, RedisConstants::TIME_7_DAYS);
         }
 
@@ -231,8 +227,8 @@ class CompanionMarketActivity
             return $feed;
         }
 
-        // reduce to a maximum of 300 items...
-        array_splice($itemIds, 300);
+        // set a max
+        array_splice($itemIds, 500);
 
         /**
          * Only fetch the last sale price + the current cheapest for each server
@@ -245,18 +241,12 @@ class CompanionMarketActivity
 
         // only record 15 entries, otherwise it gets spammy
         $countPerList = [];
-        $countMax = 5;
+        $countMax = 10;
         
         // fetch in batches of 50
         foreach(array_chunk($itemIds, 50) as $itemIdsChunked) {
-            /**
-             * Check cache first
-             */
-            $key = "mb_user_home_feed_xivapi_items_{$userId}_". md5(implode('-', $itemIdsChunked));
-            if (!$market = Redis::cache()->get($key)) {
-                $market = $xivapi->market->items($itemIdsChunked, [], $dc);
-                Redis::cache()->set($key, $market, 60);
-            }
+            // get market info
+            $market = $xivapi->market->items($itemIdsChunked, [], $dc);
     
             /**
              * Process market data
@@ -268,7 +258,7 @@ class CompanionMarketActivity
                 
                 foreach ($itemMarket as $server => $serverMarket) {
                     $lastSale = $serverMarket->History[0] ?? null;
-                    $cheapest = $serverMarket->Prices[0] ?? null;
+                    $cheapest = $serverMarket->Prices[0]  ?? null;
     
                     $countPerList[$listId] = isset($countPerList[$listId]) ? $countPerList[$listId] + 1 : 1;
     
@@ -278,8 +268,8 @@ class CompanionMarketActivity
                     
                     $feed[] = [
                         'timestamp' => $serverMarket->Updated,
-                        'type' => self::TYPE_LIST_PRICES,
-                        'data' => [
+                        'type'      => self::TYPE_LIST_PRICES,
+                        'data'      => [
                             'server'   => $server,
                             'itemId'   => $itemId,
                             'lastSale' => $lastSale,
