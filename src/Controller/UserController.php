@@ -66,9 +66,12 @@ class UserController extends AbstractController
             throw new BasicException("Sorry, you are not a patreon member and cannot view this page.");
         }
 
-        $character = $this->userCharacters->getCharacter(
+        /**
+         * Try get the users main character
+         */
+        $character = $user->getMainCharacter() ? $this->userCharacters->getCharacter(
             $user->getMainCharacter()
-        );
+        ) : null;
 
         $this->users->setLastUrl($request);
         return $this->render('UserAccount/patreon.html.twig', [
@@ -111,6 +114,4 @@ class UserController extends AbstractController
         $this->users->setLastUrl($request);
         return $this->render('UserAccount/reports.html.twig');
     }
-    
-    
 }

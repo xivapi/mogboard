@@ -5,7 +5,25 @@
 {% block account %}
 <h5>Patreon</h5>
 
-<div class="account-panel">
-    todo...
-</div>
+    {# friends with benefits! #}
+    {% if auth.user.isPatronHealer %}
+        <h3>Patreon Perk: Friendly Benefits</h3>
+        <p>
+            As a {{ auth.user.patreonTier }} patron member, you can give site-wide
+            benefits to your most fave friends!
+        </p>
+        <p>
+            Select up to: {{ auth.user.maxBenefitFriends }} friends to give patreon status to.
+        </p>
+
+        {% if character %}
+            {% for friend in character.Friends %}
+                <div>
+                    {{ friend.Name }}
+                </div>
+            {% else %}
+                <div class="alert-dark">Your friends list is not public on XIVAPI</div>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
 {% endblock %}

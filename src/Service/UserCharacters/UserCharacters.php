@@ -265,7 +265,7 @@ class UserCharacters
         try {
             // get retainer items
             $data = (new XIVAPI())->character->get(
-                $userCharacter->getLodestoneId(), [ 'AC', 'FR', 'FC', 'FCM' ], true
+                $userCharacter->getLodestoneId(), [ 'FR', 'FC', 'FCM' ], true
             );
         } catch (ClientException $ex) {
             $error = json_decode($ex->getResponse()->getBody()->getContents());
