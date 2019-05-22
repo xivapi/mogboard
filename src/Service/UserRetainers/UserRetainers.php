@@ -10,7 +10,7 @@ use App\Common\Repository\UserRetainerRepository;
 use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
 use App\Common\Utils\Arrays;
-use App\Exceptions\GeneralJsonException;
+use App\Common\Exceptions\GeneralJsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
 use App\Service\Companion\Companion;
 use Doctrine\ORM\EntityManagerInterface;

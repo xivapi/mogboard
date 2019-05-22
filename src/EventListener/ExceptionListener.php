@@ -7,7 +7,7 @@ use App\Common\Exceptions\BasicException;
 use App\Common\Service\Redis\Redis;
 use App\Common\ServicesThirdParty\Discord\Discord;
 use App\Common\Utils\Environment;
-use App\Exceptions\GeneralJsonException;
+use App\Common\Exceptions\GeneralJsonException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -87,7 +87,8 @@ class ExceptionListener implements EventSubscriberInterface
          */
         $validExceptions = [
             BasicException::class,
-            NotFoundHttpException::class
+            NotFoundHttpException::class,
+            GeneralJsonException::class,
         ];
 
         $madeAware = false;

@@ -7,7 +7,7 @@ use App\Common\Exceptions\BasicException;
 use App\Common\Repository\UserCharacterRepository;
 use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
-use App\Exceptions\GeneralJsonException;
+use App\Common\Exceptions\GeneralJsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -61,7 +61,7 @@ class UserCharacters
 
         // test if our Users pass phrase was found
         if (stripos($verification->Bio, $user->getCharacterPassPhrase()) === false) {
-            throw new GeneralJsonException('Character auth code could not be found on the characters profile bio.');
+            throw new GeneralJsonException('Character auth code could not be found on the characters profile bio.', 200);
         }
         
         // grab character
