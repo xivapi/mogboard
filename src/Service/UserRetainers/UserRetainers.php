@@ -161,10 +161,14 @@ class UserRetainers
             if (!isset($market->entries)) {
                 throw new BasicException("XIVAPI Error 88: Market entry data was empty");
             }
+
+            if (empty($market->entries)) {
+                throw new BasicException("There were no sales on the market for this item on this server.");
+            }
     
             // find listing
             foreach ($market->entries as $entry) {
-                if ($entry->sellRetainerName == $name && $entry->sellPrice == $itemPrice) {
+                if (strtolower($entry->sellRetainerName) == strtolower($name) && $entry->sellPrice == $itemPrice) {
                     $found = true;
                     break;
                 }
