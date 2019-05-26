@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Common\Entity\Maintenance;
 use App\Common\Entity\UserAlert;
+use App\Common\Exceptions\BasicException;
 use App\Common\Game\GameServers;
 use App\Common\Service\Redis\RedisTracking;
 use App\Common\User\Users;
@@ -77,8 +78,12 @@ class ItemController extends AbstractController
     /**
      * @Route("/market/{itemId}", name="item_page")
      */
-    public function index(Request $request, int $itemId)
+    public function index(Request $request, $itemId)
     {
+        if (filter_var($itemId, FILTER_VALIDATE_INT) === false) {
+            return $this->redirectToRoute('404');
+        }
+        
         RedisTracking::increment('PAGE_VIEW');
         
         $this->users->setLastUrl($request);
