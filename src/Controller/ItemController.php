@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Common\Entity\Maintenance;
 use App\Common\Entity\UserAlert;
 use App\Common\Exceptions\BasicException;
+use App\Common\Exceptions\JsonException;
 use App\Common\Game\GameServers;
 use App\Common\Service\Redis\RedisTracking;
 use App\Common\User\Users;
@@ -80,6 +81,10 @@ class ItemController extends AbstractController
      */
     public function index(Request $request, $itemId)
     {
+        if ($itemId === '-id-') {
+            throw new JsonException("Something went wrong during the request... Contact a mogboard staff admin.");
+        }
+        
         if (filter_var($itemId, FILTER_VALIDATE_INT) === false) {
             return $this->redirectToRoute('404');
         }
