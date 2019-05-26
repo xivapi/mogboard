@@ -92,7 +92,7 @@ class ExceptionListener implements EventSubscriberInterface
         ];
 
         $madeAware = false;
-        if (Redis::Cache()->get(__METHOD__ . $error->hash) == null && !in_array($error->ex_class, $validExceptions)) {
+        if (Redis::Cache()->get(__METHOD__ . $error->hash) == null && !in_array($error->ex_class, $validExceptions) && $error->env != 'local') {
             Redis::Cache()->set(__METHOD__ . $error->hash, true);
             $madeAware = true;
             Discord::mog()->sendMessage(
