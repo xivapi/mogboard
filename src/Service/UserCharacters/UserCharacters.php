@@ -59,6 +59,10 @@ class UserCharacters
 
         // run character verification
         $verification = $this->xivapi->character->verify($lodestoneId);
+        
+        if (isset($verification->Error)) {
+            throw new JsonException($verification->Message);
+        }
 
         // test if our Users pass phrase was found
         if (stripos($verification->Bio, $user->getCharacterPassPhrase()) === false) {
