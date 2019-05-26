@@ -34,6 +34,9 @@ class AdminController extends AbstractController
      */
     public function adminTrackingStats()
     {
+        $user = $this->users->getUser(true);
+        $user->mustBeAdmin();
+        
         $report = RedisTracking::get();
         $report = (Array)$report;
         ksort($report);
@@ -48,6 +51,9 @@ class AdminController extends AbstractController
      */
     public function adminTrackingStatsReset()
     {
+        $user = $this->users->getUser(true);
+        $user->mustBeAdmin();
+        
         RedisTracking::reset();
         return $this->json(true);
     }

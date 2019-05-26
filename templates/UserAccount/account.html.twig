@@ -5,81 +5,103 @@
 {% block account %}
 
     <h1>Account</h1>
-    <div class="table-dark">
-        <table>
-            <tbody>
-                <tr>
-                    <td width="10%">
-                        <img src="{{ auth.user.avatar }}" height="64" class="user_avatar">
-                    </td>
-                    <td>
-                        <h3>{{ auth.user.username }}</h3>
-                        {{ auth.user.sso|title }} - {{ auth.user.email }} - Timezone: {{ timezone() }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>
-                        {% if auth.user.isPatron %}
-                            <small style="margin-bottom: 5px;">PATREON REWARD ACTIVE</small>
-                            <h5 class="text-green">You are a {{ auth.user.patreonTier }} tier supporter!</h5>
+    <table>
+        <tbody>
+            <tr>
+                <td width="10%">
+                    <img src="{{ auth.user.avatar }}" height="64" class="user_avatar">
+                </td>
+                <td>
+                    <h3>{{ auth.user.username }}</h3>
+                    {{ auth.user.sso|title }} - {{ auth.user.email }} - Timezone: {{ timezone() }}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    {% if auth.user.isPatron %}
+                        <small style="margin-bottom: 5px;display:block;">PATREON REWARD ACTIVE</small>
+                        <h5 class="text-green">You are a {{ auth.user.patreonTier }} tier supporter!</h5>
+
+                        {% if auth.user.patron == 9 %}
+                            {% if benefit_user %}
                             <p>
-                                Firstly: a huge thank you to support XIVAPI and MogBoard. This reduces the worry
-                                of building out infrastructure, or paying for market accounts. Your money
-                                goes a long way. If you are interested in seeing the cost of the servers you can
-                                view the <a href="https://xivapi.com/docs/Costs">Costs page on XIVAPI</a>.
+                                You are one lucky duck, the user:
+                                <span class="text-yellow">{{ benefit_user.username|title }}</span> has
+                                granted you extra perks on Mogboard!
                             </p>
+                            {% else %}
                             <p>
-                                All your perks on MogBoard and XIVAPI are active, alerts have been retroactively updated
-                                to receive the new benefits. You can view your benefits in the table below.
+                                You are one lucky duck, a user of Mogboard has granted you extra perks!
                             </p>
-                            <p>
-                                Be sure to say Hi on the <strong>#patreon</strong> discord channel!
-                            </p>
-                            <p>
-                                - PV
-                            </p>
-                        {% else %}
-                            <h5>Patreon</h5>
-                            <p>
-                                Both XIVAPI.com and MogBoard.com are supported by the community via Patreon. By becoming a supporter
-                                you'll receive perks for both sites and help keep the lights on!
-                            </p>
-                            <p>
-                                If you are a supporter, please make sure you are in the
-                                <a href="https://discordapp.com/invite/MFFVHWC">XIVAPI discord</a>, have
-                                received a Patreon Role and can view <span class="text-highlight">#patreon</span> channel.
-                            </p>
-                            <p>
-                                <a href="https://www.patreon.com/bePatron?u=13230932" target="_blank">
-                                    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png">
-                                </a>
-                            </p>
-                        {% endif %}
-                        <hr>
-                        <h6>Confirm Patreon Status</h6>
-                        {% if app.request.get('patreon_checked') %}
-                            <div class="alert-green">
-                                Your patreon status returned as: <strong>{{ app.request.get('patreon_checked') }}</strong>
-                                - If this is incorrect, please jump into the Discord and message Vekien.
-                            </div>
-                        {% endif %}
-                        <p class="form">
-                            <button class="btn btn-green check_patreon_status">Check my Patreon Status</button>
+                            {% endif %}
+                        <p>
+                            With this status, you get the following benefits:
                         </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="tar">
-                        Ready to leave? <a href="{{ path('account_logout') }}" class="text-red">Logout</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                        <ul>
+                            <li><strong>Manually update items on-demand</strong></li>
+                            <li><strong>Prioritised Mogboard alerts!</strong></li>
+                        </ul>
+                        {% else %}
+                        <p>
+                            Firstly: a huge thank you to support XIVAPI and MogBoard. This reduces the worry
+                            of building out infrastructure, or paying for market accounts. Your money
+                            goes a long way. If you are interested in seeing the cost of the servers you can
+                            view the <a href="https://xivapi.com/docs/Costs">Costs page on XIVAPI</a>.
+                        </p>
+                        <p>
+                            All your perks on MogBoard and XIVAPI are active, alerts have been retroactively updated
+                            to receive the new benefits. You can view your benefits in the table below.
+                        </p>
+                        <p>
+                            Be sure to say Hi on the <strong>#patreon</strong> discord channel!
+                        </p>
+                        {% endif %}
+                        <p>
+                            - PV
+                        </p>
+                    {% else %}
+                        <h5>Patreon</h5>
+                        <p>
+                            Both XIVAPI.com and MogBoard.com are supported by the community via Patreon. By becoming a supporter
+                            you'll receive perks for both sites and help keep the lights on!
+                        </p>
+                        <p>
+                            If you are a supporter, please make sure you are in the
+                            <a href="https://discordapp.com/invite/MFFVHWC" target="_blank">XIVAPI discord</a>, have
+                            received a Patreon Role and can view <span class="text-highlight">#patreon</span> channel.
+                        </p>
+                        <p>
+                            <a href="https://www.patreon.com/bePatron?u=13230932" target="_blank">
+                                <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png">
+                            </a>
+                        </p>
+                    {% endif %}
+                    <hr>
+                    <p>
+                        You can confirm and check your patreon status at anytime.
+                        You must be in the <a href="https://discord.gg/MFFVHWC" target="_blank">XIVAPI Discord</a>
+                        to receive your status, so please join! You must have also obtained your Patreon
+                        discord role.
+                    </p>
+                    {% if app.request.get('patreon_checked') %}
+                        <div class="alert-green">
+                            Your patreon status returned as: <strong>{{ app.request.get('patreon_checked') }}</strong>
+                            - If this is incorrect, please jump into the Discord and message Vekien.
+                        </div>
+                    {% endif %}
+                    <p class="form">
+                        <button class="btn btn-green check_patreon_status">Check my Patreon Status</button>
+                    </p>
+                    <p class="text-red">
+                        <strong>Note:</strong> Clicking this will reset your benefit selections.
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-    <hr>
-
+    <br><br>
 
     <h3>PATREON</h3>
     <div class="alert-dark">
@@ -111,7 +133,6 @@
         <p>
             You can view the current server and account costs here:
             <a href="https://xivapi.com/docs/Costs" target="_blank">Accounts and Server Costs</a>
-            (This page updates in real-time)
         </p>
     </div>
 

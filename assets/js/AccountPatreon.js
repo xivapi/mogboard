@@ -10,6 +10,7 @@ class AccountPatreon
         }
 
         this.handlePatreonStatusCheck();
+        this.handlePatreonFriendAssignment();
     }
 
     /**
@@ -41,6 +42,47 @@ class AccountPatreon
                 }
             })
         });
+    }
+
+    /**
+     * Handles assigning friend the benefit perk
+     */
+    handlePatreonFriendAssignment()
+    {
+        $('.pat-friend-promote button').on('click', event => {
+            const $btn = $(event.target);
+            const id   = $btn.attr('id');
+
+            ButtonLoading.start($btn);
+
+            $.ajax({
+                url: '/account/patreon/perks/benefit',
+                data: {
+                    id: id,
+                },
+                success: response => {
+                    if (response === 10) {
+                        Popup.success('All Good!', 'This member now has benefit patreon features!');
+                    }
+
+                    if (response === 20) {
+                        Popup.success('All Good!', 'This users patreon benefits status has been removed.');
+                    }
+
+                    $btn.after('<p>✔</p>');
+                    $btn.remove();
+                },
+                error: (response,b,c) => {
+                    const error = response.responseJSON;
+                    Popup.error('Error', error.Message);
+                },
+                complete: () => {
+                    ButtonLoading.finish($btn);
+                }
+            });
+
+            console.log(id);
+        })
     }
 }
 

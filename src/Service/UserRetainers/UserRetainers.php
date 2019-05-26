@@ -10,7 +10,7 @@ use App\Common\Repository\UserRetainerRepository;
 use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
 use App\Common\Utils\Arrays;
-use App\Common\Exceptions\GeneralJsonException;
+use App\Common\Exceptions\JsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
 use App\Service\Companion\Companion;
 use Doctrine\ORM\EntityManagerInterface;
@@ -83,13 +83,13 @@ class UserRetainers
         $itemId = (int)trim($request->get('itemId'));
     
         if (in_array(GameServers::getServerId($server), GameServers::MARKET_OFFLINE)) {
-            throw new GeneralJsonException('Server currently not supported.');
+            throw new JsonException('Server currently not supported.');
         }
         
         $unique = UserRetainer::unique($name, $server);
 
         if ($this->getViaUniqueRef($unique, true)) {
-            throw new GeneralJsonException('Retainer already exists and is confirmed.');
+            throw new JsonException('Retainer already exists and is confirmed.');
         }
 
         $retainer = (new UserRetainer())

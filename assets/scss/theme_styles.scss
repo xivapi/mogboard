@@ -355,7 +355,6 @@ table {
 }
 
 .table-dark {
-    box-shadow: none;
     background-color: var(--table-color-dark);
 
     tr td:first-of-type {
@@ -494,6 +493,23 @@ header {
 
                 &.on {
                     display: block;
+                }
+            }
+
+            a.btn-patron {
+                line-height: 46px;
+                background-color: #f86754;
+                padding: 0 15px;
+
+                img {
+                    height: 24px;
+                    display: inline-table;
+                    vertical-align: middle;
+                    transition: 80ms;
+                }
+
+                @include mq($until: tablet) {
+                    display: none;
                 }
             }
 

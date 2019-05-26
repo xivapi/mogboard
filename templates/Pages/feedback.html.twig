@@ -56,10 +56,63 @@
                 be contacted via one of these methods:
             </p>
             <ul>
-                <li><strong>Username:</strong> {{ auth.user.username }} - <strong>Email:</strong> {{ auth.user.email }}</li>
+                <li class="text-yellow">
+                    <strong>Username:</strong> {{ auth.user.username }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <strong>Email:</strong> {{ auth.user.email }}
+                </li>
             </ul>
             {% endif %}
+
+            <h3>F&Q</h3>
+
+            <div class="alert-dark">
+                <ul>
+                    <li>
+                        <strong class="text-green">Why is item "XYZ" not updating often?</strong>
+                        <p>
+                            There could be many reasons why. First thing is it is important to know what Queue it is in. If
+                            the item does not sell often (over a long period of time...) then it will not be updated
+                            as often. All items aim to update within a 2 day period unless they sell very rarely or not at all.
+                        </p>
+                        <p>
+                            Mogboard cannot provide 100% up to date prices as Square-Enix BAN accounts that perform too many
+                            requests to the Companion API. So until things improve in that area not much can be done.
+                        </p>
+                    </li>
+                    <li>
+                        <strong class="text-green">Why has my alert not triggered?</strong>
+                        <p>
+                            Check if your alert is using the trigger: <code>Price_Added</code>, this trigger
+                            is a TIMESTAMP and not a "Gil Price", so if you put "Price_Added < 150" then it's going
+                            to be looking at the Epoch Timestamp + 150 seconds.. Which would be January 1st 1970 + 150 seconds
+                        </p>
+                        <p>
+                            Make sure to remove these kinds of triggers unless you know how to make a timestamp.
+                        </p>
+                    </li>
+                    <li>
+                        <strong class="text-green">Why can't we get items sold by NPCs?!</strong>
+                        <p>
+                            This has been asked a lot. It comes back to the ability to "update", There are 9500 items on the
+                            Market Board. And 34 Servers between NA/EU. That is 323,000 updates to handle. Double that to
+                            also include Price History (646,000).
+                        </p>
+                        <p>
+                            Companion is very slow and the only way to get faster update times is to either: Perform more requests
+                            (which results in a BAN), or reduce the amount of items I need to update.
+                        </p>
+                        <p>
+                            With this, some items got removed from the system to avoid being banned. This includes items
+                            sold by an NPC. 80% of these items are cheaper from the NPC than MB, and some you don't really
+                            need a HQ version for (eg: DOW Levelling Gear)
+                        </p>
+                        Until SE decide to stop banning for Companion usage, this cannot be changed.
+                    </li>
+                </ul>
+            </div>
+
             <br>
+
             <h3><strong>Send your feedback</strong></h3>
             <form method="post" action="{{ path('feedback_send') }}">
                 <div class="form_row">

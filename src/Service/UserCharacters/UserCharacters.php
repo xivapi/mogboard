@@ -2,12 +2,13 @@
 
 namespace App\Service\UserCharacters;
 
+use App\Common\Constants\PatreonConstants;
 use App\Common\Entity\UserCharacter;
 use App\Common\Exceptions\BasicException;
 use App\Common\Repository\UserCharacterRepository;
 use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
-use App\Common\Exceptions\GeneralJsonException;
+use App\Common\Exceptions\JsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -61,7 +62,7 @@ class UserCharacters
 
         // test if our Users pass phrase was found
         if (stripos($verification->Bio, $user->getCharacterPassPhrase()) === false) {
-            throw new GeneralJsonException('Character auth code could not be found on the characters profile bio.', 200);
+            throw new JsonException('Character auth code could not be found on the characters profile bio.', 200);
         }
         
         // grab character
@@ -119,12 +120,30 @@ class UserCharacters
      */
     public function delete(UserCharacter $userCharacter)
     {
-        if ($userCharacter->getUser() !== $this->users->getUser(true)) {
+        $user = $this->users->getUser(true);
+        
+        if ($userCharacter->getUser() !== $user) {
             throw new UnauthorisedRetainerOwnershipException();
         }
         
         $this->em->remove($userCharacter);
         $this->em->flush();
+        
+        // remove benefit patron status if it exist and this was their "main"
+        if ($userCharacter->isMain() && $user->isPatron(PatreonConstants::PATREON_BENEFIT)) {
+            $benefits = PatreonConstants::ALERT_DEFAULTS;
+            
+            $user
+                ->setPatron(0)
+                ->setPatronBenefitUser(null)
+                ->setAlertsMax($benefits['MAX'])
+                ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT'])
+                ->setAlertsUpdate($benefits['UPDATE_TIMEOUT']);
+            
+            $this->em->persist($user);
+            $this->em->flush();
+        }
+        
         return true;
     }
 
@@ -276,5 +295,43 @@ class UserCharacters
 
         Redis::cache()->set($key, $data);
         return $data;
+    }
+    
+    /**
+     * Get a characters patreon status
+     */
+    public function getCharacterPatronState(int $lodestoneId, ?string $userId = null)
+    {
+        /** @var UserCharacter $character */
+        $character = $this->repository->findOneBy([ 'lodestoneId' => $lodestoneId ]);
+        
+        if ($character == null) {
+            return 1;
+        }
+        
+        if ($character->getUser()->getPatronBenefitUser() == $userId) {
+            return 4;
+        }
+        
+        if ($character->getUser()->isPatron()) {
+            return 2;
+        }
+        
+        return 3;
+    }
+    
+    /**
+     * Get a user via a character id
+     */
+    public function getUserViaCharacter(int $lodestoneId)
+    {
+        /** @var UserCharacter $character */
+        $character = $this->repository->findOneBy([ 'lodestoneId' => $lodestoneId ]);
+    
+        if ($character == null) {
+            return null;
+        }
+    
+        return $character->getUser();
     }
 }

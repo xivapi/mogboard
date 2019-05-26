@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Common\Constants\PatreonConstants;
 use App\Common\Controller\UserTraitController;
 use App\Common\Exceptions\BasicException;
+use App\Common\Exceptions\JsonException;
 use App\Common\User\Users;
 use App\Service\UserCharacters\UserCharacters;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,7 +32,18 @@ class UserController extends AbstractController
      */
     public function account(Request $request)
     {
-        return $this->render('UserAccount/account.html.twig');
+        $user = $this->users->getUser(true);
+
+        $benefitUser = null;
+        if ($user->isPatron(PatreonConstants::PATREON_BENEFIT)) {
+            $benefitUser = $this->users->getRepository()->findOneBy(
+                [ 'id' => $user->getPatronBenefitUser() ]
+            );
+        }
+        
+        return $this->render('UserAccount/account.html.twig', [
+            'benefit_user' => $benefitUser
+        ]);
     }
     
     /**
@@ -56,9 +69,9 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/account/patreon", name="user_account_patreon")
+     * @Route("/account/patreon/perks", name="user_account_patron_perks")
      */
-    public function accountPatreon(Request $request)
+    public function accountPatreonPerks(Request $request)
     {
         $user = $this->users->getUser(true);
 
@@ -69,14 +82,87 @@ class UserController extends AbstractController
         /**
          * Try get the users main character
          */
-        $character = $user->getMainCharacter() ? $this->userCharacters->getCharacter(
+        $character = $user->getMainCharacter() && $user->isPatronHealer() ? $this->userCharacters->getCharacter(
             $user->getMainCharacter()
         ) : null;
+    
+        /**
+         * If we have friends, see if any have patreon
+         * 1 = character does not exist on XIVAPI
+         * 2 = character is already a patron
+         * 3 = fine to perk up
+         * 4 = this user already assigned it patron, can unassign
+         */
+        $friendStates = [];
+        if ($character && $character->Friends) {
+            foreach ($character->Friends as $friend) {
+                $friendStates[$friend->ID] = $this->userCharacters->getCharacterPatronState($friend->ID, $user->getId());
+            }
+        }
 
         $this->users->setLastUrl($request);
         return $this->render('UserAccount/patreon.html.twig', [
             'character' => $character,
+            'friend_states' => $friendStates,
         ]);
+    }
+    
+    /**
+     * @Route("/account/patreon/perks/benefit", name="user_account_patron_perks_benefits")
+     */
+    public function accountPatreonPerksBenefit(Request $request)
+    {
+        $user = $this->users->getUser(true);
+    
+        if ($user->isPatron() == false) {
+            throw new JsonException("Sorry, you are not a patreon member and cannot view this page.");
+        }
+        
+        if ($user->isPatronHealer() == false) {
+            throw new JsonException("Sorry, you must be a healer or higher to provide benefits.");
+        }
+        
+        $benefitCount = $this->users->getBenefitCount($user->getId());
+        
+        if ($benefitCount >= $user->getMaxBenefitFriends()) {
+            throw new JsonException("Sorry, you have reached the maximum amount ({$user->getMaxBenefitFriends()}) of benefit friends you can dish out. Maybe De-Benefit some friends, I'll keep it a secret!");
+        }
+    
+        $benefit = $this->userCharacters->getUserViaCharacter($request->get('id'));
+        
+        if ($benefit->getPatron() == PatreonConstants::PATREON_BENEFIT && $benefit->getPatronBenefitUser() == $user->getId()) {
+            $benefit
+                ->setPatron(0)
+                ->setPatronBenefitUser(null);
+    
+            $this->users->save($benefit);
+            return $this->json(20);
+        }
+        
+        if ($benefit == null) {
+            throw new JsonException("Sorry, there is no user on mogboard for this character. Please ask them to join!");
+        }
+        
+        if ($benefit->isPatron()) {
+            throw new JsonException("Sorry! This user is already a patron member!");
+        }
+        
+        $benefit
+            ->setPatron(PatreonConstants::PATREON_BENEFIT)
+            ->setPatronBenefitUser($user->getId());
+    
+        // get Alert Limits
+        $benefits = PatreonConstants::ALERT_LIMITS[$benefit->getPatron()];
+    
+        // update user
+        $user
+            ->setAlertsMax($benefits['MAX'])
+            ->setAlertsExpiry($benefits['EXPIRY_TIMEOUT'])
+            ->setAlertsUpdate($benefits['UPDATE_TIMEOUT']);
+            
+        $this->users->save($benefit);
+        
+        return $this->json(10);
     }
     
     /**

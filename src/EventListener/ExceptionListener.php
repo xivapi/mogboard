@@ -7,7 +7,7 @@ use App\Common\Exceptions\BasicException;
 use App\Common\Service\Redis\Redis;
 use App\Common\ServicesThirdParty\Discord\Discord;
 use App\Common\Utils\Environment;
-use App\Common\Exceptions\GeneralJsonException;
+use App\Common\Exceptions\JsonException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,7 +88,7 @@ class ExceptionListener implements EventSubscriberInterface
         $validExceptions = [
             BasicException::class,
             NotFoundHttpException::class,
-            GeneralJsonException::class,
+            JsonException::class,
         ];
 
         $madeAware = false;
@@ -104,7 +104,7 @@ class ExceptionListener implements EventSubscriberInterface
         /**
          * If it's a json exception
          */
-        if ($error->ex_class === GeneralJsonException::class) {
+        if ($error->ex_class === JsonException::class) {
             $response = new JsonResponse([
                 'Error'    => true,
                 'Message'  => $ex->getMessage(),
