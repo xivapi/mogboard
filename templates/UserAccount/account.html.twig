@@ -21,7 +21,7 @@
                 <td>
                     {% if auth.user.isPatron %}
                         <small style="margin-bottom: 5px;display:block;">PATREON REWARD ACTIVE</small>
-                        <h5 class="text-green">You are a {{ auth.user.patreonTier }} tier supporter!</h5>
+                        <h5 class="text-green">You are a <strong>{{ auth.user.patreonTier }}</strong> tier supporter!</h5>
 
                         {% if auth.user.patron == 9 %}
                             {% if benefit_user %}
