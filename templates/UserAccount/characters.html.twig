@@ -32,7 +32,7 @@
                 </div>
                 <div class="flex_90 character_info">
                     <a href="{{ path('characters_delete', { character: character.id }) }}" class="character_remove">REMOVE</a>
-                    <h4 class="char_name">{{ character.main ? '[MAIN]' : '' }} {{ character.name }}</h4>
+                    <h4 class="char_name"><strong>{{ character.main ? '[MAIN]' : '' }}</strong> {{ character.name }}</h4>
                     <p>
                         {{ character.server }}
                         - Updated: {{ character.updated|date }}
@@ -60,6 +60,8 @@
                 Add a new character
                 <span class="character_auth_code">AUTH CODE: {{ auth.user.getCharacterPassPhrase() }}</span>
             </h5>
+
+            <br><br>
 
             <p>
                 To add a new character, you must first add your verification code. <strong>Please add your MAIN character first</strong>.
