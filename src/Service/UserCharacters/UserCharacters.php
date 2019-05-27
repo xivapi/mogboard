@@ -278,7 +278,7 @@ class UserCharacters
      */
     public function getCharacter(UserCharacter $userCharacter)
     {
-        $key = __METHOD__ . $userCharacter->getId();
+        $key = __METHOD__ . $userCharacter->getId() . 200;
 
         // check cache
         if ($data = Redis::cache()->get($key)) {
@@ -297,8 +297,30 @@ class UserCharacters
             );
         }
 
-        Redis::cache()->set($key, $data);
+        Redis::cache()->set($key, $data, 300);
         return $data;
+    }
+    
+    public function updateCharacter(UserCharacter $userCharacter)
+    {
+        $key = __METHOD__ . $userCharacter->getId() . 200;
+        
+        // check cache
+        if ($data = Redis::cache()->get($key)) {
+            return;
+        }
+        
+        try {
+            // get retainer items
+            $data = (new XIVAPI())->character->update($userCharacter->getLodestoneId());
+        } catch (ClientException $ex) {
+            $error = json_decode($ex->getResponse()->getBody()->getContents());
+            throw new BasicException(
+                "{$error->Subject} -- {$error->Message} -- {$error->Note}"
+            );
+        }
+    
+        Redis::cache()->set($key, $data, 300);
     }
     
     /**

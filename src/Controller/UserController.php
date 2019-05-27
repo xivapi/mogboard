@@ -6,6 +6,7 @@ use App\Common\Constants\PatreonConstants;
 use App\Common\Controller\UserTraitController;
 use App\Common\Exceptions\BasicException;
 use App\Common\Exceptions\JsonException;
+use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
 use App\Service\UserCharacters\UserCharacters;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -98,6 +99,8 @@ class UserController extends AbstractController
             foreach ($character->Friends as $friend) {
                 $friendStates[$friend->ID] = $this->userCharacters->getCharacterPatronState($friend->ID, $user->getId());
             }
+        } else if ($user->getMainCharacter()) {
+            $this->userCharacters->updateCharacter($user->getMainCharacter());
         }
 
         $this->users->setLastUrl($request);

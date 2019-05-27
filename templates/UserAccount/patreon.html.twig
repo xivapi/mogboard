@@ -95,7 +95,7 @@
 
         <div class="fbc pat-friend-promote">
         {% if character %}
-            {% for friend in character.Friends %}
+            {% for friend in character.Friends if friend_states %}
                 {% set state = friend_states[friend.ID] %}
                 <div>
                     <div><img src="{{ friend.Avatar }}" height="42" class="perk-avatar"></div>
@@ -117,6 +117,12 @@
                     Your friends list could not be fetched via XIVAPI. Make sure that your
                     friends list is accessible on Lodestone and then check back here after
                     an hour (Caching).
+                </p>
+                <p>
+                    Attempt for character: ({{ character.Character.ID }}) {{ character.Character.Name }} on {{ character.Character.Server }}
+                </p>
+                <p>
+                    Friend Status ID: {{ character.Info.Friends.State }}, last updated: {{ character.Info.Friends.Updated|date }}
                 </p>
             {% endfor %}
         {% else %}
