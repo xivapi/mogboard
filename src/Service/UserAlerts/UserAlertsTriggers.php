@@ -3,6 +3,7 @@
 namespace App\Service\UserAlerts;
 
 use App\Common\Constants\PatreonConstants;
+use App\Common\Entity\Maintenance;
 use App\Common\Entity\UserAlert;
 use App\Common\Entity\UserAlertEvent;
 use App\Common\Game\GameServers;
@@ -54,6 +55,8 @@ class UserAlertsTriggers
         $this->gamedata   = $gamedata;
         $this->console    = new ConsoleOutput();
         $this->xivapi     = new XIVAPI();
+
+        $this->maintenance = $this->em->getRepository(Maintenance::class)->findOneBy(['id' => 1 ]) ?: new Maintenance();
     }
     
     /**
@@ -62,6 +65,11 @@ class UserAlertsTriggers
      */
     public function trigger(int $offset, bool $patronQueue = false)
     {
+        if ($this->maintenance->isCompanionMaintenance() || $this->maintenance->isGameMaintenance()) {
+            $this->console->writeln("Maintenance is active, stopping...");
+            return false;
+        }
+
         $this->console->writeln("Triggering Alerts");
 
         // grab all alerts
@@ -75,6 +83,13 @@ class UserAlertsTriggers
         /** @var UserAlert $alert */
         foreach ($alerts as $alert) {
             $this->console->writeln("- Alert: <comment>{$alert->getName()}</comment> by <info>{$alert->getUser()->getUsername()}</info>");
+
+            // if alert is on an offline server, delete it
+            $serverId = GameServers::getServerId($alert->getServer());
+            if (in_array($serverId, GameServers::MARKET_OFFLINE)) {
+                $this->userAlerts->delete($alert, true);
+                continue;
+            }
             
             // if trigger conditions are empty (shouldn't happen), delete it.
             if (empty($alert->getTriggerConditions())) {
