@@ -101,11 +101,13 @@
                                 <button type="button" class="btn-blue alert_trigger_add">Add</button>
                             </div>
                         </div>
+                        <div class="alert-dark">
+                            <span class="text-red">NOTE:</span> The filter: <code>Price_Added</code> is a timestamp, it is
+                            NOT a Gil value. You can convert a date to a timestamp <a href="https://www.epochconverter.com/" target="_blank">here</a>,
+                            work is being done to improve this UI.
+                        </div>
                         <small>
                             Trigger values are checked as a series of <strong>AND</strong> conditions.
-                            For "Bool" conditions values use 1 = true, 0 = false (eg: Price_IsHQ = 1).
-                            For time related ones "Added" the value would be Epoch Unix Timestamp, work
-                            is being done to improve this experience.
                         </small>
 
                     </div>

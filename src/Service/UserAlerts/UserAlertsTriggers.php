@@ -189,8 +189,13 @@ class UserAlertsTriggers
                      * If the alert type is a "History" event, we ignore any market
                      * entries prior to when the alert was created
                      */
-                    if ($alert->getTriggerType() === 'History' && $marketRow->PurchaseDate < $alert->getAdded()) {
+                    if ($alert->getTriggerType() === 'History' && $marketRow->PurchaseDate < $alert->getActiveTime()) {
                         continue;
+                    }
+
+                    // update the active time for the alert so that only purchases AFTER now are monitored.
+                    if ($alert->getTriggerType() === 'History') {
+                        $alert->setActiveTime(time());
                     }
                     
                     // loop through triggers
