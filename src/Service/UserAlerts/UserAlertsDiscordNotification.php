@@ -27,52 +27,6 @@ class UserAlertsDiscordNotification
     const TIME_FORMAT  = 'F j, Y, g:i a';
 
     /**
-     * Send the saved alert notification
-     */
-    public function sendSavedAlertNotification(UserAlert $alert)
-    {
-        $item = Redis::Cache()->get("xiv_Item_{$alert->getItemId()}");
-
-        $conditions = [];
-        foreach($alert->getTriggerConditionsFormatted() as $cond) {
-            [$field, $operator, $value, $operatorShort, $operatorLong] = $cond;
-
-            $conditions[] = [
-                'name'   => $field,
-                'value'  => "`{$operatorLong} {$value}`",
-                'inline' => true,
-            ];
-        }
-
-        $embed = [
-            'title'         => "Alert Saved: {$alert->getName()}",
-            'description'   => "Your alert for the item: {$item->Name_en} has been saved. You will be alerted via discord when the alert is triggered.\n\n",
-            'color'         => hexdec(self::COLOR_GREEN),
-            'footer'        => self::FOOTER,
-            'fields'        => $conditions,
-        ];
-
-        Discord::seraymeric()->sendMessage($alert->getUser()->getSsoDiscordId(), null, $embed);
-    }
-
-    /**
-     * Send the deleted notification
-     */
-    public function sendDeletedAlertNotification(UserAlert $alert)
-    {
-        $item = Redis::Cache()->get("xiv_Item_{$alert->getItemId()}");
-
-        $embed = [
-            'title'         => "Alert Deleted: {$alert->getName()}",
-            'description'   => "Your alert for the item: {$item->Name_en} has been deleted.",
-            'color'         => hexdec(self::COLOR_RED),
-            'footer'        => self::FOOTER,
-        ];
-
-        Discord::seraymeric()->sendMessage($alert->getUser()->getSsoDiscordId(), null, $embed);
-    }
-    
-    /**
      * Send a notification regarding triggers
      */
     public function sendAlertTriggerNotification(UserAlert $alert, array $triggeredMarketRows, string $hash)
@@ -111,23 +65,7 @@ class UserAlertsDiscordNotification
                 'inline' => false,
             ];
         }
-        
-        // print trigger conditions
-        /*
-        $triggers = [];
-        foreach($alert->getTriggerConditionsFormatted() as $trigger) {
-            [$field, $op, $value, $operatorShort, $operatorLong] = $trigger;
-            [$type, $field] = explode('_', $field);
-            
-            if (empty($triggers)) {
-                $triggers[] = "Trigger Conditions ($type):";
-            }
-            
-            $triggers[] = "- {$field} {$operatorLong} {$value}";
-        }
-        $triggers = "```". implode("\n", $triggers) ."```";
-        */
-        
+
         // modify footer
         $footer = self::FOOTER;
         $footer['text'] = "{$footer['text']} - Alert ID: {$alert->getUniq()} - {$hash}";
