@@ -161,6 +161,10 @@ class IndexController extends AbstractController
         if (strtolower($request->get('ted')) !== 'ffxiv') {
             return $this->redirectToRoute('feedback');
         }
+    
+        if (strtoupper($request->get('gil')) !== 'NO') {
+            return $this->redirectToRoute('feedback');
+        }
         
         if (strlen($message) == 0) {
             return $this->redirectToRoute('feedback');

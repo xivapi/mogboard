@@ -33,7 +33,7 @@ class Companion
             );
         }
     
-        Redis::cache()->set($key, $data, 900);
+        Redis::cache()->set($key, $data, 60);
         
         return $data;
     }
