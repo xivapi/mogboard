@@ -121,8 +121,8 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Queue</th>
-                            <th>Priority</th>
+                            <th>Queue Name</th>
+                            <th>Queue Number</th>
                             <th>Items</th>
                             <th>Cycle Time</th>
                             <th>Cycle Time Real</th>
@@ -139,7 +139,7 @@
                             <td>{{ report.Items }}</td>
                             {% if queue == 9 %}
                             <td colspan="3">
-                                Default Queue - Items update in order.
+                                Default Queue - Items update in order with no time goal.
                             </td>
                             {% else %}
                             <td>{{ report.CycleTime }}</td>
