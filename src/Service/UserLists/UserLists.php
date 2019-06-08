@@ -219,7 +219,7 @@ class UserLists
      */
     public function getMarketData(UserList $list, bool $homeOnly = false)
     {
-        $key = __METHOD__ . $list->getId();
+        $key = __METHOD__ . $list->getId() . $homeOnly ? 'home' : 'world';
     
         $items   = $list->getItems();
         
