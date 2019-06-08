@@ -139,10 +139,12 @@
                             {% else %}
                                 <div class="alert-light">
                                     <h4>
-                                        <img src="/i/game/offline.png"> {{ item.Name }} on {{ serverName }} is not update.
+                                        <img src="/i/game/offline.png"> Could not find update information
                                     </h4>
-                                    As this item sells on average more than 2 days, it is currently not updating. For more
-                                    information please view the <a href="{{ path('news') }}">latest news</a>.
+                                    <p>
+                                        This item has either <strong>just recently updated</strong> and its market information is being processed (refresh in a couple minutes)
+                                        or this item is not currently being updated. If this message persists, please contact a staff member on the XIVAPI Discord to verify.
+                                    </p>
                                 </div>
                             {% endif %}
 
