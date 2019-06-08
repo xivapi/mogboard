@@ -14,11 +14,12 @@ class Companion
      */
     private function handle(string $method, $arguments, $queries = [])
     {
+        /*
         $key = __METHOD__ . $method . sha1(json_encode($arguments));
-        
         if ($data = Redis::cache()->get($key)) {
             return $data;
         }
+        */
         
         // init xivapi
         $api = new XIVAPI();
@@ -33,7 +34,7 @@ class Companion
             );
         }
     
-        Redis::cache()->set($key, $data, 60);
+        //Redis::cache()->set($key, $data, 60);
         
         return $data;
     }
