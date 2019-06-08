@@ -62,7 +62,7 @@ class Companion
     public function getItemsOnServer(array $items, string $server)
     {
         return $this->handle('items', [
-            $items, [ $server ], null
+            $items, [ $server ], ''
         ], [
             'max_history' => 10,
             'max_prices'  => 10
