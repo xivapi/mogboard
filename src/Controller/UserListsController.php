@@ -59,9 +59,9 @@ class UserListsController extends AbstractController
     /**
      * @Route("/list/{list}", name="lists_view")
      */
-    public function view(UserList $list)
+    public function view(Request $request, UserList $list)
     {
-        $marketStats = $this->lists->getMarketData($list);
+        $marketStats = $this->lists->getMarketData($list, !empty($request->get('home')));
 
         return $this->render('UserLists/index.html.twig', [
             'list'         => $list,

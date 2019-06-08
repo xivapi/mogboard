@@ -58,7 +58,17 @@ class Companion
             $itemId, [], $dataCenter
         ]);
     }
-
+    
+    public function getItemsOnServer(array $items, string $server)
+    {
+        return $this->handle('items', [
+            $items, [ $server ], null
+        ], [
+            'max_history' => 10,
+            'max_prices'  => 10
+        ]);
+    }
+    
     public function getItemsOnDataCenter(array $items, string $dc)
     {
         return $this->handle('items', [

@@ -8,6 +8,12 @@
         <h1>
             {{ list.name }}
             <span>{{ list.items|length }} / {{ max_items }} items</span>
+            &nbsp;|&nbsp;
+            {% if app.request.get('home') %}
+                <a href="{{ path('lists_view', { list: list.id }) }}">Show Cross-World</a>
+            {% else %}
+                <a href="{{ path('lists_view', { list: list.id, home: 1 }) }}">Show Home Server Only</a>
+            {% endif %}
         </h1>
 
         {% for itemId in list.items %}
@@ -75,6 +81,10 @@
             {% else %}
                 <div class="alert-light">Market info could not be fetched for: {{ item.Name }} at this time.</div>
             {% endif %}
+        {% else %}
+            <div class="alert-dark">
+                You have no items in this list.
+            </div>
         {% endfor %}
     </div>
 {% endblock %}

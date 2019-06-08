@@ -217,19 +217,26 @@ class UserLists
     /**
      * Get market data for a list
      */
-    public function getMarketData(UserList $list)
+    public function getMarketData(UserList $list, bool $homeOnly = false)
     {
         $key = __METHOD__ . $list->getId();
     
+        $items   = $list->getItems();
+        
+        if (empty($items)) {
+            return null;
+        }
+    
         // check cache
         if ($data = Redis::cache()->get($key)) {
-            //return $data;
+            return $data;
         }
         
-        $items   = $list->getItems();
         $server  = GameServers::getServer();
         $dc      = GameServers::getDataCenter($server);
-        $market  = $this->companion->getItemsOnDataCenter($items, $dc);
+        $market  = $homeOnly
+            ? $this->companion->getItemsOnServer($items, $server)
+            : $this->companion->getItemsOnDataCenter($items, $dc);
         
         $serverMarketStats = [];
         $lastUpdatedTimes  = [];
@@ -277,7 +284,7 @@ class UserLists
             $serverMarketStats[$itemId]['RoughUpdateTime'] = round(Average::mean($lastUpdatedTimes[$itemId]));
         }
     
-        Redis::cache()->set($key, $serverMarketStats, 900);
+        Redis::cache()->set($key, $serverMarketStats, 60);
         return $serverMarketStats;
     }
 }
