@@ -8,11 +8,11 @@
 
     <div class="row row_top {{ cookie('mogboard_server') == '' ? 'row-alert' : '' }}">
         <label for="servers">Server</label>
-        <p>Choose your primary server, this also sets your DC.</p>
+        <p>Choose your primary server, this also sets your DC. (Japan-DC not supported)</p>
         <div class="form">
             <select id="servers" class="servers">
                 <option disabled selected>- Please Choose a Server -</option>
-                {% for dc, servers in getGameDataCenters() %}
+                {% for dc, servers in getGameDataCenters() if dc not in ['Elemental','Gaia','Mana'] %}
                     <optgroup label="{{ dc }}">
                         {% for server in servers %}
                             <option value="{{ server }}">{{ server }}</option>
