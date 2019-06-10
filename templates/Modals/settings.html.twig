@@ -7,8 +7,7 @@
 
             {# Server Select #}
             <div class="flex_50">
-                <label for="servers">Server</label>
-                <p>Choose your primary server, this also sets your DC. (Japan-DC not supported)</p>
+                <label for="servers">Your Server</label>
                 <div class="form">
                     <select id="servers" class="servers">
                         <option disabled selected>- Please Choose a Server -</option>
@@ -20,13 +19,13 @@
                             </optgroup>
                         {% endfor %}
                     </select>
+                    <small>Japan not supported</small>
                 </div>
             </div>
 
             {# Language Select#}
             <div class="flex_50">
                 <label for="languages">Language</label>
-                <p>Set the language for the site and search.</p>
                 <div class="form">
                     <select id="languages" class="languages">
                         <option disabled selected>- Choose your language -</option>
@@ -60,7 +59,9 @@
             {# Nav Menu #}
             <div class="flex_50">
                 <label for="leftnav">Left Navigation</label>
-                <p>Show a navigation on the left side of the site.</p>
+                <small>
+                    This enables a quick-access left-navigation of all market categories.
+                </small>
                 <div class="form">
                     <select id="leftnav" class="leftnav">
                         <option value="off">No</option>
@@ -71,7 +72,9 @@
             {# Default home world #}
             <div class="flex_50">
                 <label for="homeworld">Default Home World</label>
-                <p>Default to Home-World instead of Cross-World on items.</p>
+                <small>
+                    This will show prices/history on your home world by default instead of cross-world.
+                </small>
                 <div class="form">
                     <select id="homeworld" class="homeworld">
                         <option value="yes">Yes</option>
