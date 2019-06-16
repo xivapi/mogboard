@@ -2,44 +2,50 @@
 <div class="modal modal_settings">
     <button type="button" class="modal_close_button"><i class="xiv-NavigationClose"></i></button>
 
-    <div class="row row_top tac">
-        <strong>Changes will take affect after a page refresh.</strong>
+    <div class="row row_top {{ cookie('mogboard_server') == '' ? 'row-alert' : '' }}">
+        <div class="flex">
+
+            {# Server Select #}
+            <div class="flex_50">
+                <label for="servers">Your Server</label>
+                <div class="form">
+                    <select id="servers" class="servers">
+                        <option disabled selected>- Please Choose a Server -</option>
+                        {% for dc, servers in getGameDataCenters() if dc not in ['Elemental','Gaia','Mana'] %}
+                            <optgroup label="{{ dc }} - {{ dc in ['Chaos','Light'] ? 'Europe' : 'America' }}">
+                                {% for server in servers %}
+                                    <option value="{{ server }}">{{ server }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="padding-top: 10px;">
+                    <small>Japan-DC currently not supported.</small>
+                </div>
+            </div>
+
+            {# Language Select#}
+            <div class="flex_50">
+                <label for="languages">Language</label>
+                <div class="form">
+                    <select id="languages" class="languages">
+                        <option disabled selected>- Choose your language -</option>
+                        <option value="en">English</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="ja">日本語</option>
+                        {# <option value="kr">한국어</option>
+                        <option value="cn">中文</option> #}
+                    </select>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <div class="row row_top {{ cookie('mogboard_server') == '' ? 'row-alert' : '' }}">
-        <label for="servers">Server</label>
-        <p>Choose your primary server, this also sets your DC.</p>
-        <div class="form">
-            <select id="servers" class="servers">
-                <option disabled selected>- Please Choose a Server -</option>
-                {% for dc, servers in getGameDataCenters() %}
-                    <optgroup label="{{ dc }}">
-                        {% for server in servers %}
-                            <option value="{{ server }}">{{ server }}</option>
-                        {% endfor %}
-                    </optgroup>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="row row_top">
-        <label for="languages">Language</label>
-        <p>Set the language for the site and search.</p>
-        <div class="form">
-            <select id="languages" class="languages">
-                <option disabled selected>- Choose your language -</option>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-                <option value="ja">日本語</option>
-                {# <option value="kr">한국어</option>
-                <option value="cn">中文</option> #}
-            </select>
-        </div>
-    </div>
     <div class="row row_top">
         <label for="timezones">Timezone</label>
-        <p>Choose your timezone, so times are right!</p>
         <div class="form">
             <select id="timezones" class="timezones">
                 <option disabled selected>- Choose your timezone -</option>
@@ -49,26 +55,42 @@
             </select>
         </div>
     </div>
+
     <div class="row row_top">
-        <label for="leftnav">Left Navigation</label>
-        <p>Show a navigation on the left side of the site.</p>
-        <div class="form">
-            <select id="leftnav" class="leftnav">
-                <option value="off">No</option>
-                <option value="on">Yes</option>
-            </select>
+        <div class="flex">
+            {# Nav Menu #}
+            <div class="flex_50">
+                <label for="leftnav">Left Navigation</label>
+                <div style="padding-bottom: 10px;">
+                    <small>
+                        This enables a quick-access left-navigation of all market categories.
+                    </small>
+                </div>
+                <div class="form">
+                    <select id="leftnav" class="leftnav">
+                        <option value="off">No</option>
+                        <option value="on">Yes</option>
+                    </select>
+                </div>
+            </div>
+            {# Default home world #}
+            <div class="flex_50">
+                <label for="homeworld">Default Home World</label>
+                <div style="padding-bottom: 10px;">
+                    <small>
+                        This will show prices/history on your home world by default instead of cross-world.
+                    </small>
+                </div>
+                <div class="form">
+                    <select id="homeworld" class="homeworld">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row row_top">
-        <label for="homeworld">Default Home World</label>
-        <p>Default to Home-World instead of Cross-World on items.</p>
-        <div class="form">
-            <select id="homeworld" class="homeworld">
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-            </select>
-        </div>
-    </div>
+
     <div class="row form tac">
         <button type="button" class="btn-green">Save Settings</button>
     </div>
