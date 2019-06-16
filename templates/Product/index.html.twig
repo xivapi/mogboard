@@ -135,7 +135,9 @@
                                     Update Queue: <strong class="text-blue">{{ updateInfo.Name }}</strong>
                                     -
                                     ETA: <strong>{{ marketData.UpdatePriority == 9 ? 'Anytime' : updateEta }}</strong>
+                                    {#
                                     <em class="{{ (updateInfo.CycleDiffSec < 0 and updateEtaFuture) ? 'text-green' : 'text-red' }}">({{ (updateInfo.CycleDiffSec < 0 and updateEtaFuture) ? 'On-Time' : 'Out of date' }})</em>
+                                    #}
                             </div>
                             {% else %}
                                 <div class="alert-light">
