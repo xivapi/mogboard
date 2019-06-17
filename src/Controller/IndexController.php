@@ -205,8 +205,11 @@ class IndexController extends AbstractController
      */
     public function about()
     {
+        $stats = $this->companionStatistics->stats();
+        $stats = json_decode(json_encode($stats), true);
+
         return $this->render('Pages/about.html.twig', [
-            'market_stats'    => $this->companionStatistics->stats(),
+            'market_stats' => $stats,
         ]);
     }
     

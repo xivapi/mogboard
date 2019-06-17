@@ -125,7 +125,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for report in attribute(market_stats, 'Report') %}
+                    {% for report in market_stats.Report %}
                         <tr>
                             <td>{{ report.Name }}</td>
                             <td>{{ report.Priority }}</td>
