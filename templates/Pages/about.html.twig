@@ -112,11 +112,6 @@
                 time will slow down, this allows a dynamic shift of keeping fast selling items updated more frequently.
             </p>
 
-            <br>
-
-            <p>
-                <strong>Here is a live distribution of the items</strong> (this updates twice a day at 10AM and 10PM UTC)
-            </p>
             <div class="table-dark">
                 <table>
                     <thead>
@@ -135,11 +130,6 @@
                             <td>{{ report.Name }}</td>
                             <td>{{ report.Priority }}</td>
                             <td>{{ report.Items }}</td>
-                            {% if queue == 9 %}
-                            <td colspan="3">
-                                Default Queue - Items update in order with no time goal.
-                            </td>
-                            {% else %}
                             <td>{{ report.CycleTime }}</td>
                             <td>{{ report.CycleTimeReal }}</td>
                             <td class="{{ report.CycleDiffSec|replace({ ',': '' }) < 300 ? 'text-green' : 'text-red' }}">{{ report.CycleDiff }}</td>
