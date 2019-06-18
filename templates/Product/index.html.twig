@@ -52,7 +52,7 @@
                             {# nothing #}
                         {% else %}
                             {# Cross World #}
-                            <button type="button" data-tab="summary" class="btn-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or not app.request.get('server')) ? '' : 'open' }}">
+                            <button type="button" data-tab="summary" class="btn-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or app.request.get('server')) ? '' : 'open' }}">
                                 <i class="xiv-CrossWorld cw-summary"></i> Cross-World
                             </button>
 
@@ -105,7 +105,7 @@
                 </div>
             {% else %}
                 {# Summary #}
-                <div class="tab-page tab-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or not app.request.get('server')) ? '' : 'open' }}">
+                <div class="tab-page tab-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or app.request.get('server')) ? '' : 'open' }}">
                     {% include 'Product/item_market_summary.html.twig' %}
                 </div>
 
