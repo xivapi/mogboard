@@ -53,10 +53,13 @@ class Companion
         ]);
     }
     
-    public function getByDataCenter(string $dataCenter, int $itemId)
+    public function getByDataCenter(string $dataCenter, int $itemId, int $maxHistory = 100, int $maxPrices = 50)
     {
         return $this->handle('item', [
             $itemId, [], $dataCenter
+        ], [
+            'max_history' => $maxHistory,
+            'max_prices'  => $maxPrices
         ]);
     }
     

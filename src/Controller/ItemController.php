@@ -128,7 +128,7 @@ class ItemController extends AbstractController
 
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
-        $market     = $this->companion->getByDataCenter($dc, $itemId);
+        $market     = $this->companion->getByDataCenter($dc, $itemId, 250);
         
         $canUpdate = false;
         foreach ($market as $marketData) {
@@ -174,6 +174,16 @@ class ItemController extends AbstractController
         // get market stats
         $marketStats = $this->companionStatistics->stats();
         $marketStats = json_decode(json_encode($marketStats), true);
+        
+        $updateTimes = [];
+        
+        foreach ($market as $m) {
+            $updateTimes[] = [
+                'name'     => GameServers::LIST[$m->Server],
+                'updated'  => $m->Updated,
+                'priority' => $m->UpdatePriority ?? null,
+            ];
+        }
 
         // response
         $data = [
@@ -188,6 +198,8 @@ class ItemController extends AbstractController
             'lists'          => $user ? $user->getCustomLists() : [],
             'cheapest'       => $this->companionStatistics->cheapest($market),
             'shops'          => $shops,
+            'update_times'   => $updateTimes,
+            'chart_max'      => 100,
             'server'         => [
                 'name'       => $server,
                 'dc'         => $dc,

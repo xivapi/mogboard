@@ -715,10 +715,11 @@
     }
 
     .cross_world_chart {
-        background: rgb(63,63,63);
-        background: -moz-linear-gradient(top, rgba(50,50,50,1) 0%, rgba(40,40,40,1) 100%);
-        background: -webkit-linear-gradient(top, rgba(50,50,50,1) 0%,rgba(40,40,40,1) 100%);
-        background: linear-gradient(to bottom, rgba(50,50,50,1) 0%,rgba(40,40,40,1) 100%);
+        background: #272a33;
+        background: -moz-linear-gradient(top, #272a33 0%, #1d2027 100%);
+        background: -webkit-linear-gradient(top, #272a33 0%, #1d2027 100%);
+        background: linear-gradient(to bottom, #272a33 0%, #1d2027 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#272a33', endColorstr='#1d2027',GradientType=0 );
         box-shadow: 0 1px 3px #000;
 
         border-radius: 5px;
@@ -726,26 +727,25 @@
     }
 
     .census_box {
-        display: flex;
-        background-color: #262932;
+        background-color: #222;
         border-radius: 5px;
+        display: flex;
         box-shadow: 0 1px 3px #000;
 
         h5 {
-            text-shadow: none;
+            font-size: 14px !important;
+            font-weight: bold;
             text-transform: uppercase;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--color6);
-            margin: 0 0 15px 0;
-            text-align: center;
+            margin: 0 0 3px 0;
+            color: #555;
         }
 
         > div {
+            flex: 0 1 auto;
+            flex-grow: 1;
+            padding: 10px;
             text-align: center;
-            flex: 0 1 33.3%;
-            padding: 25px 5px;
-            border-right: solid 1px #000;
+            font-size: 14px;
 
             img {
                 display: inline-table;
@@ -907,6 +907,57 @@
             border-right: solid 2px var(--table-color-3x);
         }
     }
+
+    .item-no-data {
+        max-width: 500px;
+        background-color: #333;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 0 auto;
+        box-shadow: 0 1px 3px #000;
+
+        h2 {
+            font-size: 22px;
+        }
+    }
+
+    .market_update_times {
+        background-color: #222;
+        border-radius: 5px;
+        display: flex;
+        margin-bottom: 25px;
+        box-shadow: 0 1px 3px #000;
+
+        @include mq($until: tablet) {
+            flex-wrap: wrap;
+        }
+
+        h4 {
+            font-size: 14px !important;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0 0 3px 0;
+            color: #555;
+        }
+
+        > div {
+            flex: 0 1 auto;
+            flex-grow: 1;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+
+            @include mq($until: tablet) {
+                flex: 0 1 25%;
+                flex-grow: 1;
+            }
+        }
+    }
+}
+
+.item-prices,
+.item-history {
+    max-height: 1000px;
 }
 
 .list_modal {

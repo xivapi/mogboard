@@ -299,6 +299,18 @@
     }
 }
 
+.home-news {
+    background-color: #1e2b1e;
+    line-height: 20px;
+
+    strong {
+        color: var(--highlight);
+        display: block;
+        margin-bottom: 8px;
+        font-size: 18px;
+    }
+}
+
 .home-box2 {
     background-color: #222;
     border-left: solid 5px #444;

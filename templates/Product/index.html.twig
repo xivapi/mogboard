@@ -2,7 +2,6 @@
 {% set title = item.Name %}
 
 {% block body %}
-{% set chartMax = 50 %}
 {% include 'Product/chart_js.html.twig' %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
@@ -112,16 +111,15 @@
                 {# Server Pages #}
                 {% for serverName in server.dc_servers %}
                     {% set marketData = attribute(market, serverName) %}
-
                     {% if marketData.Updated %}
-                    {% set pricesCount       = marketData.Prices|length %}
-                    {% set historyCount      = marketData.History|length %}
-                    {% set updateInfo        = marketStats.Report[marketData.UpdatePriority] ?? null %}
-                    {% set cheapestPrice     = cheapest[serverName] %}
-                    {% set averagePricesNQ   = attribute(census, serverName).Prices_Average_PricePerUnit_NQ %}
-                    {% set averagePricesHQ   = attribute(census, serverName).Prices_Average_PricePerUnit_HQ %}
-                    {% set averageHistoryNQ  = attribute(census, serverName).History_Average_PricePerUnit_NQ %}
-                    {% set averageHistoryHQ  = attribute(census, serverName).History_Average_PricePerUnit_HQ %}
+                        {% set pricesCount       = marketData.Prices|length %}
+                        {% set historyCount      = marketData.History|length %}
+                        {% set updateInfo        = marketStats.Report[marketData.UpdatePriority] ?? null %}
+                        {% set cheapestPrice     = cheapest[serverName] %}
+                        {% set averagePricesNQ   = attribute(census, serverName).Prices_Average_PricePerUnit_NQ %}
+                        {% set averagePricesHQ   = attribute(census, serverName).Prices_Average_PricePerUnit_HQ %}
+                        {% set averageHistoryNQ  = attribute(census, serverName).History_Average_PricePerUnit_NQ %}
+                        {% set averageHistoryHQ  = attribute(census, serverName).History_Average_PricePerUnit_HQ %}
 
                         <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or app.request.get('server') == serverName) ? 'open' : '' }}">
 
@@ -164,15 +162,15 @@
                                                 ],
                                                 1,
                                                     {{ [
-                                                        attribute(census, serverName).Prices_BubbleChart_HQ|slice(0,chartMax)|length,
-                                                        attribute(census, serverName).Prices_BubbleChart_NQ|slice(0,chartMax)|length
+                                                        attribute(census, serverName).Prices_BubbleChart_HQ|slice(0,chart_max)|length,
+                                                        attribute(census, serverName).Prices_BubbleChart_NQ|slice(0,chart_max)|length
                                                     ]|max }},
                                                 [
                                                     {{ attribute(census, serverName).PricesQuantity_Chart_PricePerUnit_HQ|json_encode|raw }},
                                                     {{ attribute(census, serverName).PricesQuantity_Chart_PricePerUnit_NQ|json_encode|raw }}
                                                 ],
-                                                {{ attribute(census, serverName).Prices_BubbleChart_HQ|slice(0,chartMax)|json_encode|raw }},
-                                                {{ attribute(census, serverName).Prices_BubbleChart_NQ|slice(0,chartMax)|json_encode|raw }},
+                                                {{ attribute(census, serverName).Prices_BubbleChart_HQ|slice(0,chart_max)|json_encode|raw }},
+                                                {{ attribute(census, serverName).Prices_BubbleChart_NQ|slice(0,chart_max)|json_encode|raw }},
                                             );
                                         </script>
                                         <br><br>
@@ -205,15 +203,15 @@
                                                 ],
                                                 1,
                                                     {{ [
-                                                        attribute(census, serverName).History_BubbleChart_HQ|slice(0,chartMax)|length,
-                                                        attribute(census, serverName).History_BubbleChart_NQ|slice(0,chartMax)|length
+                                                        attribute(census, serverName).History_BubbleChart_HQ|slice(0,chart_max)|length,
+                                                        attribute(census, serverName).History_BubbleChart_NQ|slice(0,chart_max)|length
                                                     ]|max }},
                                                 [
                                                     {{ attribute(census, serverName).HistoryQuantity_Chart_PricePerUnit_HQ|json_encode|raw }},
                                                     {{ attribute(census, serverName).HistoryQuantity_Chart_PricePerUnit_NQ|json_encode|raw }}
                                                 ],
-                                                {{ attribute(census, serverName).History_BubbleChart_HQ|slice(0,chartMax)|json_encode|raw }},
-                                                {{ attribute(census, serverName).History_BubbleChart_NQ|slice(0,chartMax)|json_encode|raw }},
+                                                {{ attribute(census, serverName).History_BubbleChart_HQ|slice(0,chart_max)|json_encode|raw }},
+                                                {{ attribute(census, serverName).History_BubbleChart_NQ|slice(0,chart_max)|json_encode|raw }},
                                             );
                                         </script>
                                         <br><br>
@@ -234,19 +232,24 @@
                                 </div>
                             </div>
                         </div>
-
                     {% else %}
                         <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name) ? 'open' : '' }}">
-                            <div class="alert-red">
-                                <h1>Sorry, no data!</h1>
+                            <div class="item-no-data">
+                                <h2 class="text-highlight">Sorry, no market data!</h2>
                                 <p>
-                                    At this time there is no data for this item on {{ serverName }}. This is likely
-                                    due to the server only recently having its congested status lifted and
-                                    items are being updated behind the scenes.
+                                    Mogboard could not find any market data for
+                                    this item on the server{{ serverName }}.
                                 </p>
                                 <p>
-                                    Please check back in a couple of hours.
+                                    There can be a few reasons for this, here are some:
                                 </p>
+                                <ul>
+                                    <li>{{ serverName }} is a brand new server</li>
+                                    <li>This item has only recently been added</li>
+                                    <li>This item has just started to be tracked</li>
+                                    <li>Something broke</li>
+                                </ul>
+                                If it is that last one, be sure to jump on discord and let us know!
                             </div>
                         </div>
                     {% endif %}
@@ -266,23 +269,5 @@
         </div>
     </div>
 </div>
-
-<small class="cross_world_foot_note">
-    <strong>Market Data Information</strong>
-    <p>
-        Prices are updated based on the items sale rate. The more frequently it sells, the faster it will be updated on the site.
-    </p>
-    <p>
-        Prices on servers which are currently not updating are removed from the Cross-World view.
-    </p>
-    <p>
-        The Maximum "Current Prices" listing is 50, this is a Limitation of Companion.
-    </p>
-
-    <p>
-        Item prices that are {{ junkvalue }}x above scale have been removed from all Cross-World views.
-    </p>
-</small>
-
 
 {% endblock %}
