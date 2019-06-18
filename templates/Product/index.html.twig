@@ -128,16 +128,12 @@
                             {% if updateInfo %}
                             <div class="item_update_time" data-tippy-content="Queue: {{ marketData.UpdatePriority }} - {{ updateInfo.Name ?? 'No Queue' }} <br> Current Update Duration: {{ marketData.UpdatePriority ? 'Anytime' : (updateInfo.CycleTimeReal ?? 'None') }}">
 
-                                    {% set updateEta       = (marketData.Updated + updateInfo.CycleTimeSec)|date   %}
-                                    {% set updateEtaFuture = (marketData.Updated + updateInfo.CycleTimeSec)|timestamp > "now"|timestamp %}
+                                    {% set updateEta = (marketData.Updated + updateInfo.CycleTimeSec)|date   %}
                                     Prices on <strong>{{ serverName }}</strong> updated <strong class="text-highlight">{{ marketData.Updated|dateSimple }}</strong>
                                     <span></span>
                                     Update Queue: <strong class="text-blue">{{ updateInfo.Name }}</strong>
                                     -
                                     ETA: <strong>{{ marketData.UpdatePriority == 9 ? 'Anytime' : updateEta }}</strong>
-                                    {#
-                                    <em class="{{ (updateInfo.CycleDiffSec < 0 and updateEtaFuture) ? 'text-green' : 'text-red' }}">({{ (updateInfo.CycleDiffSec < 0 and updateEtaFuture) ? 'On-Time' : 'Out of date' }})</em>
-                                    #}
                             </div>
                             {% else %}
                                 <div class="alert-light">
