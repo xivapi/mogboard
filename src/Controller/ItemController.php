@@ -119,13 +119,7 @@ class ItemController extends AbstractController
             }
         }
     
-        $server = $request->get('server') ?: GameServers::getServer();
-        $server = ucwords($server);
-
-        if (!in_array($server, GameServers::LIST)) {
-            throw new \Exception("Sorry, that server is not in the list of valid servers");
-        }
-
+        $server     = GameServers::getServer($request->get('server'));
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
         $market     = $this->companion->getByDataCenter($dc, $itemId, 250);
