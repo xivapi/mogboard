@@ -330,7 +330,7 @@ class UserRetainers
      */
     public function getMarketData($items, bool $homeOnly = false)
     {
-        $key = __METHOD__ . md5(implode('', $items)) . ($homeOnly ? 'homeonly' : 'crossworldworld');
+        $key = __METHOD__ . md5(serialize($items)) . ($homeOnly ? 'homeonly' : 'crossworldworld');
     
         // check cache
         if ($data = Redis::cache()->get($key)) {
