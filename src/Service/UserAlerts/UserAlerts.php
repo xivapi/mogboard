@@ -105,6 +105,10 @@ class UserAlerts
             ->setServer(GameServers::getServer())
             ->setUser($user);
 
+        if ($user->isPatronDps() === false) {
+            $alert->setKeepUpdated(false);
+        }
+
         $this->em->persist($alert);
         $this->em->flush();
 
