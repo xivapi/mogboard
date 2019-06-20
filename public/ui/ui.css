@@ -1716,6 +1716,15 @@ aside {
           text-transform: uppercase;
           color: var(--default-2x); }
 
+.highchart {
+  text-shadow: none;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px #000;
+  margin-bottom: 20px; }
+  .highchart > div {
+    height: 260px; }
+
 .page {
   width: 100%;
   max-width: 1200px;

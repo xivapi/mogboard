@@ -40,6 +40,7 @@ class CompanionCensus
         $this->homeServer = GameServers::getServer();
         
         // add for global statistics
+        $this->census->All = (Object)[];
         $this->census->_Global = (Object)[];
     
         /**
@@ -61,24 +62,34 @@ class CompanionCensus
             $this->buildAverage('PriceTotal', $server, $marketData);
             $this->buildAverage('Quantity', $server, $marketData);
             $this->buildChart('PricePerUnit', $server, $marketData);
-            $this->buildChartBubble($server, $marketData);
             $this->calculateAverageSaleDuration($server, $marketData);
             $this->calculateNumericStatistics($server, $marketData);
+            
+            // high charts
+            $this->buildHighChartHistory($server, $marketData);
+    
+            // deprecated
+            $this->buildChartBubble($server, $marketData);
         }
     
         /**
          * Global Statistics
          */
         $this->buildCrossWorldPricesAndHistory($market);
+    
+        // high charts
+        $this->buildHighChartHistory('All', $this->census->_Global);
         
         $this->buildAverage('PricePerUnit', '_Global', $this->census->_Global);
         $this->buildAverage('PriceTotal', '_Global', $this->census->_Global);
         $this->buildAverage('Quantity', '_Global', $this->census->_Global);
         $this->buildChart('PricePerUnit', '_Global', $this->census->_Global);
-        $this->buildChartBubble('_Global', $this->census->_Global);
         $this->calculateAverageSaleDuration('_Global', $this->census->_Global);
         $this->calculateNumericStatistics('_Global', $this->census->_Global);
-
+    
+        // deprecated
+        $this->buildChartBubble('_Global', $this->census->_Global);
+    
         return $this;
     }
     
@@ -88,6 +99,29 @@ class CompanionCensus
     public function getCensus()
     {
         return $this->census;
+    }
+    
+    private function buildHighChartHistory($server, $marketData)
+    {
+        $this->census->{$server}->{"HC_History_HQ"} = [];
+        $this->census->{$server}->{"HC_History_NQ"} = [];
+    
+        foreach ($marketData->History as $i => $row) {
+            $key   = ($row->IsHQ ? "HC_History_HQ" : "HC_History_NQ");
+            $date  = (int)$row->PurchaseDateMS;
+            $value = (int)$row->PricePerUnit;
+            
+            // add onto existing date if more than 1 sold that second
+            if (isset($this->census->{$server}->{$key}[$date])) {
+                //$this->census->{$server}->{$key}[$date][1] = $this->census->{$server}->{$key}[$date][1] + $value;
+                continue;
+            }
+            
+            $this->census->{$server}->{$key}[$date] = [ $date, $value ];
+        }
+    
+        Arrays::sortBySubKey($this->census->{$server}->{"HC_History_HQ"}, 0, true);
+        Arrays::sortBySubKey($this->census->{$server}->{"HC_History_NQ"}, 0, true);
     }
     
     /**
@@ -121,10 +155,10 @@ class CompanionCensus
         asort($historyHQ);
         asort($historyNQ);
 
-        array_splice($pricesHQ, 50);
-        array_splice($pricesNQ, 50);
-        array_splice($historyHQ, 50);
-        array_splice($historyNQ, 50);
+        array_splice($pricesHQ, 150);
+        array_splice($pricesNQ, 150);
+        array_splice($historyHQ, 150);
+        array_splice($historyNQ, 150);
 
         $this->census->{$server}->{"Prices_Average_{$field}_HQ"}  = round(Average::mean($pricesHQ));
         $this->census->{$server}->{"Prices_Average_{$field}_NQ"}  = round(Average::mean($pricesNQ));
@@ -315,6 +349,7 @@ class CompanionCensus
     }
     
     /**
+     * @deprecated
      * Simple chart with quantity and price, this is useful for bubble charts, this
      * uses the average quantity to know the "scale" of the bubble radius
      */
@@ -324,6 +359,12 @@ class CompanionCensus
         $this->buildChartBubbleHandler($server, $marketData->History, 'History');
     }
     
+    /**
+     * @deprecated
+     * @param $server
+     * @param $tableData
+     * @param $type
+     */
     private function buildChartBubbleHandler($server, $tableData, $type)
     {
         // the max scale in pixels

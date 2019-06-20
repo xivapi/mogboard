@@ -2,272 +2,238 @@
 {% set title = item.Name %}
 
 {% block body %}
-{% include 'Product/chart_js.html.twig' %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
-<script>var appEnableItemPage = 1;</script>
-<script>var itemId = {{ item.ID }};</script>
-<div class="product">
-    <div>
-        <div class="item_top">
-            {# Icon #}
-            <div class="item_icon">
-                <img src="{{ item.ID|icon2x }}">
-            </div>
+    {% include 'Product/chart_js.html.twig' %}
 
-            {# Item info #}
-            <div class="item_header">
 
-                <div class="box box_lists">
-                    {% include 'Product/lists.html.twig' %}
+    <script>var appEnableItemPage = 1;</script>
+    <script>var itemId = {{ item.ID }};</script>
+    <div class="product">
+        <div>
+            <div class="item_top">
+                {# Icon #}
+                <div class="item_icon">
+                    <img src="{{ item.ID|icon2x }}">
                 </div>
 
-                <div class="item_info">
-                    {# title #}
-                    <h1 class="rarity-{{ item.Rarity }}">
-                        <span>{{ item.LevelItem }}</span>
-                        {{ item.Name }}
-                    </h1>
-                    <div class="item_info_small">
-                        {% if item.ItemSearchCategory.ID is defined %}
-                        <span><i class="xiv-{{ item.ItemSearchCategory.ID|xivicon }}"></i></span>
-                        <span>{{ item.ItemKind.Name }}</span>
-                        <span>{{ item.ItemUICategory.Name }}</span>
-                        {% endif %}
+                {# Item info #}
+                <div class="item_header">
+
+                    <div class="box box_lists">
+                        {% include 'Product/lists.html.twig' %}
                     </div>
-                </div>
 
-                <div class="item_nav_mobile_toggle">
-                    <button type="button">Menu</button>
-                </div>
-                <div class="item_nav">
-                    <div class="item_nav_servers">
-                        {% if shops %}
-                            {# Item Details #}
-                            <button type="button" data-tab="shops" class="btn-shops open">
-                                <i class="xiv-Gil cw-shops"></i> Shops
-                            </button>
-                        {% elseif item.ItemSearchCategory.ID is not defined %}
-                            {# nothing #}
-                        {% else %}
-                            {# Cross World #}
-                            <button type="button" data-tab="summary" class="btn-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or app.request.get('server')) ? '' : 'open' }}">
-                                <i class="xiv-CrossWorld cw-summary"></i> Cross-World
-                            </button>
+                    <div class="item_info">
+                        {# title #}
+                        <h1 class="rarity-{{ item.Rarity }}">
+                            <span>{{ item.LevelItem }}</span>
+                            {{ item.Name }}
+                        </h1>
+                        <div class="item_info_small">
+                            {% if item.ItemSearchCategory.ID is defined %}
+                                <span><i class="xiv-{{ item.ItemSearchCategory.ID|xivicon }}"></i></span>
+                                <span>{{ item.ItemKind.Name }}</span>
+                                <span>{{ item.ItemUICategory.Name }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
 
-                            {# Server List #}
-                            {% for serverName in server.dc_servers %}
-                                {% set icon          = serverName == server.name ? 'ItemShard cw-home' : '' %}
-                                {% set className     = serverName == server.name ? 'home-world' : '' %}
-                                {% set salesCount    = attribute(market, serverName).Prices is defined ? attribute(market, serverName).Prices|length|number_format : '-' %}
-                                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or app.request.get('server') == serverName) ? 'open' : '' }}">
-                                    {% if serverName == server.name %}
-                                        <i class="xiv-ItemShard cw-home"></i>
-                                    {% endif %}
-                                    {{ serverName }}
+                    <div class="item_nav_mobile_toggle">
+                        <button type="button">Menu</button>
+                    </div>
+                    <div class="item_nav">
+                        <div class="item_nav_servers">
+                            {% if shops %}
+                                {# Item Details #}
+                                <button type="button" data-tab="shops" class="btn-shops open">
+                                    <i class="xiv-Gil cw-shops"></i> Shops
                                 </button>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-
-                    {# Custom Pages #}
-                    <div class="item_nav_custom">
-                        {% if item.ItemSearchCategory.ID is defined %}
-                        {# Item Details #}
-                        <button type="button" data-tab="details" class="btn-details">
-                            <i class="xiv-ArmoryChest cw-details"></i> Details
-                        </button>
-                        {% endif %}
-
-                        {% if not shops and item.ItemSearchCategory.ID is defined %}
-                        {# Alerts #}
-                        <button type="button" data-tab="alerts" class="btn-alerts">
-                            <i class="xiv-app_drawer_news cw-alerts"></i> Alerts
-                        </button>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="tab">
-            {% if shops %}
-                <div class="tab-page tab-shops open">
-                    {% include 'Product/item_shops.html.twig' %}
-                </div>
-            {% elseif item.ItemSearchCategory.ID is not defined %}
-                <div class="tab-page open">
-                    <div class="alert-red">
-                        This item does not sell on the Market Board.
-                    </div>
-                </div>
-            {% else %}
-                {# Summary #}
-                <div class="tab-page tab-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or app.request.get('server')) ? '' : 'open' }}">
-                    {% include 'Product/item_market_summary.html.twig' %}
-                </div>
-
-                {# Server Pages #}
-                {% for serverName in server.dc_servers %}
-                    {% set marketData = attribute(market, serverName) %}
-                    {% if marketData.Updated %}
-                        {% set pricesCount       = marketData.Prices|length %}
-                        {% set historyCount      = marketData.History|length %}
-                        {% set updateInfo        = marketStats.Report[marketData.UpdatePriority] ?? null %}
-                        {% set cheapestPrice     = cheapest[serverName] %}
-                        {% set averagePricesNQ   = attribute(census, serverName).Prices_Average_PricePerUnit_NQ %}
-                        {% set averagePricesHQ   = attribute(census, serverName).Prices_Average_PricePerUnit_HQ %}
-                        {% set averageHistoryNQ  = attribute(census, serverName).History_Average_PricePerUnit_NQ %}
-                        {% set averageHistoryHQ  = attribute(census, serverName).History_Average_PricePerUnit_HQ %}
-
-                        <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or app.request.get('server') == serverName) ? 'open' : '' }}">
-
-                            {% if updateInfo %}
-                            <div class="item_update_time" data-tippy-content="Queue: {{ marketData.UpdatePriority }} - {{ updateInfo.Name ?? 'No Queue' }} <br> Current Update Duration: {{ marketData.UpdatePriority ? 'Anytime' : (updateInfo.CycleTimeReal ?? 'None') }}">
-
-                                    {% set updateEta = (marketData.Updated + updateInfo.CycleTimeSec)|date   %}
-                                    Prices on <strong>{{ serverName }}</strong> updated <strong class="text-highlight">{{ marketData.Updated|dateSimple }}</strong>
-                                    <span></span>
-                                    Update Queue: <strong class="text-blue">{{ updateInfo.Name }}</strong>
-                                    -
-                                    ETA: <strong>{{ updateEta }}</strong>
-                            </div>
+                            {% elseif item.ItemSearchCategory.ID is not defined %}
+                                {# nothing #}
                             {% else %}
-                                <div class="alert-light">
-                                    <h4>
-                                        <img src="/i/game/offline.png"> Could not find update information
-                                    </h4>
-                                    <p>
-                                        This item has either <strong>just recently updated</strong> and its market information is being processed (refresh in a couple minutes)
-                                        or this item is not currently being updated. If this message persists, please contact a staff member on the XIVAPI Discord to verify.
-                                    </p>
-                                </div>
+                                {# Cross World #}
+                                <button type="button" data-tab="summary" class="btn-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or app.request.get('server')) ? '' : 'open' }}">
+                                    <i class="xiv-CrossWorld cw-summary"></i> Cross-World
+                                </button>
+
+                                {# Server List #}
+                                {% for serverName in server.dc_servers %}
+                                    {% set icon          = serverName == server.name ? 'ItemShard cw-home' : '' %}
+                                    {% set className     = serverName == server.name ? 'home-world' : '' %}
+                                    {% set salesCount    = attribute(market, serverName).Prices is defined ? attribute(market, serverName).Prices|length|number_format : '-' %}
+                                    <button type="button" data-tab="cw{{ serverName }}" class="{{ className }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or app.request.get('server') == serverName) ? 'open' : '' }}">
+                                        {% if serverName == server.name %}
+                                            <i class="xiv-ItemShard cw-home"></i>
+                                        {% endif %}
+                                        {{ serverName }}
+                                    </button>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        {# Custom Pages #}
+                        <div class="item_nav_custom">
+                            {% if item.ItemSearchCategory.ID is defined %}
+                                {# Item Details #}
+                                <button type="button" data-tab="details" class="btn-details">
+                                    <i class="xiv-ArmoryChest cw-details"></i> Details
+                                </button>
                             {% endif %}
 
-                            <div class="tab-market-tables">
-                                <div class="cw-table cw-prices">
-                                    <h4>PRICES <small>MAX: 50</small></h4>
-                                    {# PRICE VS QUANTITY #}
-
-                                    {% if updateInfo %}
-                                        <div class="cross_world_chart" style="position: relative; height: 350px; width: 100%"><canvas id="Prices_BubbleChart_{{ serverName }}"></canvas></div>
-                                        <script>
-                                            renderChart(
-                                                'Prices_BubbleChart_{{ serverName }}',
-                                                'bubble',
-                                                [
-                                                    'High-Quality',
-                                                    'Normal Quality'
-                                                ],
-                                                1,
-                                                    {{ [
-                                                        attribute(census, serverName).Prices_BubbleChart_HQ|slice(0,chart_max)|length,
-                                                        attribute(census, serverName).Prices_BubbleChart_NQ|slice(0,chart_max)|length
-                                                    ]|max }},
-                                                [
-                                                    {{ attribute(census, serverName).PricesQuantity_Chart_PricePerUnit_HQ|json_encode|raw }},
-                                                    {{ attribute(census, serverName).PricesQuantity_Chart_PricePerUnit_NQ|json_encode|raw }}
-                                                ],
-                                                {{ attribute(census, serverName).Prices_BubbleChart_HQ|slice(0,chart_max)|json_encode|raw }},
-                                                {{ attribute(census, serverName).Prices_BubbleChart_NQ|slice(0,chart_max)|json_encode|raw }},
-                                            );
-                                        </script>
-                                        <br><br>
-                                        {% if marketData.Prices is defined %}
-                                            {% include 'Product/prices.html.twig' with {
-                                                'prices': marketData.Prices,
-                                                'cheapestPrice': cheapestPrice,
-                                                'averagePricesNQ': averagePricesNQ,
-                                                'averagePricesHQ': averagePricesHQ
-                                            } %}
-                                        {% else %}
-                                            <div>umm, prices missing? huh</div>
-                                        {% endif %}
-                                    {% else %}
-                                        <p>No prices to show at this time for this server.</p>
-                                    {% endif %}
-                                </div>
-                                <div class="cw-table cw-history">
-                                    <h4>HISTORY <small>MAX: 100</small></h4>
-
-                                    {% if updateInfo %}
-                                        <div class="cross_world_chart" style="position: relative; height: 350px; width: 100%"><canvas id="History_BubbleChart_{{ serverName }}"></canvas></div>
-                                        <script>
-                                            renderChart(
-                                                'History_BubbleChart_{{ serverName }}',
-                                                'bubble',
-                                                [
-                                                    'High-Quality',
-                                                    'Normal Quality'
-                                                ],
-                                                1,
-                                                    {{ [
-                                                        attribute(census, serverName).History_BubbleChart_HQ|slice(0,chart_max)|length,
-                                                        attribute(census, serverName).History_BubbleChart_NQ|slice(0,chart_max)|length
-                                                    ]|max }},
-                                                [
-                                                    {{ attribute(census, serverName).HistoryQuantity_Chart_PricePerUnit_HQ|json_encode|raw }},
-                                                    {{ attribute(census, serverName).HistoryQuantity_Chart_PricePerUnit_NQ|json_encode|raw }}
-                                                ],
-                                                {{ attribute(census, serverName).History_BubbleChart_HQ|slice(0,chart_max)|json_encode|raw }},
-                                                {{ attribute(census, serverName).History_BubbleChart_NQ|slice(0,chart_max)|json_encode|raw }},
-                                            );
-                                        </script>
-                                        <br><br>
-
-                                        {% if marketData.History is defined %}
-                                            {% include 'Product/history.html.twig' with {
-                                                'history': marketData.History,
-                                                'cheapestPrice': cheapestPrice,
-                                                'averagePricesNQ': averagePricesNQ,
-                                                'averagePricesHQ': averagePricesHQ
-                                            } %}
-                                        {% else %}
-                                            <div>hmm, history missing to....</div>
-                                        {% endif %}
-                                    {% else %}
-                                        <p>No history to show at this time for this server.</p>
-                                    {% endif %}
-                                </div>
-                            </div>
+                            {% if not shops and item.ItemSearchCategory.ID is defined %}
+                                {# Alerts #}
+                                <button type="button" data-tab="alerts" class="btn-alerts">
+                                    <i class="xiv-app_drawer_news cw-alerts"></i> Alerts
+                                </button>
+                            {% endif %}
                         </div>
-                    {% else %}
-                        <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name) ? 'open' : '' }}">
-                            <div class="item-no-data">
-                                <h2 class="text-highlight">Sorry, no market data!</h2>
-                                <p>
-                                    Mogboard could not find any market data for
-                                    this item on the server{{ serverName }}.
-                                </p>
-                                <p>
-                                    There can be a few reasons for this, here are some:
-                                </p>
-                                <ul>
-                                    <li>{{ serverName }} is a brand new server</li>
-                                    <li>This item has only recently been added</li>
-                                    <li>This item has just started to be tracked</li>
-                                    <li>Something broke</li>
-                                </ul>
-                                If it is that last one, be sure to jump on discord and let us know!
-                            </div>
-                        </div>
-                    {% endif %}
-
-                {% endfor %}
-
-                {# Alerts #}
-                <div class="tab-page tab-alerts">
-                    {% include 'Product/alerts.html.twig' %}
+                    </div>
                 </div>
-            {% endif %}
 
-            {# Details #}
-            <div class="tab-page tab-details">
-                {% include 'Product/item_details.html.twig' %}
+            </div>
+
+            <div class="tab">
+                {% if shops %}
+                    <div class="tab-page tab-shops open">
+                        {% include 'Product/item_shops.html.twig' %}
+                    </div>
+                {% elseif item.ItemSearchCategory.ID is not defined %}
+                    <div class="tab-page open">
+                        <div class="alert-red">
+                            This item does not sell on the Market Board.
+                        </div>
+                    </div>
+                {% else %}
+                    {# Summary #}
+                    <div class="tab-page tab-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or app.request.get('server')) ? '' : 'open' }}">
+                        {% include 'Product/item_market_summary.html.twig' %}
+                    </div>
+
+                    {# Server Pages #}
+                    {% for serverName in server.dc_servers %}
+                        {% set marketData = attribute(market, serverName) %}
+                        {% if marketData.Updated %}
+                            {% set pricesCount       = marketData.Prices|length %}
+                            {% set historyCount      = marketData.History|length %}
+                            {% set updateInfo        = marketStats.Report[marketData.UpdatePriority] ?? null %}
+                            {% set cheapestPrice     = cheapest[serverName] %}
+                            {% set averagePricesNQ   = attribute(census, serverName).Prices_Average_PricePerUnit_NQ %}
+                            {% set averagePricesHQ   = attribute(census, serverName).Prices_Average_PricePerUnit_HQ %}
+                            {% set averageHistoryNQ  = attribute(census, serverName).History_Average_PricePerUnit_NQ %}
+                            {% set averageHistoryHQ  = attribute(census, serverName).History_Average_PricePerUnit_HQ %}
+
+                            <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or app.request.get('server') == serverName) ? 'open' : '' }}">
+
+                                {% if updateInfo %}
+                                    <div class="item_update_time" data-tippy-content="Queue: {{ marketData.UpdatePriority }} - {{ updateInfo.Name ?? 'No Queue' }} <br> Current Update Duration: {{ marketData.UpdatePriority ? 'Anytime' : (updateInfo.CycleTimeReal ?? 'None') }}">
+                                        {% set updateEta = (marketData.Updated + updateInfo.CycleTimeSec)|date   %}
+                                        Prices on <strong>{{ serverName }}</strong> updated <strong class="text-highlight">{{ marketData.Updated|dateSimple }}</strong>
+                                        <span></span>
+                                        Update Queue: <strong class="text-blue">{{ updateInfo.Name }}</strong>
+                                        -
+                                        ETA: <strong>{{ updateEta }}</strong>
+                                    </div>
+                                {% else %}
+                                    <div class="alert-light">
+                                        <h4>
+                                            <img src="/i/game/offline.png"> Could not find update information
+                                        </h4>
+                                        <p>
+                                            This item has either <strong>just recently updated</strong> and its market information is being processed (refresh in a couple minutes)
+                                            or this item is not currently being updated. If this message persists, please contact a staff member on the XIVAPI Discord to verify.
+                                        </p>
+                                    </div>
+                                {% endif %}
+
+                                {# Price History #}
+                                {% include 'Product/chart_hc.html.twig' with {
+                                    chart: {
+                                        id: 'history_' ~ serverName,
+                                        series: [
+                                            {
+                                                name: '(High-Quality) Price Per Unit',
+                                                data: census[serverName].HC_History_HQ,
+                                            },
+                                            {
+                                                name: '(Normal Quality) Price Per Unit',
+                                                data: census[serverName].HC_History_NQ,
+                                            }
+                                        ]
+                                    }
+                                } %}
+
+                                <div class="tab-market-tables">
+                                    <div class="cw-table cw-prices">
+                                        <h4>PRICES</h4>
+                                        {% if updateInfo %}
+                                            {% if marketData.Prices is defined %}
+                                                {% include 'Product/prices.html.twig' with {
+                                                    'prices': marketData.Prices,
+                                                    'cheapestPrice': cheapestPrice,
+                                                    'averagePricesNQ': averagePricesNQ,
+                                                    'averagePricesHQ': averagePricesHQ
+                                                } %}
+                                            {% else %}
+                                                <div>umm, prices missing? huh</div>
+                                            {% endif %}
+                                        {% else %}
+                                            <p>No prices to show at this time for this server.</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="cw-table cw-history">
+                                        <h4>HISTORY</h4>
+                                        {% if updateInfo %}
+                                            {% if marketData.History is defined %}
+                                                {% include 'Product/history.html.twig' with {
+                                                    'history': marketData.History,
+                                                    'cheapestPrice': cheapestPrice,
+                                                    'averagePricesNQ': averagePricesNQ,
+                                                    'averagePricesHQ': averagePricesHQ
+                                                } %}
+                                            {% else %}
+                                                <div>hmm, history missing to....</div>
+                                            {% endif %}
+                                        {% else %}
+                                            <p>No history to show at this time for this server.</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name) ? 'open' : '' }}">
+                                <div class="item-no-data">
+                                    <h2 class="text-highlight">Sorry, no market data!</h2>
+                                    <p>
+                                        Mogboard could not find any market data for
+                                        this item on the server{{ serverName }}.
+                                    </p>
+                                    <p>
+                                        There can be a few reasons for this, here are some:
+                                    </p>
+                                    <ul>
+                                        <li>{{ serverName }} is a brand new server</li>
+                                        <li>This item has only recently been added</li>
+                                        <li>This item has just started to be tracked</li>
+                                        <li>Something broke</li>
+                                    </ul>
+                                    If it is that last one, be sure to jump on discord and let us know!
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+
+                    {# Alerts #}
+                    <div class="tab-page tab-alerts">
+                        {% include 'Product/alerts.html.twig' %}
+                    </div>
+                {% endif %}
+
+                {# Details #}
+                <div class="tab-page tab-details">
+                    {% include 'Product/item_details.html.twig' %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

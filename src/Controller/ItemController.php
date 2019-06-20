@@ -122,7 +122,7 @@ class ItemController extends AbstractController
         $server     = GameServers::getServer($request->get('server'));
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
-        $market     = $this->companion->getByDataCenter($dc, $itemId, 250);
+        $market     = $this->companion->getByDataCenter($dc, $itemId, 500);
         
         $canUpdate = false;
         foreach ($market as $marketData) {
@@ -138,7 +138,7 @@ class ItemController extends AbstractController
 
         // build census
         $census = Redis::Cache()->get("census_{$dc}_{$itemId}");
-        if ($census == null) {
+        if (true || $census == null) {
             // generate census and cache it, it's only cached for a short
             // period just to avoid spamming and multiple users.
             $census = $this->companionCensus->generate($item, $market)->getCensus();
@@ -167,10 +167,7 @@ class ItemController extends AbstractController
 
         // get market stats
         $marketStats = $this->companionStatistics->stats();
-        $marketStats = json_decode(json_encode($marketStats), true);
-        
         $updateTimes = [];
-        
         foreach ($market as $m) {
             $updateTimes[] = [
                 'name'     => GameServers::LIST[$m->Server],
@@ -183,9 +180,9 @@ class ItemController extends AbstractController
         $data = [
             'item'           => $item,
             'market'         => $market,
-            'marketStats'    => $marketStats,
+            'marketStats'    => json_decode(json_encode($marketStats), true),
+            'census'         => json_decode(json_encode($census), true),
             'canUpdate'      => $canUpdate,
-            'census'         => $census,
             'junkvalue'      => CompanionCensus::JUNK_PRICE_FACTOR,
             'recipes'        => $recipes,
             'faved'          => $user ? $user->hasFavouriteItem($itemId) : false,
