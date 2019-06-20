@@ -102,28 +102,11 @@ class AccountRetainers
 
         this.uiItemSearchResponse.on('click', 'button', event => {
             const itemId = $(event.currentTarget).attr('data-id');
-            const server = $('#retainer_server').val().trim();
-            this.uiItemSearchResponse.html('<p>Checking market prices to ensure this is a safe item to verify with.</p>');
+            const name   = $(event.currentTarget).text();
 
-            xivapi.getMarketPrices(itemId, server, response => {
-
-                if (typeof response.Error !== 'undefined') {
-                    Popup.error('Error', 'There was an error returning market information, this is a problem with XIVAPI. This is being looked into.');
-                    return;
-                }
-
-                const market = response[server];
-
-                if (market.Prices.length >= 50) {
-                    Popup.warning('High Sale', 'There are over 50 of these items for sale. Companion API can only provide a maximum of 50 sales, please choose an item with a lower sale stock count.');
-                    return;
-                }
-
-                this.uiItemSearchResponse.html(`<p class="text-green tac"><strong>${market.Item.Name}</strong> is a good item to confirm with, continue with the form!</p>`);
-                $('.retainer_item_search').val(market.Item.Name);
-                $('.retainer_add').prop('disabled', false);
-                $('#retainer_item').val(itemId);
-            });
+            $('.retainer_item_search').val(name);
+            $('.retainer_add').prop('disabled', false);
+            $('#retainer_item').val(itemId);
         })
     }
 
