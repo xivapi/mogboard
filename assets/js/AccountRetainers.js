@@ -107,6 +107,8 @@ class AccountRetainers
             $('.retainer_item_search').val(name);
             $('.retainer_add').prop('disabled', false);
             $('#retainer_item').val(itemId);
+
+            this.uiItemSearchResponse.html('');
         })
     }
 
