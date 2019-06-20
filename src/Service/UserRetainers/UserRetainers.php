@@ -328,8 +328,15 @@ class UserRetainers
     /**
      * Get market data for a retainer
      */
-    public function getMarketData($items)
+    public function getMarketData($items, bool $homeOnly = false)
     {
+        $key = __METHOD__ . md5(implode('', $items)) . ($homeOnly ? 'homeonly' : 'crossworldworld');
+    
+        // check cache
+        if ($data = Redis::cache()->get($key)) {
+            return $data;
+        }
+        
         // grab just the item ids
         $itemIds = [];
         foreach ($items as $item) {
@@ -338,9 +345,12 @@ class UserRetainers
         
         // we only care about unique items
         $itemIds = array_unique($itemIds);
+        
         $server  = GameServers::getServer();
         $dc      = GameServers::getDataCenter($server);
-        $market  = $this->companion->getItemsOnDataCenter($itemIds, $dc);
+        $market  = $homeOnly
+            ? $this->companion->getItemsOnServer($itemIds, $server)
+            : $this->companion->getItemsOnDataCenter($itemIds, $dc);
     
         $serverMarketStats = [];
         $lastUpdatedTimes  = [];
@@ -383,7 +393,8 @@ class UserRetainers
     
             $serverMarketStats[$itemId]['RoughUpdateTime'] = round(Average::mean($lastUpdatedTimes[$itemId]));
         }
-        
+    
+        Redis::cache()->set($key, $serverMarketStats, 60);
         return $serverMarketStats;
     }
 }
