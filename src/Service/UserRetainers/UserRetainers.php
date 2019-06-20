@@ -395,6 +395,6 @@ class UserRetainers
         }
     
         Redis::cache()->set($key, $serverMarketStats, 60);
-        return $serverMarketStats;
+        return json_decode(json_encode($serverMarketStats), true);
     }
 }
