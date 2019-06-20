@@ -6,13 +6,15 @@
         <small>RETAINER</small>
         <h1>
             {{ retainer.name }}
-            <span>{{ retainer.server }}</span>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            {% if app.request.get('home') %}
-                <a href="{{ path('retainer_shop', { retainer: retainer.id }) }}">Show Cross-World</a>
-            {% else %}
-                <a href="{{ path('retainer_shop', { retainer: retainer.id, home: 1 }) }}">Show Home Server Only</a>
-            {% endif %}
+            <span>
+                {{ retainer.server }}
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                {% if app.request.get('home') %}
+                    <a href="{{ path('retainer_shop', { retainer: retainer.id }) }}">Show Cross-World</a>
+                {% else %}
+                    <a href="{{ path('retainer_shop', { retainer: retainer.id, home: 1 }) }}">Show Home Server Only</a>
+                {% endif %}
+            </span>
         </h1>
 
         {% if store and market_stats %}
