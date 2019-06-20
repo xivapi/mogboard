@@ -56,12 +56,13 @@ class UserCharacterController extends AbstractController
      */
     public function history(Request $request, UserCharacter $character)
     {
-        throw new \Exception("This page has been temporarily disabled.");
-        
         $user = $this->users->getUser(true);
 
-        // verify the user owns this character
-        if ($character->getUser() !== $user) {
+        if ($user->isAdmin() === false) {
+            throw new BasicException("No no no");
+        }
+        
+        if ($user->isAdmin() === false && $character->getUser() !== $user) {
             throw new BasicException('Sorry, you do not own this character and will not be able to view its history.');
         }
 
