@@ -334,7 +334,7 @@ class UserRetainers
     
         // check cache
         if ($data = Redis::cache()->get($key)) {
-            return json_decode(json_encode($data, true));
+            return json_decode(json_encode($data), true);
         }
         
         // grab just the item ids
