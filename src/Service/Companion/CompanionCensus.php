@@ -450,20 +450,20 @@ class CompanionCensus
                 }
             }
 
-            $averagePerHQ = ceil(Average::median($averagePerHQ));
-            $averagePerNQ = ceil(Average::median($averagePerNQ));
+            $maxPerHQ = ceil(Average::median($averagePerHQ)) * self::JUNK_PRICE_FACTOR;
+            $maxPerNQ = ceil(Average::median($averagePerNQ)) * self::JUNK_PRICE_FACTOR;
 
             /**
              * Now go through again and remove if its X above the average
              */
             foreach ($marketData->Prices as $i => $price) {
-                $maxValue = ($price->IsHQ ? $averagePerHQ : $averagePerNQ) * self::JUNK_PRICE_FACTOR;
-                $maxValueHQ = $averagePerHQ * self::JUNK_PRICE_FACTOR;
+                if (
+                    // if above NQ median * x
+                    ($price->IsHQ === false && $price->PricePerUnit > $maxPerNQ) ||
 
-                // remove if price is above max, or if it's NQ, it also checks price against max HQ.
-                if ($price->PricePerUnit > $maxValue) {
-                    unset($marketData->Prices[$i]);
-                } else if ($averagePerHQ > 0 && $price->IsHQ === false && $price->PricePerUnit > $maxValueHQ) {
+                    // if above HQ median * x
+                    ($price->IsHQ === true  && $price->PricePerUnit > $maxPerHQ)
+                ) {
                     unset($marketData->Prices[$i]);
                 }
             }
