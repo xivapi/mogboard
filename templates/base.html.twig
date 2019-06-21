@@ -35,6 +35,21 @@
     <link rel="stylesheet" href="/font/styles.css?v={{ siteVersion().hash }}">
     <link rel="stylesheet" href="/ui/ui.css?v={{ siteVersion().hash }}">
     {% block stylesheets %}{% endblock %}
+
+    {# High Charts #}
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="/theme/highchart.js"></script>
+
+    {# Chart JS #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
+    {# Stuffs #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/1.1.3/stupidtable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplebar/2.6.1/simplebar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/3.4.1/tippy.all.min.js"></script>
 </head>
 <body>
     <div class="site-container">
@@ -68,11 +83,6 @@
     {% include 'Modals/base.html.twig' %}
 
     {# JS #}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/1.1.3/stupidtable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplebar/2.6.1/simplebar.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/3.4.1/tippy.all.min.js"></script>
     <script>
         var mog = {
             path: "{{ app.request.getPathInfo()|split('/')[1] }}",

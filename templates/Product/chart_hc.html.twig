@@ -1,0 +1,33 @@
+<div class="highchart">
+    <div id="{{ chart.id }}"></div>
+</div>
+<script>
+// Create the chart
+Highcharts.stockChart('{{ chart.id }}', {
+    credits: {
+        enabled: false
+    },
+
+    scrollbar: {
+        enabled: false
+    },
+
+    legend: {
+        enabled: true
+    },
+
+    xAxis: {
+        range: (60 * 60 * 24 * 30) * 1000
+    },
+
+    yAxis: {
+        labels: {
+            formatter: function () {
+                return Highcharts.numberFormat(this.value, 0, ',', '.');
+            }
+        }
+    },
+
+    series: {{ chart.series|json_encode|raw }}
+});
+</script>

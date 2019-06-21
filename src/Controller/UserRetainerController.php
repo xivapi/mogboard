@@ -83,7 +83,7 @@ class UserRetainerController extends AbstractController
         $marketStats = null;
 
         if ($items) {
-            $marketStats = $this->retainers->getMarketData($items);
+            $marketStats = $this->retainers->getMarketData($items, !empty($request->get('home')));
         }
 
         // get the retainer store for this user
