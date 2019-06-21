@@ -44,11 +44,6 @@ class CompanionCensus
         $this->census->_Global = (Object)[];
     
         /**
-         * This removes items from servers not updating
-         */
-        $this->removeNonUpdatedItems($market);
-    
-        /**
          * First we remove all "silly" prices, these are the ones
          * that are 3x the price of the cheapest 5
          */
@@ -471,21 +466,6 @@ class CompanionCensus
                 } else if ($averagePerHQ > 0 && $price->IsHQ === false && $price->PricePerUnit > $maxValueHQ) {
                     unset($marketData->Prices[$i]);
                 }
-            }
-        }
-    }
-    
-    private function removeNonUpdatedItems($market)
-    {
-        foreach ($market as $server => $marketData)
-        {
-            if (!isset($marketData->UpdatePriority)) {
-                continue;
-            }
-            
-            if (in_array($marketData->UpdatePriority, CompanionConstants::QUEUES) == false) {
-                $marketData->Prices = [];
-                $marketData->History = [];
             }
         }
     }
