@@ -15,7 +15,7 @@ class CompanionCensus
 {
     const BUBBLE_MIN_PX = 3;
     const BUBBLE_MAX_PX = [ 6, 12, 20 ];
-    const JUNK_PRICE_FACTOR = 4;
+    const JUNK_PRICE_FACTOR = 3;
     
     /** @var \stdClass */
     private $item;
@@ -450,8 +450,8 @@ class CompanionCensus
                 }
             }
 
-            $maxPerHQ = ceil(Average::median($averagePerHQ)) * self::JUNK_PRICE_FACTOR;
-            $maxPerNQ = ceil(Average::median($averagePerNQ)) * self::JUNK_PRICE_FACTOR;
+            $maxPerHQ = ceil(Average::mean($averagePerHQ)) * self::JUNK_PRICE_FACTOR;
+            $maxPerNQ = ceil(Average::mean($averagePerNQ)) * self::JUNK_PRICE_FACTOR;
 
             /**
              * Now go through again and remove if its X above the average
@@ -459,10 +459,10 @@ class CompanionCensus
             foreach ($marketData->Prices as $i => $price) {
                 if (
                     // if above NQ median * x
-                    ($price->IsHQ === false && $price->PricePerUnit > $maxPerNQ) ||
+                    ($price->IsHQ == false && $price->PricePerUnit > $maxPerNQ) ||
 
                     // if above HQ median * x
-                    ($price->IsHQ === true  && $price->PricePerUnit > $maxPerHQ)
+                    ($price->IsHQ == true  && $price->PricePerUnit > $maxPerHQ)
                 ) {
                     unset($marketData->Prices[$i]);
                 }
