@@ -467,7 +467,7 @@ class CompanionCensus
                 }
             }
 
-            $market[$server] = $marketData;
+            $market->{$server} = $marketData;
         }
     }
 }
