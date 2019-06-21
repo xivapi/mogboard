@@ -183,7 +183,7 @@ class ItemController extends AbstractController
             'marketStats'    => json_decode(json_encode($marketStats), true),
             'census'         => json_decode(json_encode($census), true),
             'canUpdate'      => $canUpdate,
-            'junkvalue'      => CompanionCensus::JUNK_PRICE_FACTOR,
+            'junkvalue'      => 2.5,
             'recipes'        => $recipes,
             'faved'          => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'          => $user ? $user->getCustomLists() : [],
