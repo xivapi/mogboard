@@ -75,7 +75,7 @@
                     {% if env('APP_ENV') == 'dev' %}
                         Crafty Adventurer
                     {% else %}
-                        {{ row.CreatorSignatureID ? row.CreatorSignatureName : '' }}
+                        {{ row.CreatorSignatureName ? row.CreatorSignatureName : '' }}
                     {% endif %}
                 </td>
             </tr>
