@@ -113,7 +113,6 @@ class ItemController extends AbstractController
         $canUpdate = false;
         
         $time  = microtime(true);
-        $times = [];
 
         // if it has recipes, grab those
         $recipes = [];
@@ -132,6 +131,7 @@ class ItemController extends AbstractController
         // grab market for this dc
         $server     = GameServers::getServer($request->get('server'));
         $dcServers  = GameServers::getDataCenterServers($server);
+        $dc         = GameServers::getDataCenter($server);
         $market     = $this->companionMarket->get($dcServers, $itemId);
         $times      = [];
         
@@ -147,15 +147,9 @@ class ItemController extends AbstractController
                 'priority' => $md['UpdatePriority'] ?? null,
             ];
         }
-        
-        print_r([
-            microtime(true) - $time
-        ]);
-        
-        die;
 
         // grab market census
-        $census = $this->companionCensus->generate($dcServers, $item, $market);
+        $census = $this->companionCensus->generate($dc, $itemId, $market);
         
         // get market item entry
         $conn = $this->em->getConnection();
@@ -175,6 +169,8 @@ class ItemController extends AbstractController
                 );
             }
         }
+        
+        $loadSpeed = microtime(true) - $time;
 
         // response
         $data = [
@@ -190,6 +186,7 @@ class ItemController extends AbstractController
             'shops'          => $shops,
             'update_times'   => $times,
             'chart_max'      => 100,
+            'load_speed'     => round($loadSpeed, 3),
             'server'         => [
                 'name'       => $server,
                 'dc'         => $dc,

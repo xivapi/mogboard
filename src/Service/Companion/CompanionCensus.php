@@ -24,9 +24,9 @@ class CompanionCensus
     /**
      * Generate Mark Census!
      */
-    public function generate($servers, $itemId, $market)
+    public function generate(string $dc, int $itemId, $market)
     {
-        $key = "mbv4_market_census_{$itemId}_". md5(serialize($servers));
+        $key = "mbv4_market_census_{$itemId}_{$dc}";
     
         if ($data = Redis::cache()->get($key)) {
             return json_decode(json_encode($data), true);
