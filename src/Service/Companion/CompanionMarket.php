@@ -66,7 +66,7 @@ class CompanionMarket
             $data[$server] = $this->handle($itemId, $serverId, $source);
         }
         
-        # Redis::cache()->set($key, $data, 60);
+        Redis::cache()->set($key, $data, 60);
         
         return $data;
     }

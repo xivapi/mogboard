@@ -78,7 +78,7 @@ class CompanionCensus
         // deprecated
         $this->buildChartBubble('Global', $this->census['Global']);
     
-        # Redis::cache()->set($key, $this->census, 60);
+        Redis::cache()->set($key, $this->census, 60);
     
         return $this->census;
     }
