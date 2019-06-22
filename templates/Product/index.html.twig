@@ -152,12 +152,24 @@
                                                     name: '(High-Quality) Price Per Unit',
                                                     data: census[serverName].HC_History_HQ,
                                                     yAxis: 0,
+                                                    showInNavigator: true,
+                                                    negativeColor: true,
+                                                    navigatorOptions: {
+                                                        type: 'line',
+                                                        color: 'rgba(202,200,68,0.35)'
+                                                    },
                                                 },
                                                 {
                                                     id:   'HC_History_NQ_'~ serverName,
                                                     name: '(Normal Quality) Price Per Unit',
                                                     data: census[serverName].HC_History_NQ,
                                                     yAxis: 0,
+                                                    showInNavigator: true,
+                                                    negativeColor: true,
+                                                    navigatorOptions: {
+                                                        type: 'line',
+                                                        color: 'rgba(120,120,120,0.35)'
+                                                    },
                                                 },
 
                                                 {
@@ -167,6 +179,7 @@
                                                     linkedTo: 'HC_History_HQ_'~ serverName,
                                                     type: 'column',
                                                     yAxis: 1,
+                                                    showInNavigator: false,
                                                 },
                                                 {
                                                     id:   'HC_History_NQ_volume_'~ serverName,
@@ -175,6 +188,7 @@
                                                     linkedTo: 'HC_History_NQ_'~ serverName,
                                                     type: 'column',
                                                     yAxis: 1,
+                                                    showInNavigator: false,
                                                 }
                                             ]
                                         }
