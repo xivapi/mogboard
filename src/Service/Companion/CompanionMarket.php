@@ -54,7 +54,7 @@ class CompanionMarket
                 $price['Added'],
                 $price['RetainerID'],
                 $price['CreatorSignatureID'],
-                $price['StainID'],
+                $price['StainID']
             );
     
             $source['Prices'][$i] = $price;
@@ -64,7 +64,7 @@ class CompanionMarket
             unset(
                 $history['ID'],
                 $history['Added'],
-                $history['CharacterID'],
+                $history['CharacterID']
             );
         
             $source['History'][$i] = $history;
