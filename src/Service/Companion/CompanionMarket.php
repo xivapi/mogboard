@@ -2,6 +2,7 @@
 
 namespace App\Service\Companion;
 
+use App\Common\Game\GameServers;
 use App\Common\Service\ElasticSearch\ElasticSearch;
 use App\Common\Service\Redis\Redis;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,24 +30,46 @@ class CompanionMarket
         if ($this->elastic === null) {
             $this->elastic  = new ElasticSearch('ELASTIC_SERVER_COMPANION');
         }
+        
+        return $this;
+    }
+    
+    public function get(array $servers, int $itemId)
+    {
+        $key = "mbv4_market_{$itemId}_". md5(serialize($servers));
+        
+        if ($data = Redis::cache()->get($key)) {
+            return json_decode(json_encode($data), true);
+        }
+        
+        $requests = [];
+        
+        foreach ($servers as $server) {
+            $serverId   = GameServers::getServerId($server);
+            $requests[] = "{$serverId}_{$itemId}";
+        }
+    
+        $data      = [];
+        $results   = $this->connect()->elastic->getDocumentsBulk(self::INDEX, self::INDEX, $requests);
+        $results   = $results['docs'];
+        
+        foreach ($results as $result) {
+            [$serverId, $itemId] = explode('_', $result['_id']);
+            $source        = $result['_source'];
+            $server        = GameServers::LIST[$serverId];
+            $data[$server] = $this->handle($itemId, $serverId, $source);
+        }
+    
+        # Redis::cache()->set($key, $data, 60);
+        
+        return $data;
     }
 
     /**
      * Get the current prices for an item
      */
-    public function get(int $server, int $itemId)
+    private function handle($itemId, $server, $source)
     {
-        $key = "mb_market_{$server}_{$itemId}";
-        
-        if ($source = Redis::cache()->get($key)) {
-            return json_decode(json_encode($source), true);
-        }
-        
-        $this->connect();
-    
-        $result = $this->elastic->getDocument(self::INDEX, self::INDEX, "{$server}_{$itemId}");
-        $source = $result['_source'];
-        
         // remove some stuff, try reduce memory
         foreach ($source['Prices'] as $i => $price) {
             unset(
@@ -71,7 +94,7 @@ class CompanionMarket
         }
 
         // slice history
-        $source['History'] = array_slice($source['History'], 0, 500);
+        $source['History'] = array_slice($source['History'], 0, 100);
     
         // add update queue
         $stmt = $this->em->getConnection()->prepare(
@@ -85,8 +108,6 @@ class CompanionMarket
     
         $source['UpdatePriority'] = $stmt->fetch()['normal_queue'] ?? null;
     
-        Redis::cache()->set($key, $source, 60);
-        
         return $source;
     }
 }

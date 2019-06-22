@@ -94,23 +94,26 @@ class ItemController extends AbstractController
             return $this->redirectToRoute('404');
         }
         
-        RedisTracking::increment('PAGE_VIEW');
         
-        $this->users->setLastUrl($request);
-
         $user = $this->users->getUser(false);
         
         /** @var \stdClass $item */
         $item = $this->gameDataSource->getItem($itemId);
         
-        if (!$item) {
+        if ($item == null) {
             return $this->redirectToRoute('404');
         }
-        
+
+        // bits n bobs
+        $this->userLists->handleRecentlyViewed($itemId);
         $this->itemPopularity->hit($request, $itemId);
         $this->itemViews->hit($request, $itemId);
-    
+        $this->users->setLastUrl($request);
+        RedisTracking::increment('PAGE_VIEW');
         $canUpdate = false;
+        
+        $time  = microtime(true);
+        $times = [];
 
         // if it has recipes, grab those
         $recipes = [];
@@ -126,45 +129,33 @@ class ItemController extends AbstractController
             }
         }
     
+        // grab market for this dc
         $server     = GameServers::getServer($request->get('server'));
-        $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
-        //$market     = $this->companion->getByDataCenter($dc, $itemId, 500);
-    
-        $market = [];
-        $updateTimes = [];
+        $market     = $this->companionMarket->get($dcServers, $itemId);
+        $times      = [];
         
-        foreach ($dcServers as $server) {
-            $serverId = GameServers::getServerId($server);
-            $md = $this->companionMarket->get($serverId, $itemId);
-
+        foreach ($market as $server => $md) {
             // state if it can be updated
             if ($canUpdate == false && isset($md['UpdatePriority']) && in_array($md['UpdatePriority'], CompanionConstants::QUEUES)) {
                 $canUpdate = true;
             }
-            
-            $market[$server] = $md;
-    
-            $updateTimes[] = [
+
+            $times[] = [
                 'name'     => $server,
                 'updated'  => $md['Updated'],
                 'priority' => $md['UpdatePriority'] ?? null,
             ];
         }
-
-        // build census
-        $census = Redis::Cache()->get("census_{$dc}_{$itemId}");
-        if ($census == null) {
-            // generate census and cache it, it's only cached for a short
-            // period just to avoid spamming and multiple users.
-            $census = $this->companionCensus->generate($item, $market)->getCensus();
-            Redis::Cache()->set("census_{$dc}_{$itemId}", $census, 120);
-        } else {
-            $census = json_decode(json_encode($census), true);
-        }
         
-        // add to recently viewed
-        $this->userLists->handleRecentlyViewed($itemId);
+        print_r([
+            microtime(true) - $time
+        ]);
+        
+        die;
+
+        // grab market census
+        $census = $this->companionCensus->generate($dcServers, $item, $market);
         
         // get market item entry
         $conn = $this->em->getConnection();
@@ -197,7 +188,7 @@ class ItemController extends AbstractController
             'lists'          => $user ? $user->getCustomLists() : [],
             'cheapest'       => $this->companionStatistics->cheapest($market),
             'shops'          => $shops,
-            'update_times'   => $updateTimes,
+            'update_times'   => $times,
             'chart_max'      => 100,
             'server'         => [
                 'name'       => $server,

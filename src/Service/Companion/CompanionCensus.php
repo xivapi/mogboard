@@ -3,6 +3,7 @@
 namespace App\Service\Companion;
 
 use App\Common\Game\GameServers;
+use App\Common\Service\Redis\Redis;
 use App\Common\Utils\Arrays;
 use MathPHP\Statistics\Average;
 
@@ -15,8 +16,6 @@ class CompanionCensus
     const BUBBLE_MIN_PX = 3;
     const BUBBLE_MAX_PX = [ 6, 12, 20 ];
 
-    /** @var \stdClass */
-    private $item;
     /** @var \array */
     private $census = [];
     /** @var string */
@@ -25,9 +24,13 @@ class CompanionCensus
     /**
      * Generate Mark Census!
      */
-    public function generate($item, $market): self
+    public function generate($servers, $itemId, $market)
     {
-        $this->item = $item;
+        $key = "mbv4_market_census_{$itemId}_". md5(serialize($servers));
+    
+        if ($data = Redis::cache()->get($key)) {
+            return json_decode(json_encode($data), true);
+        }
         
         // server users home world
         $this->homeServer = GameServers::getServer();
@@ -71,14 +74,8 @@ class CompanionCensus
         // deprecated
         $this->buildChartBubble('Global', $this->census['Global']);
     
-        return $this;
-    }
+        # Redis::cache()->set($key, $this->census, 60);
     
-    /**
-     * @return array
-     */
-    public function getCensus()
-    {
         return $this->census;
     }
     
