@@ -2,6 +2,7 @@
 
 namespace App\Service\Companion;
 
+use App\Common\Exceptions\BasicException;
 use App\Common\Game\GameServers;
 use App\Common\Service\ElasticSearch\ElasticSearch;
 use App\Common\Service\Redis\Redis;
@@ -55,8 +56,14 @@ class CompanionMarket
         
         foreach ($results as $result) {
             [$serverId, $itemId] = explode('_', $result['_id']);
-            $source        = $result['_source'];
+            $source        = $result['_source'] ?? null;
             $server        = GameServers::LIST[$serverId];
+            
+            if ($source === null) {
+                throw new BasicException("This item cannot be found on the Mogboard market database for the server: {$server}.");
+            }
+            
+            
             $data[$server] = $this->handle($itemId, $serverId, $source);
         }
     
