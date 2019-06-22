@@ -1,10 +1,12 @@
 Highcharts.theme = {
     colors: [
-        '#cac844', // nq
-        '#787878', // hq
+        '#cac844',  // hq
+        '#787878',  // nq
 
-        '#f45b5b',
-        '#7798BF',
+        'rgba(202,200,68,0.4)',  // hq qty
+        'rgba(120,120,120,0.5)',  // nq qty
+
+
         '#aaeeee',
         '#ff0066',
         '#eeaaee',

@@ -12,15 +12,15 @@
     <div class="cheapest">
         <h2>Cheapest High-Quality</h2>
         {% if item.CanBeHq %}
-            {% if census._Global.Prices_CheapestHQ %}
+            {% if census.Global.Prices_CheapestHQ %}
             <div class="cheapest_price">
                 <i class="xiv-Gil"></i>
-                <em>{{ census._Global.Prices_CheapestHQ.Quantity|number_format }} x</em>
-                <span class="cheapest_value">{{ census._Global.Prices_CheapestHQ.PricePerUnit|number_format }}</span>
+                <em>{{ census.Global.Prices_CheapestHQ.Quantity|number_format }} x</em>
+                <span class="cheapest_value">{{ census.Global.Prices_CheapestHQ.PricePerUnit|number_format }}</span>
 
                 <span class="cheapest_price_info">
-                    Server: <strong>{{ census._Global.Prices_CheapestHQ.Server }}</strong> -
-                    Total: <strong>{{ census._Global.Prices_CheapestHQ.PriceTotal|number_format }}</strong>
+                    Server: <strong>{{ census.Global.Prices_CheapestHQ.Server }}</strong> -
+                    Total: <strong>{{ census.Global.Prices_CheapestHQ.PriceTotal|number_format }}</strong>
                 </span>
             </div>
             {% else %}
@@ -32,15 +32,15 @@
     </div>
     <div class="cheapest">
         <h2>Cheapest Normal Quality</h2>
-        {% if census._Global.Prices_CheapestNQ %}
+        {% if census.Global.Prices_CheapestNQ %}
         <div class="cheapest_price">
             <i class="xiv-Gil"></i>
-            <em>{{ census._Global.Prices_CheapestNQ.Quantity|number_format }} x</em>
-            <span class="cheapest_value">{{ census._Global.Prices_CheapestNQ.PricePerUnit|number_format }}</span>
+            <em>{{ census.Global.Prices_CheapestNQ.Quantity|number_format }} x</em>
+            <span class="cheapest_value">{{ census.Global.Prices_CheapestNQ.PricePerUnit|number_format }}</span>
 
             <span class="cheapest_price_info">
-                Server: <strong>{{ census._Global.Prices_CheapestNQ.Server }}</strong> -
-                Total: <strong>{{ census._Global.Prices_CheapestNQ.PriceTotal|number_format }}</strong>
+                Server: <strong>{{ census.Global.Prices_CheapestNQ.Server }}</strong> -
+                Total: <strong>{{ census.Global.Prices_CheapestNQ.PriceTotal|number_format }}</strong>
             </span>
         </div>
         {% else %}
@@ -51,28 +51,49 @@
 <br><br>
 
 {# Purchase History #}
-<h6>Cross-World Purchase history</h6>
+<h6>Cross-World Purchase history (500 sales)</h6>
 {% include 'Product/chart_hc.html.twig' with {
     chart: {
         id: 'history_global',
         series: [
             {
-                name: '(High-Quality) Price Per Unit',
+                id:   'HC_History_HQ',
+                name: '(High-Quality) PerUnit',
                 data: census.All.HC_History_HQ,
+                yAxis: 0,
             },
             {
-                name: '(Normal Quality) Price Per Unit',
+                id:   'HC_History_HQ',
+                name: '(Normal Quality) PerUnit',
                 data: census.All.HC_History_NQ,
+                yAxis: 0,
+            },
+
+            {
+                id:   'HC_History_HQ_volume',
+                name: '(High-Quality) PerUnit QUANTITY',
+                data: census.All.HC_History_HQ_volume,
+                linkedTo: 'HC_History_HQ',
+                type: 'column',
+                yAxis: 1,
+            },
+            {
+                id:   'HC_History_NQ_volume',
+                name: '(Normal Quality) PerUnit QUANTITY',
+                data: census.All.HC_History_NQ_volume,
+                linkedTo: 'HC_History_NQ',
+                type: 'column',
+                yAxis: 1,
             }
         ]
     }
 } %}
 
 
-{% set averagePricesNQ   = census._Global.Prices_Average_PricePerUnit_NQ %}
-{% set averagePricesHQ   = census._Global.Prices_Average_PricePerUnit_HQ %}
-{% set averageHistoryNQ  = census._Global.History_Average_PricePerUnit_NQ %}
-{% set averageHistoryHQ  = census._Global.History_Average_PricePerUnit_HQ %}
+{% set averagePricesNQ   = census.Global.Prices_Average_PricePerUnit_NQ %}
+{% set averagePricesHQ   = census.Global.Prices_Average_PricePerUnit_HQ %}
+{% set averageHistoryNQ  = census.Global.History_Average_PricePerUnit_NQ %}
+{% set averageHistoryHQ  = census.Global.History_Average_PricePerUnit_HQ %}
 
 {# CROSS WORLD MARKET BOARD #}
 <div class="cross_world_markets">
@@ -80,7 +101,7 @@
         {% if item.CanBeHq %}
             <h6><img src="/i/game/hq.png" height="15"> HQ Prices</h6>
             {% include 'Product/prices.html.twig' with {
-                'prices': census._Global.PricesHQ|slice(0, 10),
+                'prices': census.Global.PricesHQ|slice(0, 10),
                 'crossWorld': true,
                 'averagePricesNQ': averagePricesNQ,
                 'averagePricesHQ': averagePricesHQ
@@ -90,7 +111,7 @@
 
         <h6>NQ Prices</h6>
         {% include 'Product/prices.html.twig' with {
-            'prices': census._Global.PricesNQ|slice(0, 10),
+            'prices': census.Global.PricesNQ|slice(0, 10),
             'crossWorld': true,
             'averagePricesNQ': averagePricesNQ,
             'averagePricesHQ': averagePricesHQ
@@ -100,7 +121,7 @@
         {% if item.CanBeHq %}
             <h6><img src="/i/game/hq.png" height="15"> HQ Purchase History</h6>
             {% include 'Product/history.html.twig' with {
-                'history': census._Global.HistoryHQ|slice(0, 10),
+                'history': census.Global.HistoryHQ|slice(0, 10),
                 'crossWorld': true,
                 'averageHistoryNQ': averageHistoryNQ,
                 'averageHistoryHQ': averageHistoryHQ
@@ -110,7 +131,7 @@
 
         <h6>NQ Purchase History</h6>
         {% include 'Product/history.html.twig' with {
-            'history': census._Global.HistoryNQ|slice(0, 10),
+            'history': census.Global.HistoryNQ|slice(0, 10),
             'crossWorld': true,
             'averageHistoryNQ': averageHistoryNQ,
             'averageHistoryHQ': averageHistoryHQ
@@ -129,11 +150,11 @@
                 <div class="flex avg_prices">
                     {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
-                        <img src="/i/game/hq.png"> {{ census._Global.Prices_Average_PricePerUnit_HQ|number_format }}
+                        <img src="/i/game/hq.png"> {{ census.Global.Prices_Average_PricePerUnit_HQ|number_format }}
                     </div>
                     {% endif %}
                     <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                        {{ census._Global.Prices_Average_PricePerUnit_NQ|number_format }}
+                        {{ census.Global.Prices_Average_PricePerUnit_NQ|number_format }}
                     </div>
                 </div>
             </div>
@@ -143,11 +164,11 @@
                 <div class="flex avg_prices">
                     {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
-                        <img src="/i/game/hq.png"> {{ census._Global.Prices_Average_PriceTotal_HQ|number_format }}
+                        <img src="/i/game/hq.png"> {{ census.Global.Prices_Average_PriceTotal_HQ|number_format }}
                     </div>
                     {% endif %}
                     <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                        {{ census._Global.Prices_Average_PriceTotal_NQ|number_format }}
+                        {{ census.Global.Prices_Average_PriceTotal_NQ|number_format }}
                     </div>
                 </div>
             </div>
@@ -161,11 +182,11 @@
                 <div class="flex avg_prices">
                     {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
-                        <img src="/i/game/hq.png"> {{ census._Global.History_Average_PricePerUnit_HQ|number_format }}
+                        <img src="/i/game/hq.png"> {{ census.Global.History_Average_PricePerUnit_HQ|number_format }}
                     </div>
                     {% endif %}
                     <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                        {{ census._Global.History_Average_PricePerUnit_NQ|number_format }}
+                        {{ census.Global.History_Average_PricePerUnit_NQ|number_format }}
                     </div>
                 </div>
             </div>
@@ -175,11 +196,11 @@
                 <div class="flex avg_prices">
                     {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
-                        <img src="/i/game/hq.png"> {{ census._Global.History_Average_PriceTotal_HQ|number_format }}
+                        <img src="/i/game/hq.png"> {{ census.Global.History_Average_PriceTotal_HQ|number_format }}
                     </div>
                     {% endif %}
                     <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                        {{ census._Global.History_Average_PriceTotal_NQ|number_format }}
+                        {{ census.Global.History_Average_PriceTotal_NQ|number_format }}
                     </div>
                 </div>
             </div>
@@ -188,59 +209,3 @@
 </div>
 
 <br><br>
-
-{# PRICE VS QUANTITY #}
-<div class="cross_world_markets">
-    <div>
-        <h6>Current - Price Per Unit vs Quantity</h6>
-        <div class="cross_world_chart" style="position: relative; height: 350px; width: 100%"><canvas id="Prices_BubbleChart"></canvas></div>
-        <script>
-            renderChart(
-                'Prices_BubbleChart',
-                'bubble',
-                [
-                    'High-Quality',
-                    'Normal Quality'
-                ],
-                1,
-                {{ [
-                    census._Global.Prices_BubbleChart_HQ|slice(0,chart_max)|length,
-                    census._Global.Prices_BubbleChart_NQ|slice(0,chart_max)|length
-                ]|max }},
-                [
-                    {{ census._Global.PricesQuantity_Chart_PricePerUnit_HQ|json_encode|raw }},
-                    {{ census._Global.PricesQuantity_Chart_PricePerUnit_NQ|json_encode|raw }}
-                ],
-                {{ census._Global.Prices_BubbleChart_HQ|slice(0,chart_max)|json_encode|raw }},
-                {{ census._Global.Prices_BubbleChart_NQ|slice(0,chart_max)|json_encode|raw }},
-            );
-        </script>
-    </div>
-    <div>
-        <h6>History - Price Per Unit vs Quantity</h6>
-        <div class="cross_world_chart" style="position: relative; height: 350px; width: 100%"><canvas id="History_BubbleChart"></canvas></div>
-        <script>
-            renderChart(
-                'History_BubbleChart',
-                'bubble',
-                [
-                    'High-Quality',
-                    'Normal Quality'
-                ],
-                1,
-                {{ [
-                    census._Global.History_BubbleChart_HQ|slice(0,chart_max)|length,
-                    census._Global.History_BubbleChart_NQ|slice(0,chart_max)|length
-                ]|max }},
-                [
-                    {{ census._Global.HistoryQuantity_Chart_PricePerUnit_HQ|json_encode|raw }},
-                    {{ census._Global.HistoryQuantity_Chart_PricePerUnit_NQ|json_encode|raw }}
-                ],
-                {{ census._Global.History_BubbleChart_HQ|slice(0,chart_max)|json_encode|raw }},
-                {{ census._Global.History_BubbleChart_NQ|slice(0,chart_max)|json_encode|raw }},
-            );
-        </script>
-    </div>
-</div>
-
-<br><br><br><br>

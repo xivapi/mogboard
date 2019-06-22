@@ -11,6 +11,7 @@ use App\Common\Service\Redis\RedisTracking;
 use App\Common\User\Users;
 use App\Common\Utils\Language;
 use App\Constants\CompanionConstants;
+use App\Service\Companion\CompanionMarket;
 use App\Service\Companion\CompanionStatistics;
 use App\Service\GameData\GameDataSource;
 use App\Service\Companion\Companion;
@@ -38,6 +39,8 @@ class ItemController extends AbstractController
     private $companionCensus;
     /** @var CompanionStatistics */
     private $companionStatistics;
+    /** @var CompanionMarket */
+    private $companionMarket;
     /** @var Users */
     private $users;
     /** @var UserAlerts */
@@ -57,6 +60,7 @@ class ItemController extends AbstractController
         Companion $companion,
         CompanionCensus $companionCensus,
         CompanionStatistics $companionStatistics,
+        CompanionMarket $companionMarket,
         Users $users,
         UserAlerts $userAlerts,
         UserLists $userLists,
@@ -68,6 +72,7 @@ class ItemController extends AbstractController
         $this->companion           = $companion;
         $this->companionCensus     = $companionCensus;
         $this->companionStatistics = $companionStatistics;
+        $this->companionMarket     = $companionMarket;
         $this->users               = $users;
         $this->userAlerts          = $userAlerts;
         $this->userLists           = $userLists;
@@ -104,6 +109,8 @@ class ItemController extends AbstractController
         
         $this->itemPopularity->hit($request, $itemId);
         $this->itemViews->hit($request, $itemId);
+    
+        $canUpdate = false;
 
         // if it has recipes, grab those
         $recipes = [];
@@ -122,18 +129,27 @@ class ItemController extends AbstractController
         $server     = GameServers::getServer($request->get('server'));
         $dc         = GameServers::getDataCenter($server);
         $dcServers  = GameServers::getDataCenterServers($server);
-        $market     = $this->companion->getByDataCenter($dc, $itemId, 500);
+        //$market     = $this->companion->getByDataCenter($dc, $itemId, 500);
+    
+        $market = [];
+        $updateTimes = [];
         
-        $canUpdate = false;
-        foreach ($market as $marketData) {
-            if (!isset($marketData->UpdatePriority)) {
-                continue;
+        foreach ($dcServers as $server) {
+            $serverId = GameServers::getServerId($server);
+            $md = $this->companionMarket->get($serverId, $itemId);
+
+            // state if it can be updated
+            if ($canUpdate == false && isset($md['UpdatePriority']) && in_array($md['UpdatePriority'], CompanionConstants::QUEUES)) {
+                $canUpdate = true;
             }
             
-            if (in_array($marketData->UpdatePriority, CompanionConstants::QUEUES)) {
-                $canUpdate = true;
-                break;
-            }
+            $market[$server] = $md;
+    
+            $updateTimes[] = [
+                'name'     => $server,
+                'updated'  => $md['Updated'],
+                'priority' => $md['UpdatePriority'] ?? null,
+            ];
         }
 
         // build census
@@ -143,6 +159,8 @@ class ItemController extends AbstractController
             // period just to avoid spamming and multiple users.
             $census = $this->companionCensus->generate($item, $market)->getCensus();
             Redis::Cache()->set("census_{$dc}_{$itemId}", $census, 120);
+        } else {
+            $census = json_decode(json_encode($census), true);
         }
         
         // add to recently viewed
@@ -153,6 +171,7 @@ class ItemController extends AbstractController
         $stmt = $conn->prepare("SELECT * FROM companion_market_item_source WHERE item = {$itemId}");
         $stmt->execute();
         
+        // shopz
         $shops = [];
         if ($shopData = $stmt->fetch()) {
             $shopData = json_decode($shopData['data'], true);
@@ -166,25 +185,13 @@ class ItemController extends AbstractController
             }
         }
 
-        // get market stats
-        $marketStats = $this->companionStatistics->stats();
-        $updateTimes = [];
-        foreach ($market as $m) {
-            $updateTimes[] = [
-                'name'     => GameServers::LIST[$m->Server],
-                'updated'  => $m->Updated,
-                'priority' => $m->UpdatePriority ?? null,
-            ];
-        }
-
         // response
         $data = [
             'item'           => $item,
             'market'         => $market,
-            'marketStats'    => json_decode(json_encode($marketStats), true),
-            'census'         => json_decode(json_encode($census), true),
+            'marketStats'    => $this->companionStatistics->stats(),
+            'census'         => $census,
             'canUpdate'      => $canUpdate,
-            'junkvalue'      => 2.5,
             'recipes'        => $recipes,
             'faved'          => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'          => $user ? $user->getCustomLists() : [],

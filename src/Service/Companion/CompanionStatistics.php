@@ -28,7 +28,7 @@ class CompanionStatistics
             Redis::Cache()->set('mogboard_marketstats', $apiStats, (60 * 60));
         }
         
-        return $apiStats;
+        return json_decode(json_encode($apiStats), true);
     }
     
     /**
@@ -42,13 +42,13 @@ class CompanionStatistics
             $cheapestHq = 0;
             $cheapestNq = 0;
             
-            foreach ($serverMarket->Prices as $m) {
-                if ($cheapestNq === 0 && $m->IsHQ === false) {
-                    $cheapestNq = $m->PricePerUnit;
+            foreach ($serverMarket['Prices'] as $m) {
+                if ($cheapestNq === 0 && $m['IsHQ'] === false) {
+                    $cheapestNq = $m['PricePerUnit'];
                 }
     
-                if ($cheapestHq === 0 && $m->IsHQ === true) {
-                    $cheapestHq = $m->PricePerUnit;
+                if ($cheapestHq === 0 && $m['IsHQ'] === true) {
+                    $cheapestHq = $m['PricePerUnit'];
                 }
             }
             

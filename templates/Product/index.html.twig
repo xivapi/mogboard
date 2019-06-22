@@ -2,9 +2,6 @@
 {% set title = item.Name %}
 
 {% block body %}
-    {% include 'Product/chart_js.html.twig' %}
-
-
     <script>var appEnableItemPage = 1;</script>
     <script>var itemId = {{ item.ID }};</script>
     <div class="product">
@@ -59,7 +56,7 @@
                                 {% for serverName in server.dc_servers %}
                                     {% set icon          = serverName == server.name ? 'ItemShard cw-home' : '' %}
                                     {% set className     = serverName == server.name ? 'home-world' : '' %}
-                                    {% set salesCount    = attribute(market, serverName).Prices is defined ? attribute(market, serverName).Prices|length|number_format : '-' %}
+                                    {% set salesCount    = market[serverName].Prices is defined ? market[serverName].Prices|length|number_format : '-' %}
                                     <button type="button" data-tab="cw{{ serverName }}" class="{{ className }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or app.request.get('server') == serverName) ? 'open' : '' }}">
                                         {% if serverName == server.name %}
                                             <i class="xiv-ItemShard cw-home"></i>
@@ -110,16 +107,16 @@
 
                     {# Server Pages #}
                     {% for serverName in server.dc_servers %}
-                        {% set marketData = attribute(market, serverName) %}
+                        {% set marketData = market[serverName] %}
                         {% if marketData.Updated %}
                             {% set pricesCount       = marketData.Prices|length %}
                             {% set historyCount      = marketData.History|length %}
                             {% set updateInfo        = marketStats.Report[marketData.UpdatePriority] ?? null %}
                             {% set cheapestPrice     = cheapest[serverName] %}
-                            {% set averagePricesNQ   = attribute(census, serverName).Prices_Average_PricePerUnit_NQ %}
-                            {% set averagePricesHQ   = attribute(census, serverName).Prices_Average_PricePerUnit_HQ %}
-                            {% set averageHistoryNQ  = attribute(census, serverName).History_Average_PricePerUnit_NQ %}
-                            {% set averageHistoryHQ  = attribute(census, serverName).History_Average_PricePerUnit_HQ %}
+                            {% set averagePricesNQ   = census[serverName].Prices_Average_PricePerUnit_NQ %}
+                            {% set averagePricesHQ   = census[serverName].Prices_Average_PricePerUnit_HQ %}
+                            {% set averageHistoryNQ  = census[serverName].History_Average_PricePerUnit_NQ %}
+                            {% set averageHistoryHQ  = census[serverName].History_Average_PricePerUnit_HQ %}
 
                             <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or app.request.get('server') == serverName) ? 'open' : '' }}">
 
@@ -135,7 +132,7 @@
                                 {% else %}
                                     <div class="alert-light">
                                         <h4>
-                                            <img src="/i/game/offline.png"> Could not find update information
+                                            <img src="/i/game/offline.png"> Could not find update information - {{ updateInfo }}
                                         </h4>
                                         <p>
                                             This item has either <strong>just recently updated</strong> and its market information is being processed (refresh in a couple minutes)
@@ -150,12 +147,33 @@
                                         id: 'history_' ~ serverName,
                                         series: [
                                             {
+                                                id:   'HC_History_HQ_'~ serverName,
                                                 name: '(High-Quality) Price Per Unit',
                                                 data: census[serverName].HC_History_HQ,
+                                                yAxis: 0,
                                             },
                                             {
+                                                id:   'HC_History_NQ_'~ serverName,
                                                 name: '(Normal Quality) Price Per Unit',
                                                 data: census[serverName].HC_History_NQ,
+                                                yAxis: 0,
+                                            },
+
+                                            {
+                                                id:   'HC_History_HQ_volume_'~ serverName,
+                                                name: '(High-Quality) Price Per Unit QUANTITY',
+                                                data: census[serverName].HC_History_HQ_volume,
+                                                linkedTo: 'HC_History_HQ_'~ serverName,
+                                                type: 'column',
+                                                yAxis: 1,
+                                            },
+                                            {
+                                                id:   'HC_History_NQ_volume_'~ serverName,
+                                                name: '(Normal Quality) Price Per Unit QUANTITY',
+                                                data: census[serverName].HC_History_NQ_volume,
+                                                linkedTo: 'HC_History_NQ_'~ serverName,
+                                                type: 'column',
+                                                yAxis: 1,
                                             }
                                         ]
                                     }

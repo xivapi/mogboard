@@ -16,17 +16,31 @@ Highcharts.stockChart('{{ chart.id }}', {
         enabled: true
     },
 
-    xAxis: {
-        range: (60 * 60 * 24 * 30) * 1000
-    },
+    xAxis: [
+        {
+            range: (60 * 60 * 24 * 30) * 1000
+        },
+        {
+            range: (60 * 60 * 24 * 30) * 1000
+        }
+    ],
 
-    yAxis: {
-        labels: {
-            formatter: function () {
-                return Highcharts.numberFormat(this.value, 0, ',', '.');
+    yAxis: [
+        {
+            tooltip: {
+                formatter: function () {
+                    return Highcharts.numberFormat(this.value, 0, ',', '.');
+                }
+            }
+        },
+        {
+            tooltip: {
+                formatter: function () {
+                    return Highcharts.numberFormat(this.value, 0, ',', '.');
+                }
             }
         }
-    },
+    ],
 
     series: {{ chart.series|json_encode|raw }}
 });
