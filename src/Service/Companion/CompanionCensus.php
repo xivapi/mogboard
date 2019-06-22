@@ -99,21 +99,21 @@ class CompanionCensus
             $qty   = (int)$row['Quantity'];
             
             if (isset($this->census[$server][$key][$date])) {
-                $this->census[$server][$key][$date][1] += $value;
-                $this->census[$server][$key . "_volume"][$date][1] += $qty;
+                $this->census[$server][$key][$date][1] += ceil($value);
+                $this->census[$server][$key . "_volume"][$date][1] += ceil($qty);
                 continue;
             }
             
             // set date and value
             $this->census[$server][$key][$date] = [
                 $date,
-                $value,
+                ceil($value),
                 //'server' => ($row['_Server'] ?? $server)
             ];
             
             $this->census[$server][$key . "_volume"][$date] = [
                 $date,
-                $qty,
+                ceil($qty),
                 //'server' => ($row['_Server'] ?? $server )
             ];
         }
