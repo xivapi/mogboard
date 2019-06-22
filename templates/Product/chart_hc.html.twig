@@ -1,4 +1,4 @@
-<div class="highchart">
+<div class="highchart" style="width:100%;">
     <div id="{{ chart.id }}"></div>
 </div>
 <script>
@@ -17,7 +17,7 @@ var chart{{ chart.id }} = Highcharts.stockChart('{{ chart.id }}', {
     },
 
     chart: {
-        animation: false
+        animation: false,
     },
 
     rangeSelector: {
@@ -35,6 +35,7 @@ var chart{{ chart.id }} = Highcharts.stockChart('{{ chart.id }}', {
 
     yAxis: [
         {
+            visible: false,
             tooltip: {
                 formatter: function () {
                     return Highcharts.numberFormat(this.value, 0, ',', '.');
@@ -42,6 +43,7 @@ var chart{{ chart.id }} = Highcharts.stockChart('{{ chart.id }}', {
             }
         },
         {
+            visible: false,
             tooltip: {
                 formatter: function () {
                     return Highcharts.numberFormat(this.value, 0, ',', '.');
@@ -61,5 +63,10 @@ window.chart{{ chart.id }}.addSeries({
     isInternal: true,
     data : {{ chart.series|json_encode|raw }},
     showInLegend:false
+});
+
+$('.item_nav button[data-tab="cw{{ chart.server }}"]').on('click', () => {
+    window.chart{{ chart.id }}.redraw();
+    window.chart{{ chart.id }}.reflow();
 });
 </script>

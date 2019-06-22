@@ -21,6 +21,8 @@ class CompanionConstants
         14,
         15,
 
-        50, 60, 70
+        50,
+        60,
+        70
     ];
 }

@@ -48,6 +48,10 @@ class CompanionCensus
          * Per server statistics
          */
         foreach ($market as $server => $marketData) {
+            if ($marketData === null) {
+                continue;
+            }
+            
             $this->buildAverage('PricePerUnit', $server, $marketData);
             $this->buildAverage('PriceTotal', $server, $marketData);
             $this->calculateNumericStatistics($server, $marketData);
@@ -182,6 +186,10 @@ class CompanionCensus
         $crossWorldHistoryNQ = [];
         
         foreach ($market as $server => $marketData) {
+            if ($marketData === null) {
+                continue;
+            }
+            
             foreach ($marketData['Prices'] as $row) {
                 $row['_Server'] = $server;
                 $crossWorldPrices[] = (Array)$row;
@@ -358,6 +366,10 @@ class CompanionCensus
     private function removeJunkPrices($market)
     {
         foreach ($market as $server => $marketData) {
+            if ($marketData === null) {
+                continue;
+            }
+            
             // add this, will need for later
             $this->census[$server] = [];
 

@@ -108,7 +108,7 @@
                     {# Server Pages #}
                     {% for serverName in server.dc_servers %}
                         {% set marketData = market[serverName] %}
-                        {% if marketData.Updated %}
+                        {% if marketData and marketData.Updated %}
                             {% set pricesCount       = marketData.Prices|length %}
                             {% set historyCount      = marketData.History|length %}
                             {% set updateInfo        = marketStats.Report[marketData.UpdatePriority] ?? null %}
@@ -119,7 +119,6 @@
                             {% set averageHistoryHQ  = census[serverName].History_Average_PricePerUnit_HQ %}
 
                             <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or app.request.get('server') == serverName) ? 'open' : '' }}">
-
                                 {% if updateInfo %}
                                     <div class="item_update_time" data-tippy-content="Queue: {{ marketData.UpdatePriority }} - {{ updateInfo.Name ?? 'No Queue' }} <br> Current Update Duration: {{ marketData.UpdatePriority ? 'Anytime' : (updateInfo.CycleTimeReal ?? 'None') }}">
                                         {% set updateEta = (marketData.Updated + updateInfo.CycleTimeSec)|date   %}
@@ -130,89 +129,77 @@
                                         ETA: <strong>{{ updateEta }}</strong>
                                     </div>
                                 {% else %}
-                                    <div class="alert-light">
-                                        <h4>
-                                            <img src="/i/game/offline.png"> Could not find update information - {{ updateInfo }}
-                                        </h4>
-                                        <p>
-                                            This item has either <strong>just recently updated</strong> and its market information is being processed (refresh in a couple minutes)
-                                            or this item is not currently being updated. If this message persists, please contact a staff member on the XIVAPI Discord to verify.
-                                        </p>
+                                    <div class="alert-light tac">
+
+                                        <div>
+                                            <strong class="text-red">Low Data Detect</strong>
+                                        </div>
+
+                                        This item has low amount of data on Mogboard. This could be because: Server is new, Item is new (eg. Patch) or the item
+                                        has only recently started being tracked on Mogboard. If this message persists, please contact a staff member on the XIVAPI Discord to verify.
                                     </div>
                                 {% endif %}
 
                                 {# Price History #}
-                                {% include 'Product/chart_hc.html.twig' with {
-                                    chart: {
-                                        id: 'history_' ~ serverName,
-                                        series: [
-                                            {
-                                                id:   'HC_History_HQ_'~ serverName,
-                                                name: '(High-Quality) Price Per Unit',
-                                                data: census[serverName].HC_History_HQ,
-                                                yAxis: 0,
-                                            },
-                                            {
-                                                id:   'HC_History_NQ_'~ serverName,
-                                                name: '(Normal Quality) Price Per Unit',
-                                                data: census[serverName].HC_History_NQ,
-                                                yAxis: 0,
-                                            },
+                                {% if marketData.History %}
+                                    {% include 'Product/chart_hc.html.twig' with {
+                                        chart: {
+                                            id: 'history_' ~ serverName,
+                                            server: serverName,
+                                            series: [
+                                                {
+                                                    id:   'HC_History_HQ_'~ serverName,
+                                                    name: '(High-Quality) Price Per Unit',
+                                                    data: census[serverName].HC_History_HQ,
+                                                    yAxis: 0,
+                                                },
+                                                {
+                                                    id:   'HC_History_NQ_'~ serverName,
+                                                    name: '(Normal Quality) Price Per Unit',
+                                                    data: census[serverName].HC_History_NQ,
+                                                    yAxis: 0,
+                                                },
 
-                                            {
-                                                id:   'HC_History_HQ_volume_'~ serverName,
-                                                name: '(High-Quality) Price Per Unit QUANTITY',
-                                                data: census[serverName].HC_History_HQ_volume,
-                                                linkedTo: 'HC_History_HQ_'~ serverName,
-                                                type: 'column',
-                                                yAxis: 1,
-                                            },
-                                            {
-                                                id:   'HC_History_NQ_volume_'~ serverName,
-                                                name: '(Normal Quality) Price Per Unit QUANTITY',
-                                                data: census[serverName].HC_History_NQ_volume,
-                                                linkedTo: 'HC_History_NQ_'~ serverName,
-                                                type: 'column',
-                                                yAxis: 1,
-                                            }
-                                        ]
-                                    }
-                                } %}
+                                                {
+                                                    id:   'HC_History_HQ_volume_'~ serverName,
+                                                    name: '(High-Quality) Price Per Unit QUANTITY',
+                                                    data: census[serverName].HC_History_HQ_volume,
+                                                    linkedTo: 'HC_History_HQ_'~ serverName,
+                                                    type: 'column',
+                                                    yAxis: 1,
+                                                },
+                                                {
+                                                    id:   'HC_History_NQ_volume_'~ serverName,
+                                                    name: '(Normal Quality) Price Per Unit QUANTITY',
+                                                    data: census[serverName].HC_History_NQ_volume,
+                                                    linkedTo: 'HC_History_NQ_'~ serverName,
+                                                    type: 'column',
+                                                    yAxis: 1,
+                                                }
+                                            ]
+                                        }
+                                    } %}
+                                {% endif %}
 
                                 <div class="tab-market-tables">
                                     <div class="cw-table cw-prices">
                                         <h4>PRICES</h4>
-                                        {% if updateInfo %}
-                                            {% if marketData.Prices is defined %}
-                                                {% include 'Product/prices.html.twig' with {
-                                                    'prices': marketData.Prices,
-                                                    'cheapestPrice': cheapestPrice,
-                                                    'averagePricesNQ': averagePricesNQ,
-                                                    'averagePricesHQ': averagePricesHQ
-                                                } %}
-                                            {% else %}
-                                                <div>umm, prices missing? huh</div>
-                                            {% endif %}
-                                        {% else %}
-                                            <p>No prices to show at this time for this server.</p>
-                                        {% endif %}
+                                        {% include 'Product/prices.html.twig' with {
+                                            'prices': marketData.Prices,
+                                            'cheapestPrice': cheapestPrice,
+                                            'averagePricesNQ': averagePricesNQ,
+                                            'averagePricesHQ': averagePricesHQ
+                                        } %}
                                     </div>
+
                                     <div class="cw-table cw-history">
                                         <h4>HISTORY</h4>
-                                        {% if updateInfo %}
-                                            {% if marketData.History is defined %}
-                                                {% include 'Product/history.html.twig' with {
-                                                    'history': marketData.History,
-                                                    'cheapestPrice': cheapestPrice,
-                                                    'averagePricesNQ': averagePricesNQ,
-                                                    'averagePricesHQ': averagePricesHQ
-                                                } %}
-                                            {% else %}
-                                                <div>hmm, history missing to....</div>
-                                            {% endif %}
-                                        {% else %}
-                                            <p>No history to show at this time for this server.</p>
-                                        {% endif %}
+                                        {% include 'Product/history.html.twig' with {
+                                            'history': marketData.History,
+                                            'cheapestPrice': cheapestPrice,
+                                            'averagePricesNQ': averagePricesNQ,
+                                            'averagePricesHQ': averagePricesHQ
+                                        } %}
                                     </div>
                                 </div>
                             </div>

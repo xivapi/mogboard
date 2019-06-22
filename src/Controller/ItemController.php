@@ -136,6 +136,10 @@ class ItemController extends AbstractController
         $times      = [];
         
         foreach ($market as $server => $md) {
+            if ($md == null) {
+                continue;
+            }
+            
             // state if it can be updated
             if ($canUpdate == false && isset($md['UpdatePriority']) && in_array($md['UpdatePriority'], CompanionConstants::QUEUES)) {
                 $canUpdate = true;
@@ -147,7 +151,7 @@ class ItemController extends AbstractController
                 'priority' => $md['UpdatePriority'] ?? null,
             ];
         }
-
+        
         // grab market census
         $census = $this->companionCensus->generate($dc, $itemId, $market);
         

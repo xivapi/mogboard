@@ -60,13 +60,12 @@ class CompanionMarket
             $server        = GameServers::LIST[$serverId];
             
             if ($source === null) {
-                throw new BasicException("This item cannot be found on the Mogboard market database for the server: {$server}.");
+                continue;
             }
-            
             
             $data[$server] = $this->handle($itemId, $serverId, $source);
         }
-    
+        
         # Redis::cache()->set($key, $data, 60);
         
         return $data;
@@ -112,9 +111,10 @@ class CompanionMarket
             $itemId,
             $server
         ]);
+        
     
         $source['UpdatePriority'] = $stmt->fetch()['normal_queue'] ?? null;
-    
+
         return $source;
     }
 }

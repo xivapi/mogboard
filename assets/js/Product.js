@@ -19,10 +19,6 @@ class Product
             this.switchTab(event, tab);
         });
 
-        this.uiTabs.find('.tab-page button').on('click', event => {
-            const tab = $(event.currentTarget).attr('data-tab');
-            this.switchTabView(event, tab);
-        });
 
         this.uiCategory.on('click', event => {
             const id = $(event.currentTarget).attr('data-cat');
@@ -81,17 +77,6 @@ class Product
         // set active
         $(event.currentTarget).addClass('open');
         this.uiTabs.find(`.tab-${tab}`).addClass('open');
-    }
-
-    switchTabView(event, tab)
-    {
-        const tabPage = this.uiTabs.find('.tab-page.open');
-        tabPage.find('button.active').removeClass('active');
-        tabPage.find('div.cw-table').removeClass('open');
-
-        // set active
-        tabPage.find(`button[data-tab="${tab}"]`).addClass('active');
-        tabPage.find(`.${tab}`).addClass('open');
     }
 }
 
