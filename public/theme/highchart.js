@@ -3,8 +3,8 @@ Highcharts.theme = {
         '#cac844',  // hq
         '#787878',  // nq
 
-        'rgba(202,200,68,0.4)',  // hq qty
-        'rgba(120,120,120,0.5)',  // nq qty
+        'rgba(202,200,68,0.25)',  // hq qty
+        'rgba(120,120,120,0.25)',  // nq qty
 
 
         '#aaeeee',
