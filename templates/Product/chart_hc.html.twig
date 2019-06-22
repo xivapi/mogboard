@@ -20,6 +20,11 @@ var chart{{ chart.id }} = Highcharts.stockChart('{{ chart.id }}', {
         animation: false,
     },
 
+    boost: {
+        useGPUTranslations: true,
+        allowForce: true,
+    },
+
     rangeSelector: {
         selected: 1
     },
