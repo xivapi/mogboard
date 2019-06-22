@@ -100,7 +100,7 @@ class CompanionCensus
         $this->census->{$server}->{"HC_History_HQ"} = [];
         $this->census->{$server}->{"HC_History_NQ"} = [];
     
-        foreach ($marketData->History as $i => $row) {
+        foreach (array_reverse($marketData->History) as $i => $row) {
             $key   = ($row->IsHQ ? "HC_History_HQ" : "HC_History_NQ");
             $date  = (int)$row->PurchaseDateMS;
             $value = (int)$row->PricePerUnit;
@@ -114,8 +114,8 @@ class CompanionCensus
             $this->census->{$server}->{$key}[$date] = [ $date, $value ];
         }
     
-        Arrays::sortBySubKey($this->census->{$server}->{"HC_History_HQ"}, 0, true);
-        Arrays::sortBySubKey($this->census->{$server}->{"HC_History_NQ"}, 0, true);
+        #Arrays::sortBySubKey($this->census->{$server}->{"HC_History_HQ"}, 0, true);
+        #Arrays::sortBySubKey($this->census->{$server}->{"HC_History_NQ"}, 0, true);
     }
     
     /**
@@ -439,6 +439,7 @@ class CompanionCensus
              */
             $averagePerHQ = [];
             $averagePerNQ = [];
+            
             foreach ($marketData->Prices as $i => $price) {
                 if ($price->IsHQ) {
                     $averagePerHQ[$i] = $price->PricePerUnit;
@@ -449,8 +450,8 @@ class CompanionCensus
                 }
             }
 
-            $maxPerHQ = ceil(Average::median($averagePerHQ)) * 2.5;
-            $maxPerNQ = ceil(Average::median($averagePerNQ)) * 2.5;
+            $maxPerHQ = ceil(Average::median($averagePerHQ)) * 4;
+            $maxPerNQ = ceil(Average::median($averagePerNQ)) * 4;
 
             /**
              * Now go through again and remove if its X above the average
@@ -464,6 +465,19 @@ class CompanionCensus
                     (!$price->IsHQ  && (int)$price->PricePerUnit > $maxPerNQ)
                 ) {
                     unset($marketData->Prices[$i]);
+                }
+            }
+            
+            // do same for history
+            foreach ($marketData->History as $i => $history) {
+                if (
+                    // if above NQ median * x
+                    ($history->IsHQ && (int)$history->PricePerUnit > $maxPerHQ) ||
+        
+                    // if above HQ median * x
+                    (!$history->IsHQ && (int)$history->PricePerUnit > $maxPerNQ)
+                ) {
+                    unset($marketData->History[$i]);
                 }
             }
 
