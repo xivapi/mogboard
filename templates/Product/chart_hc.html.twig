@@ -16,6 +16,10 @@ Highcharts.stockChart('{{ chart.id }}', {
         enabled: true
     },
 
+    chart: {
+        animation: false
+    },
+
     xAxis: [
         {
             range: (60 * 60 * 24 * 30) * 1000

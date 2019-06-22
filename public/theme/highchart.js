@@ -3,8 +3,8 @@ Highcharts.theme = {
         '#cac844',  // hq
         '#787878',  // nq
 
-        'rgba(202,200,68,0.25)',  // hq qty
-        'rgba(120,120,120,0.25)',  // nq qty
+        'rgba(202,200,68,0.15)',  // hq qty
+        'rgba(120,120,120,0.15)',  // nq qty
 
 
         '#aaeeee',
@@ -83,6 +83,7 @@ Highcharts.theme = {
     },
     plotOptions: {
         series: {
+            animation: false,
             dataLabels: {
                 color: '#F0F0F3',
                 style: {
