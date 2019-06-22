@@ -15,8 +15,7 @@ class CompanionCensus
 {
     const BUBBLE_MIN_PX = 3;
     const BUBBLE_MAX_PX = [ 6, 12, 20 ];
-    const JUNK_PRICE_FACTOR = 4;
-    
+
     /** @var \stdClass */
     private $item;
     /** @var \stdClass */
@@ -42,11 +41,6 @@ class CompanionCensus
         // add for global statistics
         $this->census->All = (Object)[];
         $this->census->_Global = (Object)[];
-    
-        /**
-         * This removes items from servers not updating
-         */
-        $this->removeNonUpdatedItems($market);
     
         /**
          * First we remove all "silly" prices, these are the ones
@@ -455,38 +449,25 @@ class CompanionCensus
                 }
             }
 
-            $averagePerHQ = ceil(Average::mean($averagePerHQ));
-            $averagePerNQ = ceil(Average::mean($averagePerNQ));
+            $maxPerHQ = ceil(Average::median($averagePerHQ)) * 2.5;
+            $maxPerNQ = ceil(Average::median($averagePerNQ)) * 2.5;
 
             /**
              * Now go through again and remove if its X above the average
              */
             foreach ($marketData->Prices as $i => $price) {
-                $maxValue = ($price->IsHQ ? $averagePerHQ : $averagePerNQ) * self::JUNK_PRICE_FACTOR;
-                $maxValueHQ = $averagePerHQ * self::JUNK_PRICE_FACTOR;
+                if (
+                    // if above NQ median * x
+                    ($price->IsHQ && (int)$price->PricePerUnit > $maxPerHQ) ||
 
-                // remove if price is above max, or if it's NQ, it also checks price against max HQ.
-                if ($price->PricePerUnit > $maxValue) {
-                    unset($marketData->Prices[$i]);
-                } else if ($averagePerHQ > 0 && $price->IsHQ === false && $price->PricePerUnit > $maxValueHQ) {
+                    // if above HQ median * x
+                    (!$price->IsHQ  && (int)$price->PricePerUnit > $maxPerNQ)
+                ) {
                     unset($marketData->Prices[$i]);
                 }
             }
-        }
-    }
-    
-    private function removeNonUpdatedItems($market)
-    {
-        foreach ($market as $server => $marketData)
-        {
-            if (!isset($marketData->UpdatePriority)) {
-                continue;
-            }
-            
-            if (in_array($marketData->UpdatePriority, CompanionConstants::QUEUES) == false) {
-                $marketData->Prices = [];
-                $marketData->History = [];
-            }
+
+            $market->{$server} = $marketData;
         }
     }
 }
