@@ -84,10 +84,11 @@ Highcharts.theme = {
     plotOptions: {
         series: {
             animation: false,
+            showInNavigator: true,
             dataLabels: {
                 color: '#F0F0F3',
                 style: {
-                    fontSize: '13px'
+                    fontSize: '12px'
                 }
             },
             marker: {

@@ -3,7 +3,7 @@
 </div>
 <script>
 // Create the chart
-Highcharts.stockChart('{{ chart.id }}', {
+var chart{{ chart.id }} = Highcharts.stockChart('{{ chart.id }}', {
     credits: {
         enabled: false
     },
@@ -18,6 +18,10 @@ Highcharts.stockChart('{{ chart.id }}', {
 
     chart: {
         animation: false
+    },
+
+    rangeSelector: {
+        selected: 1
     },
 
     xAxis: [
@@ -47,5 +51,15 @@ Highcharts.stockChart('{{ chart.id }}', {
     ],
 
     series: {{ chart.series|json_encode|raw }}
+});
+
+window.chart{{ chart.id }}.addSeries({
+    xAxis: 1,
+    yAxis: 1,
+    type: "line",
+    enableMouseTracking: false,
+    isInternal: true,
+    data : {{ chart.series|json_encode|raw }},
+    showInLegend:false
 });
 </script>

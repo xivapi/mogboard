@@ -61,12 +61,24 @@
                 name: '(High-Quality) PerUnit',
                 data: census.All.HC_History_HQ,
                 yAxis: 0,
+                showInNavigator: true,
+                negativeColor: true,
+                navigatorOptions: {
+                    type: 'line',
+                    color: 'rgba(202,200,68,0.35)'
+                },
             },
             {
                 id:   'HC_History_HQ',
                 name: '(Normal Quality) PerUnit',
                 data: census.All.HC_History_NQ,
                 yAxis: 0,
+                showInNavigator: true,
+                negativeColor: true,
+                navigatorOptions: {
+                    type: 'line',
+                    color: 'rgba(120,120,120,0.35)'
+                },
             },
 
             {
@@ -76,6 +88,7 @@
                 linkedTo: 'HC_History_HQ',
                 type: 'column',
                 yAxis: 1,
+                showInNavigator: false,
             },
             {
                 id:   'HC_History_NQ_volume',
@@ -84,6 +97,7 @@
                 linkedTo: 'HC_History_NQ',
                 type: 'column',
                 yAxis: 1,
+                showInNavigator: false,
             }
         ]
     }
