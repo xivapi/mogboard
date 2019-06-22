@@ -14,13 +14,13 @@
                 {% for itemId, alerts in auth.user.alertsPerItem %}
                     {% if itemId %}
                         {% set item = game().item(itemId) %}
-                            <button type="button" data-tab="alerts_{{ itemId }}" class="rarity-{{ item.Rarity }}">
-                                {{ item.Name }}
-                            </button>
-                        {% else %}
-                            <span class="text-gray">You have no alerts setup.</span>
-                        {% endfor %}
+                        <button type="button" data-tab="alerts_{{ itemId }}" class="rarity-{{ item.Rarity }}">
+                            {{ item.Name }}
+                        </button>
                     {% endif %}
+                {% else %}
+                    <span class="text-gray">You have no alerts setup.</span>
+                {% endfor %}
             </div>
             <h3><img src="/i/svg/th-list-light.svg"> Lists</h3>
             <div>
