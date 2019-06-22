@@ -155,8 +155,9 @@ class ItemController extends AbstractController
         
         $shops = [];
         if ($shopData = $stmt->fetch()) {
-            $shopData = json_decode($shopData['data']);
+            $shopData = json_decode($shopData['data'], true);
             $shopData = array_unique($shopData);
+            $shopData = array_values($shopData);
             
             foreach ($shopData as $shopId) {
                 $shops[] = Language::handle(
