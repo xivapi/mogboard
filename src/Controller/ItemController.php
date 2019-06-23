@@ -135,7 +135,7 @@ class ItemController extends AbstractController
         $market     = $this->companionMarket->get($dcServers, $itemId);
         $times      = [];
         
-        foreach ($market as $server => $md) {
+        foreach ($market as $marketServer => $md) {
             if ($md == null) {
                 continue;
             }
@@ -146,7 +146,7 @@ class ItemController extends AbstractController
             }
 
             $times[] = [
-                'name'     => $server,
+                'name'     => $marketServer,
                 'updated'  => $md['Updated'],
                 'priority' => $md['UpdatePriority'] ?? null,
             ];
