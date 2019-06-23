@@ -38,6 +38,10 @@ var chart{{ chart.id }} = Highcharts.stockChart('{{ chart.id }}', {
         }
     ],
 
+    tooltip: {
+        valueDecimals: 0,
+    },
+
     yAxis: [
         {
             visible: false,
