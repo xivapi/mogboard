@@ -107,7 +107,7 @@
 
                     {# Server Pages #}
                     {% for serverName in server.dc_servers %}
-                        {% set marketData = market[serverName] %}
+                        {% set marketData = market[serverName] ?? null %}
                         {% if marketData and marketData.Updated %}
                             {% set pricesCount       = marketData.Prices|length %}
                             {% set historyCount      = marketData.History|length %}
