@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% set title = item.Name %}
+{% set reqServer = app.request.get('server')|title %}
 
 {% block body %}
     <script>var appEnableItemPage = 1;</script>
@@ -48,7 +49,7 @@
                                 {# nothing #}
                             {% else %}
                                 {# Cross World #}
-                                <button type="button" data-tab="summary" class="btn-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or app.request.get('server')) ? '' : 'open' }}">
+                                <button type="button" data-tab="summary" class="btn-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or reqServer) ? '' : 'open' }}">
                                     <i class="xiv-CrossWorld cw-summary"></i> Cross-World
                                 </button>
 
@@ -57,7 +58,7 @@
                                     {% set icon          = serverName == server.name ? 'ItemShard cw-home' : '' %}
                                     {% set className     = serverName == server.name ? 'home-world' : '' %}
                                     {% set salesCount    = market[serverName].Prices is defined ? market[serverName].Prices|length|number_format : '-' %}
-                                    <button type="button" data-tab="cw{{ serverName }}" class="{{ className }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or app.request.get('server') == serverName) ? 'open' : '' }}">
+                                    <button type="button" data-tab="cw{{ serverName }}" class="{{ className }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or reqServer == serverName) ? 'open' : '' }}">
                                         {% if serverName == server.name %}
                                             <i class="xiv-ItemShard cw-home"></i>
                                         {% endif %}
@@ -101,7 +102,7 @@
                     </div>
                 {% else %}
                     {# Summary #}
-                    <div class="tab-page tab-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or app.request.get('server')) ? '' : 'open' }}">
+                    <div class="tab-page tab-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or reqServer) ? '' : 'open' }}">
                         {% include 'Product/item_market_summary.html.twig' %}
                     </div>
 
@@ -118,7 +119,7 @@
                             {% set averageHistoryNQ  = census[serverName].History_Average_PricePerUnit_NQ %}
                             {% set averageHistoryHQ  = census[serverName].History_Average_PricePerUnit_HQ %}
 
-                            <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or app.request.get('server') == serverName) ? 'open' : '' }}">
+                            <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or reqServer == serverName) ? 'open' : '' }}">
                                 {% if updateInfo %}
                                     <div class="item_update_time" data-tippy-content="Queue: {{ marketData.UpdatePriority }} - {{ updateInfo.Name ?? 'No Queue' }} <br> Current Update Duration: {{ marketData.UpdatePriority ? 'Anytime' : (updateInfo.CycleTimeReal ?? 'None') }}">
                                         {% set updateEta = (marketData.Updated + updateInfo.CycleTimeSec)|date   %}

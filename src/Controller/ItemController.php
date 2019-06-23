@@ -94,7 +94,6 @@ class ItemController extends AbstractController
             return $this->redirectToRoute('404');
         }
         
-        
         $user = $this->users->getUser(false);
         
         /** @var \stdClass $item */
