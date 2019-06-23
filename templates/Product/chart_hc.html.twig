@@ -42,6 +42,7 @@ var chart{{ chart.id }} = Highcharts.stockChart('{{ chart.id }}', {
         {
             visible: false,
             tooltip: {
+                valueDecimals: 0,
                 formatter: function () {
                     return Highcharts.numberFormat(this.value.toFixed(0), 0, ',', '.');
                 }
@@ -50,6 +51,7 @@ var chart{{ chart.id }} = Highcharts.stockChart('{{ chart.id }}', {
         {
             visible: false,
             tooltip: {
+                valueDecimals: 0,
                 formatter: function () {
                     return Highcharts.numberFormat(this.value.toFixed(0), 0, ',', '.');
                 }
