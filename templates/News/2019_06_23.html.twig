@@ -1,0 +1,164 @@
+{% extends 'News/news.html.twig' %}
+{% set title = 'THANK YOU! + Performance Update + Mogboard through ShadowBringers release' %}
+{% set description = 'Thank you to everyone who has supported the site and been using it for their daily needs, this post outlines my plans through the ShadowBringers release.' %}
+
+{% block news %}
+
+    <div class="news-ty">
+        THANK YOU
+    </div>
+
+    <h3>
+        Big Performance Update<br>
+        + Mogboard through ShadowBringers release
+    </h3>
+    <small><strong>Posted:</strong> Monday 23rd June, 2019</small>
+
+    <hr>
+
+    <h5 class="text-green">Performance Update</h5>
+
+    <p>
+        Todays update brings a long-awaited performance boost. This is gained from having
+        Mogboard talk directly to my Companion Storage service rather than going via XIVAPI.
+    </p>
+
+    <p>
+        Not only does this reduce latency it also allows me to perform bulk requests, now
+        when loading an item I can query the market information for all servers at the
+        exact same time rather than 1 by 1.
+    </p>
+    <p>
+        In addition, I've increased graphs to 500 entries history purchases. Eventually I will
+        get graphs to show the entire history but this requires a re-think on how I store
+        data.
+    </p>
+
+    <br>
+
+    <strong class="text-blue">Graph Updates</strong>
+
+    <ul>
+        <li>
+            The graph now includes the quantity sold as a secondary volume. This is included
+            for both HQ and HQ and shown in tooltips.
+        </li>
+        <li>
+            "Outlier" logic has been improved and affects both purchases and listings, this should
+            improve graphs when random spikes happen.
+        </li>
+        <li>
+            The graph navigator bar will now show previews for both HQ and NQ and be color correct.
+        </li>
+        <li>
+            A highstock "Boost" module has been added, apparently this allows GPU rendering for
+            graphs, so hopefully it's faster!
+        </li>
+        <li>
+            Mobile improvements have been made so the graphs are responsive.
+        </li>
+    </ul>
+
+    <small>
+        * Minor known issue: If a graph only has enough data for a couple weeks, the 1m/3m/6m zooms may not work.
+    </small>
+
+    <a href="/news/mb_010.png" target="_blank" class="news-img">
+        <img src="/news/mb_010.png">
+    </a>
+
+
+    <hr>
+
+    <h5 class="text-green">Mogboard through ShadowBringers</h5>
+
+    <p>
+        I've been asked a couple times what will happen to MogBoards when the expansion drops? When
+        will the new items appear? Will updating stay as expected?
+    </p>
+    <p>
+        Right now it's all a bit unknown. This is the 1st expansion in MogBoards life and it is
+        hard to judge.
+    </p>
+
+    <strong class="text-blue">Planned Timeline</strong>
+
+    <ul>
+        <li>
+            <span class="text-highlight">Monday 24th June:</span><br>
+            EU servers: Spriggan + Twintania will have their items moved to
+            general population queues. Currently both servers have their items on queue 70, this
+            queue is isolated so that "New" items can be prioritised, however since both of these
+            servers are new it meant that <i>every item</i> was "new".
+        </li>
+        <li>
+            <span class="text-highlight">Tuesday 25th --> Friday 28th June:</span><br>
+            I am going to be relaxing a bit here, I will do any quick fixes to the site or
+            any user suggestions that are very easy. However I want to spend time
+            playing FFXIV and getting ready for ShB, I am very excited for the expansion!!
+        </li>
+        <li>
+            <span class="text-highlight">Friday 28th June:</span><br>
+            ShadowBringers Early Access begins. At this time, it is expected that all
+            data-mining tools will break and we will be working on patching these. This means
+            items cannot be added to the system right away. In addition, due to it being
+            "Early Access" there is concern over what SE concerned "Spoiler Free", if that
+            is the 28th or the 2nd.
+        </li>
+        <li>
+            <span class="text-highlight">ShB 1-2...3 Weeks in</span><br>
+            A new expansion always fetches in a large amount of players and with this
+            our best friend: "Server Issues", YAY, miss him... If SE start having
+            server instability issues it might be that I have to reduce or even
+            completely stop my Companion scraping. The risk of account bans
+            during this period is very high.
+            <br><br>
+            I understand that 2-3 weeks may be a very long time without the
+            site working (I'm hoping you're enjoying ShB so much its fine :D)..
+            But I have to weigh the risks versus keeping things running.
+            <br><br>
+            I will keep a post on the home page with status updates.
+        </li>
+    </ul>
+
+    <p>
+        If you have any questions, be sure to jump on the Discord!
+    </p>
+
+    <hr>
+
+
+    <div class="patreon-news">
+
+        <img src="/i/mog/koko.png">
+        <div>
+            <h3>Patreon Support</h3>
+
+            <p>
+                I want to give a huge thank you to all those that have supported on Patreon, it
+                helps so much in running and maintaining the site.
+            </p>
+
+            <p>
+                To give an example, to accommodate the huge performance boost in this update I also
+                doubled the resources of the Companion server, this was possible through
+                Patreon support and meant I did not have to worry about "cutting costs".
+            </p>
+
+            <p>
+                If you think you can help out the site, be sure to check out
+                my <a href="https://www.patreon.com/vekien">Patreon page</a>
+            </p>
+
+            Thank you!
+        </div>
+    </div>
+
+    <br><br>
+
+    I hope you all have fun and hype ShadowBringers!
+
+
+    <br><br>
+
+{% endblock %}

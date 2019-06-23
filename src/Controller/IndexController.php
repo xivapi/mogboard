@@ -84,9 +84,10 @@ class IndexController extends AbstractController
             'manual-updating'                               => '2019_05_05.html.twig',
             'homepage-retainer-lists-and-privacy-changes'   => '2019_05_20.html.twig',
             'updating-and-faq'                              => '2019_06_17.html.twig',
+            'thank-you-and-shadow-bringers'                 => '2019_06_23.html.twig',
         ];
 
-        $slug = $slug ?: 'updating-and-faq';
+        $slug = $slug ?: 'thank-you-and-shadow-bringers';
         
         return $this->render('News/'. $templates[$slug]);
     }
