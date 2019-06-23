@@ -42,7 +42,7 @@ var chart{{ chart.id }} = Highcharts.stockChart('{{ chart.id }}', {
         valueDecimals: 0,
 
         formatter: function () {
-            console.log(this.point, this.percentage, this.y);
+            console.log(this);
             return Highcharts.numberFormat(this.y, 0, ',', '.');
         }
     },
