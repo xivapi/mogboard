@@ -48,7 +48,7 @@ class CompanionMarketActivity
         /**
          * Grab all users who have been online in past 7 days or are new
          */
-        $deadline = time() - (60 * 60 * 24 * 7);
+        $deadline = time() - (60 * 60 * 24 * 14);
         $stmt = $this->em->getConnection()->prepare(
             "SELECT id, username FROM users WHERE (last_online > {$deadline} OR last_online = 0)"
         );
@@ -79,10 +79,10 @@ class CompanionMarketActivity
             $feed = $this->addRecentPriceUpdates($id, $feed);
 
             /**
-             * Order by timestamp and slice the top 30 results.
+             * Order by timestamp and slice
              */
             Arrays::sortBySubKey($feed, 'timestamp');
-            array_splice($feed, 50);
+            array_splice($feed, 150);
 
             // cache for the user, the time on this is random so not all feeds are generated same time
             Redis::cache()->set($checkGeneratedRecent, $feed, mt_rand(60, 570));
@@ -105,7 +105,7 @@ class CompanionMarketActivity
         /**
          * Get all the alert events for this user
          */
-        $deadline = time() - (60 * 60 * 24 * 7);
+        $deadline = time() - (60 * 60 * 24 * 14);
         $stmt = $this->em->getConnection()->prepare(
             "SELECT event_id, added, `data` FROM users_alerts_events WHERE added > {$deadline} AND user_id = '{$userId}' ORDER BY added DESC"
         );
@@ -241,10 +241,10 @@ class CompanionMarketActivity
 
         // only record 15 entries, otherwise it gets spammy
         $countPerList = [];
-        $countMax = 10;
+        $countMax = 20;
         
         // fetch in batches of 50
-        foreach(array_chunk($itemIds, 50) as $itemIdsChunked) {
+        foreach(array_chunk($itemIds, 25) as $itemIdsChunked) {
             // get market info
             $market = $xivapi->market->items($itemIdsChunked, [], $dc);
     
