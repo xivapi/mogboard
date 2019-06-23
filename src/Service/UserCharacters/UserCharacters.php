@@ -160,7 +160,7 @@ class UserCharacters
         $console = new ConsoleOutput();
         $console->writeln("Getting 500 characters to update");
         
-        $characters = $this->repository->findLastUpdated(500);
+        $characters = $this->repository->findLastUpdated(100);
 
         /** @var UserCharacter $character */
         foreach ($characters as $character) {
