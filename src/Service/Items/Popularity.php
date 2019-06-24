@@ -83,15 +83,19 @@ class Popularity
         $current = $current ? $current + 1 : 1;
         Redis::Cache()->set($key, $current);
         
-        // grab popular item entry
-        $entity = $this->repository->findOneBy([ 'item' => $itemId ]) ?: new ItemPopularity();
-        
-        $entity
-            ->setItem($itemId)
-            ->setUpdated(time())
-            ->setCount($entity->getCount() + 1);
-        
-        $this->em->persist($entity);
-        $this->em->flush();
+        try {
+            // grab popular item entry
+            $entity = $this->repository->findOneBy([ 'item' => $itemId ]) ?: new ItemPopularity();
+
+            $entity
+                ->setItem($itemId)
+                ->setUpdated(time())
+                ->setCount($entity->getCount() + 1);
+
+            $this->em->persist($entity);
+            $this->em->flush();
+        } catch (\Exception $ex) {
+            // ignore.
+        }
     }
 }
