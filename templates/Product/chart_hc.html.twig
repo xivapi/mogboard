@@ -41,10 +41,10 @@ var chart{{ chart.id }} = Highcharts.stockChart('{{ chart.id }}', {
     tooltip: {
         valueDecimals: 0,
 
-        formatter: function () {
+        /*formatter: function () {
             console.log(this);
             return Highcharts.numberFormat(this.y, 0, ',', '.');
-        }
+        }*/
     },
 
     yAxis: [
