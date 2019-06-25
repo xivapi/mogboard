@@ -180,7 +180,7 @@ class ItemController extends AbstractController
         
         $loadSpeed = microtime(true) - $time;
         
-        // if the item was updated less than 15 mins ago, remove the updating check
+        // if the item was updated less than X mins ago, remove the updating check
         if ($lastUpdated > (time() - (60 * 10))) {
             Redis::cache()->delete('mogboard_updating_' . $itemId . $dc);
         }

@@ -90,7 +90,10 @@
             </div>
 
             {% if is_updating %}
-                <div class="alert alert-purple"><strong>This item is being updated on {{ server.dc }}</strong>! Refresh in a couple minutes.</div>
+                <div class="alert alert-purple tac">
+                    <strong>This item is being updated on {{ server.dc }}</strong>!
+                    -- Refresh the page in a couple minutes for the latest prices
+                </div>
             {% endif %}
 
             <div class="tab">
