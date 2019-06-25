@@ -133,6 +133,7 @@ class ItemController extends AbstractController
         $dc         = GameServers::getDataCenter($server);
         $market     = $this->companionMarket->get($dcServers, $itemId);
         $times      = [];
+        $lastUpdated = 0;
         
         foreach ($market as $marketServer => $md) {
             if ($md == null) {
@@ -144,6 +145,7 @@ class ItemController extends AbstractController
                 $canUpdate = true;
             }
 
+            $lastUpdated = $md['Updated'];
             $times[] = [
                 'name'     => $marketServer,
                 'updated'  => $md['Updated'],
@@ -174,6 +176,9 @@ class ItemController extends AbstractController
         }
         
         $loadSpeed = microtime(true) - $time;
+        
+        $isBeingUpdated = Redis::cache()->get('mogboard_updating_' . $itemId . $dc);
+        $isBeingUpdated = $isBeingUpdated && (time() - (60 * 10) < $lastUpdated);
 
         // response
         $data = [
@@ -190,6 +195,7 @@ class ItemController extends AbstractController
             'update_times'   => $times,
             'chart_max'      => 100,
             'load_speed'     => round($loadSpeed, 3),
+            'is_updating'    => $isBeingUpdated,
             'server'         => [
                 'name'       => $server,
                 'dc'         => $dc,
@@ -274,6 +280,8 @@ class ItemController extends AbstractController
             $itemId,
             $server
         );
+        
+        Redis::cache()->set('mogboard_updating_' . $itemId . $dc, true, 1000);
         
         // if response was OK, set restrictions for user to avoid spam
         if ($ok) {

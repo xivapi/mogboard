@@ -89,6 +89,10 @@
 
             </div>
 
+            {% if is_updating %}
+            <div class="alert alert-purple">This item is being updated on {{ server.dc }}! Refresh in a couple minutes.</div>
+            {% endif %}
+
             <div class="tab">
                 {% if shops %}
                     <div class="tab-page tab-shops open">
