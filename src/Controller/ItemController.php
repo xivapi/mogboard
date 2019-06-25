@@ -145,7 +145,10 @@ class ItemController extends AbstractController
                 $canUpdate = true;
             }
 
-            $lastUpdated = $md['Updated'];
+            if ($md['Updated'] > $lastUpdated) {
+                $lastUpdated = $md['Updated'];
+            }
+
             $times[] = [
                 'name'     => $marketServer,
                 'updated'  => $md['Updated'],
@@ -177,8 +180,12 @@ class ItemController extends AbstractController
         
         $loadSpeed = microtime(true) - $time;
         
+        // if the item was updated less than 15 mins ago, remove the updating check
+        if ($lastUpdated > (time() - (60 * 10))) {
+            Redis::cache()->delete('mogboard_updating_' . $itemId . $dc);
+        }
+        
         $isBeingUpdated = Redis::cache()->get('mogboard_updating_' . $itemId . $dc);
-        $isBeingUpdated = $isBeingUpdated && (time() - (60 * 10) < $lastUpdated);
 
         // response
         $data = [
@@ -281,7 +288,7 @@ class ItemController extends AbstractController
             $server
         );
         
-        Redis::cache()->set('mogboard_updating_' . $itemId . $dc, true, 1000);
+        Redis::cache()->set('mogboard_updating_' . $itemId . $dc, true, 500);
         
         // if response was OK, set restrictions for user to avoid spam
         if ($ok) {
