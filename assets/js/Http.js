@@ -8,7 +8,7 @@ class Http
      */
     getItemCategories(language, callback)
     {
-        const url = '/data/categories_[lang].js'.replace('[lang]', language);
+        const url = '/data/categories_50_[lang].js'.replace('[lang]', language);
 
         fetch(url, { mode: 'cors' })
             .then(response => response.json())
