@@ -102,7 +102,7 @@ class GameDataCache
             // save
             $key = "mog_ItemSearchCategory_{$itemSearchCategoryId}_Items";
             Redis::Cache()->set($key, $items, GameDataCache::CACHE_TIME);
-            $section->overwrite(count($items) . " items saved to category: {$key}");
+            $section->writeln(count($items) . " items saved to category: {$key}");
         }
     }
     
@@ -142,6 +142,8 @@ class GameDataCache
             if (!in_array($category->Category, array_keys(self::CATEGORY_NAMES)) || empty($category->Name_en)) {
                 continue;
             }
+            
+            $this->console->writeln("- {$category->ID} {$category->Name_en}");
         
             // store category
             $catName = self::CATEGORY_NAMES[$category->Category];

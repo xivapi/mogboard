@@ -48,7 +48,7 @@ class SearchController extends AbstractController
                         $itemsJa[$cat->ID] = [];
                     }
     
-                    $item = Redis::Cache()->get("xiv_Item_{$item['ID']}");
+                    $item = Redis::Cache()->get("xiv_Item_{$item->ID}");
                     
                     $itemsEn[$cat->ID][] = [
                         $item->ID,
