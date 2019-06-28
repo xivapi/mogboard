@@ -90,19 +90,19 @@ class SearchController extends AbstractController
         }
         
         file_put_contents(
-            __DIR__.'/../../public/data/categories_en.js', json_encode($itemsEn)
+            __DIR__.'/../../public/data/categories_50_en.js', json_encode($itemsEn)
         );
     
         file_put_contents(
-            __DIR__.'/../../public/data/categories_de.js', json_encode($itemsDe)
+            __DIR__.'/../../public/data/categories_50_de.js', json_encode($itemsDe)
         );
     
         file_put_contents(
-            __DIR__.'/../../public/data/categories_fr.js', json_encode($itemsFr)
+            __DIR__.'/../../public/data/categories_50_fr.js', json_encode($itemsFr)
         );
     
         file_put_contents(
-            __DIR__.'/../../public/data/categories_ja.js', json_encode($itemsJa)
+            __DIR__.'/../../public/data/categories_50_ja.js', json_encode($itemsJa)
         );
         
         return $this->json(true);
