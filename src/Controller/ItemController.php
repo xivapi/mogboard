@@ -109,7 +109,7 @@ class ItemController extends AbstractController
         $this->itemViews->hit($request, $itemId);
         $this->users->setLastUrl($request);
         RedisTracking::increment('PAGE_VIEW');
-        $canUpdate = false;
+        $canUpdate = true;
         
         $time  = microtime(true);
 
@@ -138,11 +138,6 @@ class ItemController extends AbstractController
         foreach ($market as $marketServer => $md) {
             if ($md == null) {
                 continue;
-            }
-            
-            // state if it can be updated
-            if ($canUpdate == false && isset($md['UpdatePriority']) && in_array($md['UpdatePriority'], CompanionConstants::QUEUES)) {
-                $canUpdate = true;
             }
 
             if ($md['Updated'] > $lastUpdated) {
@@ -176,6 +171,11 @@ class ItemController extends AbstractController
                     Redis::Cache()->get("xiv_GilShopData_{$shopId}")
                 );
             }
+        }
+        
+        // if we have shops, can't update
+        if ($shops) {
+            $canUpdate = false;
         }
         
         $loadSpeed = microtime(true) - $time;
