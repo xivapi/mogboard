@@ -55,17 +55,10 @@
         </div>
         <div>
             {% if maintenance().isCompanionMaintenance %}
-                <div class="home-box2 flex">
-                    <div class="flex_5">
-                        <img src="/i/game/offline.png">
-                    </div>
-                    <div class="flex_95">
-                        <strong class="text-red">Auto-Update of Prices/History temporarily paused due to Server congestion.</strong>
-                        {# <strong class="text-red">Companion is down for maintenance</strong><br>
-                        Auto-Updating + Manual Updating has been paused. Prices / History will not update
-                        while Companion is down for maintenance. Retainers cannot be verified during maintenance
-                        and item alerts have been paused to avoid spam. #}
-                    </div>
+                <div class="home-box2">
+                    <strong class="text-red"><img src="/i/game/offline.png" height="16" style="vertical-align: middle"> Auto-Update Paused for: Saturday June 29th</strong><br>
+                    Hello!, Due to <a href="https://eu.finalfantasyxiv.com/lodestone/news/detail/0af9ce76afaeed492e32de36cd6a6aad5d42ddc0">yesterdays DDoS incident</a> the site
+                    will stay paused for today and very likely over Sunday as to not risk the Mogboard accounts.
                 </div>
             {% endif %}
 
