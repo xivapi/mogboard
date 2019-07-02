@@ -5,7 +5,6 @@
 
 .product {
     .item_top {
-        display: flex;
         margin-bottom: 20px;
 
         @include mq($until: desktop) {
@@ -13,34 +12,13 @@
         }
     }
 
-    .item_icon {
-        flex: 0 1 120px;
-
-        @include mq($until: desktop) {
-            flex: 0 1 100%;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        img {
-            width: 120px;
-            height: 120px;
-            border-radius: 10px;
-            box-shadow: 0 1px 3px #000;
-
-            @include mq($until: desktop) {
-                width: 72px;
-                height: 72px;
-            }
-        }
-    }
-
     .item_header {
-        flex: 0 1 calc(100% - 120px);
-        padding-left: 30px;
+        display: flex;
         position: relative;
+        margin-bottom: 20px;
 
         @include mq($until: desktop) {
+            display: block;
             flex: 0 1 100%;
             padding-left: 0;
         }
@@ -91,11 +69,34 @@
             }
         }
 
-        .item_info {
-            display: flex;
-            flex: 0 1 calc(100% - 128px);
-            height: 80px;
+        > div:nth-of-type(2) {
+            flex: 0 1 100px;
 
+            @include mq($until: desktop) {
+                flex: 0 1 100%;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            img {
+                width: 100px;
+                height: 100px;
+                border-radius: 10px;
+                box-shadow: 0 1px 3px #000;
+
+                @include mq($until: desktop) {
+                    width: 72px;
+                    height: 72px;
+                }
+            }
+        }
+
+        > div:nth-of-type(3) {
+            flex: 0 1 calc(100% - 100px);
+            padding-left: 25px;
+        }
+
+        .item_info {
             @include mq($until: desktop) {
                 display: block;
                 flex: 0 1 100%;
@@ -106,7 +107,7 @@
                 font-size: 34px;
                 font-weight: 300;
                 display: inline-block;
-                margin: 15px 20px 15px 0;
+                margin: 0 20px 10px 0;
 
                 @include mq($until: wide) {
                     font-size: 24px;
@@ -130,7 +131,7 @@
             > div {
                 font-size: 18px;
                 color: #888;
-                padding-top: 24px;
+                padding-top: 5px;
 
                 i {
                     font-size: 26px;
@@ -141,16 +142,37 @@
 
                 span {
                     display: inline-block;
-                    margin-right: 12px;
                 }
             }
+        }
 
-            .item_info_small {
-                @include mq($until: wide) {
-                    padding-top: 5px;
-                    display: none;
-                    text-align: center;
-                }
+        .item_info2 {
+            margin-bottom: 15px;
+
+            @include mq($until: desktop) {
+                text-align: center;
+                line-height: 20px;
+            }
+
+            span {
+                display: inline-block;
+            }
+
+            i {
+                font-size: 20px;
+                vertical-align: bottom;
+                margin: 0 0 -4px 0;
+                display: inline-block;
+            }
+
+            > div:first-of-type {
+                margin-bottom: 8px;
+                color: #aaa;
+            }
+
+            > div:last-of-type {
+                color: #666;
+                font-style: italic;
             }
         }
     }
