@@ -20,14 +20,6 @@ class RequestListener
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
-            return;
-        }
-
-        if ($sentry = getenv('SENTRY_KEY')) {
-            (new \Raven_Client($sentry))->install();
-        }
-    
         /** @var Request $request */
         $request = $event->getRequest();
     
@@ -37,6 +29,14 @@ class RequestListener
             header("Access-Control-Allow-Headers: *");
             header("HTTP/1.1 200 OK");
             die(200);
+        }
+        
+        if (!$event->isMasterRequest()) {
+            return;
+        }
+
+        if ($sentry = getenv('SENTRY_KEY')) {
+            (new \Raven_Client($sentry))->install();
         }
     
         // register environment
