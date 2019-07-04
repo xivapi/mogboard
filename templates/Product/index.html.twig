@@ -8,82 +8,95 @@
     <div class="product">
         <div>
             <div class="item_top">
-                {# Icon #}
-                <div class="item_icon">
-                    <img src="{{ item.ID|icon2x }}">
-                </div>
 
                 {# Item info #}
                 <div class="item_header">
 
-                    <div class="box box_lists">
-                        {% include 'Product/lists.html.twig' %}
+                    {% include 'Product/lists.html.twig' %}
+
+                    {# Icon #}
+                    <div>
+                        <img src="{{ item.ID|icon2x }}">
                     </div>
 
-                    <div class="item_info">
-                        {# title #}
-                        <h1 class="rarity-{{ item.Rarity }}">
-                            <span>{{ item.LevelItem }}</span>
-                            {{ item.Name }}
-                        </h1>
-                        <div class="item_info_small">
-                            {% if item.ItemSearchCategory.ID is defined %}
-                                <span><i class="xiv-{{ item.ItemSearchCategory.ID|xivicon }}"></i></span>
-                                <span>{{ item.ItemKind.Name }}</span>
-                                <span>{{ item.ItemUICategory.Name }}</span>
-                            {% endif %}
+                    {# Name + Info #}
+                    <div>
+                        <div class="item_info">
+                            {# title #}
+                            <h1 class="rarity-{{ item.Rarity }}">
+                                <span>{{ item.LevelItem }}</span>
+                                {{ item.Name }}
+                            </h1>
+                        </div>
+
+                        <div class="item_info2">
+                            <div>
+                                {% if item.ItemSearchCategory.ID is defined %}
+                                    <i class="xiv-{{ item.ItemSearchCategory.ID|xivicon }}"></i>
+                                    {{ item.ItemKind.Name }}
+                                    &nbsp;&nbsp;-&nbsp;&nbsp;
+                                    {{ item.ItemUICategory.Name }}
+                                    &nbsp;&nbsp;-&nbsp;&nbsp;
+                                {% endif %}
+
+                                Stack: {{ item.StackSize|number_format }}
+
+                                {% if item.ClassJobCategory %}
+                                    &nbsp;&nbsp;-&nbsp;&nbsp;
+                                    <span class="text-green">{{ item.LevelEquip }}</span> {{ item.ClassJobCategory.Name ?? '' }}
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                {{ item.Description ? item.Description|raw : '' }}
+                            </div>
                         </div>
                     </div>
 
-                    <div class="item_nav_mobile_toggle">
-                        <button type="button">Menu</button>
+                </div>
+
+                <div class="item_nav_mobile_toggle">
+                    <button type="button">Menu</button>
+                </div>
+
+                <div class="item_nav">
+                    <div class="item_nav_servers">
+                        {% if shops %}
+                            {# Item Details #}
+                            <button type="button" data-tab="shops" class="btn-shops open">
+                                <i class="xiv-Gil cw-shops"></i> Shops
+                            </button>
+                        {% elseif item.ItemSearchCategory.ID is not defined %}
+                            {# nothing #}
+                        {% else %}
+                            {# Cross World #}
+                            <button type="button" data-tab="summary" class="btn-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or reqServer) ? '' : 'open' }}">
+                                <i class="xiv-CrossWorld cw-summary"></i> Cross-World
+                            </button>
+
+                            {# Server List #}
+                            {% for serverName in server.dc_servers %}
+                                {% set icon          = serverName == server.name ? 'ItemShard cw-home' : '' %}
+                                {% set className     = serverName == server.name ? 'home-world' : '' %}
+                                {% set salesCount    = market[serverName].Prices is defined ? market[serverName].Prices|length|number_format : '-' %}
+                                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or reqServer == serverName) ? 'open' : '' }}">
+                                    {% if serverName == server.name %}
+                                        <i class="xiv-ItemShard cw-home"></i>
+                                    {% endif %}
+                                    {{ serverName }}
+                                </button>
+                            {% endfor %}
+                        {% endif %}
                     </div>
-                    <div class="item_nav">
-                        <div class="item_nav_servers">
-                            {% if shops %}
-                                {# Item Details #}
-                                <button type="button" data-tab="shops" class="btn-shops open">
-                                    <i class="xiv-Gil cw-shops"></i> Shops
-                                </button>
-                            {% elseif item.ItemSearchCategory.ID is not defined %}
-                                {# nothing #}
-                            {% else %}
-                                {# Cross World #}
-                                <button type="button" data-tab="summary" class="btn-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or reqServer) ? '' : 'open' }}">
-                                    <i class="xiv-CrossWorld cw-summary"></i> Cross-World
-                                </button>
 
-                                {# Server List #}
-                                {% for serverName in server.dc_servers %}
-                                    {% set icon          = serverName == server.name ? 'ItemShard cw-home' : '' %}
-                                    {% set className     = serverName == server.name ? 'home-world' : '' %}
-                                    {% set salesCount    = market[serverName].Prices is defined ? market[serverName].Prices|length|number_format : '-' %}
-                                    <button type="button" data-tab="cw{{ serverName }}" class="{{ className }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or reqServer == serverName) ? 'open' : '' }}">
-                                        {% if serverName == server.name %}
-                                            <i class="xiv-ItemShard cw-home"></i>
-                                        {% endif %}
-                                        {{ serverName }}
-                                    </button>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-
-                        {# Custom Pages #}
-                        <div class="item_nav_custom">
-                            {% if item.ItemSearchCategory.ID is defined %}
-                                {# Item Details #}
-                                <button type="button" data-tab="details" class="btn-details">
-                                    <i class="xiv-ArmoryChest cw-details"></i> Details
-                                </button>
-                            {% endif %}
-
-                            {% if not shops and item.ItemSearchCategory.ID is defined %}
-                                {# Alerts #}
-                                <button type="button" data-tab="alerts" class="btn-alerts">
-                                    <i class="xiv-app_drawer_news cw-alerts"></i> Alerts
-                                </button>
-                            {% endif %}
-                        </div>
+                    {# Custom Pages #}
+                    <div class="item_nav_custom">
+                        {% if not shops and item.ItemSearchCategory.ID is defined %}
+                            {# Alerts #}
+                            <button type="button" data-tab="alerts" class="btn-alerts">
+                                <i class="xiv-app_drawer_news cw-alerts"></i> Alerts
+                            </button>
+                        {% endif %}
                     </div>
                 </div>
 

@@ -20,6 +20,17 @@ class RequestListener
 
     public function onKernelRequest(GetResponseEvent $event)
     {
+        /** @var Request $request */
+        $request = $event->getRequest();
+    
+        // if options or LE test, skip
+        if ($request->getMethod() == 'OPTIONS' || stripos($request->getUri(), '.well-known') !== false) {
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: *");
+            header("HTTP/1.1 200 OK");
+            die(200);
+        }
+        
         if (!$event->isMasterRequest()) {
             return;
         }
@@ -27,9 +38,6 @@ class RequestListener
         if ($sentry = getenv('SENTRY_KEY')) {
             (new \Raven_Client($sentry))->install();
         }
-    
-        /** @var Request $request */
-        $request = $event->getRequest();
     
         // register environment
         Environment::register($request);

@@ -79,11 +79,15 @@ class UserAlertsController extends AbstractController
     /**
      * @Route("/alerts/{alert}/delete", name="alerts_delete")
      */
-    public function delete(UserAlert $alert)
+    public function delete(Request $request, UserAlert $alert)
     {
-        return $this->json(
-            $this->alerts->delete($alert)
-        );
+        $this->alerts->delete($alert);
+        
+        if ($request->get('account')) {
+            return $this->redirectToRoute('user_account_alerts');
+        }
+        
+        return $this->json(true);
     }
     
     /**

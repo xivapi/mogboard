@@ -59,6 +59,14 @@ class IndexController extends AbstractController
     }
     
     /**
+     * @Route("/.well-known/acme-challenge/{hash}")
+     */
+    public function le($hash)
+    {
+        return $this->json($hash);
+    }
+    
+    /**
      * @Route("/404", name="404")
      */
     public function fourOfour()

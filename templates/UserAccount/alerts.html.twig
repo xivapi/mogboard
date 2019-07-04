@@ -55,11 +55,14 @@
                 <tbody>
                     <tr>
                         <td colspan="2">
+                            <a href="{{ path('alerts_delete', { alert: alert.id, account: 1 }) }}" class="text-red fr">DELETE</a>
+
                             <h2>
                                 <a href="{{ path('item_page', { itemId: item.ID}) }}">
                                     ({{ alert.server }}) {{ alert.name }}
                                 </a>
                             </h2>
+
                         </td>
                     </tr>
                     <tr>
