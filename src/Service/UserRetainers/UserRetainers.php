@@ -155,7 +155,7 @@ class UserRetainers
             );
             
             if (isset($market->Error)) {
-                throw new BasicException("XIVAPI Error 42: ". $market->Message);
+                throw new BasicException("XIVAPI Error 42: ". $market->Error);
             }
             
             if (!isset($market->entries)) {
@@ -175,7 +175,7 @@ class UserRetainers
             }
         } catch (\Exception $ex) {
             return [
-                false, "Error B2: {$ex->getMessage()}"
+                false, "Error B2: Could not interact with XIVAPI at this time. This could be due to systems being offline, please check announcements on the site or discord."
             ];
         }
 
