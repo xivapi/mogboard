@@ -35,6 +35,7 @@ class CompanionMarket
         return $this;
     }
     
+    
     public function get(array $servers, int $itemId)
     {
         $key = "mbv4_market_{$itemId}_". md5(serialize($servers));

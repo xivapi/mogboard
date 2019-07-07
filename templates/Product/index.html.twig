@@ -61,20 +61,21 @@
 
                 <div class="item_nav">
                     <div class="item_nav_servers">
-                        {% if shops %}
-                            {# Item Details #}
-                            <button type="button" data-tab="shops" class="btn-shops open">
-                                <i class="xiv-Gil cw-shops"></i> Shops
-                            </button>
-                        {% elseif item.ItemSearchCategory.ID is not defined %}
-                            {# nothing #}
-                        {% else %}
-                            {# Cross World #}
-                            <button type="button" data-tab="summary" class="btn-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or reqServer) ? '' : 'open' }}">
-                                <i class="xiv-CrossWorld cw-summary"></i> Cross-World
-                            </button>
 
-                            {# Server List #}
+                        {# Cross World #}
+                        <button type="button" data-tab="summary" class="btn-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or reqServer) ? '' : 'open' }}">
+                            <i class="xiv-CrossWorld cw-summary"></i> Cross-World
+                        </button>
+
+                        {# Shops #}
+                        {% if shops %}
+                            <button type="button" data-tab="shops" class="btn-shops">
+                                <i class="xiv-Gil cw-shops"></i> NPC Shops
+                            </button>
+                        {% endif %}
+
+                        {# Server List #}
+                        {% if queue.state == 1 %}
                             {% for serverName in server.dc_servers %}
                                 {% set icon          = serverName == server.name ? 'ItemShard cw-home' : '' %}
                                 {% set className     = serverName == server.name ? 'home-world' : '' %}
@@ -91,7 +92,7 @@
 
                     {# Custom Pages #}
                     <div class="item_nav_custom">
-                        {% if not shops and item.ItemSearchCategory.ID is defined %}
+                        {% if queue.state == 1 %}
                             {# Alerts #}
                             <button type="button" data-tab="alerts" class="btn-alerts">
                                 <i class="xiv-app_drawer_news cw-alerts"></i> Alerts
@@ -99,7 +100,6 @@
                         {% endif %}
                     </div>
                 </div>
-
             </div>
 
             {% if is_updating %}
@@ -109,24 +109,35 @@
                 </div>
             {% endif %}
 
-            <div class="tab">
-                {% if shops %}
-                    <div class="tab-page tab-shops open">
-                        {% include 'Product/item_shops.html.twig' %}
-                    </div>
-                {% elseif item.ItemSearchCategory.ID is not defined %}
-                    <div class="tab-page open">
-                        <div class="alert-red">
-                            This item does not sell on the Market Board.
-                        </div>
-                    </div>
-                {% else %}
-                    {# Summary #}
-                    <div class="tab-page tab-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or reqServer) ? '' : 'open' }}">
-                        {% include 'Product/item_market_summary.html.twig' %}
+            {% if activity_count < 5 %}
+                <div class="alert-light tac">
+
+                    <div>
+                        <strong class="text-red">Low Data Detect</strong>
                     </div>
 
-                    {# Server Pages #}
+                    This item has low amount of data on Mogboard. This could be because: Server is new, Item is new (eg. Patch) or the item
+                    has only recently started being tracked on Mogboard. If this message persists, please contact a staff member on the XIVAPI Discord to verify.
+                </div>
+            {% endif %}
+
+            <div class="tab">
+                {# Summary #}
+                <div class="tab-page tab-summary {{ (cookie('mogboard_homeworld', 'no') == 'yes' or reqServer) ? '' : 'open' }}">
+                    {% include 'Product/item_market_summary.html.twig' %}
+                </div>
+
+
+                {# Shops #}
+                {% if shops %}
+                    <div class="tab-page tab-shops">
+                        {% include 'Product/item_shops.html.twig' %}
+                    </div>
+                {% endif %}
+
+
+                {# Server Pages #}
+                {% if queue.state == 1 %}
                     {% for serverName in server.dc_servers %}
                         {% set marketData = market[serverName] ?? null %}
                         {% if marketData and marketData.Updated %}
@@ -148,16 +159,6 @@
                                         Update Queue: <strong class="text-blue">{{ updateInfo.Name }}</strong>
                                         -
                                         ETA: <strong>{{ updateEta }}</strong>
-                                    </div>
-                                {% else %}
-                                    <div class="alert-light tac">
-
-                                        <div>
-                                            <strong class="text-red">Low Data Detect</strong>
-                                        </div>
-
-                                        This item has low amount of data on Mogboard. This could be because: Server is new, Item is new (eg. Patch) or the item
-                                        has only recently started being tracked on Mogboard. If this message persists, please contact a staff member on the XIVAPI Discord to verify.
                                     </div>
                                 {% endif %}
 
@@ -261,17 +262,16 @@
                         {% endif %}
 
                     {% endfor %}
-
-                    {# Alerts #}
-                    <div class="tab-page tab-alerts">
-                        {% include 'Product/alerts.html.twig' %}
-                    </div>
                 {% endif %}
 
-                {# Details #}
-                <div class="tab-page tab-details">
-                    {% include 'Product/item_details.html.twig' %}
+
+                {# Alerts #}
+                {% if queue.state == 1 %}
+                <div class="tab-page tab-alerts">
+                    {% include 'Product/alerts.html.twig' %}
                 </div>
+                {% endif %}
+
             </div>
         </div>
     </div>
