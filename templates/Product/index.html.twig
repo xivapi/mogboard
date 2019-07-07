@@ -109,13 +109,11 @@
                 </div>
             {% endif %}
 
-            {% if activity_count < 5 %}
+            {% if activity_count < 5 and queue.state == 1 %}
                 <div class="alert-light tac">
-
                     <div>
                         <strong class="text-red">Low Data Detect</strong>
                     </div>
-
                     This item has low amount of data on Mogboard. This could be because: Server is new, Item is new (eg. Patch) or the item
                     has only recently started being tracked on Mogboard. If this message persists, please contact a staff member on the XIVAPI Discord to verify.
                 </div>
@@ -127,14 +125,12 @@
                     {% include 'Product/item_market_summary.html.twig' %}
                 </div>
 
-
                 {# Shops #}
                 {% if shops %}
                     <div class="tab-page tab-shops">
                         {% include 'Product/item_shops.html.twig' %}
                     </div>
                 {% endif %}
-
 
                 {# Server Pages #}
                 {% if queue.state == 1 %}
@@ -264,14 +260,12 @@
                     {% endfor %}
                 {% endif %}
 
-
                 {# Alerts #}
                 {% if queue.state == 1 %}
                 <div class="tab-page tab-alerts">
                     {% include 'Product/alerts.html.twig' %}
                 </div>
                 {% endif %}
-
             </div>
         </div>
     </div>
