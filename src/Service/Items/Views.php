@@ -44,5 +44,17 @@ class Views
         
         $this->em->persist($entity);
         $this->em->flush();
+
+        //
+        // Track usage
+        //
+        $hits = Redis::cache()->get($key .'_count');
+        $hits = $hits ? ($hits + 1) : 0;
+        if ($hits < 50) {
+            Redis::cache()->set($key .'_count', $hits);
+            $sql = "UPDATE companion_items SET last_visit = ". time() ." WHERE item_id = ". $itemId;
+            $sql = $this->em->getConnection()->prepare($sql);
+            $sql->execute();
+        }
     }
 }
