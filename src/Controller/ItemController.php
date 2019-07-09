@@ -294,8 +294,8 @@ class ItemController extends AbstractController
         if ($ok) {
             $count = Redis::Cache()->get($key2);
             $count = $count ? $count + 1 : 1;
-            Redis::Cache()->set($key2, $count);
-            Redis::Cache()->set($key1, true);
+            Redis::Cache()->set($key2, $count, (60 * 30));
+            Redis::Cache()->set($key1, true, (60 * 30));
         }
         
         return $this->json([
