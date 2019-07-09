@@ -147,17 +147,6 @@
                             {% set averageHistoryHQ  = census[serverName].History_Average_PricePerUnit_HQ %}
 
                             <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or reqServer == serverName) ? 'open' : '' }}">
-                                {% if updateInfo %}
-                                    <div class="item_update_time" data-tippy-content="Queue: {{ marketData.UpdatePriority }} - {{ updateInfo.Name ?? 'No Queue' }} <br> Current Update Duration: {{ marketData.UpdatePriority ? 'Anytime' : (updateInfo.CycleTimeReal ?? 'None') }}">
-                                        {% set updateEta = (marketData.Updated + updateInfo.CycleTimeSec)|date   %}
-                                        Prices on <strong>{{ serverName }}</strong> updated <strong class="text-highlight">{{ marketData.Updated|dateSimple }}</strong>
-                                        <span></span>
-                                        Update Queue: <strong class="text-blue">{{ updateInfo.Name }}</strong>
-                                        -
-                                        ETA: <strong>{{ updateEta }}</strong>
-                                    </div>
-                                {% endif %}
-
                                 {# Price History #}
                                 {% if marketData.History %}
                                     {% include 'Product/chart_hc.html.twig' with {
@@ -215,7 +204,7 @@
 
                                 <div class="tab-market-tables">
                                     <div class="cw-table cw-prices">
-                                        <h4>PRICES</h4>
+                                        <h4>PRICES <small>Updated: {{ marketData.Updated|dateSimple }}</small></h4>
                                         {% include 'Product/prices.html.twig' with {
                                             'prices': marketData.Prices,
                                             'cheapestPrice': cheapestPrice,

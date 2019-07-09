@@ -94,6 +94,10 @@
         > div:nth-of-type(3) {
             flex: 0 1 calc(100% - 100px);
             padding-left: 25px;
+
+            @include mq($until: desktop) {
+                padding-left: 0px;
+            }
         }
 
         .item_info {
@@ -944,11 +948,10 @@
     }
 
     .market_update_times {
-        background-color: #222;
         border-radius: 5px;
         display: flex;
-        margin-bottom: 25px;
-        box-shadow: 0 1px 3px #000;
+        margin-bottom: 30px;
+        border: solid 1px #333;
 
         @include mq($until: tablet) {
             flex-wrap: wrap;
