@@ -158,8 +158,6 @@ class CompanionCensus
 
         asort($pricesHQ);
         asort($pricesNQ);
-        asort($historyHQ);
-        asort($historyNQ);
 
         array_splice($pricesHQ, 20);
         array_splice($pricesNQ, 20);
