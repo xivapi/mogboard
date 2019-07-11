@@ -1,9 +1,4 @@
 <script>var alert_trigger_operators = {{ alerts.trigger_operators|json_encode|raw }};</script>
-{% if shops %}
-<div class="alert-dark">
-    <div class="alert-red">As this item is purchasable from a Vendor for Gil, Alerts cannot be setup at this time.</div>
-</div>
-{% else %}
 <div class="alert-page">
     <div class="alert_info_button">
         <button>Whats an alert <img src="/i/svg/question-circle-light.svg" height="18"></button>
@@ -18,12 +13,6 @@
             <div>
                 <h3>Create a new alert</h3>
                 <form id="alert_form" class="alert_form" method="post" action="{{ url('alerts_create') }}">
-                    <div class="alert-dark">
-                        For discord notifications to work, you must be in a server that uses Ser Aymeric Bot.
-                        <a href="https://discord.gg/MFFVHWC">The XIVAPI/Mogboard</a> discord will work. You
-                        must also ensure your privacy setting for "Allow direct messages from server members"
-                        is turned on.
-                    </div>
                     <div class="alert-form-loading">
                         <img src="/i/svg/loading3.svg" height="64px">
                     </div>
@@ -168,6 +157,14 @@
                 <div class="alerts_table">
                     <div class="alert-default">Loading alerts...</div>
                 </div>
+
+                <div class="alert-dark">
+                    <strong>NOTE:</strong> You must be in a server that uses Ser Aymeric bot to receive Discord alerts. <a href="https://discord.gg/MFFVHWC">The XIVAPI/Mogboard</a> discord will work.
+                </div>
+
+                <div class="alert-dark">
+                    <strong>NOTE:</strong>If the item is not currently being tracked, you will not receive updated price/history alerts.
+                </div>
             </div>
         </div>
     {% else %}
@@ -176,7 +173,6 @@
         </div>
     {% endif %}
 </div>
-{% endif %}
 
 <div class="modal alert_delete_confirmation_modal">
     <button type="button" class="modal_close_button"><i class="xiv-NavigationClose"></i></button>
