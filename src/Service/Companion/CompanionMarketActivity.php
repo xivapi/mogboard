@@ -76,7 +76,7 @@ class CompanionMarketActivity
             $feed = $this->addRecentAlerts($id, $feed);
 
             $section->overwrite("{$i} / {$usersTotal} - {$id}  {$name}  -- Building recent price lists");
-            $feed = $this->addRecentPriceUpdates($id, $feed);
+            $feed = $this->addRecentPriceUpdates($id, $feed, $section);
 
             /**
              * Order by timestamp and slice
@@ -164,8 +164,10 @@ class CompanionMarketActivity
     /**
      * Add recent price updates
      */
-    private function addRecentPriceUpdates(string $userId, array $feed)
+    private function addRecentPriceUpdates(string $userId, array $feed, ConsoleOutput $section)
     {
+        $section->writeln("Getting character ...");
+        
         /**
          * The user MUST have a verified main character, this is how I get the server...
          */
@@ -187,6 +189,7 @@ class CompanionMarketActivity
         /**
          * Get lists
          */
+        $section->writeln("Fetching lists");
         $stmt = $this->em->getConnection()->prepare(
             "SELECT id, `name`, items FROM users_lists WHERE custom = 0 AND user_id = '{$userId}' ORDER BY added DESC"
         );
@@ -226,7 +229,9 @@ class CompanionMarketActivity
         if (empty($itemIds)) {
             return $feed;
         }
-
+    
+        $section->writeln("Items: ". count((array)$itemIds));
+        
         // set a max
         array_splice($itemIds, 200);
 
@@ -244,7 +249,9 @@ class CompanionMarketActivity
         $countMax = 20;
         
         // fetch in batches of 50
-        foreach(array_chunk($itemIds, 10) as $itemIdsChunked) {
+        foreach(array_chunk($itemIds, 5) as $i => $itemIdsChunked) {
+            $section->writeln("Chunk: {$i}");
+            
             // get market info
             $market = $xivapi->market->items($itemIdsChunked, [], $dc);
     
