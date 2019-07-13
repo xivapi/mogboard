@@ -105,7 +105,7 @@ class CompanionMarketActivity
         /**
          * Get all the alert events for this user
          */
-        $deadline = time() - (60 * 60 * 24 * 7);
+        $deadline = time() - (60 * 60 * 24 * 30);
         $stmt = $this->em->getConnection()->prepare(
             "SELECT event_id, added, `data` FROM users_alerts_events WHERE added > {$deadline} AND user_id = '{$userId}' ORDER BY added DESC"
         );
