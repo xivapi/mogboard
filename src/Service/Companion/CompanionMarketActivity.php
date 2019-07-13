@@ -164,7 +164,7 @@ class CompanionMarketActivity
     /**
      * Add recent price updates
      */
-    private function addRecentPriceUpdates(string $userId, array $feed, ConsoleOutput $section)
+    private function addRecentPriceUpdates(string $userId, array $feed, ConsoleSectionOutput $section)
     {
         $section->writeln("Getting character ...");
         
@@ -249,8 +249,8 @@ class CompanionMarketActivity
         $countMax = 20;
         
         // fetch in batches of 50
-        foreach(array_chunk($itemIds, 5) as $i => $itemIdsChunked) {
-            $section->writeln("Chunk: {$i}");
+        foreach(array_chunk($itemIds, 5) as $j => $itemIdsChunked) {
+            $section->writeln("Chunk: {$j}");
             
             // get market info
             $market = $xivapi->market->items($itemIdsChunked, [], $dc);
