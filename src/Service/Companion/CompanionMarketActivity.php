@@ -48,7 +48,7 @@ class CompanionMarketActivity
         /**
          * Grab all users who have been online in past 7 days or are new
          */
-        $deadline = time() - (60 * 60 * 24 * 14);
+        $deadline = time() - (60 * 60 * 24 * 7);
         $stmt = $this->em->getConnection()->prepare(
             "SELECT id, username FROM users WHERE (last_online > {$deadline} OR last_online = 0)"
         );
@@ -105,7 +105,7 @@ class CompanionMarketActivity
         /**
          * Get all the alert events for this user
          */
-        $deadline = time() - (60 * 60 * 24 * 14);
+        $deadline = time() - (60 * 60 * 24 * 7);
         $stmt = $this->em->getConnection()->prepare(
             "SELECT event_id, added, `data` FROM users_alerts_events WHERE added > {$deadline} AND user_id = '{$userId}' ORDER BY added DESC"
         );
@@ -228,7 +228,7 @@ class CompanionMarketActivity
         }
 
         // set a max
-        array_splice($itemIds, 500);
+        array_splice($itemIds, 200);
 
         /**
          * Only fetch the last sale price + the current cheapest for each server
@@ -244,7 +244,7 @@ class CompanionMarketActivity
         $countMax = 20;
         
         // fetch in batches of 50
-        foreach(array_chunk($itemIds, 25) as $itemIdsChunked) {
+        foreach(array_chunk($itemIds, 10) as $itemIdsChunked) {
             // get market info
             $market = $xivapi->market->items($itemIdsChunked, [], $dc);
     
