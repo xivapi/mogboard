@@ -1,89 +1,95 @@
 <div class="home-feed">
-{% for entry in market_feed %}
+{#
+    {% for entry in market_feed %}
 
-    <div class="hf-row hf-row-{{ entry.type }}">
+        <div class="hf-row hf-row-{{ entry.type }}">
 
-        {% if entry.type == 'LIST_PRICES' %}
-            {% set item = game().item(entry.data.itemId) %}
-            {% set lastSale = entry.data.lastSale %}
-            {% set cheapest = entry.data.cheapest %}
+            {% if entry.type == 'LIST_PRICES' %}
+                {% set item = game().item(entry.data.itemId) %}
+                {% set lastSale = entry.data.lastSale %}
+                {% set cheapest = entry.data.cheapest %}
 
-            <div class="hf-list-prices">
-                <div>
-                    <img src="{{ item.ID|icon2x }}">
-                </div>
-                <div>
-                    <h6>{{ entry.timestamp|date }} - Server Price Update</h6>
-                    <h5>
-                        <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
-                    </h5>
-                    <div class="hf-list-name">
-                        List: <a href="{{ path('lists_view', { list: entry.data.list.id }) }}">{{ entry.data.list.name }}</a>
+                <div class="hf-list-prices">
+                    <div>
+                        <img src="{{ item.ID|icon2x }}">
                     </div>
-                </div>
-                <div>
-                    <div class="flex">
-                        <div class="flex_50">
-                            <h6>{{ entry.data.server }} Cheapest</h6>
-                            {% if cheapest %}
-                                <div>
-                                    {{ cheapest.IsHQ ? '<img src="/i/game/hq.png">' : '' }}
-                                    {{ cheapest.Quantity|number_format }} x
-                                    <span class="text-highlight">{{ cheapest.PricePerUnit|number_format }}</span>
-                                    <span class="text-gray">({{ cheapest.PriceTotal|number_format }})</span>
-                                </div>
-                            {% else %}
-                                <div>None</div>
-                            {% endif %}
-                        </div>
-                        <div class="flex_50">
-                            <h6>{{ entry.data.server }} Last Sold</h6>
-                            {% if lastSale %}
-                                {{ lastSale.IsHQ ? '<img src="/i/game/hq.png">' : '' }}
-                                {{ lastSale.Quantity|number_format }} x
-                                <span class="text-highlight">{{ lastSale.PricePerUnit|number_format }}</span>
-                                <span class="text-gray">({{ lastSale.PriceTotal|number_format }})</span>
-                            {% else %}
-                                <div>None</div>
-                            {% endif %}
+                    <div>
+                        <h6>{{ entry.timestamp|date }} - Server Price Update</h6>
+                        <h5>
+                            <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                        </h5>
+                        <div class="hf-list-name">
+                            List: <a href="{{ path('lists_view', { list: entry.data.list.id }) }}">{{ entry.data.list.name }}</a>
                         </div>
                     </div>
+                    <div>
+                        <div class="flex">
+                            <div class="flex_50">
+                                <h6>{{ entry.data.server }} Cheapest</h6>
+                                {% if cheapest %}
+                                    <div>
+                                        {{ cheapest.IsHQ ? '<img src="/i/game/hq.png">' : '' }}
+                                        {{ cheapest.Quantity|number_format }} x
+                                        <span class="text-highlight">{{ cheapest.PricePerUnit|number_format }}</span>
+                                        <span class="text-gray">({{ cheapest.PriceTotal|number_format }})</span>
+                                    </div>
+                                {% else %}
+                                    <div>None</div>
+                                {% endif %}
+                            </div>
+                            <div class="flex_50">
+                                <h6>{{ entry.data.server }} Last Sold</h6>
+                                {% if lastSale %}
+                                    {{ lastSale.IsHQ ? '<img src="/i/game/hq.png">' : '' }}
+                                    {{ lastSale.Quantity|number_format }} x
+                                    <span class="text-highlight">{{ lastSale.PricePerUnit|number_format }}</span>
+                                    <span class="text-gray">({{ lastSale.PriceTotal|number_format }})</span>
+                                {% else %}
+                                    <div>None</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-        {% elseif entry.type == 'ALERT_EVENT' %}
-            {% set item = game().item(entry.data.alert.itemId) %}
-            {% set marketTable = entry.data.market %}
-            {% set marketAlert = entry.data.alert %}
-            <div class="hf-alert">
-                <div>
-                    <img src="{{ item.ID|icon2x }}">
+            {% elseif entry.type == 'ALERT_EVENT' %}
+                {% set item = game().item(entry.data.alert.itemId) %}
+                {% set marketTable = entry.data.market %}
+                {% set marketAlert = entry.data.alert %}
+                <div class="hf-alert">
+                    <div>
+                        <img src="{{ item.ID|icon2x }}">
+                    </div>
+                    <div>
+                        <h6>{{ entry.timestamp|date }} - Alert Triggered</h6>
+                        <h5>
+                            Alert: <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                            - {{ marketAlert.name }}
+                        </h5>
+
+                        <br>
+
+                        {% if marketTable[0].PurchaseDate is defined %}
+                            {% include 'Product/history.html.twig' with {
+                                'history': marketTable,
+                                'crossWorld': 1,
+                            } %}
+                        {% else %}
+                            {% include 'Product/prices.html.twig' with {
+                                'prices': marketTable,
+                                'crossWorld': 1,
+                            } %}
+                        {% endif %}
+                    </div>
                 </div>
-                <div>
-                    <h6>{{ entry.timestamp|date }} - Alert Triggered</h6>
-                    <h5>
-                        Alert: <a href="{{ path('item_page', { itemId: item.ID }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
-                        - {{ marketAlert.name }}
-                    </h5>
+            {% endif %}
+        </div>
+    {% else %}
+    <div class="alert-light">Your market feed is being generated, check back soon!</div>
+    {% endfor %}
+#}
 
-                    <br>
 
-                    {% if marketTable[0].PurchaseDate is defined %}
-                        {% include 'Product/history.html.twig' with {
-                            'history': marketTable,
-                            'crossWorld': 1,
-                        } %}
-                    {% else %}
-                        {% include 'Product/prices.html.twig' with {
-                            'prices': marketTable,
-                            'crossWorld': 1,
-                        } %}
-                    {% endif %}
-                </div>
-            </div>
-        {% endif %}
-    </div>
-{% else %}
-<div class="alert-light">Your market feed is being generated, check back soon!</div>
-{% endfor %}
+    <div class="alert-light">Home page market feed temporarily disabled.</div>
+
 </div>
