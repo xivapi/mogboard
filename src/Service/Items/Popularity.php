@@ -95,7 +95,7 @@ class Popularity
             $this->em->persist($entity);
             $this->em->flush();
         } catch (\Exception $ex) {
-            // ignore.
+            throw $ex;
         }
     }
 }

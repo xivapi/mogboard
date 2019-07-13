@@ -166,6 +166,8 @@ class CompanionMarketActivity
      */
     private function addRecentPriceUpdates(string $userId, array $feed, ConsoleSectionOutput $section)
     {
+        return $feed;
+        
         $section->writeln("Getting character ...");
         
         /**
