@@ -106,7 +106,7 @@ class CompanionMarketActivity
          * Get all the alert events for this user
          */
         $stmt = $this->em->getConnection()->prepare(
-            "SELECT event_id, added, `data` FROM users_alerts_events AND user_id = '{$userId}' ORDER BY added DESC LIMIT 0,30"
+            "SELECT event_id, added, `data` FROM users_alerts_events WHERE user_id = '{$userId}' ORDER BY added DESC LIMIT 0,30"
         );
         $stmt->execute();
 
