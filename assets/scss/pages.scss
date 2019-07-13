@@ -289,6 +289,35 @@
     border-radius: 4px;
 }
 
+.news-update {
+    background-color: #333;
+    background-size: cover;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+
+    small {
+        font-weight: bold;
+        color: var(--color8);
+        font-size: 12px;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    > div {
+        line-height: 22px;
+        border: solid 1px #555;
+        border-left: solid 3px #555;
+        padding: 8px;
+        border-radius: 3px;
+        font-size: 14px;
+
+        &:not(:last-of-type) {
+            margin-bottom: 5px;
+        }
+    }
+}
+
 .the-big-news-post {
     background-color: #5c169c;
     background-image: url('/i/bg/bg1.png');
