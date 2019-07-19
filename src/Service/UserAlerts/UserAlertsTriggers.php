@@ -99,11 +99,25 @@ class UserAlertsTriggers
 
             // check if the alert has expired, if so, delete it
             // todo - this should just make alerts inactive
+            $keyExpired = "mb_expired_alerts_". $alert->getId();
             if ($alert->isExpired()) {
-                $this->console->writeln("-- Alert Expired");
-                #$this->userAlerts->delete($alert, true);
+                Redis::cache()->increment($keyExpired);
+
+                // get current expired count
+                $expireCount = Redis::cache()->getCount($keyExpired);
+
+                // This is roughly 1.5 days. This is AFTER the initial expiry time.
+                if ($expireCount > 2000) {
+                    $this->userAlerts->delete($alert, true);
+                    $this->console->writeln("-- Alert deleted due to 1000 expiry counts");
+                    Redis::cache()->delete($expireCount);
+                }
+
                 continue;
             }
+
+            // remove expired count
+            Redis::cache()->delete($expireCount);
             
             // update last checked
             $alert->setLastChecked(time());
