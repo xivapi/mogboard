@@ -118,7 +118,7 @@ class UserAlertsTriggers
             }
 
             // remove expired count
-            Redis::cache()->delete($expireCount);
+            Redis::cache()->delete($keyExpired);
             
             // update last checked
             $alert->setLastChecked(time());
