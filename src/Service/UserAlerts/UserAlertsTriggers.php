@@ -63,7 +63,7 @@ class UserAlertsTriggers
      * Trigger alerts, intended to be called from commands
      * todo - there is so much shit in here.. it really needs breaking up
      */
-    public function trigger(int $offset, bool $patronQueue = false)
+    public function trigger(int $offset, ?bool $patronQueue = false)
     {
         if ($this->maintenance->isCompanionMaintenance() || $this->maintenance->isGameMaintenance()) {
             $this->console->writeln("Maintenance is active, stopping...");
@@ -72,8 +72,7 @@ class UserAlertsTriggers
 
         // grab all alerts
         $alerts = $this->userAlerts->getAllByPatronStatus($patronQueue, $offset, 200);
-        $total = count($alerts);
-        $start = microtime(true);
+        $start  = microtime(true);
     
         RedisTracking::increment('TOTAL_ALERTS_'. ($patronQueue ? 'NORMAL' : 'PATRON'));
         
