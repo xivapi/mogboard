@@ -65,6 +65,8 @@ class UserAlertsTriggers
      */
     public function trigger(int $offset, ?bool $patronQueue = false)
     {
+        $patronQueue = (bool)$patronQueue;
+        
         if ($this->maintenance->isCompanionMaintenance() || $this->maintenance->isGameMaintenance()) {
             $this->console->writeln("Maintenance is active, stopping...");
             return false;
