@@ -38,7 +38,7 @@ class AccountRetainers
                     let message = response[1];
 
                     if (message.trim().length < 1) {
-                        message = 'Could not add your retainer, the Companion Servers may be having issues. Please try again soon or contact Vekien on discord';
+                        message = 'Could not add your retainer, the Companion Servers may be having issues. Please try again soon or contact the discord';
                     }
 
                     if (status == false) {
@@ -157,7 +157,7 @@ class AccountRetainers
                     Popup.error('Retainer failed to add', `Error: ${response.Message}`);
                 },
                 error: (a,b,c) => {
-                    Popup.error('Something Broke (code 148)', 'Could not add your retainer, please hop on discord and complain to Vekien');
+                    Popup.error('Something Broke (code 148)', 'Could not add your retainer, please hop on discord!');
                     console.error(a,b,c);
                 },
                 complete: () => {
