@@ -87,12 +87,14 @@ class UserAlertsTriggers
             // if alert is on an offline server, delete it
             $serverId = GameServers::getServerId($alert->getServer());
             if (in_array($serverId, GameServers::MARKET_OFFLINE)) {
+                $this->console->writeln("Alert is on an offline server");
                 $this->userAlerts->delete($alert, true);
                 continue;
             }
             
             // if trigger conditions are empty (shouldn't happen), delete it.
             if (empty($alert->getTriggerConditions())) {
+                $this->console->writeln("Alert has no conditions");
                 $this->userAlerts->delete($alert, true);
                 continue;
             }
@@ -100,6 +102,7 @@ class UserAlertsTriggers
             // check if the alert has expired, if so, delete it
             // todo - this should just make alerts inactive
             if ($alert->isExpired()) {
+                $this->console->writeln("Alert Expired");
                 #$this->userAlerts->delete($alert, true);
                 continue;
             }
@@ -115,6 +118,7 @@ class UserAlertsTriggers
             // if no user, delete alert
             if ($user === null) {
                 $this->userAlerts->delete($alert, true);
+                $this->console->writeln("Alert has no user");
                 continue;
             }
 
@@ -134,21 +138,16 @@ class UserAlertsTriggers
             /**
              * DPS patrons get auto-price updating.
              */
-            $dpsRecent = Redis::Cache()->get("mb_dps_sent_already_{$alert->getId()}");
-            if ($dpsRecent == null && $alert->isKeepUpdated() && $user->isPatron(PatreonConstants::PATREON_DPS)) {
-                // dont send anymore requests for this alert for another 3 minutes
-                Redis::Cache()->set("mb_dps_sent_already_{$alert->getId()}", true, (60 * 3));
-                
-                // track
-                RedisTracking::increment('TOTAL_ALERTS_DPS_REQUESTED');
-                
+            if ($alert->isKeepUpdated() && $user->isPatron(PatreonConstants::PATREON_DPS)) {
                 // Send an update request, XIVAPI handles throttling this.
                 $this->console->writeln('--> Requesting manual update');
-                $this->xivapi->_private->manualItemUpdate(
-                    getenv('XIVAPI_COMPANION_KEY'),
-                    $alert->getItemId(),
-                    GameServers::getServerId($alert->getServer())
-                );
+
+                // req params
+                $dpsAccess = getenv('XIVAPI_COMPANION_KEY');
+                $dpsItemId    = $alert->getItemId();
+                $dpsServerId  = GameServers::getServerId($alert->getServer());
+
+                $this->xivapi->_private->manualItemUpdate($dpsAccess, $dpsItemId, $dpsServerId);
             }
 
             // loop through data and find a match for this trigger
