@@ -324,12 +324,11 @@ class UserAlertsTriggers
         $hashKey = "mogboard_alerts_sent_hash_{$hash}";
 
         if (Redis::Cache()->get($hashKey)) {
-            $this->console->writeln("+++ Already sent a notification with the same data to the same server");
             return [true, $hash];
         }
 
         // cache the hash for 48 hrs so it doesn't send same one.
-        Redis::Cache()->set($hashKey, true, (60 * 60 * 48));
+        Redis::Cache()->set($hashKey, true, (60 * 60 * 24 * 30));
         return [false, $hash];
     }
     
