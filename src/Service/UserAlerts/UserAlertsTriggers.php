@@ -70,10 +70,8 @@ class UserAlertsTriggers
             return false;
         }
 
-        $this->console->writeln("Triggering Alerts");
-
         // grab all alerts
-        $alerts = $this->userAlerts->getAllByPatronStatus($patronQueue, $offset, 250);
+        $alerts = $this->userAlerts->getAllByPatronStatus($patronQueue, $offset, 100);
         $total = count($alerts);
         $this->console->writeln("Total: {$total}");
         $start = microtime(true);
@@ -81,20 +79,20 @@ class UserAlertsTriggers
         RedisTracking::increment('TOTAL_ALERTS_'. ($patronQueue ? 'NORMAL' : 'PATRON'));
         
         /** @var UserAlert $alert */
-        foreach ($alerts as $alert) {
-            $this->console->writeln("- Alert: <comment>{$alert->getName()}</comment> by <info>{$alert->getUser()->getUsername()}</info>");
+        foreach ($alerts as $i => $alert) {
+            $this->console->writeln("({$i}) Alert: <comment>{$alert->getName()} - {$alert->getUser()->getUsername()}</comment>");
 
             // if alert is on an offline server, delete it
             $serverId = GameServers::getServerId($alert->getServer());
             if (in_array($serverId, GameServers::MARKET_OFFLINE)) {
-                $this->console->writeln("Alert is on an offline server");
+                $this->console->writeln("-- Alert is on an offline server");
                 $this->userAlerts->delete($alert, true);
                 continue;
             }
             
             // if trigger conditions are empty (shouldn't happen), delete it.
             if (empty($alert->getTriggerConditions())) {
-                $this->console->writeln("Alert has no conditions");
+                $this->console->writeln("-- Alert has no conditions");
                 $this->userAlerts->delete($alert, true);
                 continue;
             }
@@ -102,7 +100,7 @@ class UserAlertsTriggers
             // check if the alert has expired, if so, delete it
             // todo - this should just make alerts inactive
             if ($alert->isExpired()) {
-                $this->console->writeln("Alert Expired");
+                $this->console->writeln("-- Alert Expired");
                 #$this->userAlerts->delete($alert, true);
                 continue;
             }
@@ -118,7 +116,7 @@ class UserAlertsTriggers
             // if no user, delete alert
             if ($user === null) {
                 $this->userAlerts->delete($alert, true);
-                $this->console->writeln("Alert has no user");
+                $this->console->writeln("-- Alert has no user");
                 continue;
             }
 
@@ -132,7 +130,6 @@ class UserAlertsTriggers
              * todo - this should use Companion internally. Look into making the Companion code "common"
              * Fetch the market data from companion
              */
-            $this->console->writeln("--> Getting market info");
             $market = $this->companion->getByServers($servers, $alert->getItemId());
 
             /**
@@ -140,7 +137,7 @@ class UserAlertsTriggers
              */
             if ($alert->isKeepUpdated() && $user->isPatron(PatreonConstants::PATREON_DPS)) {
                 // Send an update request, XIVAPI handles throttling this.
-                $this->console->writeln('--> Requesting manual update');
+                $this->console->writeln('-- Requesting manual update');
 
                 // req params
                 $dpsAccess = getenv('XIVAPI_COMPANION_KEY');
@@ -151,7 +148,6 @@ class UserAlertsTriggers
             }
 
             // loop through data and find a match for this trigger
-            $this->console->writeln("--> Checking Triggers: ({$alert->getTriggerType()})");
             foreach ($market as $server => $data) {
                 if ($this->atMaxTriggers()) {
                     break;
@@ -284,13 +280,12 @@ class UserAlertsTriggers
 
                 // reset
                 $this->triggered = [];
+                $this->console->writeln("-- Alert triggered!!!");
             } else {
-                $this->console->writeln("--> No triggers to send");
+                $this->console->writeln("-- No triggers to send");
             }
         }
 
-        $this->console->writeln("Finished.");
-        
         $duration = round(microtime(true) - $start, 2);
         $this->console->writeln("Duration: {$duration}");
     }
