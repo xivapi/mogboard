@@ -35,7 +35,7 @@ class TriggerAlertsCommand extends Command
     {
         $this->alertTriggers->trigger(
             $input->getArgument('offset'),
-            !empty($input->getArgument('patrons'))
+            $input->getArgument('patrons')
         );
     }
 }

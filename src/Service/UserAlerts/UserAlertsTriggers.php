@@ -73,14 +73,14 @@ class UserAlertsTriggers
         // grab all alerts
         $alerts = $this->userAlerts->getAllByPatronStatus($patronQueue, $offset, 200);
         $total = count($alerts);
-        $this->console->writeln("Total: {$total}");
         $start = microtime(true);
     
         RedisTracking::increment('TOTAL_ALERTS_'. ($patronQueue ? 'NORMAL' : 'PATRON'));
         
         /** @var UserAlert $alert */
         foreach ($alerts as $i => $alert) {
-            $this->console->writeln("({$i}) Alert: <comment>{$alert->getName()} - {$alert->getUser()->getUsername()}</comment>");
+            $username = str_pad($alert->getUser()->getUsername(), 30);
+            $this->console->writeln("({$i}) {$username} <comment>{$alert->getName()}</comment>");
 
             // if alert is on an offline server, delete it
             $serverId = GameServers::getServerId($alert->getServer());
@@ -106,8 +106,8 @@ class UserAlertsTriggers
                 // get current expired count
                 $expireCount = Redis::cache()->getCount($keyExpired);
 
-                // This is roughly 1.5 days. This is AFTER the initial expiry time.
-                if ($expireCount > 2000) {
+                // 500 attempts after expiring
+                if ($expireCount > 500) {
                     $this->userAlerts->delete($alert, true);
                     $this->console->writeln("-- Alert deleted due to 1000 expiry counts");
                     Redis::cache()->delete($expireCount);
@@ -135,31 +135,31 @@ class UserAlertsTriggers
             }
 
             /**
-             * Handle the server for the alert,
-             */
-            $dcServers  = GameServers::getDataCenterServers($alert->getServer());
-            $servers    = $alert->isTriggerDataCenter() ? $dcServers : [ $alert->getServer() ];
-
-            /**
-             * todo - this should use Companion internally. Look into making the Companion code "common"
-             * Fetch the market data from companion
-             */
-            $market = $this->companion->getByServers($servers, $alert->getItemId());
-
-            /**
              * DPS patrons get auto-price updating.
              */
-            if ($alert->isKeepUpdated() && $user->isPatron(PatreonConstants::PATREON_DPS)) {
+            if ($patronQueue && $alert->isKeepUpdated() && $user->isPatron(PatreonConstants::PATREON_DPS)) {
                 // Send an update request, XIVAPI handles throttling this.
-                $this->console->writeln('-- Requesting manual update');
+                $this->console->writeln('<fg=red>-- Requesting manual update</>');
 
                 // req params
-                $dpsAccess = getenv('XIVAPI_COMPANION_KEY');
+                $dpsAccess    = getenv('XIVAPI_COMPANION_KEY');
                 $dpsItemId    = $alert->getItemId();
                 $dpsServerId  = GameServers::getServerId($alert->getServer());
 
                 $this->xivapi->_private->manualItemUpdate($dpsAccess, $dpsItemId, $dpsServerId);
             }
+    
+            /**
+             * Handle the server for the alert,
+             */
+            $dcServers  = GameServers::getDataCenterServers($alert->getServer());
+            $servers    = $alert->isTriggerDataCenter() ? $dcServers : [ $alert->getServer() ];
+    
+            /**
+             * todo - this should use Companion internally. Look into making the Companion code "common"
+             * Fetch the market data from companion
+             */
+            $market = $this->companion->getByServers($servers, $alert->getItemId());
 
             // loop through data and find a match for this trigger
             foreach ($market as $server => $data) {
@@ -295,8 +295,6 @@ class UserAlertsTriggers
                 // reset
                 $this->triggered = [];
                 $this->console->writeln("-- Alert triggered!!!");
-            } else {
-                $this->console->writeln("-- No triggers to send");
             }
         }
 
