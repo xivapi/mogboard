@@ -257,7 +257,8 @@ class UserLists
     
             $lastUpdatedTimes[$itemId]  = [];
             $serverMarketStats[$itemId] = [
-                'TotalForSale' => 0,
+                'TotalForSale'        => 0,
+                'RoughUpdateTime'     => 0,
                 'Top5CheapestServers' => [],
                 'Top5HistorySales'    => [],
             ];

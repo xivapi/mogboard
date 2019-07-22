@@ -13,6 +13,7 @@ use App\Common\Utils\Arrays;
 use App\Common\Exceptions\JsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
 use App\Service\Companion\Companion;
+use App\Service\Companion\CompanionMarket;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
 use MathPHP\Statistics\Average;
@@ -39,11 +40,12 @@ class UserRetainers
     public function __construct(
         EntityManagerInterface $em,
         Users $users,
-        Companion $companion
+        CompanionMarket $companionMarket
     ) {
         $this->em         = $em;
         $this->users      = $users;
-        $this->companion  = $companion;
+        $this->companionMarket = $companionMarket;
+
         $this->repository = $em->getRepository(UserRetainer::class);
         $this->console    = new ConsoleOutput();
     }
@@ -347,10 +349,14 @@ class UserRetainers
         $itemIds = array_unique($itemIds);
         
         $server  = GameServers::getServer();
-        $dc      = GameServers::getDataCenter($server);
-        $market  = $homeOnly
-            ? $this->companion->getItemsOnServer($itemIds, $server)
-            : $this->companion->getItemsOnDataCenter($itemIds, $dc);
+        $dcServers  = GameServers::getDataCenterServers($server);
+
+        $market = [];
+        foreach ($items as $itemId) {
+            $market[] = $homeOnly
+                ? $this->companionMarket->get([ $server ], $itemId)
+                : $this->companionMarket->get($dcServers, $itemId);
+        }
     
         $serverMarketStats = [];
         $lastUpdatedTimes  = [];
@@ -371,18 +377,18 @@ class UserRetainers
              * Find the cheapest server and prices
              */
             foreach ($itemMarket as $server => $serverMarket) {
-                foreach ($serverMarket->Prices as $price) {
-                    $price->_Server = $server;
+                foreach ($serverMarket['Prices'] as $price) {
+                    $price['_Server'] = $server;
                     $serverMarketStats[$itemId]['Top5CheapestServers'][] = (array)$price;
                     $serverMarketStats[$itemId]['TotalForSale']++;
                 }
             
                 foreach ($serverMarket->History as $history) {
-                    $history->_Server = $server;
+                    $history['_Server'] = $server;
                     $serverMarketStats[$itemId]['Top5HistorySales'][] = (array)$history;
                 }
     
-                $lastUpdatedTimes[$itemId][] = $serverMarket->Updated;
+                $lastUpdatedTimes[$itemId][] = $serverMarket['Updated'];
             }
         
             Arrays::sortBySubKey($serverMarketStats[$itemId]['Top5CheapestServers'], 'PricePerUnit', true);
