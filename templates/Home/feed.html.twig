@@ -1,5 +1,4 @@
 <div class="home-feed">
-{#
     {% for entry in market_feed %}
 
         <div class="hf-row hf-row-{{ entry.type }}">
@@ -87,9 +86,4 @@
     {% else %}
     <div class="alert-light">Your market feed is being generated, check back soon!</div>
     {% endfor %}
-#}
-
-
-    <div class="alert-light">Home page market feed temporarily disabled.</div>
-
 </div>
