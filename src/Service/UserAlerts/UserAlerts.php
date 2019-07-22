@@ -6,7 +6,6 @@ use App\Common\Entity\UserAlert;
 use App\Common\Game\GameServers;
 use App\Common\Repository\UserAlertRepository;
 use App\Common\User\Users;
-use App\Service\Companion\Companion;
 use App\Service\GameData\GameDataSource;
 use App\Exceptions\UnauthorisedAlertOwnershipException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,8 +18,6 @@ class UserAlerts
     private $em;
     /** @var Users */
     private $users;
-    /** @var Companion */
-    private $companion;
     /** @var GameDataSource */
     private $gamedata;
     /** @var UserAlertRepository */
@@ -35,13 +32,11 @@ class UserAlerts
     public function __construct(
         EntityManagerInterface $em,
         Users $users,
-        Companion $companion,
         GameDataSource $gamedata,
         UserAlertsDiscordNotification $discord
     ) {
         $this->em           = $em;
         $this->users        = $users;
-        $this->companion    = $companion;
         $this->gamedata     = $gamedata;
         $this->repository   = $em->getRepository(UserAlert::class);
         $this->console      = new ConsoleOutput();

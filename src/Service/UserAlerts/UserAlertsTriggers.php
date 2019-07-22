@@ -8,7 +8,6 @@ use App\Common\Entity\UserAlert;
 use App\Common\Entity\UserAlertEvent;
 use App\Common\Game\GameServers;
 use App\Common\Service\Redis\RedisTracking;
-use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionMarket;
 use App\Service\GameData\GameDataSource;
 use App\Common\Service\Redis\Redis;

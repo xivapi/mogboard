@@ -4,17 +4,14 @@ namespace App\Controller;
 
 use App\Common\Entity\Maintenance;
 use App\Common\Entity\UserAlert;
-use App\Common\Exceptions\BasicException;
 use App\Common\Exceptions\JsonException;
 use App\Common\Game\GameServers;
 use App\Common\Service\Redis\RedisTracking;
 use App\Common\User\Users;
 use App\Common\Utils\Language;
-use App\Constants\CompanionConstants;
 use App\Service\Companion\CompanionMarket;
 use App\Service\Companion\CompanionStatistics;
 use App\Service\GameData\GameDataSource;
-use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionCensus;
 use App\Service\Items\Popularity;
 use App\Service\Items\Views;
@@ -33,9 +30,7 @@ class ItemController extends AbstractController
     private $em;
     /** @var GameDataSource */
     private $gameDataSource;
-    /** @var Companion */
-    private $companion;
-    /** @var Companion */
+    /** @var CompanionCensus */
     private $companionCensus;
     /** @var CompanionStatistics */
     private $companionStatistics;
@@ -57,7 +52,6 @@ class ItemController extends AbstractController
     public function __construct(
         EntityManagerInterface $em,
         GameDataSource $gameDataSource,
-        Companion $companion,
         CompanionCensus $companionCensus,
         CompanionStatistics $companionStatistics,
         CompanionMarket $companionMarket,
@@ -69,7 +63,6 @@ class ItemController extends AbstractController
     ) {
         $this->em                  = $em;
         $this->gameDataSource      = $gameDataSource;
-        $this->companion           = $companion;
         $this->companionCensus     = $companionCensus;
         $this->companionStatistics = $companionStatistics;
         $this->companionMarket     = $companionMarket;

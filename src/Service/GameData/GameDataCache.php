@@ -190,6 +190,7 @@ class GameDataCache
 
     private function cacheGameCategories()
     {
+        $this->console->writeln('>> Caching menu categories to js files');
         $categories = Redis::Cache()->get('mog_ItemSearchCategories');
 
         $itemsEn = [];

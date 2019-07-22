@@ -12,7 +12,6 @@ use App\Common\User\Users;
 use App\Common\Utils\Arrays;
 use App\Common\Exceptions\JsonException;
 use App\Exceptions\UnauthorisedRetainerOwnershipException;
-use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionMarket;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -30,8 +29,6 @@ class UserRetainers
     private $em;
     /** @var Users */
     private $users;
-    /** @var Companion */
-    private $companion;
     /** @var UserRetainerRepository */
     private $repository;
     /** @var ConsoleOutput */

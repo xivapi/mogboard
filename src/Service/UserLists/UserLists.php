@@ -11,7 +11,6 @@ use App\Common\Service\Redis\Redis;
 use App\Common\User\Users;
 use App\Common\Utils\Arrays;
 use App\Exceptions\UnauthorisedListOwnershipException;
-use App\Service\Companion\Companion;
 use App\Service\Companion\CompanionMarket;
 use Doctrine\ORM\EntityManagerInterface;
 use MathPHP\Statistics\Average;
