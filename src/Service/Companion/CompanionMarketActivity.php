@@ -21,12 +21,15 @@ class CompanionMarketActivity
     const TYPE_ALERT_EVENT = 'ALERT_EVENT';
     const TYPE_LIST_PRICES = 'LIST_PRICES';
 
+    /** @var CompanionMarket */
+    private $companionMarket;
     /** @var EntityManagerInterface */
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, CompanionMarket $companionMarket)
     {
         $this->em = $em;
+        $this->companionMarket = $companionMarket;
     }
     
     public function getFeed(?User $user = null)
@@ -165,8 +168,6 @@ class CompanionMarketActivity
      */
     private function addRecentPriceUpdates(string $userId, array $feed, ConsoleSectionOutput $section)
     {
-        return $feed;
-        
         $section->writeln("Getting character ...");
         
         /**
@@ -185,7 +186,7 @@ class CompanionMarketActivity
         }
 
         // Get users DC
-        $dc = GameServers::getDataCenter($character['server']);
+        $dcServers = GameServers::getDataCenterServers($character['server']);
 
         /**
          * Get lists
@@ -210,7 +211,6 @@ class CompanionMarketActivity
          */
         $itemIds = [];
         $itemIdsToLists = [];
-        
         foreach ($lists as $list) {
             $listItems = unserialize($list['items']);
             $itemIds   = array_merge($itemIds, $listItems);
@@ -236,56 +236,42 @@ class CompanionMarketActivity
         // set a max
         array_splice($itemIds, 200);
 
-        /**
-         * Only fetch the last sale price + the current cheapest for each server
-         */
-        $xivapi = new XIVAPI();
-        $xivapi->queries([
-            'max_history' => 1,
-            'max_prices'  => 1,
-        ]);
-
         // only record 15 entries, otherwise it gets spammy
         $countPerList = [];
         $countMax = 20;
         
         // fetch in batches of 50
-        foreach(array_chunk($itemIds, 5) as $j => $itemIdsChunked) {
-            $section->writeln("Chunk: {$j}");
-            
-            // get market info
-            $market = $xivapi->market->items($itemIdsChunked, [], $dc);
-    
+        foreach($itemIds as $itemId) {
+            $market = $this->companionMarket->get($dcServers, $itemId);
+
+            // grab list info
+            $list = $itemIdsToLists[$itemId];
+            $listId = $list['id'];
+
             /**
              * Process market data
              */
-            foreach ($market as $i => $itemMarket) {
-                $itemId = $itemIdsChunked[$i];
-                $list   = $itemIdsToLists[$itemId];
-                $listId = $list['id'];
-                
-                foreach ($itemMarket as $server => $serverMarket) {
-                    $lastSale = $serverMarket->History[0] ?? null;
-                    $cheapest = $serverMarket->Prices[0]  ?? null;
-    
-                    $countPerList[$listId] = isset($countPerList[$listId]) ? $countPerList[$listId] + 1 : 1;
-    
-                    if ($countPerList[$listId] > $countMax) {
-                        break;
-                    };
-                    
-                    $feed[] = [
-                        'timestamp' => $serverMarket->Updated,
-                        'type'      => self::TYPE_LIST_PRICES,
-                        'data'      => [
-                            'server'   => $server,
-                            'itemId'   => $itemId,
-                            'lastSale' => $lastSale,
-                            'cheapest' => $cheapest,
-                            'list'     => $list
-                        ],
-                    ];
-                }
+            foreach ($market as $server => $serverMarket) {
+                $lastSale = $serverMarket['History'][0] ?? null;
+                $cheapest = $serverMarket['Prices'][0]  ?? null;
+
+                $countPerList[$listId] = isset($countPerList[$listId]) ? $countPerList[$listId] + 1 : 1;
+
+                if ($countPerList[$listId] > $countMax) {
+                    break;
+                };
+
+                $feed[] = [
+                    'timestamp' => $serverMarket['Updated'],
+                    'type'      => self::TYPE_LIST_PRICES,
+                    'data'      => [
+                        'server'   => $server,
+                        'itemId'   => $itemId,
+                        'lastSale' => $lastSale,
+                        'cheapest' => $cheapest,
+                        'list'     => $list
+                    ],
+                ];
             }
         }
 
