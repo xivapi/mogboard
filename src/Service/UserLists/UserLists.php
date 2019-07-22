@@ -12,6 +12,7 @@ use App\Common\User\Users;
 use App\Common\Utils\Arrays;
 use App\Exceptions\UnauthorisedListOwnershipException;
 use App\Service\Companion\Companion;
+use App\Service\Companion\CompanionMarket;
 use Doctrine\ORM\EntityManagerInterface;
 use MathPHP\Statistics\Average;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -28,15 +29,19 @@ class UserLists
     private $repository;
     /** @var ConsoleOutput */
     private $console;
+    /** @var CompanionMarket */
+    private $companionMarket;
 
     public function __construct(
         EntityManagerInterface $em,
         Users $users,
-        Companion $companion
+        Companion $companion,
+        CompanionMarket $companionMarket
     ) {
         $this->em           = $em;
         $this->users        = $users;
         $this->companion    = $companion;
+        $this->companionMarket = $companionMarket;
         $this->repository   = $em->getRepository(UserList::class);
         $this->console      = new ConsoleOutput();
     }
@@ -233,10 +238,14 @@ class UserLists
         }
         
         $server  = GameServers::getServer();
-        $dc      = GameServers::getDataCenter($server);
-        $market  = $homeOnly
-            ? $this->companion->getItemsOnServer($items, $server)
-            : $this->companion->getItemsOnDataCenter($items, $dc);
+        $dcServers  = GameServers::getDataCenterServers($server);
+
+        $market = [];
+        foreach ($items as $itemId) {
+            $market[] = $homeOnly
+                ? $this->companionMarket->get([ $server ], $itemId)
+                : $this->companionMarket->get($dcServers, $itemId);
+        }
         
         $serverMarketStats = [];
         $lastUpdatedTimes  = [];
