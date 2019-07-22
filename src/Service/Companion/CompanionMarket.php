@@ -80,7 +80,6 @@ class CompanionMarket
         // remove some stuff, try reduce memory
         foreach ($source['Prices'] as $i => $price) {
             unset(
-                $price['ID'],
                 $price['Added'],
                 $price['RetainerID'],
                 $price['CreatorSignatureID'],
@@ -92,7 +91,6 @@ class CompanionMarket
     
         foreach ($source['History'] as $i => $history) {
             unset(
-                $history['ID'],
                 $history['Added'],
                 $history['CharacterID']
             );
