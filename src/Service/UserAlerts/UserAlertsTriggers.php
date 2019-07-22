@@ -84,6 +84,16 @@ class UserAlertsTriggers
         
         /** @var UserAlert $alert */
         foreach ($alerts as $i => $alert) {
+            // get user for the alert
+            $user = $alert->getUser();
+
+            // if no user, delete alert
+            if ($user === null) {
+                $this->userAlerts->delete($alert, true);
+                $this->console->writeln("-- Alert has no user");
+                continue;
+            }
+
             $username = str_pad($alert->getUser()->getUsername(), 30);
             $this->console->writeln("({$i}) {$username} <comment>{$alert->getName()}</comment>");
 
@@ -102,10 +112,9 @@ class UserAlertsTriggers
                 continue;
             }
 
-            // check if the alert has expired, if so, delete it
-            // todo - this should just make alerts inactive
+            // delete any inactive alerts if they're not a patron
             $keyExpired = "mb_expired_alerts_". $alert->getId();
-            if ($alert->isExpired()) {
+            if ($alert->isExpired() && $user->isPatron() == false) {
                 Redis::cache()->increment($keyExpired);
 
                 // get current expired count
@@ -128,16 +137,6 @@ class UserAlertsTriggers
             $alert->setLastChecked(time());
             $this->em->persist($alert);
             $this->em->flush();
-
-            // get user for the alert
-            $user = $alert->getUser();
-            
-            // if no user, delete alert
-            if ($user === null) {
-                $this->userAlerts->delete($alert, true);
-                $this->console->writeln("-- Alert has no user");
-                continue;
-            }
 
             /**
              * DPS patrons get auto-price updating.
