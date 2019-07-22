@@ -34,11 +34,13 @@ class CompanionMarket
         
         return $this;
     }
-    
-    
+
+    /**
+     * Get companion market data for an item across multiple servers
+     */
     public function get(array $servers, int $itemId)
     {
-        $key = "mbv4_market_{$itemId}_". md5(serialize($servers));
+        $key = "mbv5_market_{$itemId}_". md5(serialize($servers));
         
         if ($data = Redis::cache()->get($key)) {
             return json_decode(json_encode($data), true);
@@ -73,7 +75,7 @@ class CompanionMarket
     }
 
     /**
-     * Get the current prices for an item
+     * Handle the response data of $this->>get
      */
     private function handle($itemId, $server, $source)
     {
@@ -109,7 +111,6 @@ class CompanionMarket
             $server
         ]);
         
-    
         $source['UpdatePriority'] = $stmt->fetch()['normal_queue'] ?? null;
 
         return $source;
