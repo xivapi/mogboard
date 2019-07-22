@@ -9,6 +9,7 @@ use App\Common\Entity\UserAlertEvent;
 use App\Common\Game\GameServers;
 use App\Common\Service\Redis\RedisTracking;
 use App\Service\Companion\Companion;
+use App\Service\Companion\CompanionMarket;
 use App\Service\GameData\GameDataSource;
 use App\Common\Service\Redis\Redis;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,7 +38,8 @@ class UserAlertsTriggers
     private $xivapi;
     /** @var array[] */
     private $triggered = [];
-
+    /** @var CompanionMarket */
+    private $companionMarket;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -45,6 +47,7 @@ class UserAlertsTriggers
         UserAlertsEmailNotification $userAlertsEmailNotification,
         UserAlerts $userAlerts,
         Companion $companion,
+        CompanionMarket $companionMarket,
         GameDataSource $gamedata
     ) {
         $this->em         = $em;
@@ -52,6 +55,7 @@ class UserAlertsTriggers
         $this->discord    = $userAlertsDiscordNotification;
         $this->email      = $userAlertsEmailNotification;
         $this->companion  = $companion;
+        $this->companionMarket = $companionMarket;
         $this->gamedata   = $gamedata;
         $this->console    = new ConsoleOutput();
         $this->xivapi     = new XIVAPI();
@@ -162,7 +166,10 @@ class UserAlertsTriggers
              * todo - this should use Companion internally. Look into making the Companion code "common"
              * Fetch the market data from companion
              */
-            $market = $this->companion->getByServers($servers, $alert->getItemId());
+            $market = $this->companionMarket->get($servers, $alert->getItemId());
+
+            // Convert from ARR to OBJ
+            $market = json_decode(json_encode($market));
 
             // loop through data and find a match for this trigger
             foreach ($market as $server => $data) {

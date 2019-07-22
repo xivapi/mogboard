@@ -23,8 +23,6 @@ class UserLists
     private $em;
     /** @var Users */
     private $users;
-    /** @var Companion */
-    private $companion;
     /** @var UserListRepository */
     private $repository;
     /** @var ConsoleOutput */
@@ -35,12 +33,10 @@ class UserLists
     public function __construct(
         EntityManagerInterface $em,
         Users $users,
-        Companion $companion,
         CompanionMarket $companionMarket
     ) {
         $this->em           = $em;
         $this->users        = $users;
-        $this->companion    = $companion;
         $this->companionMarket = $companionMarket;
         $this->repository   = $em->getRepository(UserList::class);
         $this->console      = new ConsoleOutput();
