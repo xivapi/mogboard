@@ -31,10 +31,10 @@ class AccountPatreon
                         return;
                     }
 
-                    Popup.error('There was a problem (code: 22)', 'Could not detect Patreon status, please make sure you are in the XIVAPI Admin and have accepted your Discord Reward on Patreon, if you have problems, message Vekien on Discord.');
+                    Popup.error('There was a problem (code: 22)', 'Could not detect Patreon status, please make sure you are in the XIVAPI Admin and have accepted your Discord Reward on Patreon, if you have problems, message Miu on Discord.');
                 },
                 error: (a,b,c) => {
-                    Popup.error('There was a problem (code: 47)', 'Please jump on discord and message Vekien with the error code to sort this out! Thank you');
+                    Popup.error('There was a problem (code: 47)', 'Please jump on discord and message Miu with the error code to sort this out! Thank you');
                     console.error(a,b,c);
                 },
                 complete: () => {

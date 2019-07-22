@@ -139,7 +139,7 @@ class AccountCharacters
                             Popup.error('Character failed to add', `Error: ${response.Message}`);
                         },
                         error: (a,b,c) => {
-                            Popup.error('Something Broke (code 145)', 'Could not add your character, please hop on discord and complain to Vekien');
+                            Popup.error('Something Broke (code 145)', 'Could not add your character, please hop on discord and complain to Miu');
                             console.error(a,b,c);
                         },
                         complete: () => {
