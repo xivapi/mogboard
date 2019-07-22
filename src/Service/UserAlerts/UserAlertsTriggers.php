@@ -223,7 +223,12 @@ class UserAlertsTriggers
                         [$category, $field]   = explode('_', $field);
 
                         // grab value for this field
-                        $marketValue = $marketRow->{$field};
+                        $marketValue = $marketRow->{$field} ?? null;
+
+                        // skip null values
+                        if ($marketValue === null) {
+                            continue;
+                        }
         
                         // run all trigger tests
                         switch ($op) {
