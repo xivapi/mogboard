@@ -26,10 +26,14 @@ class GameDataCache
     
     /** @var ConsoleOutput */
     private $console;
+
+    /** @var GameDataSource */
+    private $gameDataSource;
     
-    public function __construct()
+    public function __construct(GameDataSource $gameDataSource)
     {
         $this->console = new ConsoleOutput();
+        $this->gameDataSource = $gameDataSource;
     }
     
     public function populate()
@@ -37,6 +41,7 @@ class GameDataCache
         $this->cacheGameItems();
         $this->cacheGameTowns();
         $this->cacheItemSearchCategories();
+        $this->cacheGameCategories();
     }
     
     /**
@@ -181,5 +186,83 @@ class GameDataCache
     
         Redis::Cache()->set("mog_ItemSearchCategories", $categories, (60 * 60 * 24 * 365));
         Redis::Cache()->set("mog_ItemSearchCategoriesFull", $categoriesFull, (60 * 60 * 24 * 365));
+    }
+
+    private function cacheGameCategories()
+    {
+        $categories = Redis::Cache()->get('mog_ItemSearchCategories');
+
+        $itemsEn = [];
+        $itemsDe = [];
+        $itemsFr = [];
+        $itemsJa = [];
+
+        foreach ($categories as $type => $catz) {
+            foreach ($catz as $cat) {
+                foreach ($this->gameDataSource->getItemSearchCategoryItems($cat->ID) as $item) {
+                    if (!isset($itemsEn[$cat->ID])) {
+                        $itemsEn[$cat->ID] = [];
+                    }
+
+                    if (!isset($itemsDe[$cat->ID])) {
+                        $itemsDe[$cat->ID] = [];
+                    }
+
+                    if (!isset($itemsFr[$cat->ID])) {
+                        $itemsFr[$cat->ID] = [];
+                    }
+
+                    if (!isset($itemsJa[$cat->ID])) {
+                        $itemsJa[$cat->ID] = [];
+                    }
+
+                    $item = Redis::Cache()->get("xiv_Item_{$item->ID}");
+
+                    $itemsEn[$cat->ID][] = [
+                        $item->ID,
+                        $item->Name_en,
+                        $item->Icon,
+                        $item->LevelItem,
+                        $item->Rarity,
+                        $item->ClassJobCategory->Name_en ?? ''
+                    ];
+
+                    $itemsDe[$cat->ID][] = [
+                        $item->ID,
+                        $item->Name_de,
+                        $item->Icon,
+                        $item->LevelItem,
+                        $item->Rarity,
+                        $item->ClassJobCategory->Name_en ?? ''
+                    ];
+
+                    $itemsFr[$cat->ID][] = [
+                        $item->ID,
+                        $item->Name_fr,
+                        $item->Icon,
+                        $item->LevelItem,
+                        $item->Rarity,
+                        $item->ClassJobCategory->Name_en ?? ''
+                    ];
+
+                    $itemsJa[$cat->ID][] = [
+                        $item->ID,
+                        $item->Name_ja,
+                        $item->Icon,
+                        $item->LevelItem,
+                        $item->Rarity,
+                        $item->ClassJobCategory->Name_en ?? ''
+                    ];
+                }
+            }
+        }
+
+        $root = __DIR__.'/../../../public/data';
+
+        // save category data
+        file_put_contents("{$root}/categories_50_en.js", json_encode($itemsEn));
+        file_put_contents("{$root}/categories_50_de.js", json_encode($itemsDe));
+        file_put_contents("{$root}/categories_50_fr.js", json_encode($itemsFr));
+        file_put_contents("{$root}/categories_50_ja.js", json_encode($itemsJa));
     }
 }

@@ -17,8 +17,20 @@ class PopulateGameDataCommand extends Command
         'desc' => 'Populate cached game data',
     ];
 
+    /**
+     * @var GameDataCache
+     */
+    private $gdc;
+
+    public function __construct(GameDataCache $gdc, string $name = null)
+    {
+        $this->gdc = $gdc;
+
+        parent::__construct($name);
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        (new GameDataCache())->populate();
+        $this->gdc->populate();
     }
 }
