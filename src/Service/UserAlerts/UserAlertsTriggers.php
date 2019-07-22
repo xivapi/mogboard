@@ -28,8 +28,6 @@ class UserAlertsTriggers
     private $discord;
     /** @var UserAlertsEmailNotification */
     private $email;
-    /** @var Companion */
-    private $companion;
     /** @var GameDataSource */
     private $gamedata;
     /** @var ConsoleOutput */
@@ -46,7 +44,6 @@ class UserAlertsTriggers
         UserAlertsDiscordNotification $userAlertsDiscordNotification,
         UserAlertsEmailNotification $userAlertsEmailNotification,
         UserAlerts $userAlerts,
-        Companion $companion,
         CompanionMarket $companionMarket,
         GameDataSource $gamedata
     ) {
@@ -54,7 +51,6 @@ class UserAlertsTriggers
         $this->userAlerts = $userAlerts;
         $this->discord    = $userAlertsDiscordNotification;
         $this->email      = $userAlertsEmailNotification;
-        $this->companion  = $companion;
         $this->companionMarket = $companionMarket;
         $this->gamedata   = $gamedata;
         $this->console    = new ConsoleOutput();
