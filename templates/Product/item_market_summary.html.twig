@@ -1,255 +1,226 @@
-{% if queue.state == 1 %}
-    <div class="market_update_times">
-        {% for entry in update_times %}
-        <div>
-            <h4>{{ entry.name }}</h4>
-            <div>{{ entry.updated|date }}</div>
-        </div>
-        {% endfor %}
+<div class="market_update_times">
+    {% for entry in update_times %}
+    <div>
+        <h4>{{ entry.name }}</h4>
+        <div>{{ entry.updated|date }}</div>
     </div>
+    {% endfor %}
+</div>
 
-    {# CHEAPEST #}
-    <div class="cross_world_markets">
-        <div class="cheapest">
-            <h2>Cheapest High-Quality</h2>
-            {% if item.CanBeHq %}
-                {% if census.Global.Prices_CheapestHQ %}
-                <div class="cheapest_price">
-                    <i class="xiv-Gil"></i>
-                    <em>{{ census.Global.Prices_CheapestHQ.Quantity|number_format }} x</em>
-                    <span class="cheapest_value">{{ census.Global.Prices_CheapestHQ.PricePerUnit|number_format }}</span>
-
-                    <span class="cheapest_price_info">
-                        Server: <strong>{{ census.Global.Prices_CheapestHQ.Server }}</strong> -
-                        Total: <strong>{{ census.Global.Prices_CheapestHQ.PriceTotal|number_format }}</strong>
-                    </span>
-                </div>
-                {% else %}
-                    No HQ for sale!
-                {% endif %}
-            {% else %}
-                <p>Item has no High-Quality variant.</p>
-            {% endif %}
-        </div>
-        <div class="cheapest">
-            <h2>Cheapest Normal Quality</h2>
-            {% if census.Global.Prices_CheapestNQ %}
+{# CHEAPEST #}
+<div class="cross_world_markets">
+    <div class="cheapest">
+        <h2>Cheapest High-Quality</h2>
+        {% if item.CanBeHq %}
+            {% if census.Global.Prices_CheapestHQ %}
             <div class="cheapest_price">
                 <i class="xiv-Gil"></i>
-                <em>{{ census.Global.Prices_CheapestNQ.Quantity|number_format }} x</em>
-                <span class="cheapest_value">{{ census.Global.Prices_CheapestNQ.PricePerUnit|number_format }}</span>
+                <em>{{ census.Global.Prices_CheapestHQ.Quantity|number_format }} x</em>
+                <span class="cheapest_value">{{ census.Global.Prices_CheapestHQ.PricePerUnit|number_format }}</span>
 
                 <span class="cheapest_price_info">
-                    Server: <strong>{{ census.Global.Prices_CheapestNQ.Server }}</strong> -
-                    Total: <strong>{{ census.Global.Prices_CheapestNQ.PriceTotal|number_format }}</strong>
+                    Server: <strong>{{ census.Global.Prices_CheapestHQ.Server }}</strong> -
+                    Total: <strong>{{ census.Global.Prices_CheapestHQ.PriceTotal|number_format }}</strong>
                 </span>
             </div>
             {% else %}
-                <p>No Normal-Quality for sale.</p>
+                No HQ for sale!
             {% endif %}
-        </div>
+        {% else %}
+            <p>Item has no High-Quality variant.</p>
+        {% endif %}
     </div>
-    <br><br>
+    <div class="cheapest">
+        <h2>Cheapest Normal Quality</h2>
+        {% if census.Global.Prices_CheapestNQ %}
+        <div class="cheapest_price">
+            <i class="xiv-Gil"></i>
+            <em>{{ census.Global.Prices_CheapestNQ.Quantity|number_format }} x</em>
+            <span class="cheapest_value">{{ census.Global.Prices_CheapestNQ.PricePerUnit|number_format }}</span>
 
-    {# Purchase History #}
-    <h6>Cross-World Purchase history (500 sales)</h6>
-    {% include 'Product/chart_hc.html.twig' with {
-        chart: {
-            id: 'history_global',
-            server: 'summary',
-            series: [
-                {
-                    id:   'HC_History_HQ',
-                    name: '(High-Quality) PerUnit',
-                    data: census.All.HC_History_HQ,
-                    yAxis: 0,
-                    showInNavigator: true,
-                    negativeColor: true,
-                    navigatorOptions: {
-                        type: 'line',
-                        color: 'rgba(202,200,68,0.35)'
-                    },
+            <span class="cheapest_price_info">
+                Server: <strong>{{ census.Global.Prices_CheapestNQ.Server }}</strong> -
+                Total: <strong>{{ census.Global.Prices_CheapestNQ.PriceTotal|number_format }}</strong>
+            </span>
+        </div>
+        {% else %}
+            <p>No Normal-Quality for sale.</p>
+        {% endif %}
+    </div>
+</div>
+<br><br>
+
+{# Purchase History #}
+<h6>Cross-World Purchase history (500 sales)</h6>
+{% include 'Product/chart_hc.html.twig' with {
+    chart: {
+        id: 'history_global',
+        server: 'summary',
+        series: [
+            {
+                id:   'HC_History_HQ',
+                name: '(High-Quality) PerUnit',
+                data: census.All.HC_History_HQ,
+                yAxis: 0,
+                showInNavigator: true,
+                negativeColor: true,
+                navigatorOptions: {
+                    type: 'line',
+                    color: 'rgba(202,200,68,0.35)'
                 },
-                {
-                    id:   'HC_History_HQ',
-                    name: '(Normal Quality) PerUnit',
-                    data: census.All.HC_History_NQ,
-                    yAxis: 0,
-                    showInNavigator: true,
-                    negativeColor: true,
-                    navigatorOptions: {
-                        type: 'line',
-                        color: 'rgba(120,120,120,0.35)'
-                    },
+            },
+            {
+                id:   'HC_History_HQ',
+                name: '(Normal Quality) PerUnit',
+                data: census.All.HC_History_NQ,
+                yAxis: 0,
+                showInNavigator: true,
+                negativeColor: true,
+                navigatorOptions: {
+                    type: 'line',
+                    color: 'rgba(120,120,120,0.35)'
                 },
+            },
 
-                {
-                    id:   'HC_History_HQ_volume',
-                    name: '(High-Quality) PerUnit QUANTITY',
-                    data: census.All.HC_History_HQ_volume,
-                    linkedTo: 'HC_History_HQ',
-                    type: 'column',
-                    yAxis: 1,
-                    showInNavigator: false,
-                },
-                {
-                    id:   'HC_History_NQ_volume',
-                    name: '(Normal Quality) PerUnit QUANTITY',
-                    data: census.All.HC_History_NQ_volume,
-                    linkedTo: 'HC_History_NQ',
-                    type: 'column',
-                    yAxis: 1,
-                    showInNavigator: false,
-                }
-            ]
-        }
-    } %}
+            {
+                id:   'HC_History_HQ_volume',
+                name: '(High-Quality) PerUnit QUANTITY',
+                data: census.All.HC_History_HQ_volume,
+                linkedTo: 'HC_History_HQ',
+                type: 'column',
+                yAxis: 1,
+                showInNavigator: false,
+            },
+            {
+                id:   'HC_History_NQ_volume',
+                name: '(Normal Quality) PerUnit QUANTITY',
+                data: census.All.HC_History_NQ_volume,
+                linkedTo: 'HC_History_NQ',
+                type: 'column',
+                yAxis: 1,
+                showInNavigator: false,
+            }
+        ]
+    }
+} %}
 
 
-    {% set averagePricesNQ   = census.Global.Prices_Average_PricePerUnit_NQ %}
-    {% set averagePricesHQ   = census.Global.Prices_Average_PricePerUnit_HQ %}
-    {% set averageHistoryNQ  = census.Global.History_Average_PricePerUnit_NQ %}
-    {% set averageHistoryHQ  = census.Global.History_Average_PricePerUnit_HQ %}
+{% set averagePricesNQ   = census.Global.Prices_Average_PricePerUnit_NQ %}
+{% set averagePricesHQ   = census.Global.Prices_Average_PricePerUnit_HQ %}
+{% set averageHistoryNQ  = census.Global.History_Average_PricePerUnit_NQ %}
+{% set averageHistoryHQ  = census.Global.History_Average_PricePerUnit_HQ %}
 
-    {# CROSS WORLD MARKET BOARD #}
-    <div class="cross_world_markets">
-        <div>
-            {% if item.CanBeHq %}
-                <h6><img src="/i/game/hq.png" height="15"> HQ Prices</h6>
-                {% include 'Product/prices.html.twig' with {
-                    'prices': census.Global.PricesHQ|slice(0, 10),
-                    'crossWorld': true,
-                    'averagePricesNQ': averagePricesNQ,
-                    'averagePricesHQ': averagePricesHQ
-                } %}
-                <br>
-            {% endif %}
-
-            <h6>NQ Prices</h6>
+{# CROSS WORLD MARKET BOARD #}
+<div class="cross_world_markets">
+    <div>
+        {% if item.CanBeHq %}
+            <h6><img src="/i/game/hq.png" height="15"> HQ Prices</h6>
             {% include 'Product/prices.html.twig' with {
-                'prices': census.Global.PricesNQ|slice(0, 10),
+                'prices': census.Global.PricesHQ|slice(0, 10),
                 'crossWorld': true,
                 'averagePricesNQ': averagePricesNQ,
                 'averagePricesHQ': averagePricesHQ
             } %}
-        </div>
-        <div>
-            {% if item.CanBeHq %}
-                <h6><img src="/i/game/hq.png" height="15"> HQ Purchase History</h6>
-                {% include 'Product/history.html.twig' with {
-                    'history': census.Global.HistoryHQ|slice(0, 10),
-                    'crossWorld': true,
-                    'averageHistoryNQ': averageHistoryNQ,
-                    'averageHistoryHQ': averageHistoryHQ
-                } %}
-                <br>
-            {% endif %}
+            <br>
+        {% endif %}
 
-            <h6>NQ Purchase History</h6>
+        <h6>NQ Prices</h6>
+        {% include 'Product/prices.html.twig' with {
+            'prices': census.Global.PricesNQ|slice(0, 10),
+            'crossWorld': true,
+            'averagePricesNQ': averagePricesNQ,
+            'averagePricesHQ': averagePricesHQ
+        } %}
+    </div>
+    <div>
+        {% if item.CanBeHq %}
+            <h6><img src="/i/game/hq.png" height="15"> HQ Purchase History</h6>
             {% include 'Product/history.html.twig' with {
-                'history': census.Global.HistoryNQ|slice(0, 10),
+                'history': census.Global.HistoryHQ|slice(0, 10),
                 'crossWorld': true,
                 'averageHistoryNQ': averageHistoryNQ,
                 'averageHistoryHQ': averageHistoryHQ
             } %}
-        </div>
-    </div>
-    <br><br>
+            <br>
+        {% endif %}
 
-    {# AVERAGE PRICES AND HISTORY #}
-    <div class="cross_world_markets">
-        <div>
-            <div class="flex census_box">
-                <div>
-                    <h5>Avg. Per Unit</h5>
-                    <br>
-                    <div class="flex avg_prices">
-                        {% if item.CanBeHq %}
-                        <div class="flex_50 price-hq">
-                            <img src="/i/game/hq.png"> {{ census.Global.Prices_Average_PricePerUnit_HQ|number_format }}
-                        </div>
-                        {% endif %}
-                        <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                            {{ census.Global.Prices_Average_PricePerUnit_NQ|number_format }}
-                        </div>
+        <h6>NQ Purchase History</h6>
+        {% include 'Product/history.html.twig' with {
+            'history': census.Global.HistoryNQ|slice(0, 10),
+            'crossWorld': true,
+            'averageHistoryNQ': averageHistoryNQ,
+            'averageHistoryHQ': averageHistoryHQ
+        } %}
+    </div>
+</div>
+<br><br>
+
+{# AVERAGE PRICES AND HISTORY #}
+<div class="cross_world_markets">
+    <div>
+        <div class="flex census_box">
+            <div>
+                <h5>Avg. Per Unit</h5>
+                <br>
+                <div class="flex avg_prices">
+                    {% if item.CanBeHq %}
+                    <div class="flex_50 price-hq">
+                        <img src="/i/game/hq.png"> {{ census.Global.Prices_Average_PricePerUnit_HQ|number_format }}
                     </div>
-                </div>
-                <div>
-                    <h5>Avg. Total</h5>
-                    <br>
-                    <div class="flex avg_prices">
-                        {% if item.CanBeHq %}
-                        <div class="flex_50 price-hq">
-                            <img src="/i/game/hq.png"> {{ census.Global.Prices_Average_PriceTotal_HQ|number_format }}
-                        </div>
-                        {% endif %}
-                        <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                            {{ census.Global.Prices_Average_PriceTotal_NQ|number_format }}
-                        </div>
+                    {% endif %}
+                    <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
+                        {{ census.Global.Prices_Average_PricePerUnit_NQ|number_format }}
                     </div>
                 </div>
             </div>
-        </div>
-        <div>
-            <div class="flex census_box">
-                <div>
-                    <h5>Avg. Per Unit</h5>
-                    <br>
-                    <div class="flex avg_prices">
-                        {% if item.CanBeHq %}
-                        <div class="flex_50 price-hq">
-                            <img src="/i/game/hq.png"> {{ census.Global.History_Average_PricePerUnit_HQ|number_format }}
-                        </div>
-                        {% endif %}
-                        <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                            {{ census.Global.History_Average_PricePerUnit_NQ|number_format }}
-                        </div>
+            <div>
+                <h5>Avg. Total</h5>
+                <br>
+                <div class="flex avg_prices">
+                    {% if item.CanBeHq %}
+                    <div class="flex_50 price-hq">
+                        <img src="/i/game/hq.png"> {{ census.Global.Prices_Average_PriceTotal_HQ|number_format }}
                     </div>
-                </div>
-                <div>
-                    <h5>Avg. Total</h5>
-                    <br>
-                    <div class="flex avg_prices">
-                        {% if item.CanBeHq %}
-                        <div class="flex_50 price-hq">
-                            <img src="/i/game/hq.png"> {{ census.Global.History_Average_PriceTotal_HQ|number_format }}
-                        </div>
-                        {% endif %}
-                        <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                            {{ census.Global.History_Average_PriceTotal_NQ|number_format }}
-                        </div>
+                    {% endif %}
+                    <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
+                        {{ census.Global.Prices_Average_PriceTotal_NQ|number_format }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-{% else %}
-
-    <div class="item-no-data">
-        <h2 class="text-highlight">Item no-longer updated</h2>
-        <p>
-            MogBoard does not currently track prices or history
-            for this item on any server.
-        </p>
-        <p>
-            <strong>Reason:</strong>
-            {% if queue.state == 2 %}
-                This item can be purchased from an NPC and does not have a High-Quality advantage.
-            {% elseif queue.state == 3 %}
-                This item has never been sold, non-sold items are checked monthly to see if there have
-                been any sales that could be recorded. Items in this state are usually ones that have
-                little to no purpose, or have never had a sale in the games existence.
-            {% elseif queue.state == 4 %}
-                This item is low level and so it is no longer being tracked. Arms, Armor and Tools below level 60
-                that have no valuable market trading is not tracked as it can usually be purchased from an
-                NPC or it isn't worth analysing cross-world.
-            {% else %}
-                Reason could not be automatically determined by state: {{ queue.state }}, contact
-                a MogBoard staff on discord if you wish to know the exact reason this item does not update.
-            {% endif %}
-        </p>
+    <div>
+        <div class="flex census_box">
+            <div>
+                <h5>Avg. Per Unit</h5>
+                <br>
+                <div class="flex avg_prices">
+                    {% if item.CanBeHq %}
+                    <div class="flex_50 price-hq">
+                        <img src="/i/game/hq.png"> {{ census.Global.History_Average_PricePerUnit_HQ|number_format }}
+                    </div>
+                    {% endif %}
+                    <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
+                        {{ census.Global.History_Average_PricePerUnit_NQ|number_format }}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h5>Avg. Total</h5>
+                <br>
+                <div class="flex avg_prices">
+                    {% if item.CanBeHq %}
+                    <div class="flex_50 price-hq">
+                        <img src="/i/game/hq.png"> {{ census.Global.History_Average_PriceTotal_HQ|number_format }}
+                    </div>
+                    {% endif %}
+                    <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
+                        {{ census.Global.History_Average_PriceTotal_NQ|number_format }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-{% endif %}
+</div>
 
 <small class="cross_world_foot_note">Load Speed: {{ load_speed }}</small>
