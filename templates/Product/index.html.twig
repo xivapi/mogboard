@@ -127,7 +127,6 @@
                     {% if marketData and marketData.Updated %}
                         {% set pricesCount       = marketData.Prices|length %}
                         {% set historyCount      = marketData.History|length %}
-                        {% set updateInfo        = marketStats.Report[marketData.UpdatePriority] ?? null %}
                         {% set cheapestPrice     = cheapest[serverName] %}
                         {% set averagePricesNQ   = census[serverName].Prices_Average_PricePerUnit_NQ %}
                         {% set averagePricesHQ   = census[serverName].Prices_Average_PricePerUnit_HQ %}

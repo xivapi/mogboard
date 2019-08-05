@@ -184,7 +184,6 @@ class ItemController extends AbstractController
         $data = [
             'item'           => $item,
             'market'         => $market,
-            //'marketStats'    => $this->companionStatistics->stats(),
             'census'         => $census,
             'queue'          => $itemQueue,
             'faved'          => $user ? $user->hasFavouriteItem($itemId) : false,
