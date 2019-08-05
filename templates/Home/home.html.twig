@@ -48,47 +48,7 @@
             {% if auth.online %}
                 <div class="home-tab open" id="market_activity">
 
-                    <div class="alert-default">
-                        <p>
-                            Welcome to Mogboard.com
-                        </p>
-                        <p>
-                            This site remains up for existing Patreons to allow them to obtain Prices and History
-                            of items on many servers. It is not possible to obtain Patreon status to get
-                            access to the "Update" functionality for the foreseeable future. Only existing
-                            patreons who have <strong>already paid</strong> will continue to receive what
-                            they are owed.
-                        </p>
-
-                        <hr>
-
-                        <p>
-                            Square-Enix ban accounts who uses their Companion API outside of the mobile app, if you
-                            want prices, use their official app which you can find here:
-                            <a href="https://na.finalfantasyxiv.com/companion/">https://na.finalfantasyxiv.com/companion/</a>.
-                        </p>
-                        <p>
-                            Due to these bans, <strong>it is impossible to provide a FREE AUTO-UPDATING service</strong>.
-                        </p>
-                        <p>
-                            Due to these bans, <strong>it is impossible to provide a REAL-TIME UPDATED MARKET FOR EVERYONE.</strong>
-                        </p>
-                        <p>
-                            Due to these bans, there is 1 account left. Patrons have paid a month, they will
-                            get their moneys worth.
-                        </p>
-                        <p>
-                            Due to these bans, the site will be useless for the majority of people as prices will
-                            not auto-update in the background. This Auto-Updating is classified as "disruptive" and "botting"
-                            in the FFXIV TOS. The free service you all enjoyed was only available to you by
-                            breaking the TOS. In the same way Wiki-Sites, Database Sites and other FFXIV tools all
-                            break the Datamining TOS to provide you free services. They have the fortunate life
-                            of not getting banned, I do not have that luxury.
-                        </p>
-                        <p>
-                            - Vekien
-                        </p>
-                    </div>
+                    {% include 'Home/note.html.twig' %}
 
                 </div>
 
@@ -106,17 +66,7 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <div class="home-logged-out">
-                    <div>
-                        <img src="/i/brand/mogboard/mogboard_light.svg" height="42">
-                    </div>
-                    <br>
-                    <strong>Become a member!</strong>
-                    <br>
-                    Create alerts, make lists, add your retainers and get a personalised home page feed!
-                    <br><br>
-                    <a href="{{ path('account_login_discord') }}" class="btn-login">Login via <strong>Discord</strong></a>
-                </div>
+                {% include 'Home/note.html.twig' %}
             {% endif %}
         </div>
         <div>
