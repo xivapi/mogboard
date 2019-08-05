@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="home">
-        <div class="home-nav">
+        <div class="home-nav" style="{{ auth.online ? '' : 'flex: 0 1 0px' }}">
             {% if auth.online %}
             <div>
                 <button type="button" data-tab="market_activity">
@@ -38,7 +38,7 @@
             </div>
             {% endif %}
         </div>
-        <div>
+        <div style="{{ auth.online ? '' : '0 1 calc(100% - 360px)' }}">
             {% if maintenance().isCompanionMaintenance %}
                 <div class="home-box2">
                     <strong class="text-red"><img src="/i/game/offline.png" height="16" style="vertical-align: middle"> Companion App is down for maintenance. No price/history updates at this time.</strong>
