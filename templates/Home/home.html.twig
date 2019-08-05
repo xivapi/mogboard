@@ -6,9 +6,11 @@
             {% if auth.online %}
             <div>
                 <button type="button" data-tab="market_activity">
-                    <img src="/i/game/hammer.png"> Market Activity
+                    <img src="/i/game/hammer.png"> Home
                 </button>
             </div>
+
+
             <h3><img src="/i/svg/bells-light.svg"> Alerts</h3>
             <div>
                 {% for itemId, alerts in auth.user.alertsPerItem %}
@@ -18,39 +20,18 @@
                             {{ item.Name }}
                         </button>
                     {% endif %}
-                {% else %}
-                    <div style="padding: 10px;opacity:0.5;">You have no alerts setup.</div>
                 {% endfor %}
             </div>
+
+
             <h3><img src="/i/svg/th-list-light.svg"> Lists</h3>
             <div>
                 {% for list in auth.user.lists %}
                     <button type="button" data-tab="lists_{{ list.id }}">
                         {{ list.name }}
                     </button>
-                {% else %}
-                    <span class="text-gray">You have no lists.</span>
                 {% endfor %}
             </div>
-            <h3><img src="/i/svg/person-dolly-light.svg"> Retainers</h3>
-            <div>
-                {% for retainer in auth.user.retainers %}
-                    <a href="{{ path('retainer_shop', { retainer: retainer.id }) }}">
-                        {{ retainer.name }}
-                    </a>
-                {% else %}
-                    <span class="text-gray">You have no retainers.</span>
-                {% endfor %}
-            </div>
-
-            {% else %}
-                <section class="tac">
-                    <strong>Logged-out</strong>
-                    <p class="text-gray">
-                        Lists, Alerts, Market activity and retainer links will show here
-                        when you are logged into the site.
-                    </p>
-                </section>
             {% endif %}
         </div>
         <div>
@@ -60,12 +41,13 @@
                 </div>
             {% endif %}
 
-            {% include 'Home/news.html.twig' %}
-
             {% if auth.online %}
                 <div class="home-tab open" id="market_activity">
-                    {# Market Feed #}
-                    {% include 'Home/feed.html.twig' %}
+
+                    <div class="alert-default">
+                        Welcome to Mogboard.com
+                    </div>
+
                 </div>
 
                 {# Alerts #}

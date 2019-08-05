@@ -7,17 +7,12 @@
             <div>
                 <a href="{{ path('user_account') }}" class="{{ accountpage == 'account' ? 'active' : ''  }}">Account</a>
 
-                {#
                 {% if auth.user.patron > 0 %}
                     <a href="{{ path('user_account_patron_perks') }}" class="{{ accountpage == 'user_account_patron_perks' ? 'active' : ''  }}">Patreon Perks</a>
                 {% endif %}
-                #}
 
-                <a href="{{ path('user_account_characters') }}" class="{{ accountpage == 'characters' ? 'active' : '' }}">Characters</a>
-                <a href="{{ path('user_account_retainers') }}" class="{{ accountpage == 'retainers' ? 'active' : '' }}">Retainers</a>
                 <a href="{{ path('user_account_alerts') }}" class="{{ accountpage == 'alerts' ? 'active' : '' }}">Alerts</a>
                 <a href="{{ path('user_account_lists') }}" class="{{ accountpage == 'lists' ? 'active' : '' }}">Lists</a>
-                {# <a href="{{ path('user_account_reports') }}" class="{{ accountpage == 'reports' ? 'active' : '' }}">Reports</a> #}
 
                 <hr>
 
