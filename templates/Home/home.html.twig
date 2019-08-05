@@ -12,18 +12,20 @@
 
 
             <h3><img src="/i/svg/bells-light.svg"> Alerts</h3>
-            <div>
-                {% for itemId, alerts in auth.user.alertsPerItem %}
-                    {% if itemId %}
-                        {% set item = game().item(itemId) %}
-                        <button type="button" data-tab="alerts_{{ itemId }}" class="rarity-{{ item.Rarity }}">
-                            {{ item.Name }}
-                        </button>
-                    {% endif %}
-                {% else %}
-                    <p>YoNo alerts created.</p>
-                {% endfor %}
-            </div>
+            {% if auth.user.alertsPerItem %}
+                <div>
+                    {% for itemId, alerts in auth.user.alertsPerItem %}
+                        {% if itemId %}
+                            {% set item = game().item(itemId) %}
+                            <button type="button" data-tab="alerts_{{ itemId }}" class="rarity-{{ item.Rarity }}">
+                                {{ item.Name }}
+                            </button>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No alerts created.</p>
+            {% endif %}
 
 
             <h3><img src="/i/svg/th-list-light.svg"> Lists</h3>
