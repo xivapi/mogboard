@@ -92,7 +92,7 @@
 
                     {# Alerts #}
                     <div class="item_nav_custom">
-                        {% if auth.user.isPatron %}
+                        {% if auth.user and auth.user.isPatron %}
                             <button type="button" data-tab="alerts" class="btn-alerts">
                                 <i class="xiv-app_drawer_news cw-alerts"></i> Alerts
                             </button>
@@ -236,7 +236,7 @@
                 {% endfor %}
 
                 {# Alerts #}
-                {% if auth.user.isPatron %}
+                {% if auth.user and auth.user.isPatron %}
                 <div class="tab-page tab-alerts">
                     {% include 'Product/alerts.html.twig' %}
                 </div>
