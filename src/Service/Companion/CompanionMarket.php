@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CompanionMarket
 {
-    const SAVE_DIRECTORY = __DIR__.'/../../../../companion_data/';
+    const SAVE_DIRECTORY = __DIR__.'/../../../../companion_data';
     
     /** @var EntityManagerInterface */
     private $em;
