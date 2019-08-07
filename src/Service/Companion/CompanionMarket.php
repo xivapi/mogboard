@@ -117,7 +117,7 @@ class CompanionMarket
         }
 
         // slice history
-        $source['History'] = array_slice($source['History'], 0, 100);
+        $source['History'] = array_slice($source['History'], 0, 500);
     
         // add update queue
         $stmt = $this->em->getConnection()->prepare(
