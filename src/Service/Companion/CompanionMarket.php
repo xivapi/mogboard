@@ -2,9 +2,7 @@
 
 namespace App\Service\Companion;
 
-use App\Common\Exceptions\BasicException;
 use App\Common\Game\GameServers;
-use App\Common\Service\ElasticSearch\ElasticSearch;
 use App\Common\Service\Redis\Redis;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -13,26 +11,14 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CompanionMarket
 {
-    const INDEX = 'companion';
+    const SAVE_DIRECTORY = __DIR__.'/../../../../companion_data/';
     
     /** @var EntityManagerInterface */
     private $em;
-    /** @var ElasticSearch */
-    private $elastic;
-    
-    public function __construct(
-        EntityManagerInterface $em
-    ) {
-        $this->em = $em;
-    }
-    
-    public function connect()
+
+    public function __construct(EntityManagerInterface $em)
     {
-        if ($this->elastic === null) {
-            $this->elastic  = new ElasticSearch('ELASTIC_SERVER_COMPANION');
-        }
-        
-        return $this;
+        $this->em = $em;
     }
 
     /**
@@ -46,32 +32,49 @@ class CompanionMarket
             return json_decode(json_encode($data), true);
         }
         
-        $requests = [];
-        
+        $data = [];
         foreach ($servers as $server) {
             $serverId   = GameServers::getServerId($server);
-            $requests[] = "{$serverId}_{$itemId}";
-        }
-    
-        $data      = [];
-        $results   = $this->connect()->elastic->getDocumentsBulk(self::INDEX, self::INDEX, $requests);
-        $results   = $results['docs'];
-        
-        foreach ($results as $result) {
-            [$serverId, $itemId] = explode('_', $result['_id']);
-            $source        = $result['_source'] ?? null;
-            $server        = GameServers::LIST[$serverId];
-            
-            if ($source === null) {
-                continue;
-            }
-            
+            $source     = $this->getMarketDocument($serverId, $itemId);
+
             $data[$server] = $this->handle($itemId, $serverId, $source);
         }
-        
+
         Redis::cache()->set($key, $data, 60);
         
         return $data;
+    }
+
+    /**
+     * Get market doc
+     */
+    public function getMarketDocument($serverId, $itemId)
+    {
+        $folder   = $this->getFolder($serverId);
+        $filename = "{$folder}/{$itemId}.serialised";
+
+        if (file_exists($filename) == false) {
+            return null;
+        }
+
+        $item = file_get_contents($filename);
+        $item = unserialize($item);
+        return $item;
+    }
+
+    /**
+     * Get storage folder (also makes it if it dont exist)
+     */
+    private function getFolder($serverId)
+    {
+        $folder = self::SAVE_DIRECTORY;
+        $folder = "{$folder}/server_{$serverId}";
+
+        if (is_dir($folder) == false) {
+            mkdir($folder, 0775, true);
+        }
+
+        return $folder;
     }
 
     /**
@@ -79,6 +82,8 @@ class CompanionMarket
      */
     private function handle($itemId, $server, $source)
     {
+        $source = json_decode(json_encode($source), true);
+
         // remove some stuff, try reduce memory
         foreach ($source['Prices'] as $i => $price) {
             unset(
