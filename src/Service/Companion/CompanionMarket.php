@@ -26,7 +26,7 @@ class CompanionMarket
      */
     public function get(array $servers, int $itemId)
     {
-        $key = "mbv5_market_{$itemId}_". md5(serialize($servers));
+        $key = "mb_file_market_{$itemId}_". md5(serialize($servers));
         
         if ($data = Redis::cache()->get($key)) {
             return json_decode(json_encode($data), true);
