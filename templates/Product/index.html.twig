@@ -75,19 +75,17 @@
                         {% endif %}
 
                         {# Server List #}
-                        {% if queue.state == 1 %}
-                            {% for serverName in server.dc_servers %}
-                                {% set icon          = serverName == server.name ? 'ItemShard cw-home' : '' %}
-                                {% set className     = serverName == server.name ? 'home-world' : '' %}
-                                {% set salesCount    = market[serverName].Prices is defined ? market[serverName].Prices|length|number_format : '-' %}
-                                <button type="button" data-tab="cw{{ serverName }}" class="{{ className }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or reqServer == serverName) ? 'open' : '' }}">
-                                    {% if serverName == server.name %}
-                                        <i class="xiv-ItemShard cw-home"></i>
-                                    {% endif %}
-                                    {{ serverName }}
-                                </button>
-                            {% endfor %}
-                        {% endif %}
+                        {% for serverName in server.dc_servers %}
+                            {% set icon          = serverName == server.name ? 'ItemShard cw-home' : '' %}
+                            {% set className     = serverName == server.name ? 'home-world' : '' %}
+                            {% set salesCount    = market[serverName].Prices is defined ? market[serverName].Prices|length|number_format : '-' %}
+                            <button type="button" data-tab="cw{{ serverName }}" class="{{ className }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or reqServer == serverName) ? 'open' : '' }}">
+                                {% if serverName == server.name %}
+                                    <i class="xiv-ItemShard cw-home"></i>
+                                {% endif %}
+                                {{ serverName }}
+                            </button>
+                        {% endfor %}
                     </div>
 
                     {# Alerts #}

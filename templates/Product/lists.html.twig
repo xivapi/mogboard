@@ -5,7 +5,7 @@
             <button class="btn_addto_list">Lists</button>
             <button class="btn_addto_fave {{ faved ? 'on' : '' }}"><span>{{ faved ? 'Faved' : 'Favourite' }}</span></button>
 
-            {% if queue.state == 1 and auth.online and auth.user.patron %}
+            {% if auth.online and auth.user.patron %}
             <button class="btn_update">Update</button>
             {% endif %}
         </div>
