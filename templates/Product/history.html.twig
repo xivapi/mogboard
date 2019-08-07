@@ -28,7 +28,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for row in history|slice(0,250) %}
+        {% for row in history|slice(0,50) %}
             {# Compare diff against average #}
             {% if averagePricesHQ is defined %}
                 {% set diffForQuality = row.IsHQ ? averagePricesHQ : averagePricesNQ %}
