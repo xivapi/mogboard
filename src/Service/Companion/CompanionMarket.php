@@ -64,7 +64,7 @@ class CompanionMarket
     public function getMarketDocument($serverId, $itemId)
     {
         $folder   = $this->getFolder($serverId);
-        $filename = "{$folder}/{$itemId}.serialised";
+        $filename = "{$folder}/item_{$itemId}.serialised";
 
         if (file_exists($filename) == false) {
             return null;
