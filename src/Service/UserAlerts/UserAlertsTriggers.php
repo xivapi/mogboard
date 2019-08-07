@@ -157,7 +157,6 @@ class UserAlertsTriggers
             $servers    = $alert->isTriggerDataCenter() ? $dcServers : [ $alert->getServer() ];
     
             /**
-             * todo - this should use Companion internally. Look into making the Companion code "common"
              * Fetch the market data from companion
              */
             $market = $this->companionMarket->get($servers, $alert->getItemId());
