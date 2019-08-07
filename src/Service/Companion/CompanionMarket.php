@@ -37,6 +37,19 @@ class CompanionMarket
             $serverId   = GameServers::getServerId($server);
             $source     = $this->getMarketDocument($serverId, $itemId);
 
+            if ($source == null) {
+                $data[$server] = [
+                    'ID'      => "{$serverId}_{$itemId}",
+                    'Server'  => $serverId,
+                    'ItemID'  => $itemId,
+                    'Prices'  => [],
+                    'History' => [],
+                    'Updated' => null,
+                    'UpdatePriority' => 0,
+                ];
+                continue;
+            }
+
             $data[$server] = $this->handle($itemId, $serverId, $source);
         }
 
