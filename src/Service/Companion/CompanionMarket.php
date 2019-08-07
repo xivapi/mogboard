@@ -29,7 +29,7 @@ class CompanionMarket
         $key = "mbv5_market_{$itemId}_". md5(serialize($servers));
         
         if ($data = Redis::cache()->get($key)) {
-            //return json_decode(json_encode($data), true);
+            return json_decode(json_encode($data), true);
         }
         
         $data = [];
@@ -117,7 +117,7 @@ class CompanionMarket
         }
 
         // slice history
-        $source['History'] = array_slice($source['History'], 0, 500);
+        $source['History'] = array_slice($source['History'], 0, 1000);
     
         // add update queue
         $stmt = $this->em->getConnection()->prepare(
