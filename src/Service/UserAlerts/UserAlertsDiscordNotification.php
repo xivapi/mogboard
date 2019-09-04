@@ -82,6 +82,6 @@ class UserAlertsDiscordNotification
             'fields'        => $fields,
         ];
         
-        Discord::mog()->sendMessage($alert->getUser()->getSsoDiscordId(), null, $embed);
+        Discord::mog()->sendDirectMessage($alert->getUser()->getSsoDiscordId(), null, $embed);
     }
 }
