@@ -82,6 +82,6 @@ class UserAlertsDiscordNotification
             'fields'        => $fields,
         ];
         
-        Discord::seraymeric()->sendMessage($alert->getUser()->getSsoDiscordId(), null, $embed);
+        Discord::mog()->sendMessage($alert->getUser()->getSsoDiscordId(), null, $embed);
     }
 }
