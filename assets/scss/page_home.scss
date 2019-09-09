@@ -257,7 +257,7 @@
         display: inline-block;
         padding: 10px 20px;
         border-radius: 5px;
-        background-color: rgba(119, 36, 183, 0.86);
+        background-color: rgba(57, 82, 194, 0.86);
         color: #fff;
         font-size: 20px;
         box-shadow: 0 1px 3px #000;
@@ -501,4 +501,8 @@
             }
         }
     }
+}
+
+.btn-disabled {
+    pointer-events: none;
 }

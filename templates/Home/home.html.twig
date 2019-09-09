@@ -19,7 +19,9 @@
                         </button>
                     {% endif %}
                 {% else %}
-                    <span class="text-gray">You have no alerts setup.</span>
+                    <button type="button" class="btn-disabled">
+                        <span class="text-gray">You have no alerts setup.</span>
+                    </button>
                 {% endfor %}
             </div>
             <h3><img src="/i/svg/th-list-light.svg"> Lists</h3>
@@ -29,7 +31,9 @@
                         {{ list.name }}
                     </button>
                 {% else %}
-                    <span class="text-gray">You have no lists.</span>
+                    <button type="button" class="btn-disabled">
+                        <span class="text-gray">You have no lists.</span>
+                    </button>
                 {% endfor %}
             </div>
             <h3><img src="/i/svg/person-dolly-light.svg"> Retainers</h3>
@@ -39,7 +43,9 @@
                         {{ retainer.name }}
                     </a>
                 {% else %}
-                    <span class="text-gray">You have no retainers.</span>
+                    <button type="button" class="btn-disabled">
+                        <span class="text-gray">You have no retainers.</span>
+                    </button>
                 {% endfor %}
             </div>
 
@@ -88,7 +94,7 @@
             {% else %}
                 <div class="home-logged-out">
                     <div>
-                        <img src="/i/brand/mogboard/mogboard_light.svg" height="42">
+                        <img src="/i/brand/universalis/universalis_bodge.png" height="42">
                     </div>
                     <br>
                     <strong>Become a member!</strong>
