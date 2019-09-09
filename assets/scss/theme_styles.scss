@@ -464,8 +464,8 @@ header {
             }
 
             &:hover img {
-                filter: grayscale(0%);
-                -webkit-filter: grayscale(0%);
+                -webkit-filter: drop-shadow(3px 3px 3px rgba(255, 255, 255, 0.2));
+                filter: drop-shadow(3px 3px 3px rgba(255, 255, 255, 0.2));
                 opacity: 1;
             }
         }

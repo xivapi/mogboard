@@ -89,13 +89,10 @@ class IndexController extends AbstractController
     public function news(?string $slug = null)
     {
         $templates = [
-            'manual-updating'                               => '2019_05_05.html.twig',
-            'homepage-retainer-lists-and-privacy-changes'   => '2019_05_20.html.twig',
-            'updating-and-faq'                              => '2019_06_17.html.twig',
-            'thank-you-and-shadow-bringers'                 => '2019_06_23.html.twig',
+            'universalis_launch'                 => '2019_09_09.html.twig',
         ];
 
-        $slug = $slug ?: 'thank-you-and-shadow-bringers';
+        $slug = $slug ?: 'universalis_launch';
         
         return $this->render('News/'. $templates[$slug]);
     }
@@ -123,21 +120,6 @@ class IndexController extends AbstractController
      */
     public function patreonRefundProcess(Request $request)
     {
-        $name = trim($request->get('name'));
-        $user = $this->users->getUser(true);
-        
-        $this->mail->send(
-            'josh@viion.co.uk',
-            'Patreon Refund Request',
-            'Emails/patreon_refund.html.twig',
-            [
-                'name_or_email' => $name,
-                'id' => $user->getSsoDiscordId(),
-                'username' => $user->getUsername(),
-                'email' => $user->getEmail(),
-                'tier' => $user->getPatreonTier()
-            ]
-        );
     
         return $this->redirectToRoute('patreon_refund', [
             'complete' => 1
@@ -214,9 +196,12 @@ class IndexController extends AbstractController
      */
     public function about()
     {
+        /*
         $stats = $this->companionStatistics->stats();
         $stats = json_decode(json_encode($stats), true);
 
+        */
+        $stats = [];
         return $this->render('Pages/about.html.twig', [
             'market_stats' => $stats,
         ]);

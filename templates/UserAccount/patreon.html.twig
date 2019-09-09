@@ -1,0 +1,134 @@
+{% extends 'UserAccount/index.html.twig' %}
+{% set title = 'Mogboard Perks' %}
+{% set accountpage = 'user_account_patron_perks' %}
+
+{% block account %}
+<div class="patreon">
+    <div class="alert-dark">
+        All perks below are the ones "Active" and currently working. Other
+        additional perks are in active development.
+    </div>
+
+    <br>
+
+    {# Manual Update #}
+    {% if auth.user.isPatronBenefit %}
+        <h6 class="text-yellow"><strong>Perk</strong> Manual Update</h6>
+        <p>
+            You have the ability to manually update items at your leisure. You can go to
+            any item and click the "Update" button at the top-right. This will request
+            that item to be updated for your entire DC. This takes a couple minutes to
+            process through the system and then all prices/history for that item should be updated.
+        </p>
+        <p>
+            You can do 5 updates before a 60 minute cooldown is activated! This is to reduce spam however
+            in future it may be adjusted.
+        </p>
+        <hr>
+    {% endif %}
+
+    {# Alerts #}
+    {% if auth.user.isPatronBenefit %}
+        <h6 class="text-yellow"><strong>Perk</strong> Prioritised Mogboard Price Alerts</h6>
+        <p>
+            Any alert you create will be monitored on its own queue, this means your triggers
+            are checked a lot more often than if they were in the general population pool.
+        </p>
+        <hr>
+    {% endif %}
+
+    {# Character tracking #}
+    {% if auth.user.isPatronAdventurer %}
+        <h6 class="text-yellow"><strong>Perk</strong> Prioritised Character Tracking Updates</h6>
+        <p>
+            Any character you add on Mogboard will get its character data updated very frequently, this
+            benefits any website, discord bot or tool that uses XIVAPI.
+        </p>
+        <hr>
+    {% endif %}
+
+    {# Character tracking #}
+    {% if auth.user.isPatronTank %}
+        <h6 class="text-yellow"><strong>Tank Perk</strong> Prioritised FRIEND Character Tracking </h6>
+        <p>
+            Just like your own prioritised character tracking, now anyone on your in-game friends
+            list will also update fast. Make sure your friends list is public on Lodestone!
+        </p>
+        <hr>
+    {% endif %}
+
+    {# Character tracking #}
+    {% if auth.user.isPatronDps %}
+        <h6 class="text-yellow"><strong>DPS Perk</strong> Private Mogboard Alert Watcher </h6>
+        <p>
+            Your alerts have the ability to automatically request items be updated. If you
+            enable this option on the alert, then anytime the triggers are checked it will
+            also check the "last updated" time of the item, if this reaches the 10 minute
+            mark it will request it to be updated. This works for any item regardless of
+            the queue it is in.
+        </p>
+        <hr>
+    {% endif %}
+
+    {# friends with benefits! #}
+    {% if auth.user.isPatronHealer %}
+        <h6 class="text-yellow"><strong>Healer/DPS Perk</strong> Friendly Benefits</h6>
+        <p>
+            As a {{ auth.user.patreonTier }} patron member, you can give site-wide
+            benefits to your most favourite friends! Benefits include: The ability to update items,
+            prioritised mogboard alerts and more in the future as the site develops and I think of some!
+        </p>
+
+        <div class="alert-dark text-red">
+            <strong>A member will loose their benefit status if:</strong><br>
+            <div style="font-size: 13px;">
+                • You delete your character from mogboard or you delete this friend from your in-game friends list.<br>
+                • You make your friends list private.<br>
+                • If you re-confirm your Patreon Status (you would need to re-promote).<br>
+                • You change your "Main" character on Mogboard.<br>
+            </div>
+        </div>
+
+        <p>
+            Select up to: {{ auth.user.maxBenefitFriends }} friends to give patreon status to.
+        </p>
+
+        <div class="fbc pat-friend-promote">
+        {% if character %}
+            {% for friend in character.Friends if friend_states %}
+                {% set state = friend_states[friend.ID] %}
+                <div>
+                    <div><img src="{{ friend.Avatar }}" height="42" class="perk-avatar"></div>
+                    <div>{{ friend.Name }} ({{ friend.Server }})</div>
+                    <div>
+                        {% if state == 1 %}
+                            <p>User not on Mogboard</p>
+                        {% elseif state == 2 %}
+                            <p>Already a Patron!</p>
+                        {% elseif state == 4 %}
+                            <button type="button" class="btn small btn-red" id="{{ friend.ID }}">De-Benefit</button>
+                        {% else %}
+                            <button type="button" class="btn small btn-green" id="{{ friend.ID }}">Promote</button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p>
+                    Your friends list could not be fetched via XIVAPI. Make sure that your
+                    friends list is accessible on Lodestone and then check back here after
+                    an hour (Caching).
+                </p>
+                <p>
+                    Attempt for character: ({{ character.Character.ID }}) {{ character.Character.Name }} on {{ character.Character.Server }}
+                </p>
+                <p>
+                    Friend Status ID: {{ character.Info.Friends.State }}, last updated: {{ character.Info.Friends.Updated|date }}
+                </p>
+            {% endfor %}
+        {% else %}
+            <p>You have no characters added to the site, add some!</p>
+        {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -35,11 +35,242 @@
                                 You are one lucky duck, a user of Mogboard has granted you extra perks!
                             </p>
                             {% endif %}
+                        <p>
+                            With this status, you get the following benefits:
+                        </p>
+                        <ul>
+                            <li><strong>Manually update items on-demand</strong></li>
+                            <li><strong>Prioritised Mogboard alerts!</strong></li>
+                        </ul>
+                        {% else %}
+                        <p>
+                            Firstly: a huge thank you to support XIVAPI and MogBoard. This reduces the worry
+                            of building out infrastructure, or paying for market accounts. Your money
+                            goes a long way. If you are interested in seeing the cost of the servers you can
+                            view the <a href="https://xivapi.com/docs/Costs">Costs page on XIVAPI</a>.
+                        </p>
+                        <p>
+                            All your perks on MogBoard and XIVAPI are active, alerts have been retroactively updated
+                            to receive the new benefits. You can view your benefits in the table below.
+                        </p>
+                        <p>
+                            Be sure to say Hi on the <strong>#patreon</strong> discord channel!
+                        </p>
                         {% endif %}
+                        <p>
+                            - PV
+                        </p>
+                    {% else %}
+                        <h5>Patreon</h5>
+                        <p>
+                            Both XIVAPI.com and MogBoard.com are supported by the community via Patreon. By becoming a supporter
+                            you'll receive perks for both sites and help keep the lights on!
+                        </p>
+                        <p>
+                            If you are a supporter, please make sure you are in the
+                            <a href="https://discordapp.com/invite/MFFVHWC" target="_blank">XIVAPI discord</a>, have
+                            received a Patreon Role and can view <span class="text-highlight">#patreon</span> channel.
+                        </p>
+                        <p>
+                            <a href="https://www.patreon.com/bePatron?u=13230932" target="_blank">
+                                <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png">
+                            </a>
+                        </p>
                     {% endif %}
+                    <hr>
+                    <p>
+                        You can confirm and check your patreon status at anytime.
+                        You must be in the <a href="https://discord.gg/MFFVHWC" target="_blank">XIVAPI Discord</a>
+                        to receive your status, so please join! You must have also obtained your Patreon
+                        discord role.
+                    </p>
+                    {% if app.request.get('patreon_checked') %}
+                        <div class="alert-green">
+                            Your patreon status returned as: <strong>{{ app.request.get('patreon_checked') }}</strong>
+                            - If this is incorrect, please jump into the Discord and message Vekien.
+                        </div>
+                    {% endif %}
+                    <p class="form">
+                        <button class="btn btn-green check_patreon_status">Check my Patreon Status</button>
+                    </p>
+                    <p class="text-red">
+                        <strong>Note:</strong> Clicking this will reset your benefit selections.
+                    </p>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <br><br>
+
+    <h3>PATREON</h3>
+    <div class="alert-dark">
+        Patreon reward functionality is still a work-in-progress. If you are looking to support the
+        site purely for the rewards, it may be best to wait until mid-May, thank you!
+    </div>
+
+    <div class="alert-dark">
+        <p style="font-size: 24px;">
+            <strong>Link: <a href="https://www.patreon.com/vekien" class="text-red">patreon.com/vekien</a></strong>
+        </p>
+
+        <p>
+            Becoming a patron supports <strong>two FFXIV sites that I work on:</strong>
+        </p>
+        <div class="flex">
+            <div class="flex_50 text-yellow">Mogboard.com</div>
+            <div class="flex_50 text-blue">XIVAPI.com</div>
+        </div>
+
+        <p>
+            <strong>
+                All patreon funds go directly to the site. I never take a single penny
+                out from PayPal. Your money and support is for keeping the site going,
+                not my Diet Pepsi fund!
+            </strong>
+        </p>
+
+        <p>
+            You can view the current server and account costs here:
+            <a href="https://xivapi.com/docs/Costs" target="_blank">Accounts and Server Costs</a>
+        </p>
+    </div>
+
+    <div class="alert-dark">
+        <h2 class="pat-perk-title">$1 - Adventurer</h2>
+        <div class="flex">
+            <div class="flex_50">
+                <h3>MOGBOARD</h3>
+                <ul>
+                    <li>Your discord name on the official support page</li>
+                    <li>Access to the discord Patreon Channel</li>
+                    <li>Access to the Mogboard BETA Testing site</li>
+                </ul>
+            </div>
+            <div class="flex_50">
+                <h3>XIVAPI</h3>
+                <ul>
+                    <li>
+                        <span class="text-green">[ACTIVE]</span>
+                        <strong>Prioritised Character Tracking Updates</strong> - Add your
+                        character to mogboard and it will get priority updating on XIVAPI. This
+                        is useful if you use your character on many FFXIV sites or discord bots.
+                        It will also benefit mogboard when future features are implemented.
+                    </li>
+                    <li>
+                        <span class="text-green">[ACTIVE]</span>
+                        <strong>Prioritised Mogboard Price Alerts</strong> - Your alerts will be
+                        checked in a special private queue, not part of general population! This
+                        means you'll get your alerts faster.
+                    </li>
+                    <li>
+                        <span class="text-green">[ACTIVE]</span>
+                        <strong>On-Demand Item Updates</strong> - You now have the power
+                        to manually request an item price+history be updated. This is useful
+                        for those items that sell infrequently.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-dark">
+        <h2 class="pat-perk-title">$3 - Tank</h2>
+        <div class="flex">
+            <div class="flex_50">
+                <h3>MOGBOARD</h3>
+                <ul>
+                    <li>No Additional Benefits</li>
+                </ul>
+            </div>
+            <div class="flex_50">
+                <h3>XIVAPI</h3>
+                <ul>
+                    <li>
+                        <span class="text-green">[ACTIVE]</span>
+                        <strong>Prioritised FRIEND Character Tracking Updates</strong> -
+                        Ensure your character is on mogboard and that your friends-list
+                        is public on Lodestone. After this anyone on your in-game friends
+                        list will get character update priority!
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-dark">
+        <h2 class="pat-perk-title">$5 - Healer</h2>
+        <div class="flex">
+            <div class="flex_50">
+                <h3>MOGBOARD</h3>
+                <ul>
+                    <li>
+                        <span class="text-green">[ACTIVE]</span>
+                        <strong>Friends with benefits</strong> - You can choose 10
+                        friends who are on Mogboard to receive small benefits.
+                    </li>
+                </ul>
+            </div>
+            <div class="flex_50">
+                <h3>XIVAPI</h3>
+                <ul>
+                    <li>
+                        <span class="text-red">[SOON]</span>
+                        <strong>Prioritised Free-Company Character Tracking Updates</strong> -
+                        Ensure your character is on mogboard, everyone in your Free-Company
+                        will now receive character priority updates!
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-dark">
+        <h2 class="pat-perk-title">$10 - DPS (limited stock)</h2>
+        <div class="flex">
+            <div class="flex_50">
+                <h3>MOGBOARD</h3>
+                <ul>
+                    <li>
+                        <span class="text-green">[ACTIVE]</span>
+                        <strong>Private Mogboard Alert Watcher</strong> - All your alerts
+                        will ensure an item is up to date regardless of its sale frequency.
+                    </li>
+                    <li>
+                        <span class="text-green">[ACTIVE]</span>
+                        <strong>Friends with benefits</strong> - You can choose 50
+                        friends who are on Mogboard to receive small benefits.
+                    </li>
+                </ul>
+            </div>
+            <div class="flex_50">
+                <h3>XIVAPI</h3>
+                <ul>
+                    <li>No Additional Benefits</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-dark">
+        <h2 class="pat-perk-title">Benefit Friend <span class="text-red">[SOON(tm)]</span></h2>
+        <div class="flex">
+            <div class="flex_50">
+                <h3>MOGBOARD</h3>
+                <ul>
+                    <li>On-Demand Item Update</li>
+                    <li>Prioritised Mogboard Alerts</li>
+                </ul>
+            </div>
+            <div class="flex_50">
+                <h3>XIVAPI</h3>
+                <ul>
+                    <li>
+                        Rewards being decided.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
