@@ -1,0 +1,6 @@
+[submodule "src/Common"]
+	path = src/Common
+	url = https://github.com/xivapi/common-php
+[submodule "CoinachExporter/lib/SaintCoinach"]
+	path = CoinachExporter/lib/SaintCoinach
+	url = https://github.com/ufx/SaintCoinach
