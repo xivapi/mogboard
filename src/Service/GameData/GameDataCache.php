@@ -5,6 +5,7 @@ namespace App\Service\GameData;
 use App\Common\Service\Redis\Redis;
 use App\Common\Utils\Arrays;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use XIVAPI\XIVAPI;
 
 /**
  * Handle populating game data, MogBoard does not connect connect directly to XIVAPI for
@@ -30,10 +31,14 @@ class GameDataCache
     /** @var GameDataSource */
     private $gameDataSource;
     
+    /** @var XIVAPI */
+    private $xivapi;
+
     public function __construct(GameDataSource $gameDataSource)
     {
         $this->console = new ConsoleOutput();
         $this->gameDataSource = $gameDataSource;
+        $this->xivapi = new XIVAPI();
     }
     
     public function populate()
@@ -54,7 +59,8 @@ class GameDataCache
         
         // we want to save cat id to item id
         $categoryToItemId = [];
-        
+
+        /* Let's not do this for now - we will cache full items are they are needed
         // build redis key list
         $keys = [];
         foreach (Redis::Cache()->get('ids_Item') as $i => $id) {
@@ -68,7 +74,7 @@ class GameDataCache
         foreach ($keys as $i => $chunk) {
             $memory  = (memory_get_peak_usage(true) / 1024 / 1024);
             $objects = Redis::Cache()->getMulti($chunk);
-        
+
             // save locally
             Redis::Cache()->startPipeline();
             foreach ($objects as $obj) {
@@ -94,18 +100,30 @@ class GameDataCache
     
             $section->overwrite("Saved chunk: ". ($i+1) ."/{$total} - {$memory} MB");
         }
-        
+        */
+
         $this->console->writeln('>> Caching ItemSearchCategory Item IDs');
         $section = $this->console->section();
     
         // save categories
         $section->writeln('Starting ...');
-        foreach ($categoryToItemId as $itemSearchCategoryId => $items) {
+
+        foreach (\json_decode(\file_get_contents('DataExports/ItemSearchCategory_Keys.json')) as $i => $id) {
+            $itemsJsonPath = "DataExports/ItemSearchCategory_{$i}.json";
+            $key = "mog_ItemSearchCategory_{$id}_Items";
+
+            if (!\file_exists($itemsJsonPath)){
+                // no items for this category, save an empty array
+                Redis::Cache()->set($key, [], GameDataCache::CACHE_TIME);
+                continue;
+            }
+
+            $items = \json_decode(\file_get_contents($itemsJsonPath), true);
+
             // sort by item level
             Arrays::sortBySubKey($items, 'LevelItem');
-        
+            
             // save
-            $key = "mog_ItemSearchCategory_{$itemSearchCategoryId}_Items";
             Redis::Cache()->set($key, $items, GameDataCache::CACHE_TIME);
             $section->writeln(count($items) . " items saved to category: {$key}");
         }
@@ -117,10 +135,13 @@ class GameDataCache
     private function cacheGameTowns()
     {
         $this->console->writeln('>> Caching Game Towns');
-        
-        foreach (Redis::Cache()->get('ids_Town') as $i => $id) {
-            $town = Redis::Cache()->get('xiv_Town_'. $id);
-            Redis::Cache()->set('mog_Town_'. $id, $town, self::CACHE_TIME);
+        $this->console->writeln(\getcwd());
+        $towns = \json_decode(file_get_contents('DataExports/Town.json'));
+
+        foreach ($towns as $town) {
+            $this->console->writeln($town->Name_en);
+            Redis::Cache()->set('xiv_Town_'. $town->ID, $town, self::CACHE_TIME);
+            Redis::Cache()->set('mog_Town_'. $town->ID, $town, self::CACHE_TIME);
         }
     }
     
@@ -133,12 +154,14 @@ class GameDataCache
         
         // build redis key list
         $keys = [];
-        foreach (Redis::Cache()->get('ids_ItemSearchCategory') as $i => $id) {
+        $objects = [];
+        foreach (\json_decode(\file_get_contents('DataExports/ItemSearchCategory_Keys.json')) as $i => $id) {
             $keys[$i] = "xiv_ItemSearchCategory_{$id}";
+            
+            $objects[$i] = $this->xivapi->content->ItemSearchCategory()->one($i);
+            $this->console->writeln($keys[$i].': '.$objects[$i]->Name_en);
         }
-    
-        // as there are only 100 item search categories, we will get them all at once:
-        $objects    = Redis::Cache()->getMulti($keys);
+
         $categories = [];
         $categoriesFull = [];
     

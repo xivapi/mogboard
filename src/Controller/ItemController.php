@@ -82,7 +82,7 @@ class ItemController extends AbstractController
         $time = microtime(true);
         
         if ($itemId === '-id-') {
-            throw new JsonException("Something went wrong during the request... Contact a mogboard staff admin.");
+            throw new JsonException("Something went wrong during the request... Contact a staff admin.");
         }
         
         if (filter_var($itemId, FILTER_VALIDATE_INT) === false) {
@@ -90,10 +90,10 @@ class ItemController extends AbstractController
         }
     
         //
-        // Grab item from XIVAPI
+        // Grab item
         //
-        /** @var \stdClass $item */
-        $item = Redis::cache()->get("xiv_Item_{$itemId}");
+        $item = $this->gameDataSource->getItem($itemId);
+
         if ($item == null || !isset($item->ItemSearchCategory->ID)) {
             return $this->redirectToRoute('404');
         }
@@ -102,7 +102,7 @@ class ItemController extends AbstractController
         RedisTracking::increment('PAGE_VIEW');
     
         // handle item
-        $item = Language::handle($item);
+        //$item = Language::handle($item); done in gameDataSource
         
         // grab user if they're online
         $user = $this->users->getUser(false);
@@ -112,11 +112,13 @@ class ItemController extends AbstractController
         $dcServers  = GameServers::getDataCenterServers($server);
         $dc         = GameServers::getDataCenter($server);
         
+        /*
         // grab item queue info from db
         $itemQueue = "SELECT * FROM companion_market_items WHERE item = ? AND server = ? LIMIT 1";
         $itemQueue = $this->em->getConnection()->prepare($itemQueue);
         $itemQueue->execute([ $itemId, GameServers::getServerId($server) ]);
         $itemQueue = $itemQueue->fetch();
+        */
 
         // bits n bobs
         $this->userLists->handleRecentlyViewed($itemId);
@@ -228,20 +230,11 @@ class ItemController extends AbstractController
         $maintenance = $this->em->getRepository(Maintenance::class)->findOneBy(['id' => 1 ]);
         if ($maintenance && $maintenance->isCompanionMaintenance()) {
             return $this->json([
-                'message' => 'Companion is down for maintenance or the mogboard accounts are offline, manual update is not available at this time. Please try again later.'
+                'message' => 'Maintenance is in progress, manual update is not available at this time. Please try again later.'
             ]);
         }
 
         $user = $this->users->getUser(true);
-    
-        /**
-         * Check patron status of the user
-         */
-        if ($user->isPatron() == false) {
-            return $this->json([
-                'message' => 'Only patrons at this time can update items manually.'
-            ]);
-        }
         
         $itemId = (int)$itemId;
         $server = GameServers::getServerId(GameServers::getServer());
@@ -249,16 +242,7 @@ class ItemController extends AbstractController
     
         $key1 = 'mogboard_'. __METHOD__ . $itemId . $dc;
         $key2 = 'mogboard_'. __METHOD__ . $user->getId();
-    
-        /**
-         * If the user has reached their limit
-         */
-        if (Redis::Cache()->get($key2) >= 5) {
-            return $this->json([
-                'message' => 'You have reached the maximum of 5 items updated.<br>Try again in 1 hour.',
-            ]);
-        }
-    
+
         /**
          * Check the item hasn't been updated already by someone
          */

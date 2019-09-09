@@ -4,17 +4,44 @@ namespace App\Service\GameData;
 
 use App\Common\Service\Redis\Redis;
 use App\Common\Utils\Language;
+use XIVAPI\XIVAPI;
 
 class GameDataSource
 {
+    /** @var XIVAPI */
+    private $xivapi;
+
+    public function __construct()
+    {
+        $this->xivapi = new XIVAPI();
+    }
+
     public function getItem(int $itemId)
     {
-        return $this->handle("xiv_Item_{$itemId}");
+        $cachedItem = $this->handle("xiv_Item_{$itemId}");
+        if ($cachedItem == null) {
+            $cachedItem = $this->xivapi->content->Item()->one($itemId);
+            
+            if ($cachedItem != null) {
+                Redis::Cache()->set("xiv_Item_{$itemId}", $cachedItem);
+            }
+        }
+            
+        return json_decode(json_encode($cachedItem, FALSE));
     }
     
     public function getRecipe(int $recipeId)
     {
-        return $this->handle("xiv_Recipe_{$recipeId}");
+        $cachedRecipe = $this->handle("xiv_Recipe_{$itemId}");
+        if ($cachedRecipe == null) {
+            $cachedRecipe = $this->xivapi->content->Recipe()->one($itemId);
+            
+            if ($cachedRecipe != null) {
+                Redis::Cache()->set("xiv_Recipe_{$itemId}", $cachedItem);
+            }
+        }
+            
+        return json_decode(json_encode($cachedRecipe, FALSE));
     }
     
     public function getTown(int $townId)
