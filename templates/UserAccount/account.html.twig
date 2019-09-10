@@ -16,6 +16,7 @@
                     {{ auth.user.sso|title }} - {{ auth.user.email }} - Timezone: {{ timezone() }}
                 </td>
             </tr>
+            {#}
             <tr>
                 <td>&nbsp;</td>
                 <td>
@@ -98,9 +99,11 @@
                     </p>
                 </td>
             </tr>
+            #}
         </tbody>
     </table>
 
+{#
     <br><br>
 
     <h3>PATREON</h3>
@@ -272,5 +275,5 @@
             </div>
         </div>
     </div>
-
+#}
 {% endblock %}
