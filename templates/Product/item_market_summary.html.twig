@@ -2,7 +2,7 @@
     {% for entry in update_times %}
     <div>
         <h4>{{ entry.name }}</h4>
-        <div>{{ entry.updated|date }}</div>
+        <div>{{ entry.updated != 0 ? entry.updated|date : 'No data' }}</div>
     </div>
     {% endfor %}
 </div>
