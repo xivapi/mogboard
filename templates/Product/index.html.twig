@@ -67,12 +67,14 @@
                             <i class="xiv-CrossWorld cw-summary"></i> Cross-World
                         </button>
 
-                        {# Shops #}
+{#
+                        { Shops }
                         {% if shops %}
                             <button type="button" data-tab="shops" class="btn-shops">
                                 <i class="xiv-Gil cw-shops"></i> NPC Shops
                             </button>
                         {% endif %}
+                        #}
 
                         {# Server List #}
                         {% for serverName in server.dc_servers %}
@@ -99,12 +101,14 @@
                 </div>
             </div>
 
+            {#
             {% if is_updating %}
                 <div class="alert alert-purple tac">
                     <strong>This item is being updated on {{ server.dc }}</strong>!
                     -- Refresh the page in a couple minutes for the latest prices
                 </div>
             {% endif %}
+            #}
 
             <div class="tab">
                 {# Summary #}
@@ -112,12 +116,14 @@
                     {% include 'Product/item_market_summary.html.twig' %}
                 </div>
 
-                {# Shops #}
+                {#
+                { Shops }
                 {% if shops %}
                     <div class="tab-page tab-shops">
                         {% include 'Product/item_shops.html.twig' %}
                     </div>
                 {% endif %}
+                #}
 
                 {# Server Pages #}
                 {% for serverName in server.dc_servers %}
@@ -214,7 +220,7 @@
                             <div class="item-no-data">
                                 <h2 class="text-highlight">Sorry, no market data!</h2>
                                 <p>
-                                    Mogboard could not find any market data for
+                                    Universalis could not find any market data for
                                     this item on the server <strong>{{ serverName }}</strong>.
                                 </p>
                                 <p>
@@ -222,8 +228,7 @@
                                 </p>
                                 <ul>
                                     <li>{{ serverName }} is a brand new server</li>
-                                    <li>This item has only recently been added</li>
-                                    <li>This item has just started to be tracked</li>
+                                    <li>No one has contributed any information about this item yet</li>
                                     <li>Something broke</li>
                                 </ul>
                                 If it is that last one, be sure to jump on discord and let us know!

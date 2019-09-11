@@ -96,65 +96,46 @@ class AccountCharacters
         this.uiAddCharacterResponse.html('Searching for your character...');
 
         xivapi.getCharacter(lodestoneId, response => {
-            // if its a 1 and we've not recalled, try add
-            if (response.Info.Character.State == 1 && reCalled !== true) {
-                this.uiAddCharacterResponse.html('Character being added to XIVAPI, please wait ...');
+            this.uiAddCharacterResponse.html('Character found, verifying auth code.');
 
-                setTimeout(() => {
-                    // try again
-                    this.handleNewCharacterViaLodestoneId(lodestoneId, true);
-                }, 3000);
+            // try verify the profile
+            xivapi.characterVerification(lodestoneId, verify_code, response => {
+                if (response.Pass === false) {
+                    Popup.error('Auth Code Not Found', `Could not find your auth code (${verify_code}) on your characters profile, try again!`);
+                    this.uiAddCharacterResponse.html('');
+                    ButtonLoading.finish($button);
+                    return;
+                }
 
-                return;
-            }
+                this.uiAddCharacterResponse.html('Auth code found, adding character...');
 
-            // if character found, do a
-            if (response.Info.Character.State == 2) {
-                this.uiAddCharacterResponse.html('Character found, verifying auth code.');
+                $.ajax({
+                    url: mog.urls.characters.add.replace('-id-', lodestoneId),
+                    success: response => {
+                        if (response === true) {
+                            Popup.success('Character Added!', 'Your character has been added, the page will refresh in 3 seconds.');
+                            Popup.setForcedOpen(true);
+                            setTimeout(() => {
+                                location.reload();
+                            }, 3000);
 
-                // try verify the profile
-                xivapi.characterVerification(lodestoneId, verify_code, response => {
-                    if (response.Pass === false) {
-                        Popup.error('Auth Code Not Found', `Could not find your auth code (${verify_code}) on your characters profile, try again!`);
+                            return;
+                        }
+
+                        Popup.error('Character failed to add', `Error: ${response.Message}`);
+                    },
+                    error: (a, b, c) => {
+                        Popup.error('Something Broke (code 145)', 'Could not add your character, please hop on discord and complain to Miu');
+                        console.error(a, b, c);
+                    },
+                    complete: () => {
                         this.uiAddCharacterResponse.html('');
                         ButtonLoading.finish($button);
-                        return;
                     }
+                })
+            });
 
-                    this.uiAddCharacterResponse.html('Auth code found, adding character...');
-
-                    $.ajax({
-                        url: mog.urls.characters.add.replace('-id-', lodestoneId),
-                        success: response => {
-                            if (response === true) {
-                                Popup.success('Character Added!', 'Your character has been added, the page will refresh in 3 seconds.');
-                                Popup.setForcedOpen(true);
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 3000);
-
-                                return;
-                            }
-
-                            Popup.error('Character failed to add', `Error: ${response.Message}`);
-                        },
-                        error: (a,b,c) => {
-                            Popup.error('Something Broke (code 145)', 'Could not add your character, please hop on discord and complain to Miu');
-                            console.error(a,b,c);
-                        },
-                        complete: () => {
-                            this.uiAddCharacterResponse.html('');
-                            ButtonLoading.finish($button);
-                        }
-                    })
-                });
-
-                return;
-            }
-
-            Popup.error('Failed to Add Character', 'Could not add character, please hop on Discord and complain to Vekien!');
-            this.uiAddCharacterResponse.html('');
-            ButtonLoading.finish($button);
+            return;
         })
 
     }

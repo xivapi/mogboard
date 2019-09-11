@@ -36,7 +36,7 @@
 
             .btn_addto_list,
             .btn_addto_fave,
-            .btn_update {
+            .btn_gt {
                 height: 32px;
                 line-height: 32px;
                 font-size: 15px;
@@ -60,11 +60,12 @@
                 }
             }
 
-            .btn_update {
-                background-color: var(--green);
+            .btn_gt {
+                background-color: var(--default);
+                margin-right: 10px;
 
                 &:hover {
-                    background-color: var(--green-2x) !important;
+                    background-color: var(--red) !important;
                 }
             }
         }

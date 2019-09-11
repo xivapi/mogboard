@@ -81,8 +81,8 @@ class ProductLists
             this.uiFaveButton.find('span').text(response.state ? 'Faved' : 'Favourite');
             Modals.close(this.uiModal);
             Popup.success(
-                response.state ? 'Added to Faves' : 'Removed from Faves',
-                response.state ? 'Why you love this item so much!? Added to your favourites.' : 'Unpopular item ey, removed from your favourites.'
+                response.state ? 'Added to Favourites' : 'Removed from Favourites',
+                response.state ? 'Added to your favourites.' : 'Removed from your favourites.'
             );
 
             this.loadLists();

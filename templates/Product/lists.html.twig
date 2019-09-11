@@ -1,16 +1,22 @@
 <div class="box box_lists">
-    {% if auth.online() %}
+    
     <div class="box_form">
         <div class="box_flex form">
+            <a href="https://www.garlandtools.org/db/#item/{{item.ID}}" target="_blank" rel="noopener noreferrer"><button type="button" class="btn btn_gt">Show on GarlandTools</button></a>
+
+            {% if auth.online() %}
             <button class="btn_addto_list">Lists</button>
             <button class="btn_addto_fave {{ faved ? 'on' : '' }}"><span>{{ faved ? 'Faved' : 'Favourite' }}</span></button>
-
+            {% endif %}
+{#
             {% if auth.online and auth.user.patron %}
             <button class="btn_update">Update</button>
             {% endif %}
+            #}
         </div>
     </div>
 
+    {% if auth.online() %}
     <div class="modal list_modal">
         <button type="button" class="modal_close_button"><i class="xiv-NavigationClose"></i></button>
         <div class="modal_row">

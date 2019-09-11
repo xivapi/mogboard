@@ -123,7 +123,7 @@ class ItemController extends AbstractController
         // bits n bobs
         $this->userLists->handleRecentlyViewed($itemId);
         $this->itemPopularity->hit($request, $itemId);
-        $this->itemViews->hit($request, $itemId);
+        //$this->itemViews->hit($request, $itemId);
         $this->users->setLastUrl($request);
         
         // grab market for this dc
@@ -154,6 +154,8 @@ class ItemController extends AbstractController
         // grab market census
         $census = $this->companionCensus->generate($dc, $itemId, $market);
         
+        $shops = [];
+        /*
         // get market item entry
         $conn = $this->em->getConnection();
         $stmt = $conn->prepare("SELECT * FROM companion_market_item_source WHERE item = {$itemId}");
@@ -172,31 +174,31 @@ class ItemController extends AbstractController
                 );
             }
         }
+        */
 
         $loadSpeed = microtime(true) - $time;
         
+        /*
         // if the item was updated less than X mins ago, remove the updating check
         if ($updated > (time() - (60 * 10))) {
             Redis::cache()->delete('mogboard_updating_' . $itemId . $dc);
         }
         
         $isBeingUpdated = Redis::cache()->get('mogboard_updating_' . $itemId . $dc);
+        */
 
         // response
         $data = [
             'item'           => $item,
             'market'         => $market,
             'census'         => $census,
-            'queue'          => $itemQueue,
             'faved'          => $user ? $user->hasFavouriteItem($itemId) : false,
             'lists'          => $user ? $user->getCustomLists() : [],
             'cheapest'       => $this->companionStatistics->cheapest($market),
-            'shops'          => $shops,
             'update_times'   => $times,
             'activity_count' => $activityCount,
             'chart_max'      => 100,
             'load_speed'     => round($loadSpeed, 3),
-            'is_updating'    => $isBeingUpdated,
             'server'         => [
                 'name'       => $server,
                 'dc'         => $dc,

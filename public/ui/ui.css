@@ -53,7 +53,7 @@ table {
   --color5: #252830;
   --color6: #717988;
   --color7: #1c1c1c;
-  --color8: #fff97b;
+  --color8: #a7caff;
   --color9: #798ebb;
   --color10: #c2ccff;
   --highlight: #fffca6;
@@ -72,9 +72,9 @@ table {
   --green-2x: #1a8255;
   --green-3x: #2cdd8f;
   --green-4x: #84fbbe;
-  --purple: #9F86FF;
-  --purple-2x: #6e5ab4;
-  --purple-3x: #adaaff;
+  --purple: rgb(134, 162, 255);
+  --purple-2x: #5a81b4;
+  --purple-3x: #9ab9fa;
   --white: #fff;
   --white-2x: #fff;
   --general-border-radius: 6px;
@@ -701,8 +701,8 @@ header {
         -webkit-filter: grayscale(100%);
         height: 64px; }
       header > div:first-of-type .btn-home:hover img {
-        filter: grayscale(0%);
-        -webkit-filter: grayscale(0%);
+        -webkit-filter: drop-shadow(3px 3px 3px rgba(255, 255, 255, 0.2));
+        filter: drop-shadow(3px 3px 3px rgba(255, 255, 255, 0.2));
         opacity: 1; }
     header > div:first-of-type .header-nav {
       display: flex;
@@ -1806,7 +1806,8 @@ aside {
   position: relative;
   z-index: 2;
   background-image: url("/i/bg/bg_light_dof.png");
-  background-size: cover; }
+  background-size: cover;
+  background-position: center center; }
   .mogboard-header img {
     height: 64px;
     filter: drop-shadow(0 2px 5px black) drop-shadow(0 2px 20px black); }
@@ -1950,7 +1951,7 @@ aside {
       margin-bottom: 5px; }
 
 .the-big-news-post {
-  background-color: #5c169c;
+  background-color: #375bd1;
   background-image: url("/i/bg/bg1.png");
   background-size: cover;
   border-radius: 3px;
@@ -1967,7 +1968,7 @@ aside {
   .the-big-news-post a {
     font-weight: bold;
     font-size: 17px;
-    color: #e5adff;
+    color: #adceff;
     background-color: rgba(0, 0, 0, 0.25);
     padding: 8px 14px;
     border-radius: 3px; }
@@ -2204,7 +2205,7 @@ aside {
     display: inline-block;
     padding: 10px 20px;
     border-radius: 5px;
-    background-color: rgba(119, 36, 183, 0.86);
+    background-color: rgba(57, 82, 194, 0.86);
     color: #fff;
     font-size: 20px;
     box-shadow: 0 1px 3px #000; }
@@ -2271,6 +2272,13 @@ aside {
       transform: scale(1.4); }
     .patreon-discord a.patreon {
       background-color: #f86754;
+      border-left: solid 2px #000;
+      overflow: hidden; }
+      .patreon-discord a.patreon img {
+        vertical-align: middle;
+        height: 60px; }
+    .patreon-discord a.patreon {
+      background-color: #7500b2;
       border-left: solid 2px #000;
       overflow: hidden; }
       .patreon-discord a.patreon img {
@@ -2364,6 +2372,9 @@ aside {
     .home-trending > div > div:last-of-type small {
       font-size: 12px; }
 
+.btn-disabled {
+  pointer-events: none; }
+
 :root {
   --columnMid: 100%;
   --box-padding: 16px; }
@@ -2394,7 +2405,7 @@ aside {
         margin-bottom: 15px; } }
     .product .item_header .box_lists .btn_addto_list,
     .product .item_header .box_lists .btn_addto_fave,
-    .product .item_header .box_lists .btn_update {
+    .product .item_header .box_lists .btn_gt {
       height: 32px;
       line-height: 32px;
       font-size: 15px;
@@ -2403,21 +2414,22 @@ aside {
       border-radius: 3px; }
       .product .item_header .box_lists .btn_addto_list:hover,
       .product .item_header .box_lists .btn_addto_fave:hover,
-      .product .item_header .box_lists .btn_update:hover {
+      .product .item_header .box_lists .btn_gt:hover {
         background-color: var(--table-color); }
       .product .item_header .box_lists .btn_addto_list.btn_addto_fave.on,
       .product .item_header .box_lists .btn_addto_fave.btn_addto_fave.on,
-      .product .item_header .box_lists .btn_update.btn_addto_fave.on {
+      .product .item_header .box_lists .btn_gt.btn_addto_fave.on {
         background-color: var(--red-2x); }
       .product .item_header .box_lists .btn_addto_list i,
       .product .item_header .box_lists .btn_addto_fave i,
-      .product .item_header .box_lists .btn_update i {
+      .product .item_header .box_lists .btn_gt i {
         margin-bottom: -3px;
         margin-right: 5px; }
-    .product .item_header .box_lists .btn_update {
-      background-color: var(--green); }
-      .product .item_header .box_lists .btn_update:hover {
-        background-color: var(--green-2x) !important; }
+    .product .item_header .box_lists .btn_gt {
+      background-color: var(--default);
+      margin-right: 10px; }
+      .product .item_header .box_lists .btn_gt:hover {
+        background-color: var(--red) !important; }
   .product .item_header > div:nth-of-type(2) {
     flex: 0 1 100px; }
     @media (max-width: 61.24em) {
