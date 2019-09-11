@@ -11,17 +11,14 @@
                 <div class="form">
                     <select id="servers" class="servers">
                         <option disabled selected>- Please Choose a Server -</option>
-                        {% for dc, servers in getGameDataCenters() if dc not in ['Elemental','Gaia','Mana'] %}
-                            <optgroup label="{{ dc }} - {{ dc in ['Chaos','Light'] ? 'Europe' : 'America' }}">
+                        {% for dc, servers in getGameDataCenters() %}
+                            <optgroup label="{{ dc }} - {{ dc in ['Chaos','Light'] ? 'Europe' : (dc in ['Elemental','Gaia','Mana'] ? 'Japan' : 'America')}}">
                                 {% for server in servers %}
                                     <option value="{{ server }}">{{ server }}</option>
                                 {% endfor %}
                             </optgroup>
                         {% endfor %}
                     </select>
-                </div>
-                <div style="padding-top: 10px;">
-                    <small>Japan-DC currently not supported.</small>
                 </div>
             </div>
 
