@@ -206,6 +206,22 @@ class IndexController extends AbstractController
             'market_stats' => $stats,
         ]);
     }
+
+    /**
+     * @Route("/contribute", name="contribute")
+     */
+    public function contribute()
+    {
+        /*
+        $stats = $this->companionStatistics->stats();
+        $stats = json_decode(json_encode($stats), true);
+
+        */
+        $stats = [];
+        return $this->render('Pages/about.html.twig', [
+            'market_stats' => $stats,
+        ]);
+    }
     
     /**
      * @Route("/server-status", name="server_status")

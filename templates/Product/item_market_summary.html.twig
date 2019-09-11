@@ -24,7 +24,7 @@
                 </span>
             </div>
             {% else %}
-                No HQ for sale!
+                No HQ for sale.
             {% endif %}
         {% else %}
             <p>Item has no High-Quality variant.</p>
@@ -44,7 +44,7 @@
             </span>
         </div>
         {% else %}
-            <p>No Normal-Quality for sale.</p>
+            <p>No NQ for sale.</p>
         {% endif %}
     </div>
 </div>
@@ -59,7 +59,7 @@
         series: [
             {
                 id:   'HC_History_HQ',
-                name: '(High-Quality) PerUnit',
+                name: '(HQ) PerUnit',
                 data: census.All.HC_History_HQ,
                 yAxis: 0,
                 showInNavigator: true,
@@ -71,7 +71,7 @@
             },
             {
                 id:   'HC_History_HQ',
-                name: '(Normal Quality) PerUnit',
+                name: '(NQ) PerUnit',
                 data: census.All.HC_History_NQ,
                 yAxis: 0,
                 showInNavigator: true,
@@ -84,7 +84,7 @@
 
             {
                 id:   'HC_History_HQ_volume',
-                name: '(High-Quality) PerUnit QUANTITY',
+                name: '(HQ) PerUnit QUANTITY',
                 data: census.All.HC_History_HQ_volume,
                 linkedTo: 'HC_History_HQ',
                 type: 'column',
@@ -93,7 +93,7 @@
             },
             {
                 id:   'HC_History_NQ_volume',
-                name: '(Normal Quality) PerUnit QUANTITY',
+                name: '(NQ) PerUnit QUANTITY',
                 data: census.All.HC_History_NQ_volume,
                 linkedTo: 'HC_History_NQ',
                 type: 'column',
