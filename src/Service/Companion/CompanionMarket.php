@@ -16,9 +16,13 @@ class CompanionMarket
     /** @var EntityManagerInterface */
     private $em;
 
+    /** @var UniversalisApi */
+    private $universalis;
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
+        $this->universalis = new UniversalisApi();
     }
 
     /**
@@ -35,7 +39,7 @@ class CompanionMarket
         $data = [];
         foreach ($servers as $server) {
             $serverId   = GameServers::getServerId($server);
-            $source     = $this->getMarketDocument($serverId, $itemId);
+            $source     = $this->universalis->getItem($serverId, $itemId);
 
             if ($source == null) {
                 $data[$server] = [
@@ -51,6 +55,7 @@ class CompanionMarket
             }
 
             $data[$server] = $this->handle($itemId, $serverId, $source);
+            $data[$server]['lastUploadTime'] = ceil($data[$server]['lastUploadTime'] / 1000);
         }
 
         Redis::cache()->set($key, $data, 60);
@@ -98,38 +103,27 @@ class CompanionMarket
         $source = json_decode(json_encode($source), true);
 
         // remove some stuff, try reduce memory
-        foreach ($source['Prices'] as $i => $price) {
+        foreach ($source['listings'] as $i => $price) {
             unset(
-                $price['RetainerID'],
-                $price['CreatorSignatureID'],
-                $price['StainID']
+                $price['retainerID'],
+                $price['sellerID'],
+                $price['stainID']
             );
     
-            $source['Prices'][$i] = $price;
+            $source['prices'][$i] = $price;
         }
     
-        foreach ($source['History'] as $i => $history) {
+        foreach ($source['recentHistory'] as $i => $history) {
             unset(
-                $history['CharacterID']
+                $history['buyerID'],
+                $history['sellerID']
             );
         
-            $source['History'][$i] = $history;
+            $source['recentHistory'][$i] = $history;
         }
 
         // slice history
-        $source['History'] = array_slice($source['History'], 0, 200);
-    
-        // add update queue
-        $stmt = $this->em->getConnection()->prepare(
-            "SELECT normal_queue FROM companion_market_items WHERE item = ? AND server = ? LIMIT 1"
-        );
-    
-        $stmt->execute([
-            $itemId,
-            $server
-        ]);
-        
-        $source['UpdatePriority'] = $stmt->fetch()['normal_queue'] ?? null;
+        $source['recentHistory'] = array_slice($source['recentHistory'], 0, 200);
 
         return $source;
     }

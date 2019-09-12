@@ -45,8 +45,9 @@ class GameDataCache
     {
         $this->cacheGameItems();
         $this->cacheGameTowns();
+        $this->cacheGameWorlds();
         $this->cacheItemSearchCategories();
-        $this->cacheGameCategories();
+        //$this->cacheGameCategories();
     }
     
     /**
@@ -143,6 +144,25 @@ class GameDataCache
             Redis::Cache()->set('xiv_Town_'. $town->ID, $town, self::CACHE_TIME);
             Redis::Cache()->set('mog_Town_'. $town->ID, $town, self::CACHE_TIME);
         }
+    }
+
+    /**
+     * Cache the game worlds
+     */
+    private function cacheGameWorlds()
+    {
+        $this->console->writeln('>> Caching Game Worlds');
+        $this->console->writeln(\getcwd());
+        $worlds = \json_decode(file_get_contents('DataExports/World.json'));
+
+        $worldMap = [];
+        foreach ($worlds as $world) {
+            $this->console->writeln($world->Name);
+            $worldMap[$world->ID] = $world->Name;
+            Redis::Cache()->set('xiv_World_'. $world->ID, $world, self::CACHE_TIME);
+        }
+
+        Redis::Cache()->set('xiv_World_Map', $worldMap, self::CACHE_TIME);
     }
     
     /**

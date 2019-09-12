@@ -44,6 +44,11 @@ class GameDataSource
         return json_decode(json_encode($cachedRecipe, FALSE));
     }
     
+    public function getWorld(int $worldId)
+    {
+        return $this->handle("xiv_World_{$townId}");
+    }
+
     public function getTown(int $townId)
     {
         return $this->handle("xiv_Town_{$townId}");

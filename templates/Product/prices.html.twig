@@ -34,15 +34,15 @@
         {% for row in prices %}
             {# Set materia #}
             {% set materialist = [] %}
-            {% for id in row.Materia %}
+            {% for id in row.materia %}
                 {% set item = game().item(id) %}
                 {% set materialist = materialist|merge([ item.Name ]) %}
             {% endfor %}
 
             {# Compare diff against average #}
             {% if averagePricesHQ is defined  %}
-                {% set diffForQuality = row.IsHQ ? averagePricesHQ : averagePricesNQ %}
-                {% set pricePerUnitDiff = diffForQuality <= 0 ? 0 : (((row.PricePerUnit / diffForQuality) * 100) - 100)|round %}
+                {% set diffForQuality = row.hq ? averagePricesHQ : averagePricesNQ %}
+                {% set pricePerUnitDiff = diffForQuality <= 0 ? 0 : (((row.pricePerUnit / diffForQuality) * 100) - 100)|round %}
             {% endif %}
 
             <tr class="{{ averageHistoryHQ is defined and pricePerUnitDiff < -100 ? 'price-diff-oops' : ''}}">
@@ -50,33 +50,33 @@
                 {% if crossWorld is defined %}
                 <td class="price-server" data-sort-value="{{ row._Server }}"><strong>{{ row._Server }}</strong></td>
                 {% endif %}
-                <td class="price-hq" data-sort-value="{{ row.IsHQ ? 1 : 0 }}">{{ row.IsHQ ? '<img src="/i/game/hq.png">' : '' }}</td>
-                <td class="materia" data-sort-value="{{ row.Materia|length }}">
-                    {% if row.Materia %}
+                <td class="price-hq" data-sort-value="{{ row.hq ? 1 : 0 }}">{{ row.hq ? '<img src="/i/game/hq.png">' : '' }}</td>
+                <td class="materia" data-sort-value="{{ row.materia|length }}">
+                    {% if row.materia %}
                         <span data-tippy-content="{{ materialist|join("<br>") }}" data-tippy-placement="right">
-                            <i class="xiv-ItemCategory_Materia"></i>x{{ row.Materia|length }}
+                            <i class="xiv-ItemCategory_Materia"></i>x{{ row.materia|length }}
                         </span>
                     {% endif %}
                 </td>
-                <td class="price-current" data-sort-value="{{ row.PricePerUnit }}">{{ row.PricePerUnit|number_format }}</td>
-                <td class="price-qty" data-sort-value="{{ row.Quantity }}">{{ row.Quantity|number_format }}</td>
-                <td class="price-total" data-sort-value="{{ row.PriceTotal }}">{{ row.PriceTotal|number_format }}</td>
+                <td class="price-current" data-sort-value="{{ row.pricePerUnit }}">{{ row.pricePerUnit|number_format }}</td>
+                <td class="price-qty" data-sort-value="{{ row.quantity }}">{{ row.quantity|number_format }}</td>
+                <td class="price-total" data-sort-value="{{ row.total }}">{{ row.total|number_format }}</td>
                 {% if averagePricesHQ is defined %}
-                <td class="price-diff {{ pricePerUnitDiff >= 20 ? 'price-diff-bad' : (pricePerUnitDiff < -10 ? 'price-diff-good' : '') }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="This listing is {{ pricePerUnitDiff }}% {{ pricePerUnitDiff > 0 ? 'more' : 'less' }} than the current <br> <strong>Avg. Price Per Unit</strong>: {{ row.IsHQ ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff > 0 ? '+' : '' }}{{ pricePerUnitDiff == 0 ? '-' : pricePerUnitDiff ~ '%' }}</td>
+                <td class="price-diff {{ pricePerUnitDiff >= 20 ? 'price-diff-bad' : (pricePerUnitDiff < -10 ? 'price-diff-good' : '') }}" data-sort-value="{{ pricePerUnitDiff }}" data-tippy-content="This listing is {{ pricePerUnitDiff }}% {{ pricePerUnitDiff > 0 ? 'more' : 'less' }} than the current <br> <strong>Avg. Price Per Unit</strong>: {{ row.hq ? '(HQ)' : '(NQ)' }} {{ diffForQuality|number_format }}">{{ pricePerUnitDiff > 0 ? '+' : '' }}{{ pricePerUnitDiff == 0 ? '-' : pricePerUnitDiff ~ '%' }}</td>
                 {% endif %}
                 <td class="price-retainer">
-                    {% if env('APP_ENV') == 'dev' %}
+                    {% if env('APP_ENV') == 'devs' %}
                         Retainer
                     {% else %}
-                        {{ row.RetainerName }}
+                        {{ row.retainerName }}
                     {% endif %}
-                    <img src="{{ cityflags[row.TownID]|icon }}" class="price-city-flag">
+                    <img src="{{ cityflags[row.retainerCity]|icon }}" class="price-city-flag">
                 </td>
                 <td class="price-creator">
-                    {% if env('APP_ENV') == 'dev' %}
+                    {% if env('APP_ENV') == 'devs' %}
                         Crafty Adventurer
                     {% else %}
-                        {{ row.CreatorSignatureName ? row.CreatorSignatureName : '' }}
+                        {{ row.creatorName ? row.creatorName : '?' }}
                     {% endif %}
                 </td>
             </tr>

@@ -34,6 +34,8 @@ namespace MogboardDataExporter
 
             Console.WriteLine("Starting game data export...");
 
+            goto world_export;
+
             #region Item Export
             var items = realm.GameData.GetSheet<Item>();
             var itemsDe = realmDe.GameData.GetSheet<Item>();
@@ -82,6 +84,7 @@ namespace MogboardDataExporter
             #endregion
             
             #region Town Export
+            town_export:
             var towns = realm.GameData.GetSheet("Town");
             var townsDe = realmDe.GameData.GetSheet("Town");
             var townsFr = realmFr.GameData.GetSheet("Town");
@@ -107,6 +110,28 @@ namespace MogboardDataExporter
             }
 
             System.IO.File.WriteAllText(Path.Combine(outputPath, "Town.json"), JsonConvert.SerializeObject(outputTowns));
+            #endregion
+
+            #region World Export
+            world_export:
+            var worlds = realm.GameData.GetSheet("World");
+
+            var outputWorlds = new List<JObject>();
+
+            foreach (var world in worlds)
+            {
+                dynamic outputWorld = new JObject();
+
+                outputWorld.ID = world.Key;
+
+                outputWorld.Name = world.AsString("Name").ToString();
+                outputWorld.DataCenter = (byte) world.GetRaw("DataCenter");
+                outputWorld.IsPublic = world.AsBoolean("IsPublic");
+
+                outputWorlds.Add(outputWorld);
+            }
+
+            System.IO.File.WriteAllText(Path.Combine(outputPath, "World.json"), JsonConvert.SerializeObject(outputWorlds));
             #endregion
 
             Console.WriteLine("Done!");

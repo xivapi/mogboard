@@ -137,55 +137,25 @@ class ItemController extends AbstractController
                 continue;
             }
 
+            /* TODO
             if ($md['Updated'] > $updated) {
                 $updated = $md['Updated'];
             }
+            */
     
-            $activityCount += count($md['Prices']);
-            $activityCount += count($md['History']);
+            $activityCount += count($md['listings']);
+            $activityCount += count($md['recentHistory']);
 
             $times[] = [
                 'name'     => $marketServer,
-                'updated'  => $md['Updated'],
-                'priority' => $md['UpdatePriority'] ?? null,
+                'updated'  => $md['lastUploadTime']
             ];
         }
-        
+
         // grab market census
         $census = $this->companionCensus->generate($dc, $itemId, $market);
-        
-        $shops = [];
-        /*
-        // get market item entry
-        $conn = $this->em->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM companion_market_item_source WHERE item = {$itemId}");
-        $stmt->execute();
-        
-        // shopz
-        $shops = [];
-        if ($shopData = $stmt->fetch()) {
-            $shopData = json_decode($shopData['data'], true);
-            $shopData = array_unique($shopData);
-            $shopData = array_values($shopData);
-            
-            foreach ($shopData as $shopId) {
-                $shops[] = Language::handle(
-                    Redis::Cache()->get("xiv_GilShopData_{$shopId}")
-                );
-            }
-        }
-        */
 
         $loadSpeed = microtime(true) - $time;
-        
-        /*
-        // if the item was updated less than X mins ago, remove the updating check
-        if ($updated > (time() - (60 * 10))) {
-            Redis::cache()->delete('mogboard_updating_' . $itemId . $dc);
-        }
-        
-        $isBeingUpdated = Redis::cache()->get('mogboard_updating_' . $itemId . $dc);
-        */
 
         // response
         $data = [
@@ -217,67 +187,5 @@ class ItemController extends AbstractController
         ];
         
         return $this->render('Product/index.html.twig', $data);
-    }
-    
-    /**
-     * @Route("/market/{itemId}/update", name="item_update")
-     */
-    public function update(int $itemId)
-    {
-        
-        /**
-         * Check maintenance status
-         * @var Maintenance $maintenance
-         */
-        $maintenance = $this->em->getRepository(Maintenance::class)->findOneBy(['id' => 1 ]);
-        if ($maintenance && $maintenance->isCompanionMaintenance()) {
-            return $this->json([
-                'message' => 'Maintenance is in progress, manual update is not available at this time. Please try again later.'
-            ]);
-        }
-
-        $user = $this->users->getUser(true);
-        
-        $itemId = (int)$itemId;
-        $server = GameServers::getServerId(GameServers::getServer());
-        $dc     = GameServers::getDataCenter(GameServers::getServer());
-    
-        $key1 = 'mogboard_'. __METHOD__ . $itemId . $dc;
-        $key2 = 'mogboard_'. __METHOD__ . $user->getId();
-
-        /**
-         * Check the item hasn't been updated already by someone
-         */
-        if (Redis::Cache()->get($key1)) {
-            return $this->json([
-                'message' => 'Item already updated recently by a MogBoard member!',
-            ]);
-        }
-        
-    
-        /**
-         * Request update
-         */
-        $xivapi = new XIVAPI();
-        
-        [$ok, $time, $message] = $xivapi->_private->manualItemUpdateForce(
-            getenv('XIVAPI_COMPANION_KEY'),
-            $itemId,
-            $server
-        );
-        
-        Redis::cache()->set('mogboard_updating_' . $itemId . $dc, true, 500);
-        
-        // if response was OK, set restrictions for user to avoid spam
-        if ($ok) {
-            $count = Redis::Cache()->get($key2);
-            $count = $count ? $count + 1 : 1;
-            Redis::Cache()->set($key2, $count, (60 * 30));
-            Redis::Cache()->set($key1, true, (60 * 30));
-        }
-        
-        return $this->json([
-            'message' => $message
-        ]);
     }
 }

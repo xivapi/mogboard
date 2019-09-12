@@ -52,8 +52,8 @@ class CompanionCensus
                 continue;
             }
             
-            $this->buildAverage('PricePerUnit', $server, $marketData);
-            $this->buildAverage('PriceTotal', $server, $marketData);
+            $this->buildAverage('pricePerUnit', $server, $marketData);
+            $this->buildAverage('total', $server, $marketData);
             $this->calculateNumericStatistics($server, $marketData);
             
             // high charts
@@ -71,8 +71,8 @@ class CompanionCensus
         // high charts
         $this->buildHighChartHistory('All', $this->census['Global']);
         
-        $this->buildAverage('PricePerUnit', 'Global', $this->census['Global']);
-        $this->buildAverage('PriceTotal', 'Global', $this->census['Global']);
+        $this->buildAverage('pricePerUnit', 'Global', $this->census['Global']);
+        $this->buildAverage('total', 'Global', $this->census['Global']);
         $this->calculateNumericStatistics('Global', $this->census['Global']);
     
         // deprecated
@@ -90,13 +90,16 @@ class CompanionCensus
     
         $this->census[$server]["HC_History_HQ_volume"] = [];
         $this->census[$server]["HC_History_NQ_volume"] = [];
+
+        if (!\array_key_exists('recentHistory', $marketData))
+            return;
     
-        foreach ($marketData['History'] as $i => $row) {
-            $key   = ($row['IsHQ'] ? "HC_History_HQ" : "HC_History_NQ");
+        foreach ($marketData['recentHistory'] as $i => $row) {
+            $key   = ($row['hq'] ? "HC_History_HQ" : "HC_History_NQ");
             
-            $date  = (int)$row['PurchaseDateMS'];
-            $value = (int)$row['PricePerUnit'];
-            $qty   = (int)$row['Quantity'];
+            $date  = (int)$row['timestamp'] * 1000;
+            $value = (int)$row['pricePerUnit'];
+            $qty   = (int)$row['quantity'];
             
             if (isset($this->census[$server][$key][$date])) {
                 $this->census[$server][$key][$date][1] += ceil($value);
@@ -133,28 +136,39 @@ class CompanionCensus
         $pricesNQ = [];
         $historyHQ = [];
         $historyNQ = [];
+
+        if (!\array_key_exists('listings', $marketData))
+            $marketData['listings'] = [];
+
+        if (!\array_key_exists('recentHistory', $marketData))
+            $marketData['recentHistory'] = [];
         
-        foreach ($marketData['Prices'] as $row) {
+        foreach ($marketData['listings'] as $row) {
             
-            if (!isset($row['IsHQ'])) {
+            if (!isset($row['hq'])) {
                 print_r($marketData);
                 die;
             }
             
-            if ($row['IsHQ']) {
+            if ($row['hq']) {
                 $pricesHQ[] = $row[$field];
             } else {
                 $pricesNQ[] = $row[$field];
             }
         }
     
-        foreach ($marketData['History'] as $row) {
-            if ($row['IsHQ']) {
+        foreach ($marketData['recentHistory'] as $row) {
+            if ($row['hq']) {
                 $historyHQ[] = $row[$field];
             } else {
                 $historyNQ[] = $row[$field];
             }
         }
+
+        /*
+        if ($server=="Global")
+            echo \var_dump($marketData);
+            */
 
         asort($pricesHQ);
         asort($pricesNQ);
@@ -168,6 +182,8 @@ class CompanionCensus
         $this->census[$server]["Prices_Average_{$field}_NQ"]  = round(Average::mean($pricesNQ));
         $this->census[$server]["History_Average_{$field}_HQ"] = round(Average::mean($historyHQ));
         $this->census[$server]["History_Average_{$field}_NQ"] = round(Average::mean($historyNQ));
+
+        //echo $server.':'.$field.':'.$this->census[$server]["Prices_Average_{$field}_HQ"].'<br>';
     }
     
     /**
@@ -188,22 +204,22 @@ class CompanionCensus
                 continue;
             }
             
-            foreach ($marketData['Prices'] as $row) {
+            foreach ($marketData['listings'] as $row) {
                 $row['_Server'] = $server;
                 $crossWorldPrices[] = (Array)$row;
                 
-                if ($row['IsHQ']) {
+                if ($row['hq']) {
                     $crossWorldPricesHQ[] = (Array)$row;
                 } else {
                     $crossWorldPricesNQ[] = (Array)$row;
                 }
             }
             
-            foreach ($marketData['History'] as $row) {
+            foreach ($marketData['recentHistory'] as $row) {
                 $row['_Server'] = $server;
                 $crossWorldHistory[] = (Array)$row;
     
-                if ($row['IsHQ']) {
+                if ($row['hq']) {
                     $crossWorldHistoryHQ[] = (Array)$row;
                 } else {
                     $crossWorldHistoryNQ[] = (Array)$row;
@@ -211,15 +227,15 @@ class CompanionCensus
             }
         }
     
-        Arrays::sortBySubKey($crossWorldPrices, 'PricePerUnit', true);
-        Arrays::sortBySubKey($crossWorldPricesHQ, 'PricePerUnit', true);
-        Arrays::sortBySubKey($crossWorldPricesNQ, 'PricePerUnit', true);
-        Arrays::sortBySubKey($crossWorldHistory, 'PurchaseDate');
-        Arrays::sortBySubKey($crossWorldHistoryHQ, 'PurchaseDate');
-        Arrays::sortBySubKey($crossWorldHistoryNQ, 'PurchaseDate');
+        Arrays::sortBySubKey($crossWorldPrices, 'pricePerUnit', true);
+        Arrays::sortBySubKey($crossWorldPricesHQ, 'pricePerUnit', true);
+        Arrays::sortBySubKey($crossWorldPricesNQ, 'pricePerUnit', true);
+        Arrays::sortBySubKey($crossWorldHistory, 'timestamp');
+        Arrays::sortBySubKey($crossWorldHistoryHQ, 'timestamp');
+        Arrays::sortBySubKey($crossWorldHistoryNQ, 'timestamp');
     
-        $this->census['Global']['Prices']       = $crossWorldPrices;
-        $this->census['Global']['History']      = $crossWorldHistory;
+        $this->census['Global']['listings']       = $crossWorldPrices;
+        $this->census['Global']['recentHistory']      = $crossWorldHistory;
         $this->census['Global']['PricesHQ']     = $crossWorldPricesHQ;
         $this->census['Global']['PricesNQ']     = $crossWorldPricesNQ;
         $this->census['Global']['HistoryHQ']    = $crossWorldHistoryHQ;
@@ -237,32 +253,35 @@ class CompanionCensus
         $totalStockNQ = 0;
         $cheapestPriceHQ = null;
         $cheapestPriceNQ = null;
+
+        if (!\array_key_exists('listings', $marketData))
+            $marketData['listings'] = [];
         
-        foreach ($marketData['Prices'] as $row) {
-            if ($cheapestPriceHQ === null && $row['IsHQ']) {
+        foreach ($marketData['listings'] as $row) {
+            if ($cheapestPriceHQ === null && $row['hq']) {
                 $cheapestPriceHQ = [
                     'Server'       => $row['_Server'] ?? $server,
-                    'PricePerUnit' => $row['PricePerUnit'],
-                    'PriceTotal'   => $row['PriceTotal'],
-                    'Quantity'     => $row['Quantity']
+                    'PricePerUnit' => $row['pricePerUnit'],
+                    'PriceTotal'   => $row['total'],
+                    'Quantity'     => $row['quantity']
                 ];
             }
     
-            if ($cheapestPriceNQ === null && $row['IsHQ'] == false) {
+            if ($cheapestPriceNQ === null && $row['hq'] == false) {
                 $cheapestPriceNQ = [
                     'Server'       => $row['_Server'] ?? $server,
-                    'PricePerUnit' => $row['PricePerUnit'],
-                    'PriceTotal'   => $row['PriceTotal'],
-                    'Quantity'     => $row['Quantity']
+                    'PricePerUnit' => $row['pricePerUnit'],
+                    'PriceTotal'   => $row['total'],
+                    'Quantity'     => $row['quantity']
                 ];
             }
             
-            if ($row['IsHQ']) {
-                $totalGilHQ += $row['PriceTotal'];
-                $totalStockHQ += $row['Quantity'];
+            if ($row['hq']) {
+                $totalGilHQ += $row['total'];
+                $totalStockHQ += $row['quantity'];
             } else {
-                $totalGilNQ += $row['PriceTotal'];
-                $totalStockNQ += $row['Quantity'];
+                $totalGilNQ += $row['total'];
+                $totalStockNQ += $row['quantity'];
             }
         }
     
@@ -282,8 +301,11 @@ class CompanionCensus
      */
     private function buildChartBubble($server, $marketData)
     {
-        $this->buildChartBubbleHandler($server, $marketData['Prices'], 'Prices');
-        $this->buildChartBubbleHandler($server, $marketData['History'], 'History');
+        if (\array_key_exists('listings', $marketData))
+            $this->buildChartBubbleHandler($server, $marketData['listings'], 'Prices');;
+
+        if (\array_key_exists('recentHistory', $marketData))
+            $this->buildChartBubbleHandler($server, $marketData['recentHistory'], 'History');
     }
     
     /**
@@ -309,13 +331,13 @@ class CompanionCensus
          * Calculate the max for scaling factors
          */
         foreach ($tableData as $row) {
-            $variations[$row['Quantity']] = 1;
+            $variations[$row['quantity']] = 1;
             $colors[$row['_Server'] ?? $server] = sprintf("rgb(%s,%s,%s)", mt_rand(100,255),mt_rand(100,255),mt_rand(100,255));
             
-            if ($row['IsHQ'] && $row['Quantity'] > $bubbleScaleFactorHQ) {
-                $bubbleScaleFactorHQ = $row['Quantity'];
-            } else if ($row['Quantity'] > $bubbleScaleFactorNQ) {
-                $bubbleScaleFactorNQ = $row['Quantity'];
+            if ($row['hq'] && $row['quantity'] > $bubbleScaleFactorHQ) {
+                $bubbleScaleFactorHQ = $row['quantity'];
+            } else if ($row['quantity'] > $bubbleScaleFactorNQ) {
+                $bubbleScaleFactorNQ = $row['quantity'];
             }
         }
         
@@ -328,17 +350,17 @@ class CompanionCensus
     
         foreach ($tableData as $row) {
             // calculate quantity radius
-            $radiusFactor = $row['Quantity'] / ($row['IsHQ'] ? $bubbleScaleFactorHQ : $bubbleScaleFactorNQ);
+            $radiusFactor = $row['quantity'] / ($row['hq'] ? $bubbleScaleFactorHQ : $bubbleScaleFactorNQ);
             $radius = $maxBubblePix * $radiusFactor;
             
             // limits
             $radius = $radius < self::BUBBLE_MIN_PX ? self::BUBBLE_MIN_PX : $radius;
             $radius = $radius > $maxBubblePix ? $maxBubblePix : $radius;
         
-            if ($row['IsHQ']) {
+            if ($row['hq']) {
                 $chartDataHQ[] = [
                     'x' => count($chartDataHQ),
-                    'y' => $row['PricePerUnit'],
+                    'y' => $row['pricePerUnit'],
                     'r' => $radius,
                     'server' => $row['_Server'] ?? $server,
                     'backgroundColor' => $colors[$row['_Server'] ?? $server],
@@ -347,7 +369,7 @@ class CompanionCensus
             } else {
                 $chartDataNQ[] = [
                     'x' => count($chartDataNQ),
-                    'y' => $row['PricePerUnit'],
+                    'y' => $row['pricePerUnit'],
                     'r' => $radius,
                     'server' => $row['_Server'] ?? $server,
                 ];
@@ -377,13 +399,13 @@ class CompanionCensus
             $averagePerHQ = [];
             $averagePerNQ = [];
             
-            foreach ($marketData['Prices'] as $i => $price) {
-                if ($price['IsHQ']) {
-                    $averagePerHQ[$i] = $price['PricePerUnit'];
+            foreach ($marketData['listings'] as $i => $price) {
+                if ($price['hq']) {
+                    $averagePerHQ[$i] = $price['pricePerUnit'];
                 }
     
-                if ($price['IsHQ'] == false) {
-                    $averagePerNQ[$i] = $price['PricePerUnit'];
+                if ($price['hq'] == false) {
+                    $averagePerNQ[$i] = $price['pricePerUnit'];
                 }
             }
 
@@ -393,28 +415,28 @@ class CompanionCensus
             /**
              * Now go through again and remove if its X above the average
              */
-            foreach ($marketData['Prices'] as $i => $price) {
+            foreach ($marketData['listings'] as $i => $price) {
                 if (
                     // if above NQ median * x
-                    ($price['IsHQ'] && (int)$price['PricePerUnit'] > $maxPerHQ) ||
+                    ($price['hq'] && (int)$price['pricePerUnit'] > $maxPerHQ) ||
 
                     // if above HQ median * x
-                    (!$price['IsHQ']  && (int)$price['PricePerUnit'] > $maxPerNQ)
+                    (!$price['hq']  && (int)$price['pricePerUnit'] > $maxPerNQ)
                 ) {
-                    unset($marketData['Prices'][$i]);
+                    unset($marketData['listings'][$i]);
                 }
             }
             
             // do same for history
-            foreach ($marketData['History'] as $i => $history) {
+            foreach ($marketData['recentHistory'] as $i => $history) {
                 if (
                     // if above NQ median * x
-                    ($history['IsHQ'] && (int)$history['PricePerUnit'] > $maxPerHQ) ||
+                    ($history['hq'] && (int)$history['pricePerUnit'] > $maxPerHQ) ||
         
                     // if above HQ median * x
-                    (!$history['IsHQ'] && (int)$history['PricePerUnit'] > $maxPerNQ)
+                    (!$history['hq'] && (int)$history['pricePerUnit'] > $maxPerNQ)
                 ) {
-                    unset($marketData['History'][$i]);
+                    unset($marketData['recentHistory'][$i]);
                 }
             }
             

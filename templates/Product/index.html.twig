@@ -80,7 +80,7 @@
                         {% for serverName in server.dc_servers %}
                             {% set icon          = serverName == server.name ? 'ItemShard cw-home' : '' %}
                             {% set className     = serverName == server.name ? 'home-world' : '' %}
-                            {% set salesCount    = market[serverName].Prices is defined ? market[serverName].Prices|length|number_format : '-' %}
+                            {% set salesCount    = market[serverName].listings is defined ? market[serverName].listings|length|number_format : '-' %}
                             <button type="button" data-tab="cw{{ serverName }}" class="{{ className }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or reqServer == serverName) ? 'open' : '' }}">
                                 {% if serverName == server.name %}
                                     <i class="xiv-ItemShard cw-home"></i>
@@ -128,18 +128,18 @@
                 {# Server Pages #}
                 {% for serverName in server.dc_servers %}
                     {% set marketData = market[serverName] ?? null %}
-                    {% if marketData and marketData.Updated %}
-                        {% set pricesCount       = marketData.Prices|length %}
-                        {% set historyCount      = marketData.History|length %}
+                    {% if marketData and marketData.lastUploadTime %}
+                        {% set pricesCount       = marketData.listings|length %}
+                        {% set historyCount      = marketData.recentHistory|length %}
                         {% set cheapestPrice     = cheapest[serverName] %}
-                        {% set averagePricesNQ   = census[serverName].Prices_Average_PricePerUnit_NQ %}
-                        {% set averagePricesHQ   = census[serverName].Prices_Average_PricePerUnit_HQ %}
-                        {% set averageHistoryNQ  = census[serverName].History_Average_PricePerUnit_NQ %}
-                        {% set averageHistoryHQ  = census[serverName].History_Average_PricePerUnit_HQ %}
+                        {% set averagePricesNQ   = census[serverName].Prices_Average_pricePerUnit_NQ %}
+                        {% set averagePricesHQ   = census[serverName].Prices_Average_pricePerUnit_HQ %}
+                        {% set averageHistoryNQ  = census[serverName].History_Average_pricePerUnit_NQ %}
+                        {% set averageHistoryHQ  = census[serverName].History_Average_pricePerUnit_HQ %}
 
                         <div class="tab-page tab-cw{{ serverName }} {{ (cookie('mogboard_homeworld', 'no') == 'yes' and serverName == server.name or reqServer == serverName) ? 'open' : '' }}">
                             {# Price History #}
-                            {% if marketData.History %}
+                            {% if marketData.recentHistory %}
                                 {% include 'Product/chart_hc.html.twig' with {
                                     chart: {
                                         id: 'history_' ~ serverName,
@@ -147,7 +147,7 @@
                                         series: [
                                             {
                                                 id:   'HC_History_HQ_'~ serverName,
-                                                name: '(High-Quality) Price Per Unit',
+                                                name: '(HQ) Price Per Unit',
                                                 data: census[serverName].HC_History_HQ,
                                                 yAxis: 0,
                                                 showInNavigator: true,
@@ -159,7 +159,7 @@
                                             },
                                             {
                                                 id:   'HC_History_NQ_'~ serverName,
-                                                name: '(Normal Quality) Price Per Unit',
+                                                name: '(NQ) Price Per Unit',
                                                 data: census[serverName].HC_History_NQ,
                                                 yAxis: 0,
                                                 showInNavigator: true,
@@ -195,9 +195,9 @@
 
                             <div class="tab-market-tables">
                                 <div class="cw-table cw-prices">
-                                    <h4>PRICES <small>Updated: {{ marketData.Updated|dateSimple }}</small></h4>
+                                    <h4>PRICES <small>Updated: {{ marketData.lastUploadTime|dateSimple }}</small></h4>
                                     {% include 'Product/prices.html.twig' with {
-                                        'prices': marketData.Prices,
+                                        'prices': marketData.listings,
                                         'cheapestPrice': cheapestPrice,
                                         'averagePricesNQ': averagePricesNQ,
                                         'averagePricesHQ': averagePricesHQ
@@ -207,7 +207,7 @@
                                 <div class="cw-table cw-history">
                                     <h4>HISTORY</h4>
                                     {% include 'Product/history.html.twig' with {
-                                        'history': marketData.History,
+                                        'history': marketData.recentHistory,
                                         'cheapestPrice': cheapestPrice,
                                         'averagePricesNQ': averagePricesNQ,
                                         'averagePricesHQ': averagePricesHQ

@@ -42,13 +42,13 @@ class CompanionStatistics
             $cheapestHq = 0;
             $cheapestNq = 0;
             
-            foreach ($serverMarket['Prices'] as $m) {
-                if ($cheapestNq === 0 && $m['IsHQ'] === false) {
-                    $cheapestNq = $m['PricePerUnit'];
+            foreach ($serverMarket['listings'] as $m) {
+                if ($cheapestNq === 0 && $m['hq'] === false) {
+                    $cheapestNq = $m['pricePerUnit'];
                 }
     
-                if ($cheapestHq === 0 && $m['IsHQ'] === true) {
-                    $cheapestHq = $m['PricePerUnit'];
+                if ($cheapestHq === 0 && $m['hq'] === true) {
+                    $cheapestHq = $m['pricePerUnit'];
                 }
             }
             

@@ -10,7 +10,7 @@
 {# CHEAPEST #}
 <div class="cross_world_markets">
     <div class="cheapest">
-        <h2>Cheapest High-Quality</h2>
+        <h2>Cheapest HQ</h2>
         {% if item.CanBeHq %}
             {% if census.Global.Prices_CheapestHQ %}
             <div class="cheapest_price">
@@ -27,11 +27,11 @@
                 No HQ for sale.
             {% endif %}
         {% else %}
-            <p>Item has no High-Quality variant.</p>
+            <p>Item has no HQ variant.</p>
         {% endif %}
     </div>
     <div class="cheapest">
-        <h2>Cheapest Normal Quality</h2>
+        <h2>Cheapest NQ</h2>
         {% if census.Global.Prices_CheapestNQ %}
         <div class="cheapest_price">
             <i class="xiv-Gil"></i>
@@ -105,10 +105,10 @@
 } %}
 
 
-{% set averagePricesNQ   = census.Global.Prices_Average_PricePerUnit_NQ %}
-{% set averagePricesHQ   = census.Global.Prices_Average_PricePerUnit_HQ %}
-{% set averageHistoryNQ  = census.Global.History_Average_PricePerUnit_NQ %}
-{% set averageHistoryHQ  = census.Global.History_Average_PricePerUnit_HQ %}
+{% set averagePricesNQ   = census.Global.Prices_Average_pricePerUnit_NQ %}
+{% set averagePricesHQ   = census.Global.Prices_Average_pricePerUnit_HQ %}
+{% set averageHistoryNQ  = census.Global.History_Average_pricePerUnit_NQ %}
+{% set averageHistoryHQ  = census.Global.History_Average_pricePerUnit_HQ %}
 
 {# CROSS WORLD MARKET BOARD #}
 <div class="cross_world_markets">
@@ -165,11 +165,11 @@
                 <div class="flex avg_prices">
                     {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
-                        <img src="/i/game/hq.png"> {{ census.Global.Prices_Average_PricePerUnit_HQ|number_format }}
+                        <img src="/i/game/hq.png"> {{ census.Global.Prices_Average_pricePerUnit_HQ|number_format }}
                     </div>
                     {% endif %}
                     <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                        {{ census.Global.Prices_Average_PricePerUnit_NQ|number_format }}
+                        {{ census.Global.Prices_Average_pricePerUnit_NQ|number_format }}
                     </div>
                 </div>
             </div>
@@ -179,11 +179,11 @@
                 <div class="flex avg_prices">
                     {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
-                        <img src="/i/game/hq.png"> {{ census.Global.Prices_Average_PriceTotal_HQ|number_format }}
+                        <img src="/i/game/hq.png"> {{ census.Global.Prices_Average_total_HQ|number_format }}
                     </div>
                     {% endif %}
                     <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                        {{ census.Global.Prices_Average_PriceTotal_NQ|number_format }}
+                        {{ census.Global.Prices_Average_total_NQ|number_format }}
                     </div>
                 </div>
             </div>
@@ -197,11 +197,11 @@
                 <div class="flex avg_prices">
                     {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
-                        <img src="/i/game/hq.png"> {{ census.Global.History_Average_PricePerUnit_HQ|number_format }}
+                        <img src="/i/game/hq.png"> {{ census.Global.History_Average_pricePerUnit_HQ|number_format }}
                     </div>
                     {% endif %}
                     <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                        {{ census.Global.History_Average_PricePerUnit_NQ|number_format }}
+                        {{ census.Global.History_Average_pricePerUnit_NQ|number_format }}
                     </div>
                 </div>
             </div>
@@ -211,11 +211,11 @@
                 <div class="flex avg_prices">
                     {% if item.CanBeHq %}
                     <div class="flex_50 price-hq">
-                        <img src="/i/game/hq.png"> {{ census.Global.History_Average_PriceTotal_HQ|number_format }}
+                        <img src="/i/game/hq.png"> {{ census.Global.History_Average_total_HQ|number_format }}
                     </div>
                     {% endif %}
                     <div class="{{ item.CanBeHq ? 'flex_50' : 'flex_100' }}">
-                        {{ census.Global.History_Average_PriceTotal_NQ|number_format }}
+                        {{ census.Global.History_Average_total_NQ|number_format }}
                     </div>
                 </div>
             </div>

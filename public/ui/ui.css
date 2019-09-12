@@ -1810,7 +1810,7 @@ aside {
   background-position: center center; }
   .mogboard-header img {
     height: 64px;
-    filter: drop-shadow(0 2px 5px black) drop-shadow(0 2px 20px black); }
+    filter: drop-shadow(0 2px 70px white) drop-shadow(0 2px 20px white); }
 
 .mogboard-news {
   padding: 60px 0;
@@ -2201,6 +2201,12 @@ aside {
   @media (max-width: 61.24em) {
     .home-logged-out {
       padding: 30px 15px; } }
+  .home-logged-out p {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 34px !important;
+    text-shadow: 0 2px 5px #000 !important; }
   .home-logged-out a {
     display: inline-block;
     padding: 10px 20px;
