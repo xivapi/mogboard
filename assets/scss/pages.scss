@@ -125,6 +125,37 @@
     }
 }
 
+.mog-avatar {
+    height: 100px;
+    width: 100px;
+    border-radius: 5px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.8);
+}
+
+.mog-credits {
+    margin-left: 20px;
+}
+
+.mog-honorable {
+    opacity: 0.5;
+    color: #ccc;
+    font-size: 15px;
+    line-height: 22px;
+
+    @include mq($until: tablet) {
+        display: none;
+    }
+
+    em {
+        color: var(--blue-3x);
+        font-style: normal;
+    }
+
+    small {
+        font-size: 13px;
+    }
+}
+
 //
 // Mog News
 //

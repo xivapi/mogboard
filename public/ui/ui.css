@@ -1812,6 +1812,29 @@ aside {
     height: 64px;
     filter: drop-shadow(0 2px 70px white) drop-shadow(0 2px 20px white); }
 
+.mog-avatar {
+  height: 100px;
+  width: 100px;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8); }
+
+.mog-credits {
+  margin-left: 20px; }
+
+.mog-honorable {
+  opacity: 0.5;
+  color: #ccc;
+  font-size: 15px;
+  line-height: 22px; }
+  @media (max-width: 39.99em) {
+    .mog-honorable {
+      display: none; } }
+  .mog-honorable em {
+    color: var(--blue-3x);
+    font-style: normal; }
+  .mog-honorable small {
+    font-size: 13px; }
+
 .mogboard-news {
   padding: 60px 0;
   text-align: center;
