@@ -106,7 +106,7 @@
                         <div class="form_columns">
                             <div class="flex_50">
                                 <div class="checkbox">
-                                    <input type="checkbox" id="alert_notify_discord">
+                                    <input type="checkbox" id="alert_notify_discord" disabled>
                                     <label for="alert_notify_discord">Discord <em>({{ auth.user.username }})</em></label>
                                 </div>
                             </div>
@@ -157,7 +157,7 @@
                 <div class="alerts_table">
                     <div class="alert-default">Loading alerts...</div>
                 </div>
-
+{#
                 <br><br>
 
                 <div class="alert-default" style="opacity: 0.5;">
@@ -166,6 +166,7 @@
                         <li><strong>NOTE:</strong> If the item is not currently being tracked, you will not receive updated price/history alerts.</li>
                     </ul>
                 </div>
+                #}
             </div>
         </div>
     {% else %}
