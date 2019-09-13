@@ -35,6 +35,33 @@ class UniversalisApi
         ]);
     }
 
+    public function getExtendedHistory(int $worldId, int $itemId, int $numEntries = 200)
+    {
+        return $this->query("GET", "api/{$worldId}/{$itemId}", [
+            RequestOptions::QUERY => [
+                'src'   => 'universalis_front'
+            ]
+        ]);
+    }
+
+    public function getRecentlyUpdated()
+    {
+        return $this->query("GET", "api/extra/stats/recently-updated", [
+            RequestOptions::QUERY => [
+                'src'   => 'universalis_front'
+            ]
+        ]);
+    }
+
+    public function getUploadHistory()
+    {
+        return $this->query("GET", "api/extra/stats/upload-history", [
+            RequestOptions::QUERY => [
+                'src'   => 'universalis_front'
+            ]
+        ]);
+    }
+
     private function query($method, $apiEndpoint, $options = [])
     {
         // set XIVAPI key
