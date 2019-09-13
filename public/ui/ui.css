@@ -1835,6 +1835,10 @@ aside {
   .mog-honorable small {
     font-size: 13px; }
 
+.btn-download {
+  width: 200px;
+  height: 45px; }
+
 .mogboard-news {
   padding: 60px 0;
   text-align: center;
