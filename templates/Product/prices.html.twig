@@ -34,8 +34,8 @@
         {% for row in prices %}
             {# Set materia #}
             {% set materialist = [] %}
-            {% for id in row.materia %}
-                {% set item = game().item(id) %}
+            {% for mat in row.materia %}
+                {% set item = game().MateriaItem(mat.materiaID, mat.slotID) %}
                 {% set materialist = materialist|merge([ item.Name ]) %}
             {% endfor %}
 

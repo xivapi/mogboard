@@ -23,7 +23,7 @@ class GameDataSource
             $cachedItem = $this->xivapi->content->Item()->one($itemId);
             
             if ($cachedItem != null) {
-                Redis::Cache()->set("xiv_Item_{$itemId}", $cachedItem);
+                Redis::Cache()->set("xiv_Item_{$itemId}", $cachedItem, GameDataCache::CACHE_TIME);
             }
         }
             
@@ -32,16 +32,37 @@ class GameDataSource
     
     public function getRecipe(int $recipeId)
     {
-        $cachedRecipe = $this->handle("xiv_Recipe_{$itemId}");
+        $cachedRecipe = $this->handle("xiv_Recipe_{$recipeId}");
         if ($cachedRecipe == null) {
-            $cachedRecipe = $this->xivapi->content->Recipe()->one($itemId);
+            $cachedRecipe = $this->xivapi->content->Recipe()->one($recipeId);
             
             if ($cachedRecipe != null) {
-                Redis::Cache()->set("xiv_Recipe_{$itemId}", $cachedItem);
+                Redis::Cache()->set("xiv_Recipe_{$recipeId}", $cachedRecipe, GameDataCache::CACHE_TIME);
             }
         }
             
         return json_decode(json_encode($cachedRecipe, FALSE));
+    }
+
+    public function getMateria(int $materiaId)
+    {
+        $cachedMateria = $this->handle("xiv_Materia_{$materiaId}");
+        if ($cachedMateria == null) {
+            $cachedMateria = $this->xivapi->content->Materia()->one($materiaId);
+            
+            if ($cachedMateria != null) {
+                Redis::Cache()->set("xiv_Materia_{$materiaId}", $cachedMateria, GameDataCache::CACHE_TIME);
+            }
+        }
+            
+        return json_decode(json_encode($cachedMateria, FALSE));
+    }
+
+    public function getMateriaItem(int $materiaId, int $materiaClass)
+    {
+        $materia = $this->getMateria($materiaId);
+
+        return $this->getItem(((Array) $materia)["Item{$materiaClass}TargetID"]);
     }
     
     public function getWorld(int $worldId)
