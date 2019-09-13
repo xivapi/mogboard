@@ -7,6 +7,7 @@ use App\Common\User\Users;
 use App\Common\Utils\Mail;
 use App\Service\Companion\CompanionMarketActivity;
 use App\Service\Companion\CompanionStatistics;
+use App\Service\Companion\UniversalisApi;
 use App\Service\Items\Popularity;
 use App\Common\Service\Redis\Redis;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +23,8 @@ class IndexController extends AbstractController
     private $companionStatistics;
     /** @var CompanionMarketActivity */
     private $companionMarketActivity;
+    /** @var UniversalisApi */
+    private $universalisApi;
     /** @var Users */
     private $users;
     /** @var Mail */
@@ -39,6 +42,7 @@ class IndexController extends AbstractController
         $this->companionMarketActivity  = $companionMarketActivity;
         $this->users                    = $users;
         $this->mail                     = $mail;
+        $this->universalisApi           = new UniversalisApi();
     }
     
     /**
@@ -49,12 +53,21 @@ class IndexController extends AbstractController
         $this->users->setLastUrl($request);
         
         // grab the users market feed
-        $marketFeed = $this->companionMarketActivity->getFeed($this->users->getUser());
-        $marketFeed = json_decode(json_encode($marketFeed), true);
-        
+        //$marketFeed = $this->companionMarketActivity->getFeed($this->users->getUser());
+        //$marketFeed = json_decode(json_encode($marketFeed), true);
+
+        $uploads = $this->universalisApi->getUploadHistory();
+        $uploads = json_decode(json_encode($uploads), true);
+
+        $recentUpdates = $this->universalisApi->getRecentlyUpdated();
+        $recentUpdates = json_decode(json_encode($recentUpdates), true);
+
         return $this->render('Home/home.html.twig',[
-            'market_feed'   => $marketFeed,
+        //    'market_feed'   => $marketFeed,
             'popular_items' => $this->itemPopularity->get(),
+            'uploads_today' => $uploads['uploadCountByDay'][0],
+            'uploads_week'  => \array_sum($uploads['uploadCountByDay']),
+            'recent'        => \array_slice($recentUpdates['items'], 0, 6)
         ]);
     }
     
@@ -196,11 +209,10 @@ class IndexController extends AbstractController
      */
     public function about()
     {
-        /*
-        $stats = $this->companionStatistics->stats();
+        
+        $stats = $this->universalisApi->getUploadHistory();
         $stats = json_decode(json_encode($stats), true);
-
-        */
+        
         $stats = [];
         return $this->render('Pages/about.html.twig', [
             'market_stats' => $stats,
@@ -218,7 +230,7 @@ class IndexController extends AbstractController
 
         */
         $stats = [];
-        return $this->render('Pages/about.html.twig', [
+        return $this->render('Pages/contribute.html.twig', [
             'market_stats' => $stats,
         ]);
     }

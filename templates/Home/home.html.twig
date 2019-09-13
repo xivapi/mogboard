@@ -114,6 +114,7 @@
                     <span><img src="/i/brand/contribute/logo_name.png"></span>
                 </a>
             </div>
+{# NOT RIGHT NOW
             <h4>Trending Today</h4>
             <div class="home-box home-trending">
                 {% for itemId in popular_items %}
@@ -136,6 +137,55 @@
                     {% endif %}
                 {% endfor %}
             </div>
+#}
+            <h4>Recent Updates</h4>
+            <div class="home-box home-trending">
+                {% for itemId in recent %}
+                    {% set item = game().item(itemId) %}
+                    {% if item.ID is defined %}
+                        <div>
+                            <div>
+                                <a href="{{ path('item_page', { itemId: itemId }) }}">
+                                    <img src="{{ item.ID|icon2x }}">
+                                </a>
+                            </div>
+                            <div>
+                                <div>
+                                    {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
+                                    <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
+                                </div>
+                                <small>{{ item.ItemSearchCategory.Name ?? '(Cannot be sold)' }}</small>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {# AVERAGE PRICES AND HISTORY #}
+<div>
+    <div>
+        <div class="flex updates_box">
+            <div>
+                <h5>Uploads today</h5>
+                <br>
+                <div class="flex avg_prices">
+                    <div class="flex_50">
+                        {{ uploads_today|number_format }}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h5>Uploads this week</h5>
+                <br>
+                <div class="flex avg_prices">
+                    <div class="flex_50">
+                        {{ uploads_week|number_format }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="mog-honorable" style="text-align: center; margin-top: 5px;">Thank you!</p>
+    </div>
         </div>
     </div>
 {% endblock %}
