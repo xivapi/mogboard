@@ -106,7 +106,7 @@
                         <div class="form_columns">
                             <div class="flex_50">
                                 <div class="checkbox">
-                                    <input type="checkbox" id="alert_notify_discord" disabled>
+                                    <input type="checkbox" id="alert_notify_discord">
                                     <label for="alert_notify_discord">Discord <em>({{ auth.user.username }})</em></label>
                                 </div>
                             </div>
@@ -157,16 +157,16 @@
                 <div class="alerts_table">
                     <div class="alert-default">Loading alerts...</div>
                 </div>
-{#
+
                 <br><br>
 
                 <div class="alert-default" style="opacity: 0.5;">
                     <ul style="margin-bottom: 0">
-                        <li><strong>NOTE:</strong> You must be in a server that uses Ser Aymeric bot to receive Discord alerts. <a href="https://discord.gg/MFFVHWC">The XIVAPI/Mogboard</a> discord will work.</li>
-                        <li><strong>NOTE:</strong> If the item is not currently being tracked, you will not receive updated price/history alerts.</li>
+                        <li><strong>NOTE:</strong> You must be in <a href="https://discord.gg/JcMvMxD">our discord server</a> to receive alerts.</li>
+                        <li><strong>NOTE:</strong> Keep in mind that alerts will only be fired when the item is updated by someone.</li>
                     </ul>
                 </div>
-                #}
+                
             </div>
         </div>
     {% else %}
