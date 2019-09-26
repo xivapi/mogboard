@@ -2,6 +2,11 @@
 
 {% block body %}
 
+    <div>
+        <button id="test-discord">Send discord test msg</button>
+        <button id="test-mail">Send test mail</button>
+    </div>
+
     <h2>Real-time Statistics</h2>
 
     <div>
@@ -21,6 +26,14 @@
 
     $('#reset').on('click', event => {
         $.get('/admin/tracking_stats_reset');
+    });
+
+    $('#test-discord').on('click', event => {
+        $.get('/admin/test_discord');
+    });
+
+    $('#test-mail').on('click', event => {
+        $.get('/admin/test_mail');
     });
 
     setInterval(function() {

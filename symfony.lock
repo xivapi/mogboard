@@ -117,6 +117,18 @@
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
+    "kriswallsmith/buzz": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "1da7c9584a9face8cc2a9ee42a04ae33c284bea8"
+        },
+        "files": [
+            "config/packages/buzz.yaml"
+        ]
+    },
     "league/oauth2-client": {
         "version": "2.4.1"
     },
@@ -128,6 +140,18 @@
     },
     "nikic/php-parser": {
         "version": "v4.2.1"
+    },
+    "nyholm/psr7": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "0cd4d2d0e7f646fda75f9944f747a56e6ed13d4c"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
+        ]
     },
     "ocramius/proxy-manager": {
         "version": "2.2.2"

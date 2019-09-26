@@ -132,23 +132,6 @@ class UserAlertsTriggers
             $alert->setLastChecked(time());
             $this->em->persist($alert);
             $this->em->flush();
-
-            /**
-             * DPS patrons get auto-price updating.
-             */
-            if ($patronQueue && $alert->isKeepUpdated() && $user->isPatron(PatreonConstants::PATREON_DPS)) {
-                // Send an update request, XIVAPI handles throttling this.
-                $this->console->writeln('<fg=red>-- Requesting manual update</>');
-                
-                // todo - this should really just modify db, it doesn't need to call xivapi...
-
-                // req params
-                $dpsAccess    = getenv('XIVAPI_COMPANION_KEY');
-                $dpsItemId    = $alert->getItemId();
-                $dpsServerId  = GameServers::getServerId($alert->getServer());
-
-                $this->xivapi->_private->manualItemUpdate($dpsAccess, $dpsItemId, $dpsServerId);
-            }
     
             /**
              * Handle the server for the alert,
