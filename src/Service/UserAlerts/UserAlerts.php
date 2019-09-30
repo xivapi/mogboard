@@ -82,14 +82,6 @@ class UserAlerts
     }
     
     /**
-     * Get all alerts by their patron status
-     */
-    public function getAllByPatronStatus(bool $patronQueue = false, int $offset = 0, int $limit = 100)
-    {
-        return $this->repository->findPatrons($patronQueue, $offset, $limit);
-    }
-
-    /**
      * Save a new or existing alert
      */
     public function save(UserAlert $alert)
@@ -99,10 +91,6 @@ class UserAlerts
         $alert
             ->setServer(GameServers::getServer())
             ->setUser($user);
-
-        if ($user->isPatronDps() === false) {
-            $alert->setKeepUpdated(false);
-        }
 
         $this->em->persist($alert);
         $this->em->flush();

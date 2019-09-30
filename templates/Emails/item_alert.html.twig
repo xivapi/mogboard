@@ -32,10 +32,10 @@
                 {% set row = marketRow[1] %}
                 <tr>
                     <td style="padding: 5px; margin: 0;">{{ server }}</td>
-                    <td style="padding: 5px; margin: 0;"><strong>{{ row.PricePerUnit|number_format }}</strong></td>
-                    <td style="padding: 5px; margin: 0;">{{ row.Quantity|number_format }}</td>
-                    <td style="padding: 5px; margin: 0;"><em>{{ row.PriceTotal|number_format }}</em></td>
-                    <td style="padding: 5px; margin: 0;">{{ row.IsHQ ? '<img src="https://mogboard.com/i/game/hq.png">' : '' }}</td>
+                    <td style="padding: 5px; margin: 0;"><strong>{{ row.pricePerUnit|number_format }}</strong></td>
+                    <td style="padding: 5px; margin: 0;">{{ row.quantity|number_format }}</td>
+                    <td style="padding: 5px; margin: 0;"><em>{{ row.total|number_format }}</em></td>
+                    <td style="padding: 5px; margin: 0;">{{ row.hq ? '<img src="https://universalis.app/i/game/hq.png">' : '' }}</td>
                     <td style="padding: 5px; margin: 0;">{{ alert.triggerType == 'Prices' ? row.RetainerName : row.CharacterName }}</td>
                     {% if alert.triggerType == 'History' %}
                         <td style="padding: 5px;">

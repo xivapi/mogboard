@@ -18,12 +18,13 @@
 
     <title>{{ title }}</title>
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
-    <link rel="apple-touch-icon" type="image/png" href="/i/universalis/universalis_ios.png">
+    <link href="https://fonts.googleapis.com/css?family=Cinzel|Fjalla+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/simplebar/2.6.1/simplebar.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/font/xivicons.css?v={{ siteVersion().hash }}">
     <link rel="stylesheet" href="/font/styles.css?v={{ siteVersion().hash }}">
     <link rel="stylesheet" href="/ui/ui.css?v={{ siteVersion().hash }}">
+    <link rel="manifest" href="manifest.json">
     {% block stylesheets %}{% endblock %}
 
     {# High Charts #}
@@ -46,6 +47,13 @@
         gtag('js', new Date());
 
         gtag('config', 'UA-147847104-1');
+    </script>
+
+    <script>
+        // Register the service worker that will provide the "offline page"
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('serviceworker-offline.js');
+        }
     </script>
 </head>
 <body>
