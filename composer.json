@@ -28,7 +28,7 @@
         "symfony/yaml": "4.2.*",
         "wildbit/postmark-php": "^2.6",
         "wohali/oauth2-discord-new": "^1.0",
-        "xivapi/companion-php": "^1.2.2",
+        "xivapi/companion-php": "^1.2.9",
         "xivapi/xivapi-php": "1.6.11"
     },
     "config": {
