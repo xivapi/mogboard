@@ -8,7 +8,7 @@
         {% for itemId in list.items %}
             {% set item = game().item(itemId) %}
             <li>
-                <img src="{{ item.ID|icon2x }}">
+                <img src="{{ item.ID|icon }}">
                 {% if item.LevelItem > 1 %}<em class="ilv">{{ item.LevelItem }}</em>{% endif %}
                 <a href="{{ path('item_page', { itemId: itemId }) }}" class="rarity-{{ item.Rarity }}">{{ item.Name }}</a>
                 <small>
